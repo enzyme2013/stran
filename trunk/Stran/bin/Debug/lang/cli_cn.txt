@@ -1,0 +1,132 @@
+﻿// global const
+tribelist=自动探测,罗马,日尔曼,高卢
+typelist=资源田,建筑,拆除,攻击,防御,研究,活动
+// main form
+username=用户名
+server=服务器
+tribe=种族
+accmanager=帐号管理
+// main form context menu account
+loginnoacc=&L. 登录
+loginacc=&L. 登录: 
+loginaccs=&L. 登录这些帐号
+loginall=&O. 登录所有帐号
+addacc=&A. 添加帐号
+editacc=&E. 编辑帐号
+delacc=&D. 删除帐号
+// main form message
+repeatlogin=重复登录的帐号: 
+
+// main frame
+villagebuilding=村庄建设
+event=事件
+log=日志
+// tab village building tab
+villagestatus=村庄建筑
+upgradestatus=研发状态
+// list view villages
+vid=ID
+qcount=队列
+vname=村名
+coord=坐标
+// list view building
+bid=坑号
+gname=建筑名
+lefttimetobuild=剩余时间
+available=可升级
+// list view inbuilding
+ibtype=项目
+ibitem=建筑和时间
+// list view queue
+qtype=类别
+status=状态
+qdelay=延迟
+// list view upgrade
+troopname=兵种
+research=研发
+offence=攻击
+defence=防御
+finished=已完成
+notavailable=不可升级
+upgrading=正在升级
+// list view event
+trigger=触发条件
+action=动作
+// context menu village
+refresh=&R. 刷新村庄
+cmbup=&A. 升级建筑 - 添加到队列
+cmpupmulti=&U. 升级建筑 - 多次
+cmpup2=&2. 添加 2 次
+cmpup5=&5. 添加 5 次
+cmpup9=&9. 添加 9 次
+cmpupto=&L. 升级建筑到指定等级...
+cmpdestroy=&D. 拆除建筑
+cmbnew=&N. 新建建筑
+cmbai=&E. 启用人工智能模块
+// context menu queue
+cmqdel=&D. 删除
+cmqclear=C. 清空
+cmqup=&U. 上移
+cmqdown=&D. 下移
+cmqtimer=&E. 延迟倒计时正在工作
+// message
+reallyclosetext=队列中仍有项目。真的要关闭吗？
+reallyclosecap=警告!
+
+// account form
+account=帐号
+password=密码
+displang=显示语言
+edit=编辑
+add=添加
+save=保存
+cancel=取消
+
+// new building form
+newbuilding=新建建筑
+building=建筑
+position=位置
+ok=确定
+
+// build to level form
+upgradeto=升级至…
+upgrade=升级
+
+snapshot=&S. 获取当前村庄快照
+snapall=&A. 获取所有村庄快照
+
+mresearch=&R. 研发
+upgradeatk=&A. 升级攻击
+upgradeatkto=&T. 升级攻击至…
+upgradedef=&D. 升级防御
+upgradedefto=&O. 升级防御至…
+
+market=市场运输
+reallyexittext=真的要关闭程序吗？
+resamount=资源量
+queue=队列
+mtype=运输类型
+role=用途
+newtransfer=&T. 新的运输
+merchantcnt=商人数:
+cmbaic=&C. 根据资源储备
+cmbail=&L. 根据资源田等级
+transfer=运输
+merchantsformat={0}/{1} 个商人
+unprocessedqueue=发现未处理的队列项目，要加入到队列列表中吗？
+villagelist=村庄列表
+resourceshow=资源状况
+inbuilding=进行中的任务
+autonormalizetarget=自动资源目标平衡
+autonormalizeme=自动平衡我的资源
+noautonormalize=无资源平衡计算
+nocrop=不运送粮食
+
+cmbparty=&P. 启用自动派对模块
+cmbparty500=&500 小派对
+cmbparty2000=&2000 大派对
+
+refreshbuilding=&F. 刷新建筑列表
+refreshdestroy=&H. 刷新拆除项目
+refreshupgrade=&F. 刷新研发项目
+cmicancel=&C. 取消
