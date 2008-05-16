@@ -1,4 +1,4 @@
-English page see MainEn.
+English page see [MainEn].
 
 = 简介 =
 
@@ -16,7 +16,7 @@ Stran 是一个流行网络游戏 Travian 的辅助工具。具有多语言界�
  * 即将支持计划任务(事件)系统。用户可以根据条件(例如 resamount / rescapacity > 0.5) 来在村庄间智能地运送资源。
 
 = 截图 =
-参见 Screenshot 页面。
+参见 [Screenshot] 页面。
 
 = 下载 =
-参见 Download 页面。
+参见 [Download] 页面。
