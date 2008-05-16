@@ -1,6 +1,4 @@
-#summary One-sentence summary of this page.
 #labels Main
-
 = Introduction =
 
 Stran is a game tool for the populate webgame Travian.
