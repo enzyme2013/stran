@@ -1,6 +1,6 @@
 ﻿// global const
 tribelist=自动探测,罗马,日尔曼,高卢
-typelist=资源田,建筑,拆除,攻击,防御,研究,活动
+typelist=资源田,建筑,拆除,攻击,防御,研究,活动,运输
 // main form
 username=用户名
 server=服务器
@@ -109,6 +109,7 @@ mtype=运输类型
 role=用途
 newtransfer=&T. 新的运输
 merchantcnt=商人数:
+transfercnt=次数(0:无限):
 cmbaic=&C. 根据资源储备
 cmbail=&L. 根据资源田等级
 transfer=运输
