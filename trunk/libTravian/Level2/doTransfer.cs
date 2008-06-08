@@ -16,27 +16,420 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
 using System.Text.RegularExpressions;
 
 namespace libTravian
 {
+	/// <summary>
+	/// Automatic resource balance flavors in resource transportations
+	/// </summary>
+	public enum ResourceDistributionType
+	{
+		/// <summary>
+		/// Always transport fixed amounts of resources
+		/// </summary>
+		None = 0,
+
+		/// <summary>
+		/// Evenly distribute the source village's remaining resources
+		/// </summary>
+		BalanceSource,
+
+		/// <summary>
+		/// Evenly distribute destination village's resources wrt storage capacity
+		/// </summary>
+		BalanceTarget
+	}
+
+	/// <summary>
+	/// Define what's in a transfer
+	/// </summary>
 	public class TransferOption
 	{
-		public int VillageID { get; set; }
-		public TResAmount ResourceAmount { get; set; }
+		/// <summary>
+		/// Short names for distribution type None, Source and Destination
+		/// </summary>
+		private static readonly string[] DistributionShortName = new string[] { "=>", "=S=>", "=T=>" };
+
+		/// <summary>
+		/// When the mechant (occupied by the previous transfer) will return
+		/// </summary>
+		private DateTime resumeTime;
+
+		/// <summary>
+		/// The destination village (where the resource is going)
+		/// </summary>
+		public int TargetVillageID { get; set; }
+
+		/// <summary>
+		/// How many times left
+		/// </summary>
+		public int MaxCount { get; set; }
+
+		/// <summary>
+		/// How many transfers been done so far
+		/// </summary>
+		public int Count { get; set; }
+
+		/// <summary>
+		/// Resource distribution options
+		/// </summary>
+		public ResourceDistributionType Distribution { get; set; }
+
+		/// <summary>
+		/// Do not transport
+		/// </summary>
+		public bool NoCrop { get; set; }
+
+		/// <summary>
+		/// Destination village
+		/// </summary>
 		public TPoint TargetPos { get; set; }
+
+		/// <summary>
+		/// Resource amount
+		/// </summary>
+		public TResAmount ResourceAmount { get; set; }
+
+		/// <summary>
+		/// Minimum seconds to wait until the mechant resturns
+		/// </summary>
+		public int MinimumDelay
+		{
+			get
+			{
+				int value = 0;
+				if (this.resumeTime > DateTime.Now)
+				{
+					try
+					{
+						value = Convert.ToInt32((this.resumeTime - DateTime.Now).TotalSeconds);
+					}
+					catch (OverflowException)
+					{
+					}
+				}
+
+				return value;
+			}
+			set
+			{
+				this.resumeTime = DateTime.Now.AddSeconds(value);
+			}
+		}
+
+		/// <summary>
+		/// Display transfer amound ant repeat counts left
+		/// </summary>
+		public string Status
+		{
+			get
+			{
+				string count = this.Count.ToString() + "/";
+				count += this.MaxCount == 0 ? "Inf" : this.MaxCount.ToString();
+				string resources = this.ResourceAmount.ToString().Replace('|', '/');
+				return count + DistributionShortName[(int)this.Distribution] + resources;
+			}
+		}
+
+		/// <summary>
+		/// For the first time, a transfer can start immediately (of course, if mechants/resources are available)
+		/// </summary>
+		public TransferOption()
+		{
+			this.resumeTime = DateTime.MinValue;
+			this.ResourceAmount = new TResAmount(0, 0, 0, 0);
+		}
+
+		/// <summary>
+		/// Display target village info
+		/// </summary>
+		/// <param name="travianData">Game info including target village info</param>
+		/// <returns>Target village name and coordination</returns>
+		public string GetTitle(Data travianData)
+		{
+			string pos = this.TargetPos.ToString().Replace('|', '/');
+			if (travianData != null && travianData.Villages.ContainsKey(this.TargetVillageID))
+			{
+				pos = pos + " " + travianData.Villages[this.TargetVillageID].Name;
+			}
+
+			return pos;
+		}
+
+		/// <summary>
+		/// Test if the target village have enought storage capacity for the to-be-transfered resources
+		/// </summary>
+		/// <param name="travianData">User game info, including target village distance and storage capacity</param>
+		/// <returns>True if the transportation will overflow the target village</returns>
+		public bool ExceedTargetCapacity(Data travianData, int sourceVillageID)
+		{
+			TResAmount targetCapacity = this.GetTargetCapacity(travianData, sourceVillageID);
+			if (targetCapacity == null)
+			{
+				if (this.Distribution == ResourceDistributionType.BalanceTarget)
+				{
+					return true;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < targetCapacity.Resources.Length; i++)
+				{
+					if (this.ResourceAmount.Resources[i] > targetCapacity.Resources[i])
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Distribute transported resource amount 
+		/// </summary>
+		/// <param name="travianData">Game info of the current user</param>
+		public void CalculateResourceAmount(Data travianData, int sourceVillageID)
+		{
+			switch (this.Distribution)
+			{
+				case ResourceDistributionType.BalanceTarget:
+					this.BalanceDestinationResource(travianData, sourceVillageID);
+					break;
+				case ResourceDistributionType.BalanceSource:
+					this.BalanceSourceResource(travianData, sourceVillageID);
+					break;
+				case ResourceDistributionType.None:
+					break;
+			}
+		}
+
+		private void BalanceDestinationResource(Data travianData, int sourceVillageID)
+		{
+			TResAmount targetAmount = this.GetTargetCapacity(travianData, sourceVillageID);
+			if (targetAmount == null)
+			{
+				targetAmount = new TResAmount(0, 0, 0, 0);
+			}
+
+			this.DoBalance(targetAmount);
+		}
+
+		private void BalanceSourceResource(Data travianData, int sourceVillageID)
+		{
+			TResAmount targetAmount = new TResAmount(0, 0, 0, 0);
+			if (travianData != null &&
+				travianData.Villages.ContainsKey(sourceVillageID) &&
+				travianData.Villages[sourceVillageID].isBuildingInitialized == 2)
+			{
+				TResource[] VR = travianData.Villages[sourceVillageID].Resource;
+				for (int i = 0; i < targetAmount.Resources.Length; i++)
+				{
+					targetAmount.Resources[i] = VR[i].CurrAmount;
+				}
+			}
+
+			this.DoBalance(targetAmount);
+		}
+
+		/// <summary>
+		/// Estimate the target village capacity when transportantion arrives, based on 
+		/// its current resource amount, production rate, distance, and merchant speed.
+		/// </summary>
+		/// <param name="travianData">Contains game info</param>
+		/// <param name="sourceVillageID">Where the merchant starts, for computing distance</param>
+		/// <returns>Estimated capacity</returns>
+		private TResAmount GetTargetCapacity(Data travianData, int sourceVillageID)
+		{
+			if (travianData != null &&
+				travianData.Villages.ContainsKey(this.TargetVillageID) &&
+				travianData.Villages.ContainsKey(sourceVillageID))
+			{
+				TVillage source = travianData.Villages[sourceVillageID];
+				TVillage destination = travianData.Villages[this.TargetVillageID];
+				if (destination.isBuildingInitialized == 2)
+				{
+					TResource[] VR = destination.Resource;
+					int[] capacity = new int[VR.Length];
+					int speed = travianData.MarketSpeed == 0 ? 24 : travianData.MarketSpeed;
+					double timecost = source.Coord * destination.Coord / speed;
+					for (int i = 0; i < VR.Length; i++)
+					{
+						capacity[i] = VR[i].Capacity - VR[i].CurrAmount - (int)(VR[i].Produce * timecost);
+						if (capacity[i] < 0)
+						{
+							capacity[i] = 0;
+						}
+					}
+
+					return new TResAmount(capacity);
+				}
+			}
+
+			return null;
+		}
+
+		private void DoBalance(TResAmount targetAmount)
+		{
+			int total = this.ResourceAmount.TotalAmount();
+			int slots = this.NoCrop ? 3 : 4;
+
+			// Sort targetAmount by desc order
+			int[] ranks = new int[] { 0, 1, 2, 3 };
+			for (int i = 0; i < slots - 1; i++)
+			{
+				for (int j = i + 1; j < slots; j++)
+				{
+					if (targetAmount.Resources[ranks[i]] < targetAmount.Resources[ranks[j]])
+					{
+						int temp = ranks[i];
+						ranks[i] = ranks[j];
+						ranks[j] = temp;
+					}
+				}
+			}
+
+			// Allocate by rank
+			this.ResourceAmount.Clear();
+			for (int i = 1; i < slots; i++)
+			{
+				int inc = targetAmount.Resources[ranks[i - 1]] - targetAmount.Resources[ranks[i]];
+				if (total < this.ResourceAmount.TotalAmount() + inc * i)
+				{
+					inc = (total - this.ResourceAmount.TotalAmount()) / i;
+				}
+
+				for (int j = 0; j < i; j++)
+				{
+					this.ResourceAmount.Resources[ranks[j]] += inc;
+				}
+			}
+
+			// Allocate remaining resources and round up with unit of 50
+			int bonus = (total - this.ResourceAmount.TotalAmount()) / slots;
+			for (int i = 0; i < slots; i++)
+			{
+				this.ResourceAmount.Resources[i] += bonus;
+				this.ResourceAmount.Resources[i] = (this.ResourceAmount.Resources[i] / 50) * 50;
+			}
+
+			// If we have anything left, give it to a lucky guy
+			int luckyOne = ranks[0];
+			this.ResourceAmount.Resources[luckyOne] += total - this.ResourceAmount.TotalAmount();
+		}
+
+		/// <summary>
+		/// Encode option in a readable string that doesn't contain '|', ',', or ':'
+		/// </summary>
+		/// <returns>Encoded string</returns>
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.AppendFormat("{0}&{1}&{2}", this.TargetVillageID, this.MaxCount, this.resumeTime.Ticks);
+			sb.AppendFormat("&{0}&{1}", this.TargetPos.X, this.TargetPos.Y);
+			for (int i = 0; i < 4; i++)
+			{
+				sb.AppendFormat("&{0}", this.ResourceAmount.Resources[i]);
+			}
+
+			sb.AppendFormat("&{0}&{1}&{2}", this.Distribution, this.NoCrop, this.Count);
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Decode the transfer option from an encoded string
+		/// </summary>
+		/// <param name="s">Encode data</param>
+		/// <returns>Decoded data</returns>
+		public static TransferOption FromString(string s)
+		{
+			string[] data = s.Split(new char[] { '&' });
+
+			int index = 0;
+			TransferOption result = new TransferOption();
+
+			try
+			{
+				result.TargetVillageID = Int32.Parse(data[index++]);
+				result.MaxCount = Int32.Parse(data[index++]);
+				result.resumeTime = new DateTime(Int64.Parse(data[index++]));
+
+				int x = Int32.Parse(data[index++]);
+				int y = Int32.Parse(data[index++]);
+				result.TargetPos = new TPoint(x, y);
+
+				int[] amount = new int[4];
+				for (int i = 0; i < 4; i++)
+				{
+					amount[i] = Int32.Parse(data[index++]);
+				}
+
+				result.ResourceAmount = new TResAmount(amount);
+
+
+				result.Distribution = (ResourceDistributionType)Enum.Parse(typeof(ResourceDistributionType), data[index++]);
+				result.NoCrop = Boolean.Parse(data[index++]);
+				result.Count = Int32.Parse(data[index++]);
+			}
+			catch
+			{
+				// Parse failure happens after we add more options
+			}
+
+			return result;
+		}
 	}
+
 	partial class Travian
 	{
 		private TResAmount JustTransferredData = null;
-		public void doTransferWrapper(object o)
+
+		public void doTransfer(int VillageID, TQueue Q)
 		{
-			TransferOption to = o as TransferOption;
-			TResAmount Amount = to.ResourceAmount;
-			TPoint TargetPos = to.TargetPos;
-			int VillageID = to.VillageID;
-			doTransfer(VillageID, Amount, TargetPos);
+			TransferOption option = TransferOption.FromString(Q.ExtraOptions);
+			if (option.MinimumDelay > 0)
+			{
+				return;
+			}
+
+			if (option.TargetVillageID != 0 &&
+				TD.Villages.ContainsKey(option.TargetVillageID) &&
+				TD.Villages[option.TargetVillageID].isBuildingInitialized == 2)
+			{
+				PageQuery(option.TargetVillageID, "dorf1.php");
+				option.CalculateResourceAmount(TD, VillageID);
+				if (option.ExceedTargetCapacity(TD, VillageID))
+				{
+					return;
+				}
+			}
+			else
+			{
+				option.CalculateResourceAmount(TD, VillageID);
+			}
+
+			int timeCost = doTransfer(VillageID, option.ResourceAmount, option.TargetPos);
+			if (timeCost >= 0)
+			{
+				var CV = TD.Villages[VillageID];
+				option.MinimumDelay = timeCost * 2 + 10;
+				option.Count++;
+				if (option.MaxCount == 0 || option.Count < option.MaxCount)
+				{
+					Q.ExtraOptions = option.ToString();
+					Q.Status = option.Status;
+					CV.SaveQueue(userdb);
+				}
+				else
+				{
+					int QueueID = CV.Queue.IndexOf(Q);
+					CV.Queue.Remove(Q);
+					CV.SaveQueue(userdb);
+					StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = QueueID });
+				}
+			}
 		}
 
 		/// <summary>
@@ -49,31 +442,32 @@ namespace libTravian
 		public int doTransfer(int VillageID, TResAmount Amount, TPoint TargetPos)
 		{
 			string result = PageQuery(VillageID, "build.php?gid=17");
-			if(result == null)
+			if (result == null)
 				return -1;
 			var CV = TD.Villages[VillageID];
 			Dictionary<string, string> PostData = new Dictionary<string, string>();
 			var m = Regex.Match(result, "name=\"id\" value=\"(\\d+)\"");
-			if(!m.Success)
+			if (!m.Success)
 				return -1; // Parse error!
 			PostData["id"] = m.Groups[1].Value;
 			m = Regex.Match(result, "var haendler = (\\d+);");
-			if(!m.Success)
+			if (!m.Success)
 				return -1;
 			var MCount = Convert.ToInt32(m.Groups[1].Value);
 			m = Regex.Match(result, "var carry = (\\d+);");
-			if(!m.Success)
+			if (!m.Success)
 				return -1;
 			var MCarry = Convert.ToInt32(m.Groups[1].Value);
 
-			int TAmount = 0;
-			for(int i = 0; i < 4; i++)
+			if (Amount.TotalAmount() > MCarry * MCount)
+			{
+				return -2; // Beyond transfer ability
+			}
+
+			for (int i = 0; i < 4; i++)
 			{
 				PostData["r" + (i + 1).ToString()] = Amount.Resources[i].ToString();
-				TAmount += Amount.Resources[i];
 			}
-			if(TAmount > MCarry * MCount)
-				return -2; // Beyond transfer ability
 
 			PostData["dname"] = "";
 			PostData["x"] = TargetPos.X.ToString();
@@ -82,29 +476,29 @@ namespace libTravian
 
 			result = PageQuery(VillageID, "build.php", PostData);
 
-			if(result == null)
+			if (result == null)
 				return -1;
 			m = Regex.Match(result, "name=\"sz\" value=\"(\\d+)\"");
-			if(!m.Success)
+			if (!m.Success)
 				return -1; // Parse error!
 			PostData["sz"] = m.Groups[1].Value;
 			PostData["kid"] = TargetPos.Z.ToString();
 			PostData["a"] = VillageID.ToString();
 			m = Regex.Match(result, "<td>([0-9:]{6,})</td>");
-			if(!m.Success)
+			if (!m.Success)
 				return -1; // Parse error!
 			int TimeCost = Convert.ToInt32(TimeSpanParse(m.Groups[1].Value).TotalSeconds);
-			if(TD.MarketSpeed != 0)
+			if (TD.MarketSpeed != 0)
 			{
 				// calc market speed
 				var distance = CV.Coord * TargetPos;
 				TD.MarketSpeed = Convert.ToInt32(Math.Round(distance * 3600 / TimeCost));
-				if(!svrdb.ContainsKey("MarketSpeedX"))
+				if (!svrdb.ContainsKey("MarketSpeedX"))
 				{
 					int StdSpeed;
-					if(TD.Tribe == 1)
+					if (TD.Tribe == 1)
 						StdSpeed = 16;
-					else if(TD.Tribe == 2)
+					else if (TD.Tribe == 2)
 						StdSpeed = 12;
 					else
 						StdSpeed = 24;
@@ -116,13 +510,13 @@ namespace libTravian
 
 
 			// write data into target village if it's my village.
-			foreach(var x in TD.Villages)
+			foreach (var x in TD.Villages)
 			{
-				if(x.Value == CV)
+				if (x.Value == CV)
 					continue;
-				if(x.Value.Coord == TargetPos)
+				if (x.Value.Coord == TargetPos)
 				{
-					if(x.Value.isBuildingInitialized == 2)
+					if (x.Value.isBuildingInitialized == 2)
 						x.Value.Market.MarketInfo.Add(new TMInfo()
 						{
 							CarryAmount = Amount,
@@ -134,6 +528,7 @@ namespace libTravian
 					break;
 				}
 			}
+
 			return TimeCost;
 		}
 	}

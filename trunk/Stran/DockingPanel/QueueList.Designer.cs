@@ -13,7 +13,7 @@
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if(disposing && (components != null))
+			if (disposing && (components != null))
 			{
 				components.Dispose();
 			}
@@ -40,11 +40,11 @@
 			// 
 			this.listViewQueue.AllowColumnReorder = true;
 			this.listViewQueue.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader6,
-            this.columnHeader7});
+			this.columnHeader5,
+			this.columnHeader8,
+			this.columnHeader9,
+			this.columnHeader6,
+			this.columnHeader7});
 			this.listViewQueue.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewQueue.FullRowSelect = true;
 			this.listViewQueue.GridLines = true;
@@ -52,7 +52,7 @@
 			this.listViewQueue.Location = new System.Drawing.Point(0, 0);
 			this.listViewQueue.Margin = new System.Windows.Forms.Padding(0);
 			this.listViewQueue.Name = "listViewQueue";
-			this.listViewQueue.Size = new System.Drawing.Size(442, 418);
+			this.listViewQueue.Size = new System.Drawing.Size(507, 418);
 			this.listViewQueue.TabIndex = 1;
 			this.listViewQueue.UseCompatibleStateImageBehavior = false;
 			this.listViewQueue.View = System.Windows.Forms.View.Details;
@@ -79,19 +79,20 @@
 			// 
 			this.columnHeader6.Tag = "status";
 			this.columnHeader6.Text = "状态";
-			this.columnHeader6.Width = 90;
+			this.columnHeader6.Width = 189;
 			// 
 			// columnHeader7
 			// 
 			this.columnHeader7.Tag = "qdelay";
 			this.columnHeader7.Text = "延迟";
-			this.columnHeader7.Width = 70;
+			this.columnHeader7.Width = 81;
 			// 
 			// QueueList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(442, 418);
+			this.AutoSize = true;
+			this.ClientSize = new System.Drawing.Size(507, 418);
 			this.CloseButton = false;
 			this.Controls.Add(this.listViewQueue);
 			this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

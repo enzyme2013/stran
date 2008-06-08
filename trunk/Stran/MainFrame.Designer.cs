@@ -178,9 +178,9 @@
 			// 
 			this.listViewEvent.AllowColumnReorder = true;
 			this.listViewEvent.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader3,
-            this.columnHeader10,
-            this.columnHeader16});
+			this.columnHeader3,
+			this.columnHeader10,
+			this.columnHeader16});
 			this.listViewEvent.ContextMenuStrip = this.contextMenuEvent;
 			this.listViewEvent.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewEvent.FullRowSelect = true;
@@ -243,21 +243,21 @@
 			// contextMenuBuilding
 			// 
 			this.contextMenuBuilding.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMBUp,
-            this.toolStripMenuItem1,
-            this.CMBUpTo,
-            this.toolStripSeparator3,
-            this.CMBDestroy,
-            this.CMBNew,
-            this.toolStripSeparator2,
-            this.CMBAI,
-            this.toolStripSeparator4,
-            this.CMBRefresh,
-            this.CMBRefreshDestroy,
-            this.toolStripSeparator12,
-            this.CMMNew2,
-            this.toolStripSeparator9,
-            this.CMBParty});
+			this.CMBUp,
+			this.toolStripMenuItem1,
+			this.CMBUpTo,
+			this.toolStripSeparator3,
+			this.CMBDestroy,
+			this.CMBNew,
+			this.toolStripSeparator2,
+			this.CMBAI,
+			this.toolStripSeparator4,
+			this.CMBRefresh,
+			this.CMBRefreshDestroy,
+			this.toolStripSeparator12,
+			this.CMMNew2,
+			this.toolStripSeparator9,
+			this.CMBParty});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
 			this.contextMenuBuilding.ShowImageMargin = false;
 			this.contextMenuBuilding.Size = new System.Drawing.Size(182, 254);
@@ -274,9 +274,9 @@
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMBUp2,
-            this.CMBUp5,
-            this.CMBUp9});
+			this.CMBUp2,
+			this.CMBUp5,
+			this.CMBUp9});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
 			this.toolStripMenuItem1.Tag = "cmpupmulti";
@@ -343,8 +343,8 @@
 			// CMBAI
 			// 
 			this.CMBAI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMBAI_C,
-            this.CMBAI_L});
+			this.CMBAI_C,
+			this.CMBAI_L});
 			this.CMBAI.Name = "CMBAI";
 			this.CMBAI.Size = new System.Drawing.Size(181, 22);
 			this.CMBAI.Tag = "cmbai";
@@ -408,8 +408,8 @@
 			// CMBParty
 			// 
 			this.CMBParty.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMBParty500,
-            this.CMBParty2000});
+			this.CMBParty500,
+			this.CMBParty2000});
 			this.CMBParty.Name = "CMBParty";
 			this.CMBParty.Size = new System.Drawing.Size(181, 22);
 			this.CMBParty.Tag = "cmbparty";
@@ -434,15 +434,15 @@
 			// contextMenuResearch
 			// 
 			this.contextMenuResearch.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMRResearch,
-            this.toolStripSeparator6,
-            this.CMRUpgradeAtk,
-            this.CMRUpgradeAtkTo,
-            this.toolStripSeparator7,
-            this.CMRUpgradeDef,
-            this.CMRUpgradeDefTo,
-            this.toolStripSeparator10,
-            this.CMRRefresh});
+			this.CMRResearch,
+			this.toolStripSeparator6,
+			this.CMRUpgradeAtk,
+			this.CMRUpgradeAtkTo,
+			this.toolStripSeparator7,
+			this.CMRUpgradeDef,
+			this.CMRUpgradeDefTo,
+			this.toolStripSeparator10,
+			this.CMRRefresh});
 			this.contextMenuResearch.Name = "contextMenuResearch";
 			this.contextMenuResearch.ShowImageMargin = false;
 			this.contextMenuResearch.Size = new System.Drawing.Size(125, 154);
@@ -515,13 +515,13 @@
 			// contextMenuQueue
 			// 
 			this.contextMenuQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMQDel,
-            this.CMQClear,
-            this.toolStripSeparator1,
-            this.CMQUp,
-            this.CMQDown,
-            this.toolStripSeparator5,
-            this.CMQTimer});
+			this.CMQDel,
+			this.CMQClear,
+			this.toolStripSeparator1,
+			this.CMQUp,
+			this.CMQDown,
+			this.toolStripSeparator5,
+			this.CMQTimer});
 			this.contextMenuQueue.Name = "contextMenuStrip3";
 			this.contextMenuQueue.ShowCheckMargin = true;
 			this.contextMenuQueue.ShowImageMargin = false;
@@ -584,11 +584,11 @@
 			// contextMenuVillage
 			// 
 			this.contextMenuVillage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMVRefresh,
-            this.CMVRole,
-            this.toolStripSeparator8,
-            this.CMVSnapshot,
-            this.CMVSnapAll});
+			this.CMVRefresh,
+			this.CMVRole,
+			this.toolStripSeparator8,
+			this.CMVSnapshot,
+			this.CMVSnapAll});
 			this.contextMenuVillage.Name = "contextMenuStrip1";
 			this.contextMenuVillage.ShowImageMargin = false;
 			this.contextMenuVillage.Size = new System.Drawing.Size(94, 98);
@@ -605,7 +605,7 @@
 			// CMVRole
 			// 
 			this.CMVRole.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMVRoleText});
+			this.CMVRoleText});
 			this.CMVRole.Name = "CMVRole";
 			this.CMVRole.Size = new System.Drawing.Size(93, 22);
 			this.CMVRole.Tag = "role";
@@ -661,9 +661,9 @@
 			// 
 			this.statusStrip1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.LastDebug,
-            this.SVRTime,
-            this.LCLTime});
+			this.LastDebug,
+			this.SVRTime,
+			this.LCLTime});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 612);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(934, 30);
@@ -723,7 +723,7 @@
 			// contextMenuMarket
 			// 
 			this.contextMenuMarket.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMMNew});
+			this.CMMNew});
 			this.contextMenuMarket.Name = "contextMenuMarket";
 			this.contextMenuMarket.ShowImageMargin = false;
 			this.contextMenuMarket.Size = new System.Drawing.Size(86, 26);
@@ -731,7 +731,7 @@
 			// contextMenuInbuilding
 			// 
 			this.contextMenuInbuilding.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMICancel});
+			this.CMICancel});
 			this.contextMenuInbuilding.Name = "contextMenuInbuilding";
 			this.contextMenuInbuilding.ShowImageMargin = false;
 			this.contextMenuInbuilding.Size = new System.Drawing.Size(74, 26);
