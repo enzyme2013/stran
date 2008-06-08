@@ -32,15 +32,66 @@ namespace libTravian
 		public override string ToString()
 		{
 			string rt = "";
-			foreach(var x in Resources)
+			foreach (int x in Resources)
 			{
-				if(rt.Length != 0)
+				if (rt.Length != 0)
 					rt += "|";
 				rt += x.ToString();
 			}
 			return rt;
 		}
+
+		/// <summary>
+		/// Total resource amount
+		/// </summary>
+		/// <returns>Total amound</returns>
+		public int TotalAmount()
+		{
+			int total = 0;
+			for (int i = 0; i < this.Resources.Length; i++)
+			{
+				total += this.Resources[i];
+			}
+
+			return total;
+		}
+
+		/// <summary>
+		/// Set all resource amounts to 0
+		/// </summary>
+		public void Clear()
+		{
+			for (int i = 0; i < this.Resources.Length; i++)
+			{
+				this.Resources[i] = 0;
+			}
+		}
+
+		/// <summary>
+		/// Comparator for unit tests
+		/// </summary>
+		/// <param name="obj">Another resource amount to compare with</param>
+		/// <returns>True if the two amounts are equal</returns>
+		public override bool Equals(object obj)
+		{
+			TResAmount amount = obj as TResAmount;
+			if (amount == null)
+			{
+				return false;
+			}
+
+			for (int i = 0; i < this.Resources.Length; i++)
+			{
+				if (this.Resources[i] != amount.Resources[i])
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
+
 	public class rinfo_array
 	{
 		TResAmount[] _data;
@@ -51,9 +102,9 @@ namespace libTravian
 		{
 			int t1 = (int)(x / 10) * 10;
 			int t2 = (int)x - t1;
-			if(t2 >= 7.5)
+			if (t2 >= 7.5)
 				t1 += 10;
-			else if(t2 >= 2.5)
+			else if (t2 >= 2.5)
 				t1 += 5;
 			return t1;
 		}
@@ -67,18 +118,18 @@ namespace libTravian
 		{
 			get
 			{
-				if(_data == null)
+				if (_data == null)
 				{
 					double[] r = new double[4];
 					int i, j;
 					_data = new TResAmount[length + 1];
 					_data[1] = resbase;
-					for(i = 0; i < 4; i++)
+					for (i = 0; i < 4; i++)
 						r[i] = resbase.Resources[i];
-					for(i = 2; i <= length; i++)
+					for (i = 2; i <= length; i++)
 					{
 						_data[i] = new TResAmount(0, 0, 0, 0);
-						for(j = 0; j < 4; j++)
+						for (j = 0; j < 4; j++)
 						{
 							r[j] *= ratio;
 							_data[i].Resources[j] = mytrunc(r[j]);
@@ -100,17 +151,17 @@ namespace libTravian
 		static public List<TResAmount> PartyCos;
 		static public void Init()
 		{
-			if(_cost == null)
+			if (_cost == null)
 				InitCost();
-			if(Depends == null)
+			if (Depends == null)
 				InitDepend();
-			if(PreferPos == null)
+			if (PreferPos == null)
 				InitPrefer();
-			if(UpCost == null)
+			if (UpCost == null)
 				InitUpCost();
-			if(ResearchCost == null)
+			if (ResearchCost == null)
 				InitResearchCost();
-			if(PartyCos == null)
+			if (PartyCos == null)
 				PartyCos = new List<TResAmount>()
 				{
 					new TResAmount(6400, 6650, 5940, 1340),
@@ -909,14 +960,14 @@ namespace libTravian
 		{
 			try
 			{
-				if(gid < 0)
+				if (gid < 0)
 					return new TResAmount(0, 0, 0, 0);
-				if(level >= _cost[gid].data.Length)
+				if (level >= _cost[gid].data.Length)
 					return new TResAmount(0, 0, 0, 0);
 				else
 					return _cost[gid].data[level];
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				//throw (new Exception("_cost[" + gid.ToString() + ", " + level.ToString() + "]"));
 				return new TResAmount(0, 0, 0, 0);

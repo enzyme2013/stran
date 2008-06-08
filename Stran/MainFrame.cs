@@ -50,7 +50,7 @@ namespace Stran
 		private static Color[] ResColor = new Color[] { Color.ForestGreen, Color.Chocolate, Color.SlateGray, Color.Gold };
 		private static readonly Color RedBGColor = Color.FromArgb(255, 192, 192);
 		private static readonly Color YellowBGColor = Color.FromArgb(255, 255, 192);
-		public static string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击", "防御", "研究" };
+		public static string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击", "防御", "研究", "活动", "运输" };
 
 		private static object QueueLock = new object();
 
@@ -206,6 +206,10 @@ namespace Stran
 				}
 		}
 
+		/// <summary>
+		/// Extract CV.Queue from userdb[v#vid#Queue]
+		/// </summary>
+		/// <param name="VillageID">Village unqiue id</param>
 		private void RestoreQueue(int VillageID)
 		{
 			string key = "v" + VillageID.ToString() + "Queue";
@@ -241,14 +245,22 @@ namespace Stran
 						case "QueueType":
 							Q.QueueType = (TQueueType)Enum.Parse(typeof(TQueueType), kvpair[1]);
 							break;
+						case "ExtraOptions":
+							Q.ExtraOptions = kvpair[1];
+							break;
 					}
 				}
-				if(Q.QueueType == TQueueType.Building && Q.Bid > 0 && !CV.Buildings.ContainsKey(Q.Bid))
+
+				if (Q.QueueType == TQueueType.Building && Q.Bid > 0 && !CV.Buildings.ContainsKey(Q.Bid))
+				{
 					CV.Buildings[Q.Bid] = new TBuilding() { Gid = Q.Gid };
+				}
+
 				Q.NextExec = DateTime.Now.AddSeconds(15);
 				TravianData.Villages[VillageID].Queue.Add(Q);
 			}
 		}
+
 		private void RefreshBuildings()
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
@@ -393,10 +405,15 @@ namespace Stran
 				}
 			}
 		}
+
+		/// <summary>
+		/// Update Queue list view
+		/// </summary>
 		private void DisplayQueue()
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
+
 			var CV = TravianData.Villages[SelectVillage];
 			lock(QueueLock)
 			{
@@ -417,15 +434,28 @@ namespace Stran
 						}
 						else
 						{
-							lvi = m_queuelist.listViewQueue.Items.Add(x.Bid.ToString());
+							lvi = m_queuelist.listViewQueue.Items.Add(x.Bid <= 0 ? "*" : x.Bid.ToString());
 							lvi.SubItems.Add(typelist[x.Type]);
-							if(x.Type < 3)
+							if (x.Type < 3)
+							{
 								lvi.SubItems.Add(dl.GetGidLang(x.Gid));
-							else if(x.Type < 6)
+							}
+							else if (x.Type < 6)
+							{
 								lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, x.Bid));
-							else
+							}
+							else if (x.Type == (int) TQueueType.Party)
+							{
 								lvi.SubItems.Add(x.Bid == 1 ? "500" : "2000");
+							}
+							else if (x.Type == (int)TQueueType.Transfer)
+							{
+								TransferOption option = TransferOption.FromString(x.ExtraOptions);
+								lvi.SubItems.Add(option.GetTitle(TravianData));
+								x.Status = option.Status;
+							}
 						}
+
 						lvi.SubItems.Add(x.Status);
 						lvi.SubItems.Add("");//tr.GetDelay(SelectVillage, x).ToString());
 					}
@@ -442,17 +472,26 @@ namespace Stran
 						int ntype = TravianData.isRomans ? x.Type : 0;
 						if(x.Type >= 2)
 							ntype = x.Type;
-						if(!status[ntype])
+
+						if(x.QueueType == TQueueType.Transfer || !status[ntype])
 						{
 							int n = tr.GetDelay(SelectVillage, x);
-							if(lvi.SubItems[4].Text != n.ToString() && n != 0)
-								lvi.SubItems[4].Text = n.ToString();
+							if (n != 0)
+							{
+								TimeSpan delay = new TimeSpan(0, 0, n);
+								string delayStr = delay.ToString();
+								if (lvi.SubItems[4].Text != delayStr)
+								{
+									lvi.SubItems[4].Text = delayStr;
+								}
+							}
 							status[ntype] = true;
 						}
 					}
 				}
 			}
 		}
+
 		private void DisplayInBuilding()
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
@@ -1471,11 +1510,22 @@ namespace Stran
 					TravianData = TravianData,
 					mui = mui
 				};
-				if(ts.ShowDialog() == DialogResult.OK)
+
+				if(ts.ShowDialog() == DialogResult.OK && ts.Return != null)
 				{
-					if(ts.Return == null)
-						return;
-					tr.Transfer(ts.Return);
+					TQueue Q = new TQueue() {
+						QueueType = TQueueType.Transfer,
+						ExtraOptions = ts.Return.ToString(),
+						Status = ts.Return.Status
+					};
+					CV.Queue.Add(Q);
+					CV.SaveQueue(tr.userdb);
+
+					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
+					lvi.SubItems.Add(typelist[(int) TQueueType.Transfer]);
+					lvi.SubItems.Add(ts.Return.GetTitle(TravianData));
+					lvi.SubItems.Add(Q.Status);
+					lvi.SubItems.Add("");
 				}
 			}
 		}

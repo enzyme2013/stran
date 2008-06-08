@@ -1,6 +1,6 @@
 ﻿// global const
 tribelist=Auto,Romans,Teutons,Gauls
-typelist=ResField,Building,Destroy,Attack,Defence,Research,Party
+typelist=ResField,Building,Destroy,Attack,Defence,Research,Party,Transfer
 // main form
 username=Username
 server=Server
@@ -109,6 +109,7 @@ mtype=Type
 role=Role
 newtransfer=New &Transfer
 merchantcnt=Merchants:
+transfercnt=Repeats(0:inf):
 cmbaic=Based on &current amount
 cmbail=Based on resource field &level
 transfer=Transfer

@@ -46,12 +46,6 @@ namespace libTravian
 			t.Name = "FetchVillageDestroy";
 			t.Start(VillageID);
 		}
-		public void Transfer(TransferOption TO)
-		{
-			Thread t = new Thread(new ParameterizedThreadStart(doTransferWrapper));
-			t.Name = "Transfer";
-			t.Start(TO);
-		}
 		public void Cancel(int VillageID, int Key)
 		{
 			Thread t = new Thread(new ParameterizedThreadStart(doCancelWrapper));

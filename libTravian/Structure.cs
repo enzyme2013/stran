@@ -155,15 +155,15 @@ namespace libTravian
 		public int TimeCost(TResAmount ResCost)
 		{
 			int time = 0;
-			for(int i = 0; i < 4; i++)
-				if(ResCost.Resources[i] > Resource[i].CurrAmount)
+			for (int i = 0; i < 4; i++)
+				if (ResCost.Resources[i] > Resource[i].CurrAmount)
 				{
 					int costtime = -1;
-					if(Resource[i].Produce > 0)
+					if (Resource[i].Produce > 0)
 						costtime = (ResCost.Resources[i] - Resource[i].CurrAmount) * 3600 / Resource[i].Produce;
-					if(costtime < 0)
+					if (costtime < 0)
 						costtime = 32767;
-					if(costtime > time)
+					if (costtime > time)
 						time = costtime;
 				}
 			return time;
@@ -177,7 +177,7 @@ namespace libTravian
 			Queue = new List<TQueue>();
 			Upgrades = new Dictionary<int, TRU>();
 			Market = new TMarket();
-			for(int i = 1; i <= 10; i++)
+			for (int i = 1; i <= 10; i++)
 				Upgrades[i] = new TRU();
 		}
 		public override string ToString()
@@ -189,10 +189,10 @@ namespace libTravian
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("Basic data:");
 			sb.AppendLine(TypeViewer.Snapshot(this));
-			if(isBuildingInitialized == 2)
+			if (isBuildingInitialized == 2)
 			{
 				sb.AppendLine("Building:");
-				foreach(var b in Buildings)
+				foreach (var b in Buildings)
 				{
 					sb.Append("\t");
 					sb.Append(b.Key);
@@ -200,7 +200,7 @@ namespace libTravian
 					sb.AppendLine(b.Value.ToString());
 				}
 				sb.AppendLine("Upgrades:");
-				foreach(var b in Upgrades)
+				foreach (var b in Upgrades)
 				{
 					sb.Append("\t");
 					sb.Append(b.Key);
@@ -208,35 +208,35 @@ namespace libTravian
 					sb.AppendLine(b.Value.ToString());
 				}
 				sb.AppendLine("Resource:");
-				foreach(var b in Resource)
+				foreach (var b in Resource)
 				{
 					sb.Append("\t");
 					sb.AppendLine(b.ToString());
 				}
 				sb.AppendLine("InBuilding:");
-				for(var i = 0; i < InBuilding.Length; i++)
+				for (var i = 0; i < InBuilding.Length; i++)
 				{
 					sb.Append("\t");
 					sb.Append(i);
 					sb.Append(": ");
-					if(InBuilding[i] == null)
+					if (InBuilding[i] == null)
 						sb.AppendLine("NULL");
 					else
 						sb.AppendLine(InBuilding[i].ToString());
 				}
 				sb.AppendLine("RecentBuilt:");
-				for(var i = 0; i < RB.Length; i++)
+				for (var i = 0; i < RB.Length; i++)
 				{
 					sb.Append("\t");
 					sb.Append(i);
 					sb.Append(": ");
-					if(RB[i] == null)
+					if (RB[i] == null)
 						sb.AppendLine("NULL");
 					else
 						sb.AppendLine(RB[i].ToString());
 				}
 				sb.AppendLine("Queue:");
-				foreach(var b in Queue)
+				foreach (var b in Queue)
 				{
 					sb.Append("\t");
 					sb.AppendLine(b.ToString());
@@ -247,9 +247,9 @@ namespace libTravian
 		public void SaveQueue(LocalDB db)
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach(var x in Queue)
+			foreach (var x in Queue)
 			{
-				if(sb.Length != 0)
+				if (sb.Length != 0)
 					sb.Append('|');
 				sb.Append(x.ToString());
 			}
@@ -280,9 +280,9 @@ namespace libTravian
 		{
 			get
 			{
-				if(Produce < 0)
+				if (Produce < 0)
 					return new TimeSpan(0, 0, CurrAmount * 3600 / -Produce);
-				else if(Produce > 0)
+				else if (Produce > 0)
 					return new TimeSpan(0, 0, (Capacity - CurrAmount) * 3600 / Produce);
 				else
 					return new TimeSpan(1, 0, 0, 0);
@@ -352,40 +352,89 @@ namespace libTravian
 		UAttack,
 		UDefense,
 		Research,
-		Party
+		Party,
+		Transfer
 	}
 
+	/// <summary>
+	/// A queued task
+	/// </summary>
 	public class TQueue
 	{
+		/// <summary>
+		/// Represents AI build strategy
+		/// </summary>
 		public static readonly int AIBID = -1024;
-		//public int Vid { get; set; }
+
+		/// <summary>
+		/// Building slot ranges 1 - 50(?)
+		/// </summary>
 		public int Bid { get; set; }
+
+		/// <summary>
+		/// Building type
+		/// </summary>
 		public int Gid { get; set; }
+
+		/// <summary>
+		/// Target building level
+		/// </summary>
 		public int TargetLevel { get; set; }
+
+		/// <summary>
+		/// For display only
+		/// </summary>
 		public string Status { get; set; }
+
+		/// <summary>
+		/// Why do we need this?
+		/// </summary>
 		public int Type
 		{
 			get
 			{
-				if(QueueType == TQueueType.Building)
+				if (QueueType == TQueueType.Building)
 					return Bid < 19 && Bid > 0 ? 0 : Bid != AIBID ? 1 : 0;
-				else 
+				else
 					return (int)QueueType;
 			}
 		}
+
+		/// <summary>
+		/// Task type
+		/// </summary>
 		public TQueueType QueueType { get; set; }
-		public DateTime NextExec;
-		//public TUpgradeType UpgradeType;
+
+		/// <summary>
+		/// Encoded extra task options (used by transfer only)
+		/// </summary>
+		public string ExtraOptions { get; set; }
+
+		/// <summary>
+		/// When the queued task is ready to go (for display only)
+		/// </summary>
+		public DateTime NextExec { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public TQueue()
 		{
-			QueueType = TQueueType.None;
-			Status = "";
-			NextExec = DateTime.MinValue;
+			this.QueueType = TQueueType.None;
+			this.Bid = 0;
+			this.Gid = 0;
+			this.Status = "";
+			this.ExtraOptions = "";
+			this.NextExec = DateTime.MinValue;
 		}
+
+		/// <summary>
+		/// Encode all properties in format "name:value,name:value,..."
+		/// </summary>
+		/// <returns>Encoded string</returns>
 		public override string ToString()
 		{
 			return TypeViewer.ToString(this);
-			//return string.Format("GID:{0}, BID:{1}, TargetLevel:{2}, Type:{3},{4}", Gid, Bid, TargetLevel, Type, QueueType.ToString());
 		}
 	}
 
@@ -413,11 +462,30 @@ namespace libTravian
 		public int ActiveMerchant { get; set; }
 		public int MaxMerchant { get; set; }
 		public List<TMInfo> MarketInfo { get; set; }
+
+		/// <summary>
+		/// How long will the next market event (e.g., merchan returns) happen
+		/// </summary>
+		public int MinimumDelay
+		{
+			get
+			{
+				if (this.MarketInfo.Count > 0)
+				{
+					return (int)Math.Round((this.MarketInfo[0].FinishTime - DateTime.Now).TotalSeconds);
+				}
+				else
+				{
+					return 0;
+				}
+			}
+		}
+
 		public void tick(ref TVillage CV, int MarketSpeed)
 		{
 			for(int i = MarketInfo.Count - 1; i >= 0; i--)
 			{
-				var x = MarketInfo[i];
+				TMInfo x = MarketInfo[i];
 				if(x.FinishTime > DateTime.Now)
 					continue;
 				if(x.MType == TMType.MyBack)
@@ -442,6 +510,7 @@ namespace libTravian
 							string.Format("{0}\r\nMarketSpeed:{1}\r\nMyCoord:{2}\r\nTargetCoord:{3}",
 							ex.Message, MarketSpeed, CV.Coord, x.Coord));
 					}
+
 				}
 				else
 				{
@@ -494,11 +563,11 @@ namespace libTravian
 			StringBuilder sb = new StringBuilder();
 			Type t = sender.GetType();
 			var p = t.GetProperties();//BindingFlags.Public);
-			foreach(var x in p)
+			foreach (var x in p)
 			{
-				if(x.GetIndexParameters().Length == 0)
+				if (x.GetIndexParameters().Length == 0)
 				{
-					if(sb.Length != 0)
+					if (sb.Length != 0)
 						sb.Append(", ");
 					sb.Append(x.Name);
 					sb.Append(":");
@@ -512,15 +581,15 @@ namespace libTravian
 			StringBuilder sb = new StringBuilder();
 			Type t = sender.GetType();
 			var p = t.GetProperties();//BindingFlags.Public);
-			foreach(var x in p)
+			foreach (var x in p)
 			{
-				if(x.PropertyType == typeof(int) ||
+				if (x.PropertyType == typeof(int) ||
 					x.PropertyType == typeof(string) ||
 					x.PropertyType == typeof(bool) ||
 					x.PropertyType == typeof(DateTime)
 					)
 				{
-					if(sb.Length != 0)
+					if (sb.Length != 0)
 						sb.Append(Environment.NewLine);
 					sb.Append(x.Name);
 					sb.Append(":");
