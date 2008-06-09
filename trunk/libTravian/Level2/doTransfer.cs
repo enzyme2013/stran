@@ -31,6 +31,11 @@ namespace libTravian
 		None = 0,
 
 		/// <summary>
+		/// Distribute the same amount of resource among all categories
+		/// </summary>
+		EvenDistribution,
+
+		/// <summary>
 		/// Evenly distribute the source village's remaining resources
 		/// </summary>
 		BalanceSource,
@@ -49,7 +54,7 @@ namespace libTravian
 		/// <summary>
 		/// Short names for distribution type None, Source and Destination
 		/// </summary>
-		private static readonly string[] DistributionShortName = new string[] { "=>", "=S=>", "=T=>" };
+		private static readonly string[] DistributionShortName = new string[] { "=>", "=Err=>", "=S=>", "=T=>" };
 
 		/// <summary>
 		/// When the mechant (occupied by the previous transfer) will return
@@ -194,26 +199,32 @@ namespace libTravian
 		{
 			switch (this.Distribution)
 			{
-				case ResourceDistributionType.BalanceTarget:
-					this.BalanceDestinationResource(travianData, sourceVillageID);
+				case ResourceDistributionType.None:
+					break;
+				case ResourceDistributionType.EvenDistribution:
+					this.EvenlyDistibuteResource();
 					break;
 				case ResourceDistributionType.BalanceSource:
 					this.BalanceSourceResource(travianData, sourceVillageID);
 					break;
-				case ResourceDistributionType.None:
+				case ResourceDistributionType.BalanceTarget:
+					this.BalanceDestinationResource(travianData, sourceVillageID);
 					break;
 			}
 		}
 
-		private void BalanceDestinationResource(Data travianData, int sourceVillageID)
+		private void EvenlyDistibuteResource()
 		{
-			TResAmount targetAmount = this.GetTargetCapacity(travianData, sourceVillageID);
-			if (targetAmount == null)
+			int total = this.ResourceAmount.TotalAmount();
+			int slots = this.NoCrop ? 3 : 4;
+
+			this.ResourceAmount = new TResAmount(0, 0, 0, 0);
+			for (int i = 0; i < slots; i++)
 			{
-				targetAmount = new TResAmount(0, 0, 0, 0);
+				this.ResourceAmount.Resources[i] = total / slots;
 			}
 
-			this.DoBalance(targetAmount);
+			this.ResourceAmount.Resources[0] += total - this.ResourceAmount.TotalAmount();
 		}
 
 		private void BalanceSourceResource(Data travianData, int sourceVillageID)
@@ -228,6 +239,17 @@ namespace libTravian
 				{
 					targetAmount.Resources[i] = VR[i].CurrAmount;
 				}
+			}
+
+			this.DoBalance(targetAmount);
+		}
+
+		private void BalanceDestinationResource(Data travianData, int sourceVillageID)
+		{
+			TResAmount targetAmount = this.GetTargetCapacity(travianData, sourceVillageID);
+			if (targetAmount == null)
+			{
+				targetAmount = new TResAmount(0, 0, 0, 0);
 			}
 
 			this.DoBalance(targetAmount);

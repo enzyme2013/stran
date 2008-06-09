@@ -105,16 +105,24 @@ namespace Stran
 				this.radioNormalTarget.Enabled = true;
 			}
 
-			numericUpDownMechantCount_ValueChanged(sender, e);
+			if (!this.radioNoNormal.Checked)
+			{
+				numericUpDownMechantCount_ValueChanged(sender, e);
+			}
 		}
 
 		private void numericUpDownMechantCount_ValueChanged(object sender, EventArgs e)
 		{
 			TransferOption option = this.GetTransferOption();
-			if (option != null && option.Distribution != ResourceDistributionType.None)
+			if (option != null)
 			{
 				int total = this.CV.Market.SingleCarry * Convert.ToInt32(this.numericUpDownMechantCount.Value);
 				option.ResourceAmount = new TResAmount(0, 0, 0, total);
+				if (option.Distribution == ResourceDistributionType.None)
+				{
+					option.Distribution = ResourceDistributionType.EvenDistribution;
+				}
+
 				option.CalculateResourceAmount(this.TravianData, this.CV.ID);
 				this.numericUpDown1.Value = option.ResourceAmount.Resources[0];
 				this.numericUpDown2.Value = option.ResourceAmount.Resources[1];
