@@ -80,6 +80,16 @@ namespace UnitTestLibTravian
 			target.CalculateResourceAmount(travianData, sourceVillageID);
 			Assert.AreEqual(new TResAmount(3000, 4000, 3000, 2375), target.ResourceAmount);
 
+			// Uniform distribution
+			target.Distribution = ResourceDistributionType.EvenDistribution;
+			target.NoCrop = false;
+			target.CalculateResourceAmount(travianData, sourceVillageID);
+			Assert.AreEqual(new TResAmount(3096, 3093, 3093, 3093), target.ResourceAmount);
+
+			target.NoCrop = true;
+			target.CalculateResourceAmount(travianData, sourceVillageID);
+			Assert.AreEqual(new TResAmount(4125, 4125, 4125, 0), target.ResourceAmount);
+
 			// Balance source village
 			TVillage sourceVillage = new TVillage();
 			sourceVillage.Resource = new TResource[4];
