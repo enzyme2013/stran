@@ -33,6 +33,7 @@ namespace Stran
 		static public Dictionary<string, string> Options = new Dictionary<string, string>();
 		static int Pagecount = 0, Buildcount = 0, Eventcount = 0;
 		static object writelock = new object();
+		// svn propset svn:keywords "Rev" MainForm.cs
 		string svnid = "$Rev$";
 		static public string VERSION;
 		private MUI mui { get; set; }
