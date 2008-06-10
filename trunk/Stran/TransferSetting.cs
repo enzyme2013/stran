@@ -67,6 +67,10 @@ namespace Stran
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			this.Return = this.GetTransferOption();
+			if (!this.Return.IsValid)
+			{
+				this.Return = null;
+			}
 		}
 
 		private void comboBoxTargetVillage_SelectedIndexChanged(object sender, EventArgs e)
@@ -176,6 +180,9 @@ namespace Stran
 			if (CV.Market.SingleCarry == 0)
 				CV.Market.SingleCarry = 750;
 			sb.AppendFormat(mui._("merchantsformat"), Convert.ToInt32(Math.Ceiling(Convert.ToDouble(all) / CV.Market.SingleCarry)), CV.Market.ActiveMerchant);
+
+			TransferOption option = this.GetTransferOption();
+			sb.AppendFormat(" {0}", option.Status);
 			labelDetail.Text = sb.ToString();
 		}
 
