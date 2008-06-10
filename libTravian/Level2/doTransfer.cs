@@ -97,6 +97,14 @@ namespace libTravian
 		public TResAmount ResourceAmount { get; set; }
 
 		/// <summary>
+		/// Return false if the total resource amount is 0
+		/// </summary>
+		public bool IsValid
+		{
+			get { return this.ResourceAmount.TotalAmount() > 0; }
+		}
+
+		/// <summary>
 		/// Minimum seconds to wait until the mechant resturns
 		/// </summary>
 		public int MinimumDelay
@@ -408,9 +416,28 @@ namespace libTravian
 	{
 		private TResAmount JustTransferredData = null;
 
+
+		/// <summary>
+		/// Wrapper of the real doTransfer function, which
+		/// 1) Verify that the tranfer amount is valid (non-zero)
+		/// 2) Verify that merchant dispatched for the same mission has returned.
+		/// 3) Recalculate the transfer amount for dynamic resource balance
+		/// 4) Verify that the transfer won't overflow the arrival village's warehouse/granary
+		/// 5) Update task status after a successful merchan dispatch
+		/// 6) Remove the task from the village queue when it's no longer valid/needed
+		/// </summary>
+		/// <param name="VillageID">Departure village ID</param>
+		/// <param name="Q">Transportation task</param>
 		public void doTransfer(int VillageID, TQueue Q)
 		{
 			TransferOption option = TransferOption.FromString(Q.ExtraOptions);
+			if (!option.IsValid)
+			{
+				DebugLog("Invalid transfer task discarded: " + option.ToString(), DebugLevel.W);
+				this.RemoveQueuedTask(VillageID, Q);
+				return;
+			}
+
 			if (option.MinimumDelay > 0)
 			{
 				return;
@@ -446,20 +473,17 @@ namespace libTravian
 				}
 				else
 				{
-					int QueueID = CV.Queue.IndexOf(Q);
-					CV.Queue.Remove(Q);
-					CV.SaveQueue(userdb);
-					StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = QueueID });
+					this.RemoveQueuedTask(VillageID, Q);
 				}
 			}
 		}
 
 		/// <summary>
-		/// 
+		/// Dispatch a transportation of a given amount of resource from one village to a given destiantion
 		/// </summary>
-		/// <param name="VillageID"></param>
-		/// <param name="Amount"></param>
-		/// <param name="TargetPos"></param>
+		/// <param name="VillageID">Unique ID of the departure village</param>
+		/// <param name="Amount">Amounts of resources to transport</param>
+		/// <param name="TargetPos">Position of the arrival village</param>
 		/// <returns>Error return minus number. Succeed return single way transfer time cost.</returns>
 		public int doTransfer(int VillageID, TResAmount Amount, TPoint TargetPos)
 		{
@@ -530,7 +554,6 @@ namespace libTravian
 			JustTransferredData = Amount;
 			result = PageQuery(VillageID, "build.php", PostData);
 
-
 			// write data into target village if it's my village.
 			foreach (var x in TD.Villages)
 			{
@@ -552,6 +575,20 @@ namespace libTravian
 			}
 
 			return TimeCost;
+		}
+
+		/// <summary>
+		/// Remove a item from the village task queue
+		/// </summary>
+		/// <param name="villageID">Which village the task queue belongs to</param>
+		/// <param name="task">The item to delete from the task queue</param>
+		private void RemoveQueuedTask (int villageID, TQueue task)
+		{
+			TVillage village = this.TD.Villages[villageID];
+			int queueID = village.Queue.IndexOf(task);
+			village.Queue.Remove(task);
+			village.SaveQueue(userdb);
+			StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = villageID, Param = queueID });
 		}
 	}
 }

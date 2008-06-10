@@ -215,5 +215,21 @@ namespace UnitTestLibTravian
 			actual = target.GetTitle(travianData);
 			Assert.AreEqual(expected, actual);
 		}
+
+		/// <summary>
+		///A test for IsValid
+		///</summary>
+		[TestMethod()]
+		public void IsValidTest()
+		{
+			TransferOption target = new TransferOption();
+
+			// Zero total amount is invalid
+			Assert.IsFalse(target.IsValid);
+
+			// Otherwise, valid
+			target.ResourceAmount = new TResAmount(100, 0, 0, 0);
+			Assert.IsTrue(target.IsValid);
+		}
 	}
 }
