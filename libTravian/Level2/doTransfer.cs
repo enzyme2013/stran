@@ -573,7 +573,8 @@ namespace libTravian
 					break;
 				}
 			}
-
+			DebugLog(string.Format("Transfer {0}({1}) => {2} {3}", CV.Coord.ToString(), VillageID, TargetPos.ToString(),
+				Amount.ToString()), DebugLevel.I);
 			return TimeCost;
 		}
 

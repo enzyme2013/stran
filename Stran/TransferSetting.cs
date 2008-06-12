@@ -191,18 +191,6 @@ namespace Stran
 			comboBoxTargetVillage_SelectedIndexChanged(sender, e);
 		}
 
-		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			try
-			{
-				linkLabel1.LinkVisited = true;
-				Process.Start("http://traplug.5d6d.com/thread-417-1-1.html");
-			}
-			catch
-			{
-			}
-		}
-
 		/// <summary>
 		/// Assemble a TransferOption object using current control values
 		/// </summary>

@@ -44,7 +44,6 @@
 			this.radioNormalTarget = new System.Windows.Forms.RadioButton();
 			this.radioNormalMe = new System.Windows.Forms.RadioButton();
 			this.radioNoNormal = new System.Windows.Forms.RadioButton();
-			this.linkLabel1 = new System.Windows.Forms.LinkLabel();
 			this.checkBoxNoCrop = new System.Windows.Forms.CheckBox();
 			this.numericUpDownTransferCount = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
@@ -62,7 +61,7 @@
 			this.buttonCancel.Location = new System.Drawing.Point(217, 315);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 32);
-			this.buttonCancel.TabIndex = 7;
+			this.buttonCancel.TabIndex = 31;
 			this.buttonCancel.Tag = "cancel";
 			this.buttonCancel.Text = "取消";
 			this.buttonCancel.UseVisualStyleBackColor = true;
@@ -73,7 +72,7 @@
 			this.buttonOK.Location = new System.Drawing.Point(97, 315);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(80, 32);
-			this.buttonOK.TabIndex = 6;
+			this.buttonOK.TabIndex = 30;
 			this.buttonOK.Tag = "ok";
 			this.buttonOK.Text = "确定";
 			this.buttonOK.UseVisualStyleBackColor = true;
@@ -81,7 +80,7 @@
 			// 
 			// numericUpDown1
 			// 
-			this.numericUpDown1.Location = new System.Drawing.Point(31, 69);
+			this.numericUpDown1.Location = new System.Drawing.Point(12, 70);
 			this.numericUpDown1.Name = "numericUpDown1";
 			this.numericUpDown1.Size = new System.Drawing.Size(70, 22);
 			this.numericUpDown1.TabIndex = 8;
@@ -91,7 +90,7 @@
 			// 
 			// numericUpDown2
 			// 
-			this.numericUpDown2.Location = new System.Drawing.Point(31, 97);
+			this.numericUpDown2.Location = new System.Drawing.Point(12, 98);
 			this.numericUpDown2.Name = "numericUpDown2";
 			this.numericUpDown2.Size = new System.Drawing.Size(70, 22);
 			this.numericUpDown2.TabIndex = 9;
@@ -101,7 +100,7 @@
 			// 
 			// numericUpDown3
 			// 
-			this.numericUpDown3.Location = new System.Drawing.Point(31, 125);
+			this.numericUpDown3.Location = new System.Drawing.Point(12, 126);
 			this.numericUpDown3.Name = "numericUpDown3";
 			this.numericUpDown3.Size = new System.Drawing.Size(70, 22);
 			this.numericUpDown3.TabIndex = 10;
@@ -111,7 +110,7 @@
 			// 
 			// numericUpDown4
 			// 
-			this.numericUpDown4.Location = new System.Drawing.Point(31, 153);
+			this.numericUpDown4.Location = new System.Drawing.Point(12, 154);
 			this.numericUpDown4.Name = "numericUpDown4";
 			this.numericUpDown4.Size = new System.Drawing.Size(70, 22);
 			this.numericUpDown4.TabIndex = 11;
@@ -126,46 +125,46 @@
 			this.comboBoxTargetVillage.FormattingEnabled = true;
 			this.comboBoxTargetVillage.Items.AddRange(new object[] {
             "-"});
-			this.comboBoxTargetVillage.Location = new System.Drawing.Point(31, 35);
+			this.comboBoxTargetVillage.Location = new System.Drawing.Point(12, 36);
 			this.comboBoxTargetVillage.MaxDropDownItems = 12;
 			this.comboBoxTargetVillage.Name = "comboBoxTargetVillage";
-			this.comboBoxTargetVillage.Size = new System.Drawing.Size(332, 21);
-			this.comboBoxTargetVillage.TabIndex = 12;
+			this.comboBoxTargetVillage.Size = new System.Drawing.Size(370, 21);
+			this.comboBoxTargetVillage.TabIndex = 0;
 			this.comboBoxTargetVillage.SelectedIndexChanged += new System.EventHandler(this.comboBoxTargetVillage_SelectedIndexChanged);
 			// 
 			// txtX
 			// 
-			this.txtX.Location = new System.Drawing.Point(254, 105);
+			this.txtX.Location = new System.Drawing.Point(273, 106);
 			this.txtX.Name = "txtX";
 			this.txtX.Size = new System.Drawing.Size(50, 22);
 			this.txtX.TabIndex = 13;
 			// 
 			// txtY
 			// 
-			this.txtY.Location = new System.Drawing.Point(313, 105);
+			this.txtY.Location = new System.Drawing.Point(332, 106);
 			this.txtY.Name = "txtY";
 			this.txtY.Size = new System.Drawing.Size(50, 22);
 			this.txtY.TabIndex = 14;
 			// 
 			// numericUpDownMechantCount
 			// 
-			this.numericUpDownMechantCount.Location = new System.Drawing.Point(313, 133);
+			this.numericUpDownMechantCount.Location = new System.Drawing.Point(321, 134);
 			this.numericUpDownMechantCount.Maximum = new decimal(new int[] {
             20,
             0,
             0,
             0});
 			this.numericUpDownMechantCount.Name = "numericUpDownMechantCount";
-			this.numericUpDownMechantCount.Size = new System.Drawing.Size(50, 22);
+			this.numericUpDownMechantCount.Size = new System.Drawing.Size(61, 22);
 			this.numericUpDownMechantCount.TabIndex = 15;
 			this.numericUpDownMechantCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numericUpDownMechantCount.ValueChanged += new System.EventHandler(this.numericUpDownMechantCount_ValueChanged);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(227, 133);
+			this.label1.Location = new System.Drawing.Point(227, 134);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(80, 22);
+			this.label1.Size = new System.Drawing.Size(88, 22);
 			this.label1.TabIndex = 16;
 			this.label1.Tag = "merchantcnt";
 			this.label1.Text = "merchantcnt";
@@ -174,7 +173,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(266, 81);
+			this.label2.Location = new System.Drawing.Point(246, 78);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(38, 14);
 			this.label2.TabIndex = 17;
@@ -188,14 +187,14 @@
 			this.labelDetail.Multiline = true;
 			this.labelDetail.Name = "labelDetail";
 			this.labelDetail.ReadOnly = true;
-			this.labelDetail.Size = new System.Drawing.Size(370, 85);
+			this.labelDetail.Size = new System.Drawing.Size(370, 119);
 			this.labelDetail.TabIndex = 19;
 			// 
 			// radioNormalTarget
 			// 
 			this.radioNormalTarget.AutoSize = true;
 			this.radioNormalTarget.Checked = true;
-			this.radioNormalTarget.Location = new System.Drawing.Point(125, 85);
+			this.radioNormalTarget.Location = new System.Drawing.Point(115, 87);
 			this.radioNormalTarget.Name = "radioNormalTarget";
 			this.radioNormalTarget.Size = new System.Drawing.Size(96, 18);
 			this.radioNormalTarget.TabIndex = 20;
@@ -208,7 +207,7 @@
 			// radioNormalMe
 			// 
 			this.radioNormalMe.AutoSize = true;
-			this.radioNormalMe.Location = new System.Drawing.Point(125, 109);
+			this.radioNormalMe.Location = new System.Drawing.Point(115, 111);
 			this.radioNormalMe.Name = "radioNormalMe";
 			this.radioNormalMe.Size = new System.Drawing.Size(96, 18);
 			this.radioNormalMe.TabIndex = 21;
@@ -221,7 +220,7 @@
 			// radioNoNormal
 			// 
 			this.radioNoNormal.AutoSize = true;
-			this.radioNoNormal.Location = new System.Drawing.Point(125, 133);
+			this.radioNoNormal.Location = new System.Drawing.Point(115, 135);
 			this.radioNoNormal.Name = "radioNoNormal";
 			this.radioNoNormal.Size = new System.Drawing.Size(96, 18);
 			this.radioNoNormal.TabIndex = 22;
@@ -231,23 +230,12 @@
 			this.radioNoNormal.UseVisualStyleBackColor = true;
 			this.radioNoNormal.CheckedChanged += new System.EventHandler(this.radio_CheckedChanged);
 			// 
-			// linkLabel1
-			// 
-			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.Location = new System.Drawing.Point(28, 289);
-			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(268, 14);
-			this.linkLabel1.TabIndex = 23;
-			this.linkLabel1.TabStop = true;
-			this.linkLabel1.Text = "Stran 正在寻求更优秀的运输量算法，详情请点击";
-			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-			// 
 			// checkBoxNoCrop
 			// 
 			this.checkBoxNoCrop.AutoSize = true;
-			this.checkBoxNoCrop.Location = new System.Drawing.Point(125, 157);
+			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 159);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
-			this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
+			this.checkBoxNoCrop.Size = new System.Drawing.Size(86, 18);
 			this.checkBoxNoCrop.TabIndex = 24;
 			this.checkBoxNoCrop.Tag = "nocrop";
 			this.checkBoxNoCrop.Text = "checkBox1";
@@ -256,15 +244,15 @@
 			// 
 			// numericUpDownTransferCount
 			// 
-			this.numericUpDownTransferCount.Location = new System.Drawing.Point(313, 161);
+			this.numericUpDownTransferCount.Location = new System.Drawing.Point(321, 162);
 			this.numericUpDownTransferCount.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
 			this.numericUpDownTransferCount.Name = "numericUpDownTransferCount";
-			this.numericUpDownTransferCount.Size = new System.Drawing.Size(50, 22);
-			this.numericUpDownTransferCount.TabIndex = 25;
+			this.numericUpDownTransferCount.Size = new System.Drawing.Size(61, 22);
+			this.numericUpDownTransferCount.TabIndex = 16;
 			this.numericUpDownTransferCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numericUpDownTransferCount.Value = new decimal(new int[] {
             1,
@@ -274,9 +262,9 @@
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(216, 159);
+			this.label3.Location = new System.Drawing.Point(230, 162);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(91, 22);
+			this.label3.Size = new System.Drawing.Size(85, 22);
 			this.label3.TabIndex = 26;
 			this.label3.Tag = "transfercnt";
 			this.label3.Text = "transfercnt";
@@ -292,7 +280,6 @@
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.numericUpDownTransferCount);
 			this.Controls.Add(this.checkBoxNoCrop);
-			this.Controls.Add(this.linkLabel1);
 			this.Controls.Add(this.radioNoNormal);
 			this.Controls.Add(this.radioNormalMe);
 			this.Controls.Add(this.radioNormalTarget);
@@ -349,7 +336,6 @@
 		private System.Windows.Forms.RadioButton radioNormalTarget;
 		private System.Windows.Forms.RadioButton radioNormalMe;
 		private System.Windows.Forms.RadioButton radioNoNormal;
-		private System.Windows.Forms.LinkLabel linkLabel1;
 		private System.Windows.Forms.CheckBox checkBoxNoCrop;
 		private System.Windows.Forms.NumericUpDown numericUpDownTransferCount;
 		private System.Windows.Forms.Label label3;
