@@ -251,7 +251,7 @@ namespace libTravian
 			{
 				if (sb.Length != 0)
 					sb.Append('|');
-				sb.Append(x.ToString());
+				sb.Append(x.ToString().Replace("|", "<_!!!_>"));
 			}
 			string key = "v" + ID.ToString() + "Queue";
 			db[key] = sb.ToString();
