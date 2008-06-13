@@ -223,7 +223,7 @@ namespace Stran
 			foreach(var x in queues)
 			{
 				TQueue Q = new TQueue();
-				foreach(var y in x.Split(','))
+				foreach(var y in x.Replace("<_!!!_>", "|").Split(','))
 				{
 					string[] kvpair = y.Trim().Split(':');
 					if(kvpair.Length != 2)
