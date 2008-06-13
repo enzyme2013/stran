@@ -61,7 +61,7 @@ namespace Stran
 				numericUpDown2.Maximum =
 				numericUpDown3.Maximum =
 				numericUpDown4.Maximum = CV.Market.SingleCarry * CV.Market.MaxMerchant;
-			numericUpDownMechantCount.Maximum = CV.Market.MaxMerchant;
+			numericUpDownMerchantCount.Maximum = CV.Market.MaxMerchant;
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
@@ -117,7 +117,7 @@ namespace Stran
 			TransferOption option = this.GetTransferOption();
 			if (option != null && option.Distribution != ResourceDistributionType.None)
 			{
-				int total = this.CV.Market.SingleCarry * Convert.ToInt32(this.numericUpDownMechantCount.Value);
+				int total = this.CV.Market.SingleCarry * Convert.ToInt32(this.numericUpDownMerchantCount.Value);
 				option.ResourceAmount = new TResAmount(0, 0, 0, total);
 				option.CalculateResourceAmount(this.TravianData, this.CV.ID);
 				this.numericUpDown1.Value = option.ResourceAmount.Resources[0];
@@ -179,7 +179,7 @@ namespace Stran
 				sb.AppendFormat(" {0}", option.Status);
 				if (option.Distribution == ResourceDistributionType.None)
 				{
-					this.numericUpDownMechantCount.Value = (option.ResourceAmount.TotalAmount() - 1) / this.CV.Market.SingleCarry + 1;
+					this.numericUpDownMerchantCount.Value = (option.ResourceAmount.TotalAmount() - 1) / this.CV.Market.SingleCarry + 1;
 				}
 			}
 
@@ -202,13 +202,17 @@ namespace Stran
 			try
 			{
 				option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
+				option.TargetVillageID = this.targetVillageID;
 				option.TargetPos = new TPoint(Convert.ToInt32(this.txtX.Text), Convert.ToInt32(this.txtY.Text));
 				option.ResourceAmount = new TResAmount(
 					 Convert.ToInt32(this.numericUpDown1.Value),
 					 Convert.ToInt32(this.numericUpDown2.Value),
 					 Convert.ToInt32(this.numericUpDown3.Value),
 					 Convert.ToInt32(this.numericUpDown4.Value));
-				option.TargetVillageID = this.targetVillageID;
+				if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
+				{
+					return null;
+				}
 
 				if (this.radioNormalTarget.Checked)
 				{
