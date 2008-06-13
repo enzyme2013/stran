@@ -33,7 +33,7 @@ namespace libTravian
 		/// <summary>
 		/// Distribute the same amount of resource among all categories
 		/// </summary>
-		EvenDistribution,
+		Uniform,
 
 		/// <summary>
 		/// Evenly distribute the source village's remaining resources
@@ -54,7 +54,7 @@ namespace libTravian
 		/// <summary>
 		/// Short names for distribution type None, Source and Destination
 		/// </summary>
-		private static readonly string[] DistributionShortName = new string[] { "=>", "=Err=>", "=S=>", "=T=>" };
+		private static readonly string[] DistributionShortName = new string[] { "=>", "=>", "=S=>", "=T=>" };
 
 		/// <summary>
 		/// When the mechant (occupied by the previous transfer) will return
@@ -140,8 +140,7 @@ namespace libTravian
 			{
 				string count = this.Count.ToString() + "/";
 				count += this.MaxCount == 0 ? "Inf" : this.MaxCount.ToString();
-				string resources = this.ResourceAmount.ToString().Replace('|', '/');
-				return count + DistributionShortName[(int)this.Distribution] + resources;
+				return count + DistributionShortName[(int)this.Distribution] + this.ResourceAmount.ToString();
 			}
 		}
 
@@ -161,7 +160,7 @@ namespace libTravian
 		/// <returns>Target village name and coordination</returns>
 		public string GetTitle(Data travianData)
 		{
-			string pos = this.TargetPos.ToString().Replace('|', '/');
+			string pos = this.TargetPos.ToString();
 			if (travianData != null && travianData.Villages.ContainsKey(this.TargetVillageID))
 			{
 				pos = pos + " " + travianData.Villages[this.TargetVillageID].Name;
@@ -209,7 +208,7 @@ namespace libTravian
 			{
 				case ResourceDistributionType.None:
 					break;
-				case ResourceDistributionType.EvenDistribution:
+				case ResourceDistributionType.Uniform:
 					this.EvenlyDistibuteResource();
 					break;
 				case ResourceDistributionType.BalanceSource:

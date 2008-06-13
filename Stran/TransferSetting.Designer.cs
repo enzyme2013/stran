@@ -47,6 +47,7 @@
 			this.checkBoxNoCrop = new System.Windows.Forms.CheckBox();
 			this.numericUpDownTransferCount = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
+			this.radioUniform = new System.Windows.Forms.RadioButton();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -189,12 +190,13 @@
 			this.labelDetail.ReadOnly = true;
 			this.labelDetail.Size = new System.Drawing.Size(370, 119);
 			this.labelDetail.TabIndex = 19;
+			this.labelDetail.TabStop = false;
 			// 
 			// radioNormalTarget
 			// 
 			this.radioNormalTarget.AutoSize = true;
 			this.radioNormalTarget.Checked = true;
-			this.radioNormalTarget.Location = new System.Drawing.Point(115, 87);
+			this.radioNormalTarget.Location = new System.Drawing.Point(115, 70);
 			this.radioNormalTarget.Name = "radioNormalTarget";
 			this.radioNormalTarget.Size = new System.Drawing.Size(96, 18);
 			this.radioNormalTarget.TabIndex = 20;
@@ -207,7 +209,7 @@
 			// radioNormalMe
 			// 
 			this.radioNormalMe.AutoSize = true;
-			this.radioNormalMe.Location = new System.Drawing.Point(115, 111);
+			this.radioNormalMe.Location = new System.Drawing.Point(115, 94);
 			this.radioNormalMe.Name = "radioNormalMe";
 			this.radioNormalMe.Size = new System.Drawing.Size(96, 18);
 			this.radioNormalMe.TabIndex = 21;
@@ -220,10 +222,10 @@
 			// radioNoNormal
 			// 
 			this.radioNoNormal.AutoSize = true;
-			this.radioNoNormal.Location = new System.Drawing.Point(115, 135);
+			this.radioNoNormal.Location = new System.Drawing.Point(115, 142);
 			this.radioNoNormal.Name = "radioNoNormal";
 			this.radioNoNormal.Size = new System.Drawing.Size(96, 18);
-			this.radioNoNormal.TabIndex = 22;
+			this.radioNoNormal.TabIndex = 23;
 			this.radioNoNormal.TabStop = true;
 			this.radioNoNormal.Tag = "noautonormalize";
 			this.radioNoNormal.Text = "radioButton2";
@@ -233,9 +235,9 @@
 			// checkBoxNoCrop
 			// 
 			this.checkBoxNoCrop.AutoSize = true;
-			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 159);
+			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 166);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
-			this.checkBoxNoCrop.Size = new System.Drawing.Size(86, 18);
+			this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
 			this.checkBoxNoCrop.TabIndex = 24;
 			this.checkBoxNoCrop.Tag = "nocrop";
 			this.checkBoxNoCrop.Text = "checkBox1";
@@ -270,6 +272,18 @@
 			this.label3.Text = "transfercnt";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// radioUniform
+			// 
+			this.radioUniform.AutoSize = true;
+			this.radioUniform.Location = new System.Drawing.Point(115, 118);
+			this.radioUniform.Name = "radioUniform";
+			this.radioUniform.Size = new System.Drawing.Size(126, 18);
+			this.radioUniform.TabIndex = 22;
+			this.radioUniform.TabStop = true;
+			this.radioUniform.Tag = "uniformdistribution";
+			this.radioUniform.Text = "uniformdistribution";
+			this.radioUniform.UseVisualStyleBackColor = true;
+			// 
 			// TransferSetting
 			// 
 			this.AcceptButton = this.buttonOK;
@@ -277,6 +291,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(394, 370);
+			this.Controls.Add(this.radioUniform);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.numericUpDownTransferCount);
 			this.Controls.Add(this.checkBoxNoCrop);
@@ -335,6 +350,7 @@
 		private System.Windows.Forms.TextBox labelDetail;
 		private System.Windows.Forms.RadioButton radioNormalTarget;
 		private System.Windows.Forms.RadioButton radioNormalMe;
+		private System.Windows.Forms.RadioButton radioUniform;
 		private System.Windows.Forms.RadioButton radioNoNormal;
 		private System.Windows.Forms.CheckBox checkBoxNoCrop;
 		private System.Windows.Forms.NumericUpDown numericUpDownTransferCount;
