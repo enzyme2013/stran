@@ -37,7 +37,7 @@
 			this.comboBoxTargetVillage = new System.Windows.Forms.ComboBox();
 			this.txtX = new System.Windows.Forms.TextBox();
 			this.txtY = new System.Windows.Forms.TextBox();
-			this.numericUpDownMechantCount = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownMerchantCount = new System.Windows.Forms.NumericUpDown();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.labelDetail = new System.Windows.Forms.TextBox();
@@ -52,7 +52,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMechantCount)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMerchantCount)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransferCount)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -149,17 +149,17 @@
 			// 
 			// numericUpDownMechantCount
 			// 
-			this.numericUpDownMechantCount.Location = new System.Drawing.Point(321, 134);
-			this.numericUpDownMechantCount.Maximum = new decimal(new int[] {
+			this.numericUpDownMerchantCount.Location = new System.Drawing.Point(321, 134);
+			this.numericUpDownMerchantCount.Maximum = new decimal(new int[] {
             20,
             0,
             0,
             0});
-			this.numericUpDownMechantCount.Name = "numericUpDownMechantCount";
-			this.numericUpDownMechantCount.Size = new System.Drawing.Size(61, 22);
-			this.numericUpDownMechantCount.TabIndex = 15;
-			this.numericUpDownMechantCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.numericUpDownMechantCount.ValueChanged += new System.EventHandler(this.numericUpDownMechantCount_ValueChanged);
+			this.numericUpDownMerchantCount.Name = "numericUpDownMechantCount";
+			this.numericUpDownMerchantCount.Size = new System.Drawing.Size(61, 22);
+			this.numericUpDownMerchantCount.TabIndex = 15;
+			this.numericUpDownMerchantCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.numericUpDownMerchantCount.ValueChanged += new System.EventHandler(this.numericUpDownMechantCount_ValueChanged);
 			// 
 			// label1
 			// 
@@ -301,7 +301,7 @@
 			this.Controls.Add(this.labelDetail);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.numericUpDownMechantCount);
+			this.Controls.Add(this.numericUpDownMerchantCount);
 			this.Controls.Add(this.txtY);
 			this.Controls.Add(this.txtX);
 			this.Controls.Add(this.comboBoxTargetVillage);
@@ -326,7 +326,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMechantCount)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMerchantCount)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransferCount)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -344,7 +344,7 @@
 		private System.Windows.Forms.ComboBox comboBoxTargetVillage;
 		private System.Windows.Forms.TextBox txtX;
 		private System.Windows.Forms.TextBox txtY;
-		private System.Windows.Forms.NumericUpDown numericUpDownMechantCount;
+		private System.Windows.Forms.NumericUpDown numericUpDownMerchantCount;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox labelDetail;
