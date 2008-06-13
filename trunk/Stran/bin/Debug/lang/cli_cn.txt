@@ -120,6 +120,7 @@ resourceshow=资源状况
 inbuilding=进行中的任务
 autonormalizetarget=自动平衡目标资源
 autonormalizeme=自动平衡我的资源
+uniformdistribution=平均分配资源
 noautonormalize=无资源平衡计算
 nocrop=不运送粮食
 

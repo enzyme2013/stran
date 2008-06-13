@@ -22,16 +22,17 @@ namespace UnitTestLibTravian
 
 			target.Distribution = ResourceDistributionType.None;
 			actual = target.Status;
-			Assert.AreEqual("0/Inf=>750/250/500/500", actual);
+			Assert.AreEqual("0/Inf=>750|250|500|500", actual);
 
+			target.Distribution = ResourceDistributionType.Uniform;
 			target.MaxCount = 3;
 			target.Count = 2;
 			actual = target.Status;
-			Assert.AreEqual("2/3=>750/250/500/500", actual);
+			Assert.AreEqual("2/3=>750|250|500|500", actual);
 
 			target.Distribution = ResourceDistributionType.BalanceSource;
 			actual = target.Status;
-			Assert.AreEqual("2/3=S=>750/250/500/500", actual);
+			Assert.AreEqual("2/3=S=>750|250|500|500", actual);
 		}
 
 		/// <summary>
@@ -81,7 +82,7 @@ namespace UnitTestLibTravian
 			Assert.AreEqual(new TResAmount(3000, 4000, 3000, 2375), target.ResourceAmount);
 
 			// Uniform distribution
-			target.Distribution = ResourceDistributionType.EvenDistribution;
+			target.Distribution = ResourceDistributionType.Uniform;
 			target.NoCrop = false;
 			target.CalculateResourceAmount(travianData, sourceVillageID);
 			Assert.AreEqual(new TResAmount(3096, 3093, 3093, 3093), target.ResourceAmount);
@@ -200,7 +201,7 @@ namespace UnitTestLibTravian
 
 			// Unknown target village
 			Data travianData = new Data();
-			string expected = "99/101";
+			string expected = "99|101";
 			string actual;
 			actual = target.GetTitle(travianData);
 			Assert.AreEqual(expected, actual);
@@ -211,7 +212,7 @@ namespace UnitTestLibTravian
 				ID = target.TargetVillageID,
 				Name = "Fargo"
 			};
-			expected = "99/101 Fargo";
+			expected = "99|101 Fargo";
 			actual = target.GetTitle(travianData);
 			Assert.AreEqual(expected, actual);
 		}

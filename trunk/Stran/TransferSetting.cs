@@ -109,24 +109,16 @@ namespace Stran
 				this.radioNormalTarget.Enabled = true;
 			}
 
-			if (!this.radioNoNormal.Checked)
-			{
-				numericUpDownMechantCount_ValueChanged(sender, e);
-			}
+			numericUpDownMechantCount_ValueChanged(sender, e);
 		}
 
 		private void numericUpDownMechantCount_ValueChanged(object sender, EventArgs e)
 		{
 			TransferOption option = this.GetTransferOption();
-			if (option != null)
+			if (option != null && option.Distribution != ResourceDistributionType.None)
 			{
 				int total = this.CV.Market.SingleCarry * Convert.ToInt32(this.numericUpDownMechantCount.Value);
 				option.ResourceAmount = new TResAmount(0, 0, 0, total);
-				if (option.Distribution == ResourceDistributionType.None)
-				{
-					option.Distribution = ResourceDistributionType.EvenDistribution;
-				}
-
 				option.CalculateResourceAmount(this.TravianData, this.CV.ID);
 				this.numericUpDown1.Value = option.ResourceAmount.Resources[0];
 				this.numericUpDown2.Value = option.ResourceAmount.Resources[1];
@@ -182,7 +174,15 @@ namespace Stran
 			sb.AppendFormat(mui._("merchantsformat"), Convert.ToInt32(Math.Ceiling(Convert.ToDouble(all) / CV.Market.SingleCarry)), CV.Market.ActiveMerchant);
 
 			TransferOption option = this.GetTransferOption();
-			sb.AppendFormat(" {0}", option.Status);
+			if (option != null)
+			{
+				sb.AppendFormat(" {0}", option.Status);
+				if (option.Distribution == ResourceDistributionType.None)
+				{
+					this.numericUpDownMechantCount.Value = (option.ResourceAmount.TotalAmount() - 1) / this.CV.Market.SingleCarry + 1;
+				}
+			}
+
 			labelDetail.Text = sb.ToString();
 		}
 
@@ -221,6 +221,10 @@ namespace Stran
 				else if (radioNormalMe.Checked)
 				{
 					option.Distribution = ResourceDistributionType.BalanceSource;
+				}
+				else if (radioUniform.Checked)
+				{
+					option.Distribution = ResourceDistributionType.Uniform;
 				}
 
 				if (checkBoxNoCrop.Checked)

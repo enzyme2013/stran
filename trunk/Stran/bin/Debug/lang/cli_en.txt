@@ -120,6 +120,7 @@ resourceshow=Resource Status
 inbuilding=In-working task
 autonormalizetarget=Nml target village
 autonormalizeme=Nml this village
+uniformdistribution=Uniform distrib
 noautonormalize=No normalize
 nocrop=No crop
 
