@@ -101,7 +101,7 @@ namespace libTravian
 		/// </summary>
 		public bool IsValid
 		{
-			get { return this.ResourceAmount.TotalAmount() > 0; }
+			get { return !this.TargetPos.IsEmpty && this.ResourceAmount.TotalAmount() > 0; }
 		}
 
 		/// <summary>
