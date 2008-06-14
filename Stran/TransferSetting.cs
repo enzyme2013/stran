@@ -195,55 +195,51 @@ namespace Stran
 		/// Assemble a TransferOption object using current control values
 		/// </summary>
 		/// <returns></returns>
-		private TransferOption GetTransferOption()
-		{
-			TransferOption option = new TransferOption();
+        private TransferOption GetTransferOption()
+        {
+            TransferOption option = new TransferOption();
 
-			try
-			{
-				option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
-				option.TargetVillageID = this.targetVillageID;
-				option.TargetPos = new TPoint(Convert.ToInt32(this.txtX.Text), Convert.ToInt32(this.txtY.Text));
-				option.ResourceAmount = new TResAmount(
-					 Convert.ToInt32(this.numericUpDown1.Value),
-					 Convert.ToInt32(this.numericUpDown2.Value),
-					 Convert.ToInt32(this.numericUpDown3.Value),
-					 Convert.ToInt32(this.numericUpDown4.Value));
-				if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
-				{
-					return null;
-				}
+            option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
+            option.TargetVillageID = this.targetVillageID;
+            int x = 0, y = 0;
+            Int32.TryParse(this.txtX.Text, out x);
+            Int32.TryParse(this.txtY.Text, out y);
+            option.TargetPos = new TPoint(x, y);
 
-				if (this.radioNormalTarget.Checked)
-				{
-					option.Distribution = ResourceDistributionType.BalanceTarget;
-					if (this.TV == null)
-					{
-						return null;
-					}
-				}
-				else if (radioNormalMe.Checked)
-				{
-					option.Distribution = ResourceDistributionType.BalanceSource;
-				}
-				else if (radioUniform.Checked)
-				{
-					option.Distribution = ResourceDistributionType.Uniform;
-				}
+            option.ResourceAmount = new TResAmount(
+                 Convert.ToInt32(this.numericUpDown1.Value),
+                 Convert.ToInt32(this.numericUpDown2.Value),
+                 Convert.ToInt32(this.numericUpDown3.Value),
+                 Convert.ToInt32(this.numericUpDown4.Value));
+            if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
+            {
+                return null;
+            }
 
-				if (checkBoxNoCrop.Checked)
-				{
-					option.NoCrop = true;
-				}
-			}
-			catch
-			{
-				// Parse failure
-				return null;
-			}
+            if (this.radioNormalTarget.Checked)
+            {
+                option.Distribution = ResourceDistributionType.BalanceTarget;
+                if (this.TV == null)
+                {
+                    return null;
+                }
+            }
+            else if (radioNormalMe.Checked)
+            {
+                option.Distribution = ResourceDistributionType.BalanceSource;
+            }
+            else if (radioUniform.Checked)
+            {
+                option.Distribution = ResourceDistributionType.Uniform;
+            }
 
-			return option;
-		}
+            if (checkBoxNoCrop.Checked)
+            {
+                option.NoCrop = true;
+            }
+
+            return option;
+        }
 
 		private void numericUpDown1234_Enter(object sender, EventArgs e)
 		{

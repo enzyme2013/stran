@@ -223,7 +223,7 @@ namespace UnitTestLibTravian
 		[TestMethod()]
 		public void IsValidTest()
 		{
-			TransferOption target = new TransferOption();
+            TransferOption target = new TransferOption() { TargetPos = new TPoint(1,1) };
 
 			// Zero total amount is invalid
 			Assert.IsFalse(target.IsValid);
@@ -231,6 +231,10 @@ namespace UnitTestLibTravian
 			// Otherwise, valid
 			target.ResourceAmount = new TResAmount(100, 0, 0, 0);
 			Assert.IsTrue(target.IsValid);
+
+            // Empty TargetPos is also invalid
+            target.TargetPos = new TPoint(0, 0);
+            Assert.IsFalse(target.IsValid);
 		}
 	}
 }
