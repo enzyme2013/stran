@@ -29,6 +29,18 @@ namespace libTravian
 		{
 			Resources = r;
 		}
+
+		public static TResAmount operator -(TResAmount r1, TResAmount r2)
+		{
+			int []resources = new int[r1.Resources.Length];
+			for (int i = 0; i < resources.Length; i ++)
+			{
+				resources[i] = r1.Resources[i] - r2.Resources[i];
+			}
+
+			return new TResAmount(resources);
+		}
+
 		public override string ToString()
 		{
 			string rt = "";
@@ -54,6 +66,20 @@ namespace libTravian
 			}
 
 			return total;
+		}
+
+		/// <summary>
+		/// Convert all negative amounts to 0
+		/// </summary>
+		public void Normalize()
+		{
+			for (int i = 0; i < this.Resources.Length; i++)
+			{
+				if (this.Resources[i] < 0)
+				{
+					this.Resources[i] = 0;
+				}
+			}
 		}
 
 		/// <summary>

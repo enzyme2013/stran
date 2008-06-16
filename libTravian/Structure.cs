@@ -189,8 +189,15 @@ namespace libTravian
 			StringBuilder sb = new StringBuilder();
 			sb.AppendLine("Basic data:");
 			sb.AppendLine(TypeViewer.Snapshot(this));
+			sb.AppendLine(TypeViewer.Snapshot(this.Market));
 			if (isBuildingInitialized == 2)
 			{
+				sb.AppendLine("Market:");
+				foreach (TMInfo info in this.Market.MarketInfo)
+				{
+					sb.Append("\t");
+					sb.AppendLine(info.ToString());
+				}
 				sb.AppendLine("Building:");
 				foreach (var b in Buildings)
 				{
@@ -387,7 +394,7 @@ namespace libTravian
 		public string Status { get; set; }
 
 		/// <summary>
-		/// Why do we need this?
+		/// Need to distinguish out-skirt (0) and within-village (1) building tasks 
 		/// </summary>
 		public int Type
 		{
@@ -534,26 +541,28 @@ namespace libTravian
 		MyBack,
 		OtherCome
 	};
+
+	/// <summary>
+	/// Stores the info of an ongoing transportation
+	/// </summary>
 	public class TMInfo
 	{
 		public TMType MType { get; set; }
 		public TResAmount CarryAmount { get; set; }
-		public int X { get; set; }
-		public int Y { get; set; }
-		public TPoint Coord
-		{
-			get
-			{
-				return new TPoint(X, Y);
-			}
-			set
-			{
-				X = value.X;
-				Y = value.Y;
-			}
-		}
+		public TPoint Coord { get; set; }
 		public string VillageName { get; set; }
 		public DateTime FinishTime { get; set; }
+
+		public override string ToString()
+		{
+			return String.Format(
+				"{0},{1},{2},{3},{4}",
+				this.FinishTime,
+				this.CarryAmount,
+				this.VillageName,
+				this.Coord,
+				this.MType);
+		}
 	}
 
 	public static class TypeViewer

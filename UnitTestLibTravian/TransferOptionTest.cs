@@ -41,7 +41,7 @@ namespace UnitTestLibTravian
 		[TestMethod()]
 		public void FromStringTest()
 		{
-			string s = "0&0&0&0&0&0&0&0&0&None&False";
+			string s = "0&0&0&0&0&0&0&0&0&None&False&0&0";
 			TransferOption expected = new TransferOption();
 			TransferOption actual;
 			actual = TransferOption.FromString(s);
@@ -59,7 +59,7 @@ namespace UnitTestLibTravian
 		public void ToStringTest()
 		{
 			TransferOption target = new TransferOption();
-			string expected = "0&0&0&0&0&0&0&0&0&None&False&0";
+			string expected = "0&0&0&0&0&0&0&0&0&None&False&0&0";
 			string actual;
 			actual = target.ToString();
 			Assert.AreEqual(expected, actual);
@@ -185,6 +185,18 @@ namespace UnitTestLibTravian
 
 			target.ResourceAmount = new TResAmount(0, 100, 100, 100);
 			Assert.IsFalse(target.ExceedTargetCapacity(travianData, sourceVillageID));
+
+			// What if another village is also transporting to the destination?
+			TMInfo transfer = new TMInfo()
+			{
+				MType = TMType.OtherCome,
+				CarryAmount = new TResAmount(0, 100, 100, 100)
+			};
+			destinationVillage.Market.MarketInfo.Add(transfer);
+			Assert.IsTrue(target.ExceedTargetCapacity(travianData, sourceVillageID));
+
+			transfer.MType = TMType.MyOut;
+			Assert.IsFalse(target.ExceedTargetCapacity(travianData, sourceVillageID));
 		}
 
 		/// <summary>
@@ -223,7 +235,7 @@ namespace UnitTestLibTravian
 		[TestMethod()]
 		public void IsValidTest()
 		{
-            TransferOption target = new TransferOption() { TargetPos = new TPoint(1,1) };
+			TransferOption target = new TransferOption() { TargetPos = new TPoint(1, 1) };
 
 			// Zero total amount is invalid
 			Assert.IsFalse(target.IsValid);
@@ -232,9 +244,9 @@ namespace UnitTestLibTravian
 			target.ResourceAmount = new TResAmount(100, 0, 0, 0);
 			Assert.IsTrue(target.IsValid);
 
-            // Empty TargetPos is also invalid
-            target.TargetPos = new TPoint(0, 0);
-            Assert.IsFalse(target.IsValid);
+			// Empty TargetPos is also invalid
+			target.TargetPos = new TPoint(0, 0);
+			Assert.IsFalse(target.IsValid);
 		}
 	}
 }
