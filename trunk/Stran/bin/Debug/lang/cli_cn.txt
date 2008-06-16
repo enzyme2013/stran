@@ -123,6 +123,13 @@ autonormalizeme=自动平衡我的资源
 uniformdistribution=平均分配资源
 noautonormalize=无资源平衡计算
 nocrop=不运送粮食
+Timing=定时
+TransferTiming=定时运输
+ImmediateTransfer=立即开始运输
+DelayedTransfer=于下列时刻开始运输:
+TransferArriveAt=到达时间:
+TransferInterval=多次运输至少间隔:
+Minutes=分钟
 
 cmbparty=&P. 启用自动派对模块
 cmbparty500=&500 小派对

@@ -14,14 +14,9 @@
  * Contributor(s): [MeteorRain].
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using libTravian;
-using System.Diagnostics;
 
 namespace Stran
 {
@@ -30,6 +25,9 @@ namespace Stran
 		private TVillage CV = null;
 		private TVillage TV = null;
 		private int targetVillageID = 0;
+
+		private DateTime transferAt = DateTime.Now;
+		private int minimumInterval = 0;
 
 		public Data TravianData { get; set; }
 		public int FromVillageID { get; set; }
@@ -191,55 +189,84 @@ namespace Stran
 			comboBoxTargetVillage_SelectedIndexChanged(sender, e);
 		}
 
+		private void buttonTiming_Click(object sender, EventArgs e)
+		{
+			TransferTiming tt = new TransferTiming
+			{
+				TransferAt = this.transferAt,
+				MinimumInterval = this.minimumInterval,
+				mui = this.mui
+			};
+
+			TransferOption option = this.GetTransferOption();
+			if (option != null && !option.TargetPos.IsEmpty)
+			{
+				int speed = this.TravianData.MarketSpeed == 0 ? 24 : this.TravianData.MarketSpeed;
+				tt.TransferTime = (int) (this.CV.Coord * option.TargetPos * 3600 / speed);
+			}
+
+			if (tt.ShowDialog() == DialogResult.OK)
+			{
+				this.transferAt = tt.TransferAt;
+				this.minimumInterval = tt.MinimumInterval;
+			}
+		}
+
 		/// <summary>
 		/// Assemble a TransferOption object using current control values
 		/// </summary>
 		/// <returns></returns>
-        private TransferOption GetTransferOption()
-        {
-            TransferOption option = new TransferOption();
+		private TransferOption GetTransferOption()
+		{
+			TransferOption option = new TransferOption();
 
-            option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
-            option.TargetVillageID = this.targetVillageID;
-            int x = 0, y = 0;
-            Int32.TryParse(this.txtX.Text, out x);
-            Int32.TryParse(this.txtY.Text, out y);
-            option.TargetPos = new TPoint(x, y);
+			option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
+			option.TargetVillageID = this.targetVillageID;
+			int x = 0, y = 0;
+			Int32.TryParse(this.txtX.Text, out x);
+			Int32.TryParse(this.txtY.Text, out y);
+			option.TargetPos = new TPoint(x, y);
 
-            option.ResourceAmount = new TResAmount(
-                 Convert.ToInt32(this.numericUpDown1.Value),
-                 Convert.ToInt32(this.numericUpDown2.Value),
-                 Convert.ToInt32(this.numericUpDown3.Value),
-                 Convert.ToInt32(this.numericUpDown4.Value));
-            if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
-            {
-                return null;
-            }
+			option.ResourceAmount = new TResAmount(
+				 Convert.ToInt32(this.numericUpDown1.Value),
+				 Convert.ToInt32(this.numericUpDown2.Value),
+				 Convert.ToInt32(this.numericUpDown3.Value),
+				 Convert.ToInt32(this.numericUpDown4.Value));
+			if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
+			{
+				return null;
+			}
 
-            if (this.radioNormalTarget.Checked)
-            {
-                option.Distribution = ResourceDistributionType.BalanceTarget;
-                if (this.TV == null)
-                {
-                    return null;
-                }
-            }
-            else if (radioNormalMe.Checked)
-            {
-                option.Distribution = ResourceDistributionType.BalanceSource;
-            }
-            else if (radioUniform.Checked)
-            {
-                option.Distribution = ResourceDistributionType.Uniform;
-            }
+			if (this.radioNormalTarget.Checked)
+			{
+				option.Distribution = ResourceDistributionType.BalanceTarget;
+				if (this.TV == null)
+				{
+					return null;
+				}
+			}
+			else if (radioNormalMe.Checked)
+			{
+				option.Distribution = ResourceDistributionType.BalanceSource;
+			}
+			else if (radioUniform.Checked)
+			{
+				option.Distribution = ResourceDistributionType.Uniform;
+			}
 
-            if (checkBoxNoCrop.Checked)
-            {
-                option.NoCrop = true;
-            }
+			if (checkBoxNoCrop.Checked)
+			{
+				option.NoCrop = true;
+			}
 
-            return option;
-        }
+			option.MinimumInterval = this.minimumInterval;
+			if (this.transferAt > DateTime.Now)
+			{
+				option.MinimumDelay = Convert.ToInt32((this.transferAt - DateTime.Now).TotalSeconds);
+			}
+
+			return option;
+		}
 
 		private void numericUpDown1234_Enter(object sender, EventArgs e)
 		{

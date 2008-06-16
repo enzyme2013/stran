@@ -123,6 +123,13 @@ autonormalizeme=Nml this village
 uniformdistribution=Uniform distrib
 noautonormalize=No normalize
 nocrop=No crop
+Timing=Timing
+TransferTiming=Transfer timing
+ImmediateTransfer=Start transfer immediately
+DelayedTransfer=Start transfer at:
+TransferArriveAt=Estimated arrival time:
+TransferInterval=Minimum interval:
+Minutes=Minutes
 
 cmbparty=Enable &Party module
 cmbparty500=&500 Small celebrations
