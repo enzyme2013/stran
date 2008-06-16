@@ -97,6 +97,11 @@ namespace libTravian
 		public TResAmount ResourceAmount { get; set; }
 
 		/// <summary>
+		/// Minimum interval between two consequential transfers in seconds
+		/// </summary>
+		public int MinimumInterval { get; set; }
+
+		/// <summary>
 		/// Return false if the total resource amount is 0
 		/// </summary>
 		public bool IsValid
@@ -280,19 +285,25 @@ namespace libTravian
 				if (destination.isBuildingInitialized == 2)
 				{
 					TResource[] VR = destination.Resource;
-					int[] capacity = new int[VR.Length];
+					int[] resources = new int[VR.Length];
 					int speed = travianData.MarketSpeed == 0 ? 24 : travianData.MarketSpeed;
 					double timecost = source.Coord * destination.Coord / speed;
-					for (int i = 0; i < VR.Length; i++)
+					for (int i = 0; i < resources.Length; i++)
 					{
-						capacity[i] = VR[i].Capacity - VR[i].CurrAmount - (int)(VR[i].Produce * timecost);
-						if (capacity[i] < 0)
+						resources[i] = VR[i].Capacity - VR[i].CurrAmount - (int)(VR[i].Produce * timecost);
+					}
+
+					TResAmount capacity = new TResAmount(resources);
+					foreach (TMInfo transfer in destination.Market.MarketInfo)
+					{
+						if (transfer.MType == TMType.OtherCome)
 						{
-							capacity[i] = 0;
+							capacity -= transfer.CarryAmount;
 						}
 					}
 
-					return new TResAmount(capacity);
+					capacity.Normalize();
+					return capacity;
 				}
 			}
 
@@ -364,6 +375,7 @@ namespace libTravian
 			}
 
 			sb.AppendFormat("&{0}&{1}&{2}", this.Distribution, this.NoCrop, this.Count);
+			sb.AppendFormat("&{0}", this.MinimumInterval);
 			return sb.ToString();
 		}
 
@@ -401,6 +413,7 @@ namespace libTravian
 				result.Distribution = (ResourceDistributionType)Enum.Parse(typeof(ResourceDistributionType), data[index++]);
 				result.NoCrop = Boolean.Parse(data[index++]);
 				result.Count = Int32.Parse(data[index++]);
+				result.MinimumInterval = Int32.Parse(data[index++]);
 			}
 			catch
 			{
@@ -462,7 +475,7 @@ namespace libTravian
 			if (timeCost >= 0)
 			{
 				var CV = TD.Villages[VillageID];
-				option.MinimumDelay = timeCost * 2 + 10;
+				option.MinimumDelay = Math.Max(option.MinimumInterval, timeCost * 2 + 10);
 				option.Count++;
 				if (option.MaxCount == 0 || option.Count < option.MaxCount)
 				{
