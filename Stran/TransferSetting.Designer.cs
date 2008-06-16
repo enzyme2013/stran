@@ -48,6 +48,7 @@
 			this.numericUpDownTransferCount = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
 			this.radioUniform = new System.Windows.Forms.RadioButton();
+			this.buttonTiming = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -59,10 +60,10 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(217, 315);
+			this.buttonCancel.Location = new System.Drawing.Point(302, 315);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 32);
-			this.buttonCancel.TabIndex = 31;
+			this.buttonCancel.TabIndex = 17;
 			this.buttonCancel.Tag = "cancel";
 			this.buttonCancel.Text = "取消";
 			this.buttonCancel.UseVisualStyleBackColor = true;
@@ -70,10 +71,10 @@
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(97, 315);
+			this.buttonOK.Location = new System.Drawing.Point(204, 315);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(80, 32);
-			this.buttonOK.TabIndex = 30;
+			this.buttonOK.TabIndex = 16;
 			this.buttonOK.Tag = "ok";
 			this.buttonOK.Text = "确定";
 			this.buttonOK.UseVisualStyleBackColor = true;
@@ -84,7 +85,7 @@
 			this.numericUpDown1.Location = new System.Drawing.Point(12, 70);
 			this.numericUpDown1.Name = "numericUpDown1";
 			this.numericUpDown1.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown1.TabIndex = 8;
+			this.numericUpDown1.TabIndex = 11;
 			this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown1.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -94,7 +95,7 @@
 			this.numericUpDown2.Location = new System.Drawing.Point(12, 98);
 			this.numericUpDown2.Name = "numericUpDown2";
 			this.numericUpDown2.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown2.TabIndex = 9;
+			this.numericUpDown2.TabIndex = 12;
 			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown2.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -104,7 +105,7 @@
 			this.numericUpDown3.Location = new System.Drawing.Point(12, 126);
 			this.numericUpDown3.Name = "numericUpDown3";
 			this.numericUpDown3.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown3.TabIndex = 10;
+			this.numericUpDown3.TabIndex = 13;
 			this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown3.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -114,7 +115,7 @@
 			this.numericUpDown4.Location = new System.Drawing.Point(12, 154);
 			this.numericUpDown4.Name = "numericUpDown4";
 			this.numericUpDown4.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown4.TabIndex = 11;
+			this.numericUpDown4.TabIndex = 14;
 			this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown4.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -138,16 +139,16 @@
 			this.txtX.Location = new System.Drawing.Point(273, 106);
 			this.txtX.Name = "txtX";
 			this.txtX.Size = new System.Drawing.Size(50, 22);
-			this.txtX.TabIndex = 13;
+			this.txtX.TabIndex = 1;
 			// 
 			// txtY
 			// 
 			this.txtY.Location = new System.Drawing.Point(332, 106);
 			this.txtY.Name = "txtY";
 			this.txtY.Size = new System.Drawing.Size(50, 22);
-			this.txtY.TabIndex = 14;
+			this.txtY.TabIndex = 2;
 			// 
-			// numericUpDownMechantCount
+			// numericUpDownMerchantCount
 			// 
 			this.numericUpDownMerchantCount.Location = new System.Drawing.Point(321, 134);
 			this.numericUpDownMerchantCount.Maximum = new decimal(new int[] {
@@ -155,9 +156,9 @@
             0,
             0,
             0});
-			this.numericUpDownMerchantCount.Name = "numericUpDownMechantCount";
+			this.numericUpDownMerchantCount.Name = "numericUpDownMerchantCount";
 			this.numericUpDownMerchantCount.Size = new System.Drawing.Size(61, 22);
-			this.numericUpDownMerchantCount.TabIndex = 15;
+			this.numericUpDownMerchantCount.TabIndex = 3;
 			this.numericUpDownMerchantCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numericUpDownMerchantCount.ValueChanged += new System.EventHandler(this.numericUpDownMechantCount_ValueChanged);
 			// 
@@ -199,7 +200,7 @@
 			this.radioNormalTarget.Location = new System.Drawing.Point(115, 70);
 			this.radioNormalTarget.Name = "radioNormalTarget";
 			this.radioNormalTarget.Size = new System.Drawing.Size(96, 18);
-			this.radioNormalTarget.TabIndex = 20;
+			this.radioNormalTarget.TabIndex = 5;
 			this.radioNormalTarget.TabStop = true;
 			this.radioNormalTarget.Tag = "autonormalizetarget";
 			this.radioNormalTarget.Text = "radioButton1";
@@ -212,7 +213,7 @@
 			this.radioNormalMe.Location = new System.Drawing.Point(115, 94);
 			this.radioNormalMe.Name = "radioNormalMe";
 			this.radioNormalMe.Size = new System.Drawing.Size(96, 18);
-			this.radioNormalMe.TabIndex = 21;
+			this.radioNormalMe.TabIndex = 6;
 			this.radioNormalMe.TabStop = true;
 			this.radioNormalMe.Tag = "autonormalizeme";
 			this.radioNormalMe.Text = "radioButton1";
@@ -225,7 +226,7 @@
 			this.radioNoNormal.Location = new System.Drawing.Point(115, 142);
 			this.radioNoNormal.Name = "radioNoNormal";
 			this.radioNoNormal.Size = new System.Drawing.Size(96, 18);
-			this.radioNoNormal.TabIndex = 23;
+			this.radioNoNormal.TabIndex = 8;
 			this.radioNoNormal.TabStop = true;
 			this.radioNoNormal.Tag = "noautonormalize";
 			this.radioNoNormal.Text = "radioButton2";
@@ -238,7 +239,7 @@
 			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 166);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
 			this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
-			this.checkBoxNoCrop.TabIndex = 24;
+			this.checkBoxNoCrop.TabIndex = 10;
 			this.checkBoxNoCrop.Tag = "nocrop";
 			this.checkBoxNoCrop.Text = "checkBox1";
 			this.checkBoxNoCrop.UseVisualStyleBackColor = true;
@@ -254,7 +255,7 @@
             0});
 			this.numericUpDownTransferCount.Name = "numericUpDownTransferCount";
 			this.numericUpDownTransferCount.Size = new System.Drawing.Size(61, 22);
-			this.numericUpDownTransferCount.TabIndex = 16;
+			this.numericUpDownTransferCount.TabIndex = 4;
 			this.numericUpDownTransferCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.numericUpDownTransferCount.Value = new decimal(new int[] {
             1,
@@ -278,11 +279,22 @@
 			this.radioUniform.Location = new System.Drawing.Point(115, 118);
 			this.radioUniform.Name = "radioUniform";
 			this.radioUniform.Size = new System.Drawing.Size(126, 18);
-			this.radioUniform.TabIndex = 22;
+			this.radioUniform.TabIndex = 7;
 			this.radioUniform.TabStop = true;
 			this.radioUniform.Tag = "uniformdistribution";
 			this.radioUniform.Text = "uniformdistribution";
 			this.radioUniform.UseVisualStyleBackColor = true;
+			// 
+			// buttonTiming
+			// 
+			this.buttonTiming.Location = new System.Drawing.Point(12, 315);
+			this.buttonTiming.Name = "buttonTiming";
+			this.buttonTiming.Size = new System.Drawing.Size(80, 32);
+			this.buttonTiming.TabIndex = 15;
+			this.buttonTiming.Tag = "Timing";
+			this.buttonTiming.Text = "定时";
+			this.buttonTiming.UseVisualStyleBackColor = true;
+			this.buttonTiming.Click += new System.EventHandler(this.buttonTiming_Click);
 			// 
 			// TransferSetting
 			// 
@@ -291,6 +303,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(394, 370);
+			this.Controls.Add(this.buttonTiming);
 			this.Controls.Add(this.radioUniform);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.numericUpDownTransferCount);
@@ -355,5 +368,6 @@
 		private System.Windows.Forms.CheckBox checkBoxNoCrop;
 		private System.Windows.Forms.NumericUpDown numericUpDownTransferCount;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button buttonTiming;
 	}
 }
