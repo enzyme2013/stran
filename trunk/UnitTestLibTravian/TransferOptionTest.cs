@@ -110,6 +110,10 @@ namespace UnitTestLibTravian
 			target.CalculateResourceAmount(travianData, sourceVillageID);
 			Assert.AreEqual(new TResAmount(5875, 2750, 3750, 0), target.ResourceAmount);
 
+			sourceVillage.Market.LowerLimit = new TResAmount(3000, 3000, 1000, 1000);
+			target.CalculateResourceAmount(travianData, sourceVillageID);
+			Assert.AreEqual(new TResAmount(4875, 2750, 4750, 0), target.ResourceAmount);
+
 			// Balance destination village
 			TVillage destinationVillage = new TVillage();
 			destinationVillage.Resource = new TResource[4];
@@ -195,7 +199,15 @@ namespace UnitTestLibTravian
 			destinationVillage.Market.MarketInfo.Add(transfer);
 			Assert.IsTrue(target.ExceedTargetCapacity(travianData, sourceVillageID));
 
-			transfer.MType = TMType.MyOut;
+			// Since transportation is no longer targeted to me ...
+			transfer.MType = TMType.MyOut; 
+			Assert.IsFalse(target.ExceedTargetCapacity(travianData, sourceVillageID));
+
+			// Now say the target village has a resource upper bound
+			destinationVillage.Market.UpperLimit = new TResAmount(0, 100, 100, 100);
+			Assert.IsTrue(target.ExceedTargetCapacity(travianData, sourceVillageID));
+
+			destinationVillage.Market.UpperLimit = new TResAmount(200, 200, 200, 200);
 			Assert.IsFalse(target.ExceedTargetCapacity(travianData, sourceVillageID));
 		}
 

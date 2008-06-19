@@ -175,6 +175,49 @@ namespace libTravian
 		}
 
 		/// <summary>
+		/// Return the minimum delay before the next transfer could start
+		/// </summary>
+		/// <param name="travianData">User data, including src/dst village info</param>
+		/// <param name="sourceVillageID">Src village ID</param>
+		/// <returns>Minimum delay in seconds</returns>
+		public int GetDelay(Data travianData, int sourceVillageID)
+		{
+			if (!travianData.Villages.ContainsKey(sourceVillageID))
+			{
+				return 86400;
+			}
+
+			TVillage village = travianData.Villages[sourceVillageID];
+			if (village.isBuildingInitialized != 2)
+			{
+				return 86400;
+			}
+
+			int []adjustedResources = new int[this.ResourceAmount.Resources.Length];
+			for (int i = 0; i < adjustedResources.Length; i++)
+			{
+				adjustedResources[i] = this.ResourceAmount.Resources[i];
+				if (village.Market.LowerLimit != null && adjustedResources[i] > 0)
+				{
+					adjustedResources[i] += village.Market.LowerLimit.Resources[i];
+				}
+			}
+
+			int timecost = Math.Max(this.MinimumDelay, village.TimeCost(new TResAmount(adjustedResources)));
+			if (this.ExceedTargetCapacity(travianData, sourceVillageID))
+			{
+				timecost = Math.Max(timecost, 86400);
+			}
+
+			if (this.ResourceAmount.TotalAmount() > village.Market.SingleCarry * village.Market.ActiveMerchant)
+			{
+				timecost = Math.Max(timecost, village.Market.MinimumDelay + 5);
+			}
+
+			return timecost;
+		}
+
+		/// <summary>
 		/// Test if the target village have enought storage capacity for the to-be-transfered resources
 		/// </summary>
 		/// <param name="travianData">User game info, including target village distance and storage capacity</param>
@@ -246,11 +289,17 @@ namespace libTravian
 				travianData.Villages.ContainsKey(sourceVillageID) &&
 				travianData.Villages[sourceVillageID].isBuildingInitialized == 2)
 			{
-				TResource[] VR = travianData.Villages[sourceVillageID].Resource;
+				TVillage village = travianData.Villages[sourceVillageID];
 				for (int i = 0; i < targetAmount.Resources.Length; i++)
 				{
-					targetAmount.Resources[i] = VR[i].CurrAmount;
+					targetAmount.Resources[i] = village.Resource[i].CurrAmount;
+					if (village.Market.LowerLimit != null)
+					{
+						targetAmount.Resources[i] -= village.Market.LowerLimit.Resources[i];
+					}
 				}
+
+				targetAmount.Normalize();
 			}
 
 			this.DoBalance(targetAmount);
@@ -290,7 +339,13 @@ namespace libTravian
 					double timecost = source.Coord * destination.Coord / speed;
 					for (int i = 0; i < resources.Length; i++)
 					{
-						resources[i] = VR[i].Capacity - VR[i].CurrAmount - (int)(VR[i].Produce * timecost);
+						resources[i] = VR[i].Capacity;
+						if (destination.Market.UpperLimit != null)
+						{
+							resources[i] = destination.Market.UpperLimit.Resources[i];
+						}
+
+						resources[i] -= VR[i].CurrAmount + (int)(VR[i].Produce * timecost);
 					}
 
 					TResAmount capacity = new TResAmount(resources);

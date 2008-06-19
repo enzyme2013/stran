@@ -45,6 +45,7 @@ namespace libTravian
 				PageQuery(VillageID, "dorf1.php");
 				PageQuery(VillageID, "dorf2.php");
 				PageQuery(VillageID, "build.php?gid=17");
+				TD.Villages[VillageID].RestoreResourceLimits(userdb);
 				TD.Villages[VillageID].isBuildingInitialized = 2;
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Buildings, VillageID = VillageID });
 				string key = "v" + VillageID.ToString() + "Queue";

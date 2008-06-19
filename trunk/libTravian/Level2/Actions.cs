@@ -231,18 +231,7 @@ namespace libTravian
 				case (int)TQueueType.Transfer:
 					TransferOption option = TransferOption.FromString(Q.ExtraOptions);
 					option.CalculateResourceAmount(TD, VillageID);
-					timecost = Math.Max(option.MinimumDelay, CV.TimeCost(option.ResourceAmount));
-					if (option.ExceedTargetCapacity(TD, VillageID))
-					{
-						timecost = Math.Max(timecost, 10);
-					}
-
-					if (option.ResourceAmount.TotalAmount() > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
-					{
-						timecost = Math.Max(timecost, CV.Market.MinimumDelay + 5);
-					}
-
-					return timecost;
+					return option.GetDelay(TD, VillageID);
 
 				default:
 					return 1;

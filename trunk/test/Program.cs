@@ -5,6 +5,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Diagnostics;
+using libTravian;
+using Stran;
 
 namespace test
 {
@@ -25,8 +27,23 @@ namespace test
 
 			Console.ReadLine();
 			*/
-			Form1 f = new Form1();
-			f.ShowDialog();
+			TVillage village = new TVillage() { Name = "我的村庄" };
+			for (int i = 0; i < village.Resource.Length; i ++)
+			{
+				village.Resource[i] = new TResource(0, 0, 1000);
+			}
+
+			MUI mui = new MUI("en");
+
+			ResourceLimit limit = new ResourceLimit()
+			{
+				Village = village,
+				Description = mui._("lowerlimit"),
+				Limit = village.Market.LowerLimit = new TResAmount(0, 0, 0, 0),
+				mui = mui
+			};
+
+			limit.ShowDialog();
 		}
 		public enum TMType
 		{
