@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TransferOptionTest.cs" />
+    <Compile Include="TravianTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libTravian\libTravian.csproj">

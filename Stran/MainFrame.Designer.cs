@@ -105,6 +105,9 @@
 			this.contextMenuMarket = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
@@ -587,6 +590,9 @@
 			this.CMVRefresh,
 			this.CMVRole,
 			this.toolStripSeparator8,
+			this.CMVLowerLimit,
+			this.CMVUpperLimit,
+			this.toolStripSeparator11,
 			this.CMVSnapshot,
 			this.CMVSnapAll});
 			this.contextMenuVillage.Name = "contextMenuStrip1";
@@ -745,6 +751,27 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
+			// CMVLowerLimit
+			// 
+			this.CMVLowerLimit.Name = "CMVLowerLimit";
+			this.CMVLowerLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVLowerLimit.Tag = "ResourceLowerLimit";
+			this.CMVLowerLimit.Text = "Minimum Resource";
+			this.CMVLowerLimit.Click += new System.EventHandler(this.CMVLowerLimit_Click);
+			// 
+			// toolStripSeparator11
+			// 
+			this.toolStripSeparator11.Name = "toolStripSeparator11";
+			this.toolStripSeparator11.Size = new System.Drawing.Size(151, 6);
+			// 
+			// CMVUpperLimit
+			// 
+			this.CMVUpperLimit.Name = "CMVUpperLimit";
+			this.CMVUpperLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVUpperLimit.Tag = "ResourceUpperLimit";
+			this.CMVUpperLimit.Text = "Maximum Resource";
+			this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
+			// 
 			// MainFrame
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -847,6 +874,9 @@
 		public System.Windows.Forms.ContextMenuStrip contextMenuMarket;
 		private System.Windows.Forms.ToolStripMenuItem CMICancel;
 		public System.Windows.Forms.ContextMenuStrip contextMenuInbuilding;
+		private System.Windows.Forms.ToolStripMenuItem CMVLowerLimit;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+		private System.Windows.Forms.ToolStripMenuItem CMVUpperLimit;
 
 
 	}

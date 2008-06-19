@@ -92,6 +92,8 @@ ok=OK
 upgradeto=Upgrade to...
 upgrade=Upgrade
 
+ResourceLowerLimit=&L Minimum Resource
+ResourceUpperLimit=&U Maximum Resource
 snapshot=&Snapshot this village
 snapall=Snapshot &all villages
 
@@ -123,6 +125,10 @@ autonormalizeme=Nml this village
 uniformdistribution=Uniform distrib
 noautonormalize=No normalize
 nocrop=No crop
+MyResource=Source
+TargetResource=Target
+
+// Transfer timing form
 Timing=Timing
 TransferTiming=Transfer timing
 ImmediateTransfer=Start transfer immediately
@@ -130,6 +136,11 @@ DelayedTransfer=Start transfer at:
 TransferArriveAt=Estimated arrival time:
 TransferInterval=Minimum interval:
 Minutes=Minutes
+
+// resource limit form
+ResourceLimit=Resource Limits
+lowerlimit=Minimum resource amount to enable outgoing transportation
+upperlimit=Maximum resource amount to enable incoming transporation
 
 cmbparty=Enable &Party module
 cmbparty500=&500 Small celebrations

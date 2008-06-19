@@ -476,10 +476,9 @@ namespace Stran
 						if(x.QueueType == TQueueType.Transfer || !status[ntype])
 						{
 							int n = tr.GetDelay(SelectVillage, x);
-							if (n != 0)
+							if (n > 0)
 							{
-								TimeSpan delay = new TimeSpan(0, 0, n);
-								string delayStr = delay.ToString();
+								string delayStr = this.TimeToString(n);
 								if (lvi.SubItems[4].Text != delayStr)
 								{
 									lvi.SubItems[4].Text = delayStr;
@@ -878,6 +877,7 @@ namespace Stran
 				CMVRoleText.Text = TravianData.Villages[SelectVillage].Role;
 			}
 		}
+
 		private void CMVRefresh_Click(object sender, EventArgs e)
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
@@ -887,6 +887,71 @@ namespace Stran
 			TravianData.Villages[SelectVillage].InitializeDestroy();
 			TravianData.Villages[SelectVillage].InitializeUpgrade();
 		}
+
+		/// <summary>
+		/// Set village resource low bound for outgoing transportation
+		/// </summary>
+		private void CMVLowerLimit_Click(object sender, EventArgs e)
+		{
+			if (!TravianData.Villages.ContainsKey(SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			ResourceLimit limit = new ResourceLimit()
+			{
+				Village = village,
+				Description = mui._("lowerlimit"),
+				Limit = village.Market.LowerLimit == null ? new TResAmount(0, 0, 0, 0) : village.Market.LowerLimit,
+				mui = this.mui
+			};
+
+			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
+			{
+				village.Market.LowerLimit = limit.Return;
+				village.SaveResourceLimits(this.tr.userdb);
+			}
+		}
+
+		/// <summary>
+		/// Set village resource upper bound for incoming transportation
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void CMVUpperLimit_Click(object sender, EventArgs e)
+		{
+			if (!TravianData.Villages.ContainsKey(SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			ResourceLimit limit = new ResourceLimit()
+			{
+				Village = village,
+				Description = mui._("upperlimit"),
+				Limit = village.Market.UpperLimit == null ? village.ResourceCapacity : village.Market.UpperLimit,
+				mui = this.mui
+			};
+
+			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
+			{
+				village.Market.UpperLimit = limit.Return;
+				village.SaveResourceLimits(this.tr.userdb);
+			}
+		}
+
 		private void CMVSnapshot_Click(object sender, EventArgs e)
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
@@ -1501,14 +1566,16 @@ namespace Stran
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
-			var CV = TravianData.Villages[SelectVillage];
+
+			TVillage CV = TravianData.Villages[SelectVillage];
 			if(CV.isBuildingInitialized == 2)
 			{
 				TransferSetting ts = new TransferSetting()
 				{
-					FromVillageID = SelectVillage,
-					TravianData = TravianData,
-					mui = mui
+					FromVillageID = this.SelectVillage,
+					TravianData = this.TravianData,
+					UserDB = this.tr.userdb,
+					mui = this.mui
 				};
 
 				if(ts.ShowDialog() == DialogResult.OK && ts.Return != null)
@@ -1573,6 +1640,5 @@ namespace Stran
 
 			}
 		}
-
 	}
 }

@@ -121,6 +121,20 @@ namespace libTravian
 			}
 		}
 
+		public TResAmount ResourceCapacity
+		{
+			get
+			{
+				int [] capacity = new int[this.Resource.Length];
+				for (int i = 0; i < capacity.Length; i++)
+				{
+					capacity[i] = this.Resource[i].Capacity;
+				}
+
+				return new TResAmount(capacity);
+			}
+		}
+
 		//[Obsolete("The role function hasn't been used now. Don't use it.", false)]
 		public string Role { get; set; }
 		public string Name { get; set; }
@@ -262,6 +276,37 @@ namespace libTravian
 			}
 			string key = "v" + ID.ToString() + "Queue";
 			db[key] = sb.ToString();
+		}
+
+		public void SaveResourceLimits(LocalDB db)
+		{
+			string key;
+			if (this.Market.LowerLimit != null)
+			{
+				key = "v" + ID.ToString() + "LowerLimit";
+				db[key] = this.Market.LowerLimit.ToString();
+			}
+
+			if (this.Market.UpperLimit != null)
+			{
+				key = "v" + ID.ToString() + "UpperLimit";
+				db[key] = this.Market.UpperLimit.ToString();
+			}
+		}
+
+		public void RestoreResourceLimits(LocalDB db)
+		{
+			string key = "v" + ID.ToString() + "LowerLimit";
+			if (db.ContainsKey(key))
+			{
+				this.Market.LowerLimit = TResAmount.FromString(db[key]);
+			}
+
+			key = "v" + ID.ToString() + "UpperLimit";
+			if (db.ContainsKey(key))
+			{
+				this.Market.UpperLimit = TResAmount.FromString(db[key]);
+			}
 		}
 	}
 
@@ -471,15 +516,34 @@ namespace libTravian
 		public List<TMInfo> MarketInfo { get; set; }
 
 		/// <summary>
+		/// When transfer outward, don't let remaining resource below this 
+		/// </summary>
+		public TResAmount UpperLimit { get; set; }
+
+		/// <summary>
+		/// Stop receiving transporations when current resource amount is higher than this
+		/// </summary>
+		public TResAmount LowerLimit { get; set; }
+
+		/// <summary>
 		/// How long will the next market event (e.g., merchan returns) happen
 		/// </summary>
 		public int MinimumDelay
 		{
 			get
 			{
-				if (this.MarketInfo.Count > 0)
+				DateTime nextEventAt = DateTime.MaxValue;
+				foreach (TMInfo transfer in this.MarketInfo)
 				{
-					return (int)Math.Round((this.MarketInfo[0].FinishTime - DateTime.Now).TotalSeconds);
+					if (transfer.FinishTime < nextEventAt)
+					{
+						nextEventAt = transfer.FinishTime;
+					}
+				}
+
+				if (nextEventAt < DateTime.MaxValue)
+				{
+					return (int)Math.Round((nextEventAt - DateTime.Now).TotalSeconds);
 				}
 				else
 				{

@@ -49,6 +49,8 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.radioUniform = new System.Windows.Forms.RadioButton();
 			this.buttonTiming = new System.Windows.Forms.Button();
+			this.buttonSource = new System.Windows.Forms.Button();
+			this.buttonTarget = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -60,10 +62,10 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(302, 315);
+			this.buttonCancel.Location = new System.Drawing.Point(302, 319);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 32);
-			this.buttonCancel.TabIndex = 17;
+			this.buttonCancel.TabIndex = 18;
 			this.buttonCancel.Tag = "cancel";
 			this.buttonCancel.Text = "取消";
 			this.buttonCancel.UseVisualStyleBackColor = true;
@@ -71,10 +73,10 @@
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(204, 315);
+			this.buttonOK.Location = new System.Drawing.Point(204, 319);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(80, 32);
-			this.buttonOK.TabIndex = 16;
+			this.buttonOK.TabIndex = 17;
 			this.buttonOK.Tag = "ok";
 			this.buttonOK.Text = "确定";
 			this.buttonOK.UseVisualStyleBackColor = true;
@@ -85,7 +87,7 @@
 			this.numericUpDown1.Location = new System.Drawing.Point(12, 70);
 			this.numericUpDown1.Name = "numericUpDown1";
 			this.numericUpDown1.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown1.TabIndex = 11;
+			this.numericUpDown1.TabIndex = 10;
 			this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown1.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -95,7 +97,7 @@
 			this.numericUpDown2.Location = new System.Drawing.Point(12, 98);
 			this.numericUpDown2.Name = "numericUpDown2";
 			this.numericUpDown2.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown2.TabIndex = 12;
+			this.numericUpDown2.TabIndex = 11;
 			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown2.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -105,7 +107,7 @@
 			this.numericUpDown3.Location = new System.Drawing.Point(12, 126);
 			this.numericUpDown3.Name = "numericUpDown3";
 			this.numericUpDown3.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown3.TabIndex = 13;
+			this.numericUpDown3.TabIndex = 12;
 			this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown3.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -115,7 +117,7 @@
 			this.numericUpDown4.Location = new System.Drawing.Point(12, 154);
 			this.numericUpDown4.Name = "numericUpDown4";
 			this.numericUpDown4.Size = new System.Drawing.Size(70, 22);
-			this.numericUpDown4.TabIndex = 14;
+			this.numericUpDown4.TabIndex = 13;
 			this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
 			this.numericUpDown4.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -127,7 +129,7 @@
 			this.comboBoxTargetVillage.FormattingEnabled = true;
 			this.comboBoxTargetVillage.Items.AddRange(new object[] {
             "-"});
-			this.comboBoxTargetVillage.Location = new System.Drawing.Point(12, 36);
+			this.comboBoxTargetVillage.Location = new System.Drawing.Point(12, 32);
 			this.comboBoxTargetVillage.MaxDropDownItems = 12;
 			this.comboBoxTargetVillage.Name = "comboBoxTargetVillage";
 			this.comboBoxTargetVillage.Size = new System.Drawing.Size(370, 21);
@@ -185,11 +187,11 @@
 			// labelDetail
 			// 
 			this.labelDetail.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelDetail.Location = new System.Drawing.Point(12, 190);
+			this.labelDetail.Location = new System.Drawing.Point(12, 239);
 			this.labelDetail.Multiline = true;
 			this.labelDetail.Name = "labelDetail";
 			this.labelDetail.ReadOnly = true;
-			this.labelDetail.Size = new System.Drawing.Size(370, 119);
+			this.labelDetail.Size = new System.Drawing.Size(370, 74);
 			this.labelDetail.TabIndex = 19;
 			this.labelDetail.TabStop = false;
 			// 
@@ -239,7 +241,7 @@
 			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 166);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
 			this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
-			this.checkBoxNoCrop.TabIndex = 10;
+			this.checkBoxNoCrop.TabIndex = 9;
 			this.checkBoxNoCrop.Tag = "nocrop";
 			this.checkBoxNoCrop.Text = "checkBox1";
 			this.checkBoxNoCrop.UseVisualStyleBackColor = true;
@@ -287,14 +289,36 @@
 			// 
 			// buttonTiming
 			// 
-			this.buttonTiming.Location = new System.Drawing.Point(12, 315);
+			this.buttonTiming.Location = new System.Drawing.Point(301, 192);
 			this.buttonTiming.Name = "buttonTiming";
 			this.buttonTiming.Size = new System.Drawing.Size(80, 32);
-			this.buttonTiming.TabIndex = 15;
+			this.buttonTiming.TabIndex = 16;
 			this.buttonTiming.Tag = "Timing";
 			this.buttonTiming.Text = "定时";
 			this.buttonTiming.UseVisualStyleBackColor = true;
 			this.buttonTiming.Click += new System.EventHandler(this.buttonTiming_Click);
+			// 
+			// buttonSource
+			// 
+			this.buttonSource.Location = new System.Drawing.Point(115, 192);
+			this.buttonSource.Name = "buttonSource";
+			this.buttonSource.Size = new System.Drawing.Size(80, 32);
+			this.buttonSource.TabIndex = 14;
+			this.buttonSource.Tag = "MyResource";
+			this.buttonSource.Text = "我的资源";
+			this.buttonSource.UseVisualStyleBackColor = true;
+			this.buttonSource.Click += new System.EventHandler(this.buttonSource_Click);
+			// 
+			// buttonTarget
+			// 
+			this.buttonTarget.Location = new System.Drawing.Point(208, 192);
+			this.buttonTarget.Name = "buttonTarget";
+			this.buttonTarget.Size = new System.Drawing.Size(80, 32);
+			this.buttonTarget.TabIndex = 15;
+			this.buttonTarget.Tag = "TargetResource";
+			this.buttonTarget.Text = "目标资源";
+			this.buttonTarget.UseVisualStyleBackColor = true;
+			this.buttonTarget.Click += new System.EventHandler(this.buttonTarget_Click);
 			// 
 			// TransferSetting
 			// 
@@ -302,7 +326,9 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(394, 370);
+			this.ClientSize = new System.Drawing.Size(394, 374);
+			this.Controls.Add(this.buttonTarget);
+			this.Controls.Add(this.buttonSource);
 			this.Controls.Add(this.buttonTiming);
 			this.Controls.Add(this.radioUniform);
 			this.Controls.Add(this.label3);
@@ -369,5 +395,7 @@
 		private System.Windows.Forms.NumericUpDown numericUpDownTransferCount;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button buttonTiming;
+		private System.Windows.Forms.Button buttonSource;
+		private System.Windows.Forms.Button buttonTarget;
 	}
 }

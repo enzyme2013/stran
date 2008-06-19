@@ -31,6 +31,7 @@ namespace Stran
 
 		public Data TravianData { get; set; }
 		public int FromVillageID { get; set; }
+		public LocalDB UserDB { get; set; }
 		public MUI mui { get; set; }
 		public TransferOption Return { get; private set; }
 
@@ -97,6 +98,7 @@ namespace Stran
 			if (this.TV == null)
 			{
 				this.radioNormalTarget.Enabled = false;
+				this.buttonTarget.Enabled = false;
 				if (this.radioNormalTarget.Checked)
 				{
 					this.radioNormalMe.Checked = true;
@@ -105,6 +107,7 @@ namespace Stran
 			else
 			{
 				this.radioNormalTarget.Enabled = true;
+				this.buttonTarget.Enabled = true;
 			}
 
 			numericUpDownMechantCount_ValueChanged(sender, e);
@@ -271,6 +274,45 @@ namespace Stran
 		private void numericUpDown1234_Enter(object sender, EventArgs e)
 		{
 			this.radioNoNormal.Checked = true;
+		}
+
+		private void buttonSource_Click(object sender, EventArgs e)
+		{
+			ResourceLimit limit = new ResourceLimit()
+			{
+				Village = this.CV,
+				Description = this.mui._("lowerlimit"),
+				Limit = this.CV.Market.LowerLimit == null ? new TResAmount(0, 0, 0, 0) : this.CV.Market.LowerLimit,
+				mui = this.mui
+			};
+
+			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
+			{
+				this.CV.Market.LowerLimit = limit.Return;
+				this.CV.SaveResourceLimits(this.UserDB);
+			}
+		}
+
+		private void buttonTarget_Click(object sender, EventArgs e)
+		{
+			if (this.TV == null || this.TV.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			ResourceLimit limit = new ResourceLimit()
+			{
+				Village = this.TV,
+				Description = this.mui._("upperlimit"),
+				Limit = this.TV.Market.UpperLimit == null ? this.TV.ResourceCapacity : this.TV.Market.UpperLimit,
+				mui = this.mui
+			};
+
+			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
+			{
+				this.TV.Market.UpperLimit = limit.Return;
+				this.TV.SaveResourceLimits(this.UserDB);
+			}
 		}
 	}
 }

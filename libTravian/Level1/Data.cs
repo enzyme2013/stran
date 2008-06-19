@@ -41,6 +41,29 @@ namespace libTravian
 			return new TResAmount(resources);
 		}
 
+		public static TResAmount operator +(TResAmount r1, TResAmount r2)
+		{
+			int[] resources = new int[r1.Resources.Length];
+			for (int i = 0; i < resources.Length; i++)
+			{
+				resources[i] = r1.Resources[i] + r2.Resources[i];
+			}
+
+			return new TResAmount(resources);
+		}
+
+		public static TResAmount FromString(string s)
+		{
+			string[] values = s.Split('|');
+			int[] resources = new int[values.Length];
+			for (int i = 0; i < resources.Length; i++)
+			{
+				resources[i] = Int32.Parse(values[i]);
+			}
+
+			return new TResAmount(resources);
+		}
+
 		public override string ToString()
 		{
 			string rt = "";
