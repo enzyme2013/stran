@@ -21,13 +21,58 @@ namespace libTravian
 	public class TResAmount
 	{
 		public int[] Resources;
-		public TResAmount(int r1, int r2, int r3, int r4)
+
+		public TResAmount() 
+			: this(0, 0, 0, 0)	 
 		{
-			Resources = new int[4] { r1, r2, r3, r4 };
 		}
+
+		public TResAmount (int r1, int r2, int r3, int r4) 
+			: this(new int[4] { r1, r2, r3, r4 })
+		{
+		}
+
 		public TResAmount(int[] r)
 		{
-			Resources = r;
+			this.Resources = r;
+		}
+
+		public TResAmount(TResAmount r)
+		{
+			this.Resources = new int[r.Resources.Length];
+			for (int i = 0; i < this.Resources.Length; i++)
+			{
+				this.Resources[i] = r.Resources[i];
+			}
+		}
+
+		public int TotalAmount
+		{
+			get
+			{
+				int total = 0;
+				for (int i = 0; i < this.Resources.Length; i++)
+				{
+					total += this.Resources[i];
+				}
+
+				return total;
+			}
+		}
+
+		public double[] Proportions
+		{
+			get
+			{
+				double total = this.TotalAmount;
+				double[] proportions = new double[this.Resources.Length];
+				for (int i = 0; i < proportions.Length; i++)
+				{
+					proportions[i] = this.Resources[i] / total;
+				}
+
+				return proportions;
+			}
 		}
 
 		public static TResAmount operator -(TResAmount r1, TResAmount r2)
@@ -74,21 +119,6 @@ namespace libTravian
 				rt += x.ToString();
 			}
 			return rt;
-		}
-
-		/// <summary>
-		/// Total resource amount
-		/// </summary>
-		/// <returns>Total amound</returns>
-		public int TotalAmount()
-		{
-			int total = 0;
-			for (int i = 0; i < this.Resources.Length; i++)
-			{
-				total += this.Resources[i];
-			}
-
-			return total;
 		}
 
 		/// <summary>

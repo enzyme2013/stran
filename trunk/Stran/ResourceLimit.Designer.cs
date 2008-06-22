@@ -51,11 +51,11 @@
 			this.lblDescription.TabIndex = 8;
 			this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// lblVillageName
+			// lblVillage
 			// 
 			this.lblVillage.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblVillage.Location = new System.Drawing.Point(30, 26);
-			this.lblVillage.Name = "lblVillageName";
+			this.lblVillage.Name = "lblVillage";
 			this.lblVillage.Size = new System.Drawing.Size(270, 30);
 			this.lblVillage.TabIndex = 7;
 			this.lblVillage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -131,6 +131,7 @@
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.Font = new System.Drawing.Font("Tahoma", 9F);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ResourceLimit";

@@ -145,7 +145,12 @@ namespace libTravian
 								{
 									doTransfer(CV.ID, CVQ[i]);
 								}
-
+								break;
+							case TQueueType.NpcTrade:
+								if (GetDelay(CV.ID, CVQ[i]) <= 0)
+								{
+									doNpcTrade(CV.ID, CVQ[i]);
+								}
 								break;
 						}
 				}
@@ -229,9 +234,13 @@ namespace libTravian
 						return timecost;
 
 				case (int)TQueueType.Transfer:
-					TransferOption option = TransferOption.FromString(Q.ExtraOptions);
-					option.CalculateResourceAmount(TD, VillageID);
-					return option.GetDelay(TD, VillageID);
+					TransferOption transferOption = TransferOption.FromString(Q.ExtraOptions);
+					transferOption.CalculateResourceAmount(TD, VillageID);
+					return transferOption.GetDelay(this.TD, VillageID);
+
+				case (int) TQueueType.NpcTrade:
+					NpcTradeOption npcTradeOption = NpcTradeOption.FromString(Q.ExtraOptions);
+					return npcTradeOption.GetDelay(this.TD, VillageID);
 
 				default:
 					return 1;

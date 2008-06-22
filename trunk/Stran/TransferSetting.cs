@@ -180,7 +180,7 @@ namespace Stran
 				sb.AppendFormat(" {0}", option.Status);
 				if (option.Distribution == ResourceDistributionType.None)
 				{
-					this.numericUpDownMerchantCount.Value = (option.ResourceAmount.TotalAmount() - 1) / this.CV.Market.SingleCarry + 1;
+					this.numericUpDownMerchantCount.Value = (option.ResourceAmount.TotalAmount - 1) / this.CV.Market.SingleCarry + 1;
 				}
 			}
 
@@ -235,7 +235,7 @@ namespace Stran
 				 Convert.ToInt32(this.numericUpDown2.Value),
 				 Convert.ToInt32(this.numericUpDown3.Value),
 				 Convert.ToInt32(this.numericUpDown4.Value));
-			if (option.ResourceAmount.TotalAmount() > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
+			if (option.ResourceAmount.TotalAmount > this.numericUpDownMerchantCount.Maximum * this.CV.Market.SingleCarry)
 			{
 				return null;
 			}

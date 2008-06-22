@@ -81,7 +81,7 @@ namespace UnitTestLibTravian
 			target.CalculateResourceAmount(travianData, sourceVillageID);
 			Assert.AreEqual(new TResAmount(3000, 4000, 3000, 2375), target.ResourceAmount);
 
-			// Uniform distribution
+			// Uniform target
 			target.Distribution = ResourceDistributionType.Uniform;
 			target.NoCrop = false;
 			target.CalculateResourceAmount(travianData, sourceVillageID);
