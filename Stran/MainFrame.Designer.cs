@@ -92,6 +92,9 @@
 			this.CMVRole = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMVRoleText = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMVSnapshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMVSnapAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -105,9 +108,8 @@
 			this.contextMenuMarket = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-			this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMMNpcTrade2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
@@ -259,6 +261,7 @@
 			this.CMBRefreshDestroy,
 			this.toolStripSeparator12,
 			this.CMMNew2,
+			this.CMMNpcTrade2,
 			this.toolStripSeparator9,
 			this.CMBParty});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
@@ -630,6 +633,27 @@
 			this.toolStripSeparator8.Name = "toolStripSeparator8";
 			this.toolStripSeparator8.Size = new System.Drawing.Size(90, 6);
 			// 
+			// CMVLowerLimit
+			// 
+			this.CMVLowerLimit.Name = "CMVLowerLimit";
+			this.CMVLowerLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVLowerLimit.Tag = "ResourceLowerLimit";
+			this.CMVLowerLimit.Text = "Minimum Resource";
+			this.CMVLowerLimit.Click += new System.EventHandler(this.CMVLowerLimit_Click);
+			// 
+			// CMVUpperLimit
+			// 
+			this.CMVUpperLimit.Name = "CMVUpperLimit";
+			this.CMVUpperLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVUpperLimit.Tag = "ResourceUpperLimit";
+			this.CMVUpperLimit.Text = "Maximum Resource";
+			this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
+			// 
+			// toolStripSeparator11
+			// 
+			this.toolStripSeparator11.Name = "toolStripSeparator11";
+			this.toolStripSeparator11.Size = new System.Drawing.Size(151, 6);
+			// 
 			// CMVSnapshot
 			// 
 			this.CMVSnapshot.Name = "CMVSnapshot";
@@ -729,7 +753,8 @@
 			// contextMenuMarket
 			// 
 			this.contextMenuMarket.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.CMMNew});
+			this.CMMNew,
+			this.CMMNpcTrade});
 			this.contextMenuMarket.Name = "contextMenuMarket";
 			this.contextMenuMarket.ShowImageMargin = false;
 			this.contextMenuMarket.Size = new System.Drawing.Size(86, 26);
@@ -751,26 +776,21 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// CMVLowerLimit
+			// CMMNpcTrade2
 			// 
-			this.CMVLowerLimit.Name = "CMVLowerLimit";
-			this.CMVLowerLimit.Size = new System.Drawing.Size(154, 22);
-			this.CMVLowerLimit.Tag = "ResourceLowerLimit";
-			this.CMVLowerLimit.Text = "Minimum Resource";
-			this.CMVLowerLimit.Click += new System.EventHandler(this.CMVLowerLimit_Click);
+			this.CMMNpcTrade2.Name = "CMMNpcTrade2";
+			this.CMMNpcTrade2.Size = new System.Drawing.Size(182, 22);
+			this.CMMNpcTrade2.Tag = "npctrade";
+			this.CMMNpcTrade2.Text = "自动平仓";
+			this.CMMNpcTrade2.Click += new System.EventHandler(this.CMMNpcTrade_Click);
 			// 
-			// toolStripSeparator11
+			// CMMNpcTransfer
 			// 
-			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(151, 6);
-			// 
-			// CMVUpperLimit
-			// 
-			this.CMVUpperLimit.Name = "CMVUpperLimit";
-			this.CMVUpperLimit.Size = new System.Drawing.Size(154, 22);
-			this.CMVUpperLimit.Tag = "ResourceUpperLimit";
-			this.CMVUpperLimit.Text = "Maximum Resource";
-			this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
+			this.CMMNpcTrade.Name = "CMMNpcTransfer";
+			this.CMMNpcTrade.Size = new System.Drawing.Size(97, 22);
+			this.CMMNpcTrade.Tag = "npctrade";
+			this.CMMNpcTrade.Text = "自动平仓";
+			this.CMMNpcTrade.Click += new System.EventHandler(this.CMMNpcTrade_Click);
 			// 
 			// MainFrame
 			// 
@@ -877,6 +897,8 @@
 		private System.Windows.Forms.ToolStripMenuItem CMVLowerLimit;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
 		private System.Windows.Forms.ToolStripMenuItem CMVUpperLimit;
+		private System.Windows.Forms.ToolStripMenuItem CMMNpcTrade2;
+		private System.Windows.Forms.ToolStripMenuItem CMMNpcTrade;
 
 
 	}

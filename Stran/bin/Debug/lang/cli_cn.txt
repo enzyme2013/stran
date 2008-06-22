@@ -1,6 +1,6 @@
 ﻿// global const
 tribelist=自动探测,罗马,日尔曼,高卢
-typelist=资源田,建筑,拆除,攻击,防御,研究,活动,运输
+typelist=资源田,建筑,拆除,攻击,防御,研究,活动,运输,平仓
 // main form
 username=用户名
 server=服务器
@@ -110,6 +110,7 @@ queue=队列
 mtype=运输类型
 role=用途
 newtransfer=&T. 新的运输
+npctrade=&N. 自动平仓
 merchantcnt=商人数:
 transfercnt=次数(0:无限):
 cmbaic=&C. 根据资源储备
@@ -141,6 +142,11 @@ Minutes=分钟
 ResourceLimit=资源限制
 lowerlimit=资源下限（限制资源输出）
 upperlimit=资源上限（限制资源输入）
+
+// NPC trade form
+NpcTradeSetting=自动平仓
+NpcTradeThreshold=触发条件（当资源量大于所有阀值后开始平仓）
+NpcTradeDistribution=分配比例（所有资源将按如下比例重新调整）
 
 cmbparty=&P. 启用自动派对模块
 cmbparty500=&500 小派对

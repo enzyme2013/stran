@@ -50,6 +50,7 @@
     <Compile Include="Level2\doAI.cs" />
     <Compile Include="Level2\doBuild.cs" />
     <Compile Include="Level2\doDestroy.cs" />
+    <Compile Include="Level2\doNpcTrade.cs" />
     <Compile Include="Level2\doParty.cs" />
     <Compile Include="Level2\doTransfer.cs" />
     <Compile Include="Level2\doUp.cs" />

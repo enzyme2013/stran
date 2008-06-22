@@ -106,7 +106,7 @@ namespace libTravian
 		/// </summary>
 		public bool IsValid
 		{
-			get { return !this.TargetPos.IsEmpty && this.ResourceAmount.TotalAmount() > 0; }
+			get { return !this.TargetPos.IsEmpty && this.ResourceAmount.TotalAmount > 0; }
 		}
 
 		/// <summary>
@@ -209,7 +209,7 @@ namespace libTravian
 				timecost = Math.Max(timecost, 86400);
 			}
 
-			if (this.ResourceAmount.TotalAmount() > village.Market.SingleCarry * village.Market.ActiveMerchant)
+			if (this.ResourceAmount.TotalAmount > village.Market.SingleCarry * village.Market.ActiveMerchant)
 			{
 				timecost = Math.Max(timecost, village.Market.MinimumDelay + 5);
 			}
@@ -270,7 +270,7 @@ namespace libTravian
 
 		private void EvenlyDistibuteResource()
 		{
-			int total = this.ResourceAmount.TotalAmount();
+			int total = this.ResourceAmount.TotalAmount;
 			int slots = this.NoCrop ? 3 : 4;
 
 			this.ResourceAmount = new TResAmount(0, 0, 0, 0);
@@ -279,7 +279,7 @@ namespace libTravian
 				this.ResourceAmount.Resources[i] = total / slots;
 			}
 
-			this.ResourceAmount.Resources[0] += total - this.ResourceAmount.TotalAmount();
+			this.ResourceAmount.Resources[0] += total - this.ResourceAmount.TotalAmount;
 		}
 
 		private void BalanceSourceResource(Data travianData, int sourceVillageID)
@@ -367,7 +367,7 @@ namespace libTravian
 
 		private void DoBalance(TResAmount targetAmount)
 		{
-			int total = this.ResourceAmount.TotalAmount();
+			int total = this.ResourceAmount.TotalAmount;
 			int slots = this.NoCrop ? 3 : 4;
 
 			// Sort targetAmount by desc order
@@ -390,9 +390,9 @@ namespace libTravian
 			for (int i = 1; i < slots; i++)
 			{
 				int inc = targetAmount.Resources[ranks[i - 1]] - targetAmount.Resources[ranks[i]];
-				if (total < this.ResourceAmount.TotalAmount() + inc * i)
+				if (total < this.ResourceAmount.TotalAmount + inc * i)
 				{
-					inc = (total - this.ResourceAmount.TotalAmount()) / i;
+					inc = (total - this.ResourceAmount.TotalAmount) / i;
 				}
 
 				for (int j = 0; j < i; j++)
@@ -402,7 +402,7 @@ namespace libTravian
 			}
 
 			// Allocate remaining resources and round up with unit of 50
-			int bonus = (total - this.ResourceAmount.TotalAmount()) / slots;
+			int bonus = (total - this.ResourceAmount.TotalAmount) / slots;
 			for (int i = 0; i < slots; i++)
 			{
 				this.ResourceAmount.Resources[i] += bonus;
@@ -411,7 +411,7 @@ namespace libTravian
 
 			// If we have anything left, give it to a lucky guy
 			int luckyOne = ranks[0];
-			this.ResourceAmount.Resources[luckyOne] += total - this.ResourceAmount.TotalAmount();
+			this.ResourceAmount.Resources[luckyOne] += total - this.ResourceAmount.TotalAmount;
 		}
 
 		/// <summary>
@@ -572,7 +572,7 @@ namespace libTravian
 				return -1;
 			var MCarry = Convert.ToInt32(m.Groups[1].Value);
 
-			if (Amount.TotalAmount() > MCarry * MCount)
+			if (Amount.TotalAmount > MCarry * MCount)
 			{
 				return -2; // Beyond transfer ability
 			}

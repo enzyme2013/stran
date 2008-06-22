@@ -23,7 +23,7 @@ using System.Drawing;
 
 namespace libTravian
 {
-	public partial class Travian
+	public partial class Travian: IPageQuerier
 	{
 		public event EventHandler<StatusChanged> StatusUpdate;
 
@@ -47,6 +47,7 @@ namespace libTravian
 		private WebClient wc;
 		public LocalDB svrdb;
 		public LocalDB userdb;
+		public IPageQuerier pageQuerier;
 
 		private bool NoMB = false;
 
@@ -58,6 +59,8 @@ namespace libTravian
 			TD = TravianData;
 			svrdb = LocalDBCenter.getDB(TravianData.Server);
 			userdb = LocalDBCenter.getDB(TravianData.Username, TravianData.Server);
+			this.pageQuerier = this;
+
 			// loading cached data into Language class
 			for(int i = 1; i <= 40; i++)
 			{

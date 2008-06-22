@@ -26,15 +26,23 @@ using System.Text.RegularExpressions;
 
 namespace libTravian
 {
+	/// <summary>
+	/// Abstract page query interface to enable unit test
+	/// </summary>
+	public interface IPageQuerier
+	{
+		string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser);
+	}
+
 	public partial class Travian
 	{
 		private string PageQuery(int VillageID, string Uri)
 		{
-			return PageQuery(VillageID, Uri, null, true, false);
+			return this.pageQuerier.PageQuery(VillageID, Uri, null, true, false);
 		}
 		private string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data)
 		{
-			return PageQuery(VillageID, Uri, Data, true, false);
+			return this.pageQuerier.PageQuery(VillageID, Uri, Data, true, false);
 		}
 		private string AddNewdid(int VillageID, string Uri)
 		{
@@ -77,7 +85,8 @@ namespace libTravian
 			};
 			OnError(this, new LogArgs() { DebugInfo = db });
 		}
-		private string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
+
+		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
 		{
 			try
 			{
@@ -104,6 +113,14 @@ namespace libTravian
 					{
 						if(sb.Length != 0)
 							sb.Append("&");
+
+						// Got to support some weired form data, like arrays
+						if (x.Key == "!!!RawData!!!")
+						{
+							sb.Append(x.Value);
+							continue;
+						}
+
 						sb.Append(HttpUtility.UrlEncode(x.Key));
 						sb.Append("=");
 						sb.Append(HttpUtility.UrlEncode(x.Value));

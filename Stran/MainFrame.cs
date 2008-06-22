@@ -50,7 +50,7 @@ namespace Stran
 		private static Color[] ResColor = new Color[] { Color.ForestGreen, Color.Chocolate, Color.SlateGray, Color.Gold };
 		private static readonly Color RedBGColor = Color.FromArgb(255, 192, 192);
 		private static readonly Color YellowBGColor = Color.FromArgb(255, 255, 192);
-		public static string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击", "防御", "研究", "活动", "运输" };
+		public static string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击", "防御", "研究", "活动", "运输", "平仓" };
 
 		private static object QueueLock = new object();
 
@@ -68,9 +68,9 @@ namespace Stran
 			reslabel = new ResourceLabel[] { m_resourceshow.resourceLabel1, m_resourceshow.resourceLabel2, m_resourceshow.resourceLabel3, m_resourceshow.resourceLabel4 };
 			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
-			foreach(var x in typelist)
+			for (int i = 0; i < 7; i ++)
 			{
-				var lvi = m_inbuildinglist.listViewInBuilding.Items.Add(x);
+				var lvi = m_inbuildinglist.listViewInBuilding.Items.Add(typelist[i]);
 				lvi.SubItems.Add("");
 			}
 		}
@@ -450,9 +450,15 @@ namespace Stran
 							}
 							else if (x.Type == (int)TQueueType.Transfer)
 							{
-								TransferOption option = TransferOption.FromString(x.ExtraOptions);
-								lvi.SubItems.Add(option.GetTitle(TravianData));
-								x.Status = option.Status;
+								TransferOption transferOption = TransferOption.FromString(x.ExtraOptions);
+								lvi.SubItems.Add(transferOption.GetTitle(TravianData));
+								x.Status = transferOption.Status;
+							}
+							else if (x.Type == (int)TQueueType.NpcTrade)
+							{
+								NpcTradeOption npcTradeOption = NpcTradeOption.FromString(x.ExtraOptions);
+								lvi.SubItems.Add(npcTradeOption.Title);
+								x.Status = npcTradeOption.Status;
 							}
 						}
 
@@ -1594,6 +1600,46 @@ namespace Stran
 					lvi.SubItems.Add(Q.Status);
 					lvi.SubItems.Add("");
 				}
+			}
+		}
+
+
+		private void CMMNpcTrade_Click(object sender, EventArgs e)
+		{
+			if (!TravianData.Villages.ContainsKey(SelectVillage))
+			{
+				return;
+			}
+
+			TVillage CV = TravianData.Villages[SelectVillage];
+			if (CV.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			NpcTradeSetting setting = new NpcTradeSetting()
+			{
+				Village = CV,
+				mui = this.mui
+			};
+
+			if (setting.ShowDialog() == DialogResult.OK && setting.Return != null)
+			{
+				NpcTradeOption option = setting.Return;
+				TQueue Q = new TQueue()
+				{
+					QueueType = TQueueType.NpcTrade,
+					ExtraOptions = option.ToString(),
+					Status = option.Status
+				};
+				CV.Queue.Add(Q);
+				CV.SaveQueue(tr.userdb);
+
+				ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
+				lvi.SubItems.Add(typelist[(int)TQueueType.NpcTrade]);
+				lvi.SubItems.Add(option.Title);
+				lvi.SubItems.Add(Q.Status);
+				lvi.SubItems.Add("");
 			}
 		}
 		#endregion

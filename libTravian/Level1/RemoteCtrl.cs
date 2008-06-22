@@ -35,7 +35,7 @@ namespace libTravian
 			}
 			if(NextRead > DateTime.Now)
 				return; // too short interval, go on pausing.
-			data = PageQuery(0, "nachrichten.php", null, true, true);
+			data = this.pageQuerier.PageQuery(0, "nachrichten.php", null, true, true);
 			if(data == null)
 				return; // cannot read... network problem?
 			NextRead = DateTime.Now.AddMinutes(15);

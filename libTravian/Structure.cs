@@ -405,7 +405,8 @@ namespace libTravian
 		UDefense,
 		Research,
 		Party,
-		Transfer
+		Transfer,
+		NpcTrade
 	}
 
 	/// <summary>

@@ -1,6 +1,6 @@
 ﻿// global const
 tribelist=Auto,Romans,Teutons,Gauls
-typelist=ResField,Building,Destroy,Attack,Defence,Research,Party,Transfer
+typelist=ResField,Building,Destroy,Attack,Defence,Research,Party,Transfer,NpcTrade
 // main form
 username=Username
 server=Server
@@ -110,6 +110,7 @@ queue=Queue
 mtype=Type
 role=Role
 newtransfer=New &Transfer
+npctrade=&NPC Trade
 merchantcnt=Merchants:
 transfercnt=Repeats(0:inf):
 cmbaic=Based on &current amount
@@ -141,6 +142,11 @@ Minutes=Minutes
 ResourceLimit=Resource Limits
 lowerlimit=Minimum resource amount to enable outgoing transportation
 upperlimit=Maximum resource amount to enable incoming transporation
+
+// NPC trade form
+NpcTradeSetting=NPC Trade
+NpcTradeThreshold=Start trading after exceeding the following thresholds:
+NpcTradeDistribution=Resource allocation ratio:
 
 cmbparty=Enable &Party module
 cmbparty500=&500 Small celebrations

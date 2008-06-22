@@ -64,7 +64,11 @@ namespace libTravian
 			if(DebugList.Count > DebugCount)
 				DebugList.RemoveAt(0);
 			DebugList.Add(db);
-			OnError(this, new LogArgs() { DebugInfo = db });
+
+			if (this.OnError != null)
+			{
+				OnError(this, new LogArgs() { DebugInfo = db });
+			}
 		}
 		private void DebugLog(Exception e)
 		{

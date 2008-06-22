@@ -78,7 +78,7 @@ namespace libTravian
 				PostData["s1.x"] = "0";
 				PostData["s1.y"] = "0";
 
-				string result = PageQuery(0, "dorf1.php?ok", PostData, false, true);
+				string result = this.pageQuerier.PageQuery(0, "dorf1.php?ok", PostData, false, true);
 
 				if(result.Contains("login"))
 				{

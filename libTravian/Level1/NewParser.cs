@@ -73,7 +73,7 @@ namespace libTravian
 
 		private int NewParseTribe()
 		{
-			string data = PageQuery(0, "a2b.php", null, true, true);
+			string data = this.pageQuerier.PageQuery(0, "a2b.php", null, true, true);
 			if (data == null)
 				return 0;
 			Match m = Regex.Match(data, "img/un/u/(\\d*)\\.gif");
@@ -138,7 +138,7 @@ namespace libTravian
 			//if(villagecount <= LastVillageCount)
 			//	return -1;
 			//int cnt = 0;
-			data = PageQuery(0, "spieler.php?uid=" + TD.UserID, null, true, true);
+			data = this.pageQuerier.PageQuery(0, "spieler.php?uid=" + TD.UserID, null, true, true);
 			if (data == null)
 				return;
 
@@ -154,7 +154,7 @@ namespace libTravian
 						isCapital = true,
 						UpCall = this
 					};
-					string viddata = PageQuery(0, "dorf3.php", null, true, true);
+					string viddata = this.pageQuerier.PageQuery(0, "dorf3.php", null, true, true);
 					if (viddata == null)
 						return;
 					m = Regex.Match(viddata, "newdid=(\\d+)");
