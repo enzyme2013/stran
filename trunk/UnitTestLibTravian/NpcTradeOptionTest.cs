@@ -17,8 +17,8 @@ namespace UnitTestLibTravian
 		[TestMethod()]
 		public void ToStringTest()
 		{
-			NpcTradeOption target = new NpcTradeOption(); 
-			string expected = "0&0&0&0&0&0&0&0&0"; 
+			NpcTradeOption target = new NpcTradeOption();
+			string expected = "0&0&0&0&0&0&0&0&0&0&1&50"; 
 			string actual;
 
 			// Empty (invalid) option
@@ -29,10 +29,13 @@ namespace UnitTestLibTravian
 			target = new NpcTradeOption()
 			{
 				Threshold = new TResAmount(0, 0, 0, 10000),
-				Distribution = new TResAmount(700, 900, 700, 0)
+				Distribution = new TResAmount(700, 900, 700, 0),
+				Count = 1,
+				MaxCount = 2,
+				MinTradeRatio = 90
 			};
 
-			expected = "0&0&0&0&10000&700&900&700&0";
+			expected = "0&0&0&0&10000&700&900&700&0&1&2&90";
 			actual = target.ToString();
 			Assert.AreEqual(expected, actual);
 		}
@@ -51,11 +54,14 @@ namespace UnitTestLibTravian
 			Assert.AreEqual(new TResAmount(), actual.Distribution);
 
 			// Non empty option
-			s = "0&0&0&0&10000&700&900&700&0";
+			s = "0&0&0&0&10000&700&900&700&0&1&2&90";
 			actual = NpcTradeOption.FromString(s);
 
 			Assert.AreEqual(new TResAmount(0, 0, 0, 10000), actual.Threshold);
 			Assert.AreEqual(new TResAmount(700, 900, 700, 0), actual.Distribution);
+			Assert.AreEqual(1, actual.Count);
+			Assert.AreEqual(2, actual.MaxCount);
+			Assert.AreEqual(90, actual.MinTradeRatio);
 		}
 
 		/// <summary>
@@ -86,7 +92,7 @@ namespace UnitTestLibTravian
 				Distribution = new TResAmount(700, 900, 700, 0)
 			};
 
-			Assert.AreEqual("700|900|700|0", target.Status);
+			Assert.AreEqual("0/1=>700|900|700|0", target.Status);
 		}
 
 		/// <summary>
@@ -101,7 +107,7 @@ namespace UnitTestLibTravian
 				Distribution = new TResAmount(700, 900, 700, 0)
 			};
 
-			Assert.AreEqual("0|0|0|10000->", target.Title);
+			Assert.AreEqual("0|0|0|10000=>50%", target.Title);
 		}
 
 		/// <summary>
@@ -193,9 +199,15 @@ namespace UnitTestLibTravian
 			actual = target.RedistributeResources(travianData, villageID, sum);
 			Assert.AreEqual(expected, actual);
 
-			// Busted!!!
+			// Busted: less than 50% crop has been exchanged to other resources
 			sum = 11001;
 			expected = null;
+			actual = target.RedistributeResources(travianData, villageID, sum);
+			Assert.AreEqual(expected, actual);
+
+			// With a lower MinTradeRatio, we'll be more tolerant
+			target.MinTradeRatio = 40;
+			expected = new TResAmount(2000, 2000, 2000, 5001);
 			actual = target.RedistributeResources(travianData, villageID, sum);
 			Assert.AreEqual(expected, actual);
 		}

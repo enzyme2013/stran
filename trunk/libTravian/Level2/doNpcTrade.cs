@@ -42,6 +42,22 @@ namespace libTravian
 		public TResAmount Distribution { get; set; }
 
 		/// <summary>
+		/// Maximum number of repeats (0 = inf)
+		/// </summary>
+		public int MaxCount { get; set; }
+
+		/// <summary>
+		/// Current number of repeats
+		/// </summary>
+		public int Count { get; set; }
+
+		/// <summary>
+		/// A percentage p: an NPC trade won't happen unless at least p%
+		/// of resource has been transfered from one type to other type(s)
+		/// </summary>
+		public int MinTradeRatio { get; set; }
+
+		/// <summary>
 		/// Minimum seconds to wait until the mechant resturns
 		/// </summary>
 		public int MinimumDelay
@@ -73,7 +89,10 @@ namespace libTravian
 		/// </summary>
 		public string Title
 		{
-			get { return this.Threshold.ToString() + "->"; }
+			get 
+			{ 
+				return String.Format("{0}=>{1}%", this.Threshold, 	this.MinTradeRatio); 
+			}
 		}
 
 		/// <summary>
@@ -81,7 +100,11 @@ namespace libTravian
 		/// </summary>
 		public string Status
 		{
-			get { return this.Distribution.ToString(); }
+			get 
+			{
+				string maxCount = this.MaxCount == 0 ? "inf" : this.MaxCount.ToString();
+				return String.Format("{0}/{1}=>{2}", this.Count, maxCount, this.Distribution); 
+			}
 		}
 
 		/// <summary>
@@ -99,6 +122,8 @@ namespace libTravian
 		{
 			this.Threshold = new TResAmount();
 			this.Distribution = new TResAmount();
+			this.MaxCount = 1;
+			this.MinTradeRatio = 50;
 		}
 
 		/// <summary>
@@ -132,6 +157,10 @@ namespace libTravian
 				}
 
 				result.Distribution = new TResAmount(amount);
+
+				result.Count = Int32.Parse(data[index++]);
+				result.MaxCount = Int32.Parse(data[index++]);
+				result.MinTradeRatio = Int32.Parse(data[index++]);
 			}
 			catch
 			{
@@ -151,6 +180,7 @@ namespace libTravian
 			sb.AppendFormat("{0}", this.resumeTime.Ticks);
 			sb.AppendFormat("&{0}", this.Threshold.ToString().Replace('|', '&'));
 			sb.AppendFormat("&{0}", this.Distribution.ToString().Replace('|', '&'));
+			sb.AppendFormat("&{0}&{1}&{2}", this.Count, this.MaxCount, this.MinTradeRatio);
 
 			return sb.ToString();
 		}
@@ -231,7 +261,7 @@ namespace libTravian
 			bool tooManyResidual = true;
 			for (int i = 0; i < this.Threshold.Resources.Length; i++)
 			{
-				if (residual < this.Threshold.Resources[i] * 50 / 100)
+				if (residual < this.Threshold.Resources[i] * (100 - this.MinTradeRatio) / 100)
 				{
 					tooManyResidual = false;
 					break;
@@ -306,20 +336,29 @@ namespace libTravian
 				case NpcTradeResult.Failure:
 					DebugLog("NPC trade task has failed: " + option.ToString(), DebugLevel.W);
 					this.RemoveQueuedTask(villageID, Q);
-					break;
+					return;
 
 				case NpcTradeResult.Delay:
 					// Wait at least 10 minutes before retrying
 					option.MinimumDelay = 600;
-					Q.ExtraOptions = option.ToString();
-					Q.Status = option.Status;
-					village.SaveQueue(userdb);
 					break;
 
 				case NpcTradeResult.Success:
-					this.RemoveQueuedTask(villageID, Q);
+					option.Count++;
+					if (option.MaxCount != 0 & option.Count >= option.MaxCount)
+					{
+						this.RemoveQueuedTask(villageID, Q);
+						return;
+					}
+
+					// This is an unfinished multiple NPC trade task, wait at least 1 hr
+					option.MinimumDelay = 3600;
 					break;
 			}
+
+			Q.ExtraOptions = option.ToString();
+			Q.Status = option.Status;
+			village.SaveQueue(userdb);
 		}
 
 		/// <summary>
