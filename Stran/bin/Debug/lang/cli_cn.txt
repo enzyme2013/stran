@@ -140,13 +140,15 @@ Minutes=分钟
 
 // resource limit form
 ResourceLimit=资源限制
-lowerlimit=资源下限（限制资源输出）
-upperlimit=资源上限（限制资源输入）
+lowerlimit=资源下限: (限制资源输出)
+upperlimit=资源上限: (限制资源输入)
 
 // NPC trade form
 NpcTradeSetting=自动平仓
-NpcTradeThreshold=触发条件（当资源量大于所有阀值后开始平仓）
-NpcTradeDistribution=分配比例（所有资源将按如下比例重新调整）
+NpcTradeThreshold=触发条件: (当资源量大于所有阀值后开始平仓)
+NpcTradeDistribution=分配比例: (所有资源将按如下比例重新调整)
+NpcTradeMinRatio=最小置换比例:
+NpcTradeMaxCount=次数: (0:无限)
 
 cmbparty=&P. 启用自动派对模块
 cmbparty500=&500 小派对

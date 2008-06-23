@@ -51,6 +51,23 @@ namespace Stran
 			this.SetResources(this.nudDistribution, capacity, distribution);
 		}
 
+		private void btnOK_Click(object sender, EventArgs e)
+		{
+			NpcTradeOption option = new NpcTradeOption()
+			{
+				Threshold = this.GetResources(this.nudThreshold),
+				Distribution = this.GetResources(this.nudDistribution),
+				MinTradeRatio = Convert.ToInt32(this.nudMinTradeRatio.Value),
+				MaxCount = Convert.ToInt32(this.nudMaxCount.Value)
+			};
+
+			if (option.IsValid)
+			{
+				this.Return = option;
+			}
+		}
+
+		#region Helper Methods
 		private void SetResources(NumericUpDown[] nuds, TResAmount capacity, TResAmount value)
 		{
 			for (int i = 0; i < nuds.Length; i++)
@@ -73,19 +90,6 @@ namespace Stran
 
 			return new TResAmount(resources);
 		}
-
-		private void btnOK_Click(object sender, EventArgs e)
-		{
-			NpcTradeOption option = new NpcTradeOption()
-			{
-				Threshold = this.GetResources(this.nudThreshold),
-				Distribution = this.GetResources(this.nudDistribution)
-			};
-
-			if (option.IsValid)
-			{
-				this.Return = option;
-			}
-		}
+		#endregion
 	}
 }

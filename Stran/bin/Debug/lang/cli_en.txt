@@ -147,6 +147,8 @@ upperlimit=Maximum resource amount to enable incoming transporation
 NpcTradeSetting=NPC Trade
 NpcTradeThreshold=Start trading after exceeding the following thresholds:
 NpcTradeDistribution=Resource allocation ratio:
+NpcTradeMinRatio=Min. trade ratio:
+NpcTradeMaxCount=Repeats: (0:inf)
 
 cmbparty=Enable &Party module
 cmbparty500=&500 Small celebrations
