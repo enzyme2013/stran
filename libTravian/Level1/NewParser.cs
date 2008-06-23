@@ -365,7 +365,8 @@ namespace libTravian
 			for (int i = 0; i < NewDorf1Data[dorfType - 1].Length; i++)
 				CV.Buildings[i + 1] = new TBuilding() { Gid = NewDorf1Data[dorfType - 1][i] };
 
-			MatchCollection mc = Regex.Matches(data, "<img src=\"[^\"]*?img/un/g/s/s(\\d+).gif\" class=\"rf(\\d+)\">");
+			// should have patched the new server-side modification problem on [id="rf*"]
+			MatchCollection mc = Regex.Matches(data, "<img src=\"[^\"]*?img/un/g/s/s(\\d+).gif\"[^>]*? class=\"rf(\\d+)\">");
 			if (mc.Count == 0)
 				return;
 			foreach (Match m1 in mc)
