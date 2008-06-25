@@ -78,6 +78,7 @@ namespace Stran
 			if (comboBoxTargetVillage.SelectedIndex == 0)
 			{
 				this.txtX.Enabled = this.txtY.Enabled = true;
+				targetVillageID = 0;
 			}
 			else
 			{
