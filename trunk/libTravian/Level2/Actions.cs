@@ -152,6 +152,8 @@ namespace libTravian
 									doNpcTrade(CV.ID, CVQ[i]);
 								}
 								break;
+							case TQueueType.Raid:
+								break;
 						}
 				}
 			}

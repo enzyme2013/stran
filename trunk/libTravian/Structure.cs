@@ -272,7 +272,10 @@ namespace libTravian
 			{
 				if (sb.Length != 0)
 					sb.Append('|');
-				sb.Append(x.ToString().Replace("|", "<_!!!_>"));
+				if(x.NewOptions == null)
+					sb.Append(x.ToString().Replace("|", "<_!!!_>"));
+				else
+					sb.Append(x.NewOptions.Export().Replace("|", "<_!!!_>"));
 			}
 			string key = "v" + ID.ToString() + "Queue";
 			db[key] = sb.ToString();
@@ -308,6 +311,8 @@ namespace libTravian
 				this.Market.UpperLimit = TResAmount.FromString(db[key]);
 			}
 		}
+
+		public List<TTroop> Troops { get; set; }
 	}
 
 	public class TResource
@@ -406,7 +411,8 @@ namespace libTravian
 		Research,
 		Party,
 		Transfer,
-		NpcTrade
+		NpcTrade,
+		Raid
 	}
 
 	/// <summary>
@@ -462,6 +468,11 @@ namespace libTravian
 		/// Encoded extra task options (used by transfer only)
 		/// </summary>
 		public string ExtraOptions { get; set; }
+
+		/// <summary>
+		/// New Options for taking the place of the old option string
+		/// </summary>
+		public IOption NewOptions { get; set; }
 
 		/// <summary>
 		/// When the queued task is ready to go (for display only)
@@ -628,6 +639,17 @@ namespace libTravian
 				this.Coord,
 				this.MType);
 		}
+	}
+
+	public class TTroop
+	{
+		public int Tribe;
+		public int[] Troops;
+		public TTroopType TroopType;
+	}
+	public enum TTroopType
+	{
+		My
 	}
 
 	public static class TypeViewer

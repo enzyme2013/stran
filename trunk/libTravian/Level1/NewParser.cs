@@ -48,6 +48,7 @@ namespace libTravian
 				NewParseUpgrade(VillageID, data);
 				NewParseTownHall(VillageID, data);
 				NewParseMarket(VillageID, data);
+				ParseTroops(VillageID, data);
 			}
 			catch (Exception ex)
 			{
@@ -387,9 +388,11 @@ namespace libTravian
 			if (mc.Count == 0)
 				return;
 			foreach (Match m in mc)
-				TD.Villages[VillageID].Buildings[Convert.ToInt32(m.Groups[1].Value) + 18] = new TBuilding() { Gid = Convert.ToInt32(m.Groups[2].Value) };
-			TD.Villages[VillageID].Buildings[39] = new TBuilding() { Gid = 16 };
-			TD.Villages[VillageID].Buildings[40] = new TBuilding() { Gid = TD.Tribe + 30 };
+				CV.Buildings[Convert.ToInt32(m.Groups[1].Value) + 18] = new TBuilding() { Gid = Convert.ToInt32(m.Groups[2].Value) };
+			CV.Buildings[39] = new TBuilding() { Gid = 16 };
+			CV.Buildings[40] = new TBuilding() { Gid = TD.Tribe + 30 };
+			if(data.Contains("img/un/g/g40.gif"))
+				CV.Buildings[26] = new TBuilding { Gid = 40 };
 
 			mc = Regex.Matches(data, "<area href=\"build.php\\?id=(\\d+)\" title=\"[^0-9\"]*?(\\d+)[^0-9\"]*?\" coords");
 			if (mc.Count == 0)
@@ -397,7 +400,10 @@ namespace libTravian
 			foreach (Match m in mc)
 			{
 				int bid = Convert.ToInt32(m.Groups[1].Value);
-				CV.Buildings[bid].Level = Convert.ToInt32(m.Groups[2].Value);
+				if(CV.Buildings.ContainsKey(bid))
+					CV.Buildings[bid].Level = Convert.ToInt32(m.Groups[2].Value);
+				else
+					DebugLog("Unknown bid on parsing dorf2: " + bid, DebugLevel.W);
 			}
 			foreach (var x in CV.Queue)
 				if (x.QueueType == TQueueType.Building && x.Bid != TQueue.AIBID && !CV.Buildings.ContainsKey(x.Bid))
@@ -668,6 +674,66 @@ namespace libTravian
 			}
 
 			return false;
+		}
+
+		private void ParseTroops(int VillageID, string data)
+		{
+			/*
+			 * <table cellspacing="1" cellpadding="2" class="tbg">
+			
+			 * <tr class="cbg1">
+			 * <td width="21%"><a href="karte.php?d=111909&c=09"><span class="c0">C1M9相坂さよ</span></a></td>
+			 * <td colspan="11" class="b">自己的军队</td>
+			 * </tr>
+			 * <tr class="unit">
+			 * <td>&nbsp;</td>
+			 * <td><img src="img/un/u/21.gif" title="方阵兵"></td>
+			 * <td><img src="img/un/u/22.gif" title="剑士"></td>
+			 * <td><img src="img/un/u/23.gif" title="探路者"></td>
+			 * <td><img src="img/un/u/24.gif" title="雷法师"></td>
+			 * <td><img src="img/un/u/25.gif" title="德鲁伊骑兵"></td>
+			 * <td><img src="img/un/u/26.gif" title="海顿圣骑士"></td>
+			 * <td><img src="img/un/u/27.gif" title="冲撞车"></td>
+			 * <td><img src="img/un/u/28.gif" title="投石器"></td>
+			 * <td><img src="img/un/u/29.gif" title="首领"></td>
+			 * <td><img src="img/un/u/30.gif" title="拓荒者"></td>
+			 * <td><img src="img/un/u/hero.gif" title="英雄"></td>
+			 * </tr>
+			 * <tr>
+			 * <td>军队</td>
+			 * <td class="c">0</td>
+			 * <td class="c">0</td>
+			 * <td class="c">0</td>
+			 * <td>24738</td>
+			 * <td class="c">0</td>
+			 * <td class="c">0</td>
+			 * <td class="c">0</td>
+			 * <td>3586</td>
+			 * <td class="c">0</td>
+			 * <td class="c">0</td>
+			 * <td>1</td>
+			 * </tr><tr class="cbg1"><td>粮食消耗</td>
+			 * <td class="s7" colspan="11">70998<img class="res" src="img/un/r/4.gif">每小时</td></table>
+			 * 
+			 * 0 0 0 24751 0 0 0 3591 0 0
+			 */
+			if(!IsParsingBuildingPage(16, data))
+				return;
+			var m = Regex.Match(data, "(?:<td[^>]*>(\\d+)</td>){10,11}");
+			var CV = TD.Villages[VillageID];
+			CV.Troops.Clear();
+			if(m.Success)
+			{
+				int[] tro = new int[m.Groups[1].Captures.Count];
+				for(int i = 0; i < m.Groups[1].Captures.Count; i++)
+					tro[i] = Convert.ToInt32(m.Groups[1].Captures[i].Value);
+				TTroop ttro = new TTroop
+				{
+					Tribe = TD.Tribe,
+					Troops = tro,
+					TroopType = TTroopType.My
+				};
+			}
 		}
 	}
 }
