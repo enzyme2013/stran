@@ -211,7 +211,7 @@ namespace libTravian
 						for (j = 0; j < 4; j++)
 						{
 							r[j] *= ratio;
-							_data[i].Resources[j] = mytrunc(r[j]);
+							_data[i].Resources[j] = Math.Min(mytrunc(r[j]), 1000000);
 						}
 					}
 				}
@@ -249,7 +249,7 @@ namespace libTravian
 		}
 		static private void InitCost()
 		{
-			_cost = new rinfo_array[40];
+			_cost = new rinfo_array[42];
 			_cost[1] = new rinfo_array(19, 1.67, new TResAmount(40, 100, 50, 60));
 			_cost[2] = new rinfo_array(19, 1.67, new TResAmount(80, 40, 80, 50));
 			_cost[3] = new rinfo_array(19, 1.67, new TResAmount(100, 80, 30, 60));
@@ -287,6 +287,9 @@ namespace libTravian
 			_cost[35] = new rinfo_array(20, 1.28, new TResAmount(1200, 1400, 1050, 2200));
 			_cost[36] = new rinfo_array(20, 1.28, new TResAmount(100, 100, 100, 100));
 			_cost[37] = new rinfo_array(20, 1.33, new TResAmount(700, 670, 700, 240));
+			_cost[38] = new rinfo_array(20, 1.28, new TResAmount(650, 800, 450, 200));
+			_cost[39] = new rinfo_array(20, 1.28, new TResAmount(400, 500, 350, 100));
+			_cost[40] = new rinfo_array(100, 1.0275, new TResAmount(66700, 69050, 72200, 13200));
 		}
 		static private void InitDepend()
 		{
@@ -312,6 +315,8 @@ namespace libTravian
 			Depends.Add(30, new TBL[] { new TBL(20, 20) });
 			Depends.Add(34, new TBL[] { new TBL(15, 5), new TBL(26, 3) });
 			Depends.Add(37, new TBL[] { new TBL(15, 3), new TBL(16, 1) });
+			Depends.Add(38, new TBL[] { new TBL(15, 10), new TBL(40, 0) });
+			Depends.Add(39, new TBL[] { new TBL(15, 10), new TBL(40, 0) });
 		}
 		static private void InitPrefer()
 		{

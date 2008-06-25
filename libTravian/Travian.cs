@@ -51,7 +51,7 @@ namespace libTravian
 
 		private bool NoMB = false;
 
-		private Data TD { get; set; }
+		public Data TD { get; set; }
 		public Travian(Data TravianData, Dictionary<string, string> Options)
 		{
 			GidLang = new Dictionary<int, string>(40);

@@ -679,6 +679,7 @@ namespace Stran
 			if(CV.isBuildingInitialized != 2)
 				return;
 			m_transferstatus.listViewMarket.Items.Clear();
+			m_transferstatus.listViewMarket.SuspendLayout();
 			foreach(var x in CV.Market.MarketInfo)
 			{
 				var lvi = m_transferstatus.listViewMarket.Items.Add(TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5));
@@ -687,6 +688,7 @@ namespace Stran
 				lvi.SubItems.Add(x.Coord.ToString());
 				lvi.SubItems.Add(x.MType.ToString());
 			}
+			m_transferstatus.listViewMarket.ResumeLayout();
 		}
 		private string TimeToString(long timecost)
 		{
@@ -841,6 +843,7 @@ namespace Stran
 			string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
 			if(!File.Exists(fn))
 				fn = "style\\default!style.xml";
+			SuspendLayout();
 			if(File.Exists(fn))
 				dockPanel1.LoadFromXml(fn, new DeserializeDockContent(FindDocument));
 			else
@@ -853,6 +856,7 @@ namespace Stran
 				m_researchstatus.Show(dockPanel1);
 				m_villagelist.Show(dockPanel1);
 			}
+			ResumeLayout();
 		}
 
 		private IDockContent FindDocument(string text)

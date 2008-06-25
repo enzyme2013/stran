@@ -238,7 +238,7 @@ namespace libTravian
 		{
 			List<int> CapitalNo = new List<int> { 27, 29, 30 };
 			List<int> NotCapitalNo = new List<int> { 34 };
-			List<int> Repeatable = new List<int> { 10, 11, 23 };
+			List<int> Repeatable = new List<int> { 10, 11, 23, 38, 39 };
 			//TQueue Q = CV.Queue[QueueID];
 			// Extend
 
@@ -276,7 +276,7 @@ namespace libTravian
 					if(x.Key == Bid)
 						continue;
 					if(x.Value.Gid == Gid)
-						if(x.Value.Level == 20)
+						if(Buildings.CheckLevelFull(x.Value.Gid, x.Value.Level, CV.isCapital))
 						{
 							toBuild = 0;
 							break;
