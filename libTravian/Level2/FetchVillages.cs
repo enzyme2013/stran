@@ -77,5 +77,15 @@ namespace libTravian
 				TD.Villages[VillageID].isDestroyInitialized = 2;
 			}
 		}
+		private void doFetchVTroop(object o)
+		{
+			lock(Level2Lock)
+			{
+				int VillageID = (int)o;
+				TD.Villages[VillageID].isTroopInitialized = 1;
+				PageQuery(VillageID, "build.php?gid=16");
+				TD.Villages[VillageID].isTroopInitialized = 2;
+			}
+		}
 	}
 }

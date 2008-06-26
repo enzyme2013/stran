@@ -4,7 +4,7 @@ using System.Text;
 
 namespace libTravian
 {
-	class RaidOption : IOption
+	public class RaidOption : IOption
 	{
 		#region IOption 成员
 
