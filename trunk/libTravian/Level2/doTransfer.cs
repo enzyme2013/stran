@@ -530,7 +530,7 @@ namespace libTravian
 			if (timeCost >= 0)
 			{
 				var CV = TD.Villages[VillageID];
-				option.MinimumDelay = Math.Max(option.MinimumInterval, timeCost * 2 + 10);
+				option.MinimumDelay = Math.Max(option.MinimumInterval, timeCost * 2 + 20);
 				option.Count++;
 				if (option.MaxCount == 0 || option.Count < option.MaxCount)
 				{
@@ -563,6 +563,7 @@ namespace libTravian
 			if (!m.Success)
 				return -1; // Parse error!
 			PostData["id"] = m.Groups[1].Value;
+			/*
 			m = Regex.Match(result, "var haendler = (\\d+);");
 			if (!m.Success)
 				return -1;
@@ -571,9 +572,12 @@ namespace libTravian
 			if (!m.Success)
 				return -1;
 			var MCarry = Convert.ToInt32(m.Groups[1].Value);
+			*/
 
-			if (Amount.TotalAmount > MCarry * MCount)
+			//if (Amount.TotalAmount > MCarry * MCount)
+			if(Amount.TotalAmount > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
 			{
+				DebugLog(string.Format("Transfer cannot go on: MCarry({0}) * MCount({1}) < Amount({2})", CV.Market.SingleCarry, CV.Market.ActiveMerchant, Amount.TotalAmount), DebugLevel.W);
 				return -2; // Beyond transfer ability
 			}
 

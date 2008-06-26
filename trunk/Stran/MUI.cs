@@ -65,7 +65,7 @@ namespace Stran
 			while(qc.Count != 0)
 			{
 				var x = qc.Dequeue();
-				Console.WriteLine(x.Name);
+				//Console.WriteLine(x.Name);
 				if(x.Tag is string)
 					x.Text = _(x.Tag as string);
 				foreach(Control y in x.Controls)
@@ -78,7 +78,7 @@ namespace Stran
 					{
 						if(y.Tag is string)
 							y.Text = _(y.Tag as string);
-						Console.WriteLine(y.Name);
+						//Console.WriteLine(y.Name);
 					}
 					var n = x as ListView;
 					if(n.ContextMenuStrip != null)
@@ -90,7 +90,7 @@ namespace Stran
 			while(qt.Count != 0)
 			{
 				var x = qt.Dequeue();
-				Console.WriteLine(x.Name);
+				//Console.WriteLine(x.Name);
 				if(x.Tag is string)
 					x.Text = _(x.Tag as string);
 				if(x is ToolStripMenuItem && (x as ToolStripMenuItem).DropDownItems != null)

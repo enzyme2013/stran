@@ -40,11 +40,11 @@
 			// 
 			this.listViewQueue.AllowColumnReorder = true;
 			this.listViewQueue.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-			this.columnHeader5,
-			this.columnHeader8,
-			this.columnHeader9,
-			this.columnHeader6,
-			this.columnHeader7});
+            this.columnHeader5,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader6,
+            this.columnHeader7});
 			this.listViewQueue.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewQueue.FullRowSelect = true;
 			this.listViewQueue.GridLines = true;
@@ -99,6 +99,7 @@
 			this.Name = "QueueList";
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.Document;
 			this.TabText = "队列";
+			this.Tag = "queue";
 			this.Text = "队列";
 			this.Load += new System.EventHandler(this.QueueList_Load);
 			this.ResumeLayout(false);

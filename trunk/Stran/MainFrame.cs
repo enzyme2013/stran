@@ -1690,5 +1690,45 @@ namespace Stran
 
 			}
 		}
+
+		private void CMBRaid_Click(object sender, EventArgs e)
+		{
+			if(!TravianData.Villages.ContainsKey(SelectVillage))
+				return;
+
+			TVillage CV = TravianData.Villages[SelectVillage];
+			if(CV.isTroopInitialized == 2)
+			{
+				RaidOptForm rof = new RaidOptForm()
+				{
+					mui = this.mui,
+					Troops = CV.Troops[0].Troops,
+					dl = this.dl,
+					Tribe = TravianData.Tribe
+				};
+
+				if(rof.ShowDialog() == DialogResult.OK && rof.Return != null)
+				{
+					/*
+					TQueue Q = new TQueue()
+					{
+						QueueType = TQueueType.Transfer,
+						ExtraOptions = ts.Return.ToString(),
+						Status = ts.Return.Status
+					};
+					CV.Queue.Add(Q);
+					CV.SaveQueue(tr.userdb);
+
+					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
+					lvi.SubItems.Add(typelist[(int)TQueueType.Transfer]);
+					lvi.SubItems.Add(ts.Return.GetTitle(TravianData));
+					lvi.SubItems.Add(Q.Status);
+					lvi.SubItems.Add("");
+					 */
+				}
+			}
+			else
+				CV.InitializeTroop();
+		}
 	}
 }

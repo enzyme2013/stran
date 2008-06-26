@@ -151,6 +151,7 @@ namespace libTravian
 		public int isBuildingInitialized { get; set; }
 		public int isUpgradeInitialized { get; set; }
 		public int isDestroyInitialized { get; set; }
+		public int isTroopInitialized { get; set; }
 		public void InitializeBuilding()
 		{
 			isBuildingInitialized = 1;
@@ -165,6 +166,11 @@ namespace libTravian
 		{
 			isDestroyInitialized = 1;
 			UpCall.FetchVillageDestroy(ID);
+		}
+		public void InitializeTroop()
+		{
+			isTroopInitialized = 1;
+			UpCall.FetchVillageTroop(ID);
 		}
 		public int TimeCost(TResAmount ResCost)
 		{
@@ -190,6 +196,7 @@ namespace libTravian
 			InBuilding = new TInBuilding[7];
 			Queue = new List<TQueue>();
 			Upgrades = new Dictionary<int, TRU>();
+			Troops = new List<TTroop>();
 			Market = new TMarket();
 			for (int i = 1; i <= 10; i++)
 				Upgrades[i] = new TRU();
@@ -576,7 +583,9 @@ namespace libTravian
 					MarketInfo.Remove(x);
 					if(SingleCarry == 0)
 						continue;
+					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ActiveMerchant.ToString());
 					ActiveMerchant += Convert.ToInt32(Math.Ceiling((double)(x.CarryAmount.Resources[0] + x.CarryAmount.Resources[1] + x.CarryAmount.Resources[2] + x.CarryAmount.Resources[3]) / SingleCarry));
+					Console.WriteLine(DateTime.Now.ToLongTimeString() + " " + ActiveMerchant.ToString());
 				}
 				else if(x.MType == TMType.MyOut)
 				{

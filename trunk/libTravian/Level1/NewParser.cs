@@ -562,6 +562,7 @@ namespace libTravian
 		{
 			if (!this.IsParsingBuildingPage(17, data))
 				return;
+			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];
 			if (Market[0] == Market[1])
 				Market[0] = null;
@@ -649,7 +650,7 @@ namespace libTravian
 						VillageName = m1.Groups[3].Value,
 						MType = MType,
 						CarryAmount = new TResAmount(am),
-						FinishTime = DateTime.Now.Add(TimeSpanParse(m1.Groups[4].Value))
+						FinishTime = DateTime.Now.Add(TimeSpanParse(m1.Groups[4].Value)).AddSeconds(15)
 					});
 				}
 			}
@@ -733,6 +734,7 @@ namespace libTravian
 					Troops = tro,
 					TroopType = TTroopType.My
 				};
+				CV.Troops.Add(ttro);
 			}
 		}
 	}
