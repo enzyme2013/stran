@@ -26,6 +26,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestLibTravian", "UnitTestLibTravian\UnitTestLibTravian.csproj", "{D8BC9C7B-6204-45E6-B47B-C121326A3B59}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Stravian.vsmdi
 	EndGlobalSection
