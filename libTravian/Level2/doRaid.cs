@@ -18,6 +18,11 @@ namespace libTravian
 			}
 			RaidOption Option = opt as RaidOption;
 
+            // check enough troops
+
+            // fetch and refresh data
+
+            // post data to server, and refresh new data
 
 			/*
 
