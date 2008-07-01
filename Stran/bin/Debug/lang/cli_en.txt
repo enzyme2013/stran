@@ -68,6 +68,7 @@ cmqdel=&Delete
 cmqclear=&Clear
 cmqup=Move &up
 cmqdown=Move &down
+cmqpause=&Pause
 cmqtimer=&Enable countdown timer
 // message
 reallyclosetext=Still items in queue. Sure to close?

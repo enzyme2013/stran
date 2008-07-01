@@ -68,6 +68,7 @@ cmqdel=&D. 删除
 cmqclear=C. 清空
 cmqup=&U. 上移
 cmqdown=&D. 下移
+cmqpause=&P. 暂停
 cmqtimer=&E. 延迟倒计时正在工作
 // message
 reallyclosetext=队列中仍有项目。真的要关闭吗？

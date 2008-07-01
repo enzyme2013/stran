@@ -487,7 +487,12 @@ namespace libTravian
 		public DateTime NextExec { get; set; }
 
 		/// <summary>
-		/// 
+		/// When set to true, the corresponding task will be temporarily suspended
+		/// </summary>
+		public bool Paused { get; set; }
+
+		/// <summary>
+		/// Default constructor (will not create a valid task object though)
 		/// </summary>
 		public TQueue()
 		{
@@ -497,6 +502,7 @@ namespace libTravian
 			this.Status = "";
 			this.ExtraOptions = "";
 			this.NextExec = DateTime.MinValue;
+			this.Paused = false;
 		}
 
 		/// <summary>
