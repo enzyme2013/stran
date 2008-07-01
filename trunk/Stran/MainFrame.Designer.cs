@@ -70,6 +70,8 @@
 			this.CMBParty = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMBParty500 = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMBParty2000 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMBRaid = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuResearch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMRResearch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -110,8 +112,7 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-			this.CMBRaid = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMQPause = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
@@ -448,6 +449,18 @@
 			this.CMBParty2000.Tag = "cmbparty2000";
 			this.CMBParty2000.Text = "2. 大派对";
 			this.CMBParty2000.Click += new System.EventHandler(this.CMBParty2000_Click);
+			// 
+			// toolStripSeparator13
+			// 
+			this.toolStripSeparator13.Name = "toolStripSeparator13";
+			this.toolStripSeparator13.Size = new System.Drawing.Size(179, 6);
+			// 
+			// CMBRaid
+			// 
+			this.CMBRaid.Name = "CMBRaid";
+			this.CMBRaid.Size = new System.Drawing.Size(182, 22);
+			this.CMBRaid.Text = "出兵";
+			this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
 			// 
 			// contextMenuResearch
 			// 
@@ -796,17 +809,13 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// toolStripSeparator13
+			// CMQPause
 			// 
-			this.toolStripSeparator13.Name = "toolStripSeparator13";
-			this.toolStripSeparator13.Size = new System.Drawing.Size(182, 6);
-			// 
-			// CMBRaid
-			// 
-			this.CMBRaid.Name = "CMBRaid";
-			this.CMBRaid.Size = new System.Drawing.Size(185, 22);
-			this.CMBRaid.Text = "出兵";
-			this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
+			this.CMQPause.Name = "CMQPause";
+			this.CMQPause.Size = new System.Drawing.Size(194, 22);
+			this.CMQPause.Tag = "cmqpause";
+			this.CMQPause.Text = "&P. 暂停";
+			this.CMQPause.Click += new System.EventHandler(this.CMQPause_Click);
 			// 
 			// MainFrame
 			// 
@@ -917,6 +926,7 @@
 		private System.Windows.Forms.ToolStripMenuItem CMMNpcTrade;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
 		private System.Windows.Forms.ToolStripMenuItem CMBRaid;
+		private System.Windows.Forms.ToolStripMenuItem CMQPause;
 
 
 	}

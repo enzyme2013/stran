@@ -248,6 +248,9 @@ namespace Stran
 						case "ExtraOptions":
 							Q.ExtraOptions = kvpair[1];
 							break;
+						case "Paused":
+							Q.Paused = Boolean.Parse(kvpair[1]);
+							break;
 					}
 				}
 
@@ -471,7 +474,7 @@ namespace Stran
 					bool[] status = new bool[10];
 					for(int i = 0; i < CV.Queue.Count; i++)
 					{
-						var x = CV.Queue[i];
+						TQueue x = CV.Queue[i];
 						var lvi = m_queuelist.listViewQueue.Items[i];
 						if(lvi.SubItems[3].Text != x.Status)
 							lvi.SubItems[3].Text = x.Status;
@@ -479,18 +482,25 @@ namespace Stran
 						if(x.Type >= 2)
 							ntype = x.Type;
 
-						if(x.QueueType == TQueueType.Transfer || !status[ntype])
+						string delayStr = lvi.SubItems[4].Text;
+						if (x.Paused)
+						{
+							delayStr = "||";
+						}
+						else if(x.QueueType == TQueueType.Transfer || ! status[ntype])
 						{
 							int n = tr.GetDelay(SelectVillage, x);
 							if (n > 0)
 							{
-								string delayStr = this.TimeToString(n);
-								if (lvi.SubItems[4].Text != delayStr)
-								{
-									lvi.SubItems[4].Text = delayStr;
-								}
+								delayStr = this.TimeToString(n);
 							}
+
 							status[ntype] = true;
+						}
+
+						if (lvi.SubItems[4].Text != delayStr)
+						{
+							lvi.SubItems[4].Text = delayStr;
 						}
 					}
 				}
@@ -1386,6 +1396,40 @@ namespace Stran
 				}
 			}
 		}
+
+		/// <summary>
+		/// Pause/resume the selected task
+		/// </summary>
+		private void CMQPause_Click(object sender, EventArgs e)
+		{
+			if (! this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			{
+				return;
+			}
+
+			if (m_queuelist.listViewQueue.SelectedIndices.Count == 0)
+			{
+				return;
+			}
+
+			lock (QueueLock)
+			{
+				TVillage village = this.TravianData.Villages[this.SelectVillage];
+				if (village.isBuildingInitialized == 2)
+				{
+					foreach (int i in m_queuelist.listViewQueue.SelectedIndices)
+					{
+						TQueue task = village.Queue[i];
+						task.Paused = !task.Paused;
+					}
+
+					village.SaveQueue(this.tr.userdb);
+				}
+			}
+
+			this.DisplayQueue();
+		}
+
 		private void CMQTimer_Click(object sender, EventArgs e)
 		{
 			CMQTimer.Checked = !CMQTimer.Checked;

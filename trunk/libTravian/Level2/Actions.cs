@@ -61,11 +61,18 @@ namespace libTravian
 				foreach (var vid in TD.Villages.Keys)
 				//for(int iii = 0; iii < TD.Villages.Count; iii++)
 				{
-					var CV = TD.Villages[vid];
-					var CVQ = CV.Queue;
+					TVillage CV = TD.Villages[vid];
 					List<int> status = new List<int>();
-					for (int i = 0; i < CVQ.Count; i++)
-						switch (CVQ[i].QueueType)
+
+					for (int i = 0; i < CV.Queue.Count; i++)
+					{
+						TQueue task = CV.Queue[i];
+						if (task.Paused)
+						{
+							continue;
+						}
+
+						switch (task.QueueType)
 						{
 							case TQueueType.Building:
 								if (CV.isBuildingInitialized == 0)
@@ -75,16 +82,16 @@ namespace libTravian
 								}
 								else if (CV.isBuildingInitialized == 1)
 									continue;
-								if (!status.Contains(TD.isRomans ? CVQ[i].Type : 0))
+								if (!status.Contains(TD.isRomans ? task.Type : 0))
 								{
-									status.Add(TD.isRomans ? CVQ[i].Type : 0);
+									status.Add(TD.isRomans ? task.Type : 0);
 
-									if (CVQ[i].Bid == TQueue.AIBID && AIDelay(CV.ID, CVQ[i]) <= 0)
+									if (task.Bid == TQueue.AIBID && AIDelay(CV.ID, task) <= 0)
 									{
 										doAI(CV.ID, i);
 										break;
 									}
-									if (GetDelay(CV.ID, CVQ[i]) <= 0)
+									if (GetDelay(CV.ID, task) <= 0)
 									{
 										doBuild(CV.ID, i);
 										break;
@@ -102,7 +109,7 @@ namespace libTravian
 								if (!status.Contains(2))
 								{
 									status.Add(2);
-									if (GetDelay(CV.ID, CVQ[i]) <= 0)
+									if (GetDelay(CV.ID, task) <= 0)
 									{
 										doDestroy(CV.ID, i);
 										break;
@@ -119,21 +126,21 @@ namespace libTravian
 								}
 								else if (CV.isUpgradeInitialized == 1)
 									continue;
-								if (!status.Contains(CVQ[i].Type))
+								if (!status.Contains(task.Type))
 								{
-									status.Add(CVQ[i].Type);
-									if (GetDelay(CV.ID, CVQ[i]) <= 0)
+									status.Add(task.Type);
+									if (GetDelay(CV.ID, task) <= 0)
 									{
-										doUp(CV.ID, i, CVQ[i].QueueType);
+										doUp(CV.ID, i, task.QueueType);
 										break;
 									}
 								}
 								break;
 							case TQueueType.Party:
-								if (!status.Contains(CVQ[i].Type))
+								if (!status.Contains(task.Type))
 								{
-									status.Add(CVQ[i].Type);
-									if (GetDelay(CV.ID, CVQ[i]) <= 0)
+									status.Add(task.Type);
+									if (GetDelay(CV.ID, task) <= 0)
 									{
 										doParty(CV.ID, i);
 										break;
@@ -141,20 +148,21 @@ namespace libTravian
 								}
 								break;
 							case TQueueType.Transfer:
-								if (GetDelay(CV.ID, CVQ[i]) <= 0)
+								if (GetDelay(CV.ID, task) <= 0)
 								{
-									doTransfer(CV.ID, CVQ[i]);
+									doTransfer(CV.ID, task);
 								}
 								break;
 							case TQueueType.NpcTrade:
-								if (GetDelay(CV.ID, CVQ[i]) <= 0)
+								if (GetDelay(CV.ID, task) <= 0)
 								{
-									doNpcTrade(CV.ID, CVQ[i]);
+									doNpcTrade(CV.ID, task);
 								}
 								break;
 							case TQueueType.Raid:
 								break;
 						}
+					}
 				}
 			}
 			catch (InvalidOperationException e)
