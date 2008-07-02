@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Net;
 using System.Collections;
@@ -272,20 +273,54 @@ namespace libTravian
 			}
 			return sb.ToString();
 		}
+
+		/// <summary>
+		/// Save task queue to user DB
+		/// </summary>
+		/// <param name="User DB"></param>
 		public void SaveQueue(LocalDB db)
 		{
-			StringBuilder sb = new StringBuilder();
-			foreach (var x in Queue)
-			{
-				if (sb.Length != 0)
-					sb.Append('|');
-				if(x.NewOptions == null)
-					sb.Append(x.ToString().Replace("|", "<_!!!_>"));
-				else
-					sb.Append(x.NewOptions.Export().Replace("|", "<_!!!_>"));
-			}
 			string key = "v" + ID.ToString() + "Queue";
-			db[key] = sb.ToString();
+			db[key] = this.EncodeQueue();
+		}
+
+		/// <summary>
+		/// Restore task queue from user DB
+		/// </summary>
+		/// <param name="User DB"></param>
+		public void RestoreQueue(LocalDB db)
+		{
+			string key = "v" + ID.ToString() + "Queue";
+			if (db.ContainsKey(key))
+			{
+				this.DecodeQueue(db[key]);
+			}
+		}
+
+		/// <summary>
+		/// Export task queue to a text file
+		/// </summary>
+		/// <param name="filename">Text file name</param>
+		public void SaveQueue(string filename)
+		{
+			using (StreamWriter sw = new StreamWriter(filename))
+			{
+				sw.Write(this.EncodeQueue().Replace("|","\r\n").Replace("<_!!!_>", "|"));
+			}
+		}
+
+		/// <summary>
+		/// Import task queue from a text file
+		/// </summary>
+		/// <param name="filename">Text file name</param>
+		public void RestoreQueue(string filename)
+		{
+			using (StreamReader sr = new StreamReader(filename))
+			{
+				string encodedQueue = sr.ReadToEnd();
+				encodedQueue = encodedQueue.Replace("|", "<_!!!_>").Replace("\r\n", "|");
+				this.DecodeQueue(encodedQueue);
+			}
 		}
 
 		public void SaveResourceLimits(LocalDB db)
@@ -320,6 +355,45 @@ namespace libTravian
 		}
 
 		public List<TTroop> Troops { get; set; }
+
+		/// <summary>
+		/// Convert current task queue into a string
+		/// </summary>
+		/// <returns>Encoded task queue</returns>
+		private string EncodeQueue()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (TQueue task in Queue)
+			{
+				if (sb.Length != 0)
+					sb.Append('|');
+				if (task.NewOptions == null)
+					sb.Append(task.ToString().Replace("|", "<_!!!_>"));
+				else
+					sb.Append(task.NewOptions.Export().Replace("|", "<_!!!_>"));
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Restore task queue from a previously encode string
+		/// </summary>
+		/// <param name="data">Encoded task queue</param>
+		private void DecodeQueue(string data)
+		{
+			foreach (string taskStr in data.Split('|'))
+			{
+				TQueue task = TQueue.FromString(taskStr.Replace("<_!!!_>", "|"));
+				if (task.QueueType == TQueueType.Building && task.Bid > 0 && ! this.Buildings.ContainsKey(task.Bid))
+				{
+					this.Buildings[task.Bid] = new TBuilding() { Gid = task.Gid };
+				}
+
+				task.NextExec = DateTime.Now.AddSeconds(15);
+				this.Queue.Add(task);
+			}
+		}
 	}
 
 	public class TResource
@@ -503,6 +577,52 @@ namespace libTravian
 			this.ExtraOptions = "";
 			this.NextExec = DateTime.MinValue;
 			this.Paused = false;
+		}
+
+		/// <summary>
+		/// Decode a queued task from an encoded string
+		/// </summary>
+		/// <param name="data">Encoded string</param>
+		/// <returns>Decoded task</returns>
+		public static TQueue FromString(string data)
+		{
+			TQueue task = new TQueue();
+
+			foreach (string attribute in data.Split(','))
+			{
+				string[] kvpair = attribute.Trim().Split(':');
+				if (kvpair.Length != 2)
+				{
+					continue;
+				}
+
+				switch (kvpair[0])
+				{
+					case "Bid":
+						task.Bid = Convert.ToInt32(kvpair[1]);
+						break;
+					case "Gid":
+						task.Gid = Convert.ToInt32(kvpair[1]);
+						break;
+					case "TargetLevel":
+						task.TargetLevel = Convert.ToInt32(kvpair[1]);
+						break;
+					case "Status":
+						task.Status = kvpair[1];
+						break;
+					case "QueueType":
+						task.QueueType = (TQueueType)Enum.Parse(typeof(TQueueType), kvpair[1]);
+						break;
+					case "ExtraOptions":
+						task.ExtraOptions = kvpair[1];
+						break;
+					case "Paused":
+						task.Paused = Boolean.Parse(kvpair[1]);
+						break;
+				}
+			}
+
+			return task;
 		}
 
 		/// <summary>

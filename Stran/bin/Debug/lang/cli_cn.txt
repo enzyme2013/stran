@@ -70,6 +70,8 @@ cmqup=&U. 上移
 cmqdown=&D. 下移
 cmqpause=&P. 暂停
 cmqtimer=&E. 延迟倒计时正在工作
+cmqexport=&X. 导出
+cmqimport=&I. 导入
 // message
 reallyclosetext=队列中仍有项目。真的要关闭吗？
 reallyclosecap=警告!
@@ -159,3 +161,7 @@ refreshbuilding=&F. 刷新建筑列表
 refreshdestroy=&H. 刷新拆除项目
 refreshupgrade=&F. 刷新研发项目
 cmicancel=&C. 取消
+
+// Queue import/export dialogs
+ExportTaskQueue=导出任务队列
+ImportTaskQueue=导入任务队列
