@@ -212,56 +212,8 @@ namespace Stran
 		/// <param name="VillageID">Village unqiue id</param>
 		private void RestoreQueue(int VillageID)
 		{
-			string key = "v" + VillageID.ToString() + "Queue";
-			if(!tr.userdb.ContainsKey(key))
-				return;
-			string qString = tr.userdb[key];
-			//if(MessageBox.Show(mui._("unprocessedqueue") + Environment.NewLine + qString.Replace('|', '\n'), mui._("reallyclosecap"), MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-				//return;
-			string[] queues = qString.Split('|');
-			var CV = TravianData.Villages[VillageID];
-			foreach(var x in queues)
-			{
-				TQueue Q = new TQueue();
-				foreach(var y in x.Replace("<_!!!_>", "|").Split(','))
-				{
-					string[] kvpair = y.Trim().Split(':');
-					if(kvpair.Length != 2)
-						continue;
-					switch(kvpair[0])
-					{
-						case "Bid":
-							Q.Bid = Convert.ToInt32(kvpair[1]);
-							break;
-						case "Gid":
-							Q.Gid = Convert.ToInt32(kvpair[1]);
-							break;
-						case "TargetLevel":
-							Q.TargetLevel = Convert.ToInt32(kvpair[1]);
-							break;
-						case "Status":
-							Q.Status = kvpair[1];
-							break;
-						case "QueueType":
-							Q.QueueType = (TQueueType)Enum.Parse(typeof(TQueueType), kvpair[1]);
-							break;
-						case "ExtraOptions":
-							Q.ExtraOptions = kvpair[1];
-							break;
-						case "Paused":
-							Q.Paused = Boolean.Parse(kvpair[1]);
-							break;
-					}
-				}
-
-				if (Q.QueueType == TQueueType.Building && Q.Bid > 0 && !CV.Buildings.ContainsKey(Q.Bid))
-				{
-					CV.Buildings[Q.Bid] = new TBuilding() { Gid = Q.Gid };
-				}
-
-				Q.NextExec = DateTime.Now.AddSeconds(15);
-				TravianData.Villages[VillageID].Queue.Add(Q);
-			}
+			TVillage CV = TravianData.Villages[VillageID];
+			CV.RestoreQueue(this.tr.userdb);
 		}
 
 		private void RefreshBuildings()
@@ -1402,7 +1354,7 @@ namespace Stran
 		/// </summary>
 		private void CMQPause_Click(object sender, EventArgs e)
 		{
-			if (! this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			if (!this.TravianData.Villages.ContainsKey(this.SelectVillage))
 			{
 				return;
 			}
@@ -1412,10 +1364,10 @@ namespace Stran
 				return;
 			}
 
-			lock (QueueLock)
+			TVillage village = this.TravianData.Villages[this.SelectVillage];
+			if (village.isBuildingInitialized == 2)
 			{
-				TVillage village = this.TravianData.Villages[this.SelectVillage];
-				if (village.isBuildingInitialized == 2)
+				lock (QueueLock)
 				{
 					foreach (int i in m_queuelist.listViewQueue.SelectedIndices)
 					{
@@ -1434,6 +1386,63 @@ namespace Stran
 		{
 			CMQTimer.Checked = !CMQTimer.Checked;
 			timer1.Enabled = CMQTimer.Checked;
+		}
+
+		/// <summary>
+		/// Export the villag task queue to a text file
+		/// </summary>
+		private void CMQImport_Click(object sender, EventArgs e)
+		{
+			if (!this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[this.SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.Filter = "Stran task queue|*.stq";
+			openFileDialog.Title = this.mui._("ImportTaskQueue");
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				lock (QueueLock)
+				{
+					village.RestoreQueue(openFileDialog.FileName);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Import the villag task queue from a previously saved text file
+		/// </summary>
+		private void CMQExport_Click(object sender, EventArgs e)
+		{
+			if (! this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[this.SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			lock (QueueLock)
+			{
+				SaveFileDialog saveFileDialog = new SaveFileDialog();
+				saveFileDialog.Filter = "Stran task queue|*.stq";
+				saveFileDialog.Title = this.mui._("ExportTaskQueue");
+				saveFileDialog.ShowDialog();
+				if (saveFileDialog.FileName != "")
+				{
+					village.SaveQueue(saveFileDialog.FileName);
+				}
+			}
 		}
 		#endregion
 

@@ -70,6 +70,8 @@ cmqup=Move &up
 cmqdown=Move &down
 cmqpause=&Pause
 cmqtimer=&Enable countdown timer
+cmqexport=E&Xport
+cmqimport=&Import
 // message
 reallyclosetext=Still items in queue. Sure to close?
 reallyclosecap=Warning!
@@ -159,3 +161,7 @@ refreshbuilding=Re&fresh building list
 refreshdestroy=Refres&h destroy item
 refreshupgrade=Re&fresh research list
 cmicancel=&Cancel
+
+// Queue import/export dialogs
+ExportTaskQueue=Export Task Queue
+ImportTaskQueue=Import Task Queue
