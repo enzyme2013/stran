@@ -1405,6 +1405,7 @@ namespace Stran
 			}
 
 			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.RestoreDirectory = true;
 			openFileDialog.Filter = "Stran task queue|*.stq";
 			openFileDialog.Title = this.mui._("ImportTaskQueue");
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -1435,6 +1436,7 @@ namespace Stran
 			lock (QueueLock)
 			{
 				SaveFileDialog saveFileDialog = new SaveFileDialog();
+				saveFileDialog.RestoreDirectory = true;
 				saveFileDialog.Filter = "Stran task queue|*.stq";
 				saveFileDialog.Title = this.mui._("ExportTaskQueue");
 				saveFileDialog.ShowDialog();
