@@ -65,12 +65,50 @@ namespace TestStran2
 		//
 		#endregion
 
+		public void dummyparser(string pageData, UserData users, int villageId)
+		{
+			if(users == null)
+				throw new ArgumentNullException();
+			users.StringProperties["testok"] = pageData;
+		}
+
+		public void dummyaction(ITask task, UserData users, int villageId)
+		{
+			if(users == null)
+				throw new ArgumentNullException();
+			users.StringProperties["testok"] = villageId.ToString();
+		}
+
+		public int dummymethod(string arg1, string arg2)
+		{
+			return arg1.Length * arg2.Length;
+		}
+
+		public int dummymethod2(IList<int> data, IPlugin iplugin)
+		{
+			return data[0];
+		}
+
+		public int dummymethod3(Exception e)
+		{
+			return -1;
+		}
+
+		#region IPlugin 成员
+
+		public void Initialize(MethodsCenter MC)
+		{
+
+		}
+
+		#endregion
+
 
 		/// <summary>
 		///RegisterParser 的测试
 		///</summary>
 		[TestMethod()]
-		public void RegisterParserTest()
+		public void ParserTest()
 		{
 			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
 			ParserPluginCall Call = new ParserPluginCall(dummyparser);
@@ -92,7 +130,7 @@ namespace TestStran2
 		///RegisterMethod 的测试
 		///</summary>
 		[TestMethod()]
-		public void RegisterMethodTest()
+		public void MethodTest()
 		{
 			MethodsCenter target = new MethodsCenter();
 			target.ReadyToRegisterFor("test", this);
@@ -150,7 +188,7 @@ namespace TestStran2
 		///RegisterAction 的测试
 		///</summary>
 		[TestMethod()]
-		public void RegisterActionTest()
+		public void ActionTest()
 		{
 			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
 			ActionPluginCall Call = new ActionPluginCall(dummyaction);
@@ -168,32 +206,46 @@ namespace TestStran2
 			target.CallAction(null, null, 5);
 		}
 
-		public void dummyparser(string pageData, UserData users, int villageId)
+		/// <summary>
+		///IsMethodExists 的测试
+		///</summary>
+		[TestMethod()]
+		public void IsMethodExistsTest()
 		{
-			if(users == null)
-				throw new ArgumentNullException();
-			users.StringProperties["testok"] = pageData;
+			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
+			target.ReadyToRegisterFor("test", this);
+			target.RegisterMethod(GetType().GetMethod("dummymethod"));
+			target.RegisterMethod(GetType().GetMethod("dummymethod2"));
+			target.RegisterMethod(GetType().GetMethod("dummymethod3"));
+			string PluginName = "test"; // TODO: 初始化为适当的值
+			string MethodName = "dummymethod"; // TODO: 初始化为适当的值
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(string), typeof(string) }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(string), typeof(int) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(string) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "arg2", typeof(string) }, { "dummy", typeof(int) }, { "arg1", typeof(string) } }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "arg2", typeof(int) }, { "arg1", typeof(string) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "arg2", typeof(string) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "arg2", typeof(string) }, { "dummy", typeof(int) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, "what"), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, "what", new Type[] { typeof(string) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, "what", new Dictionary<string, Type> { { "arg2", typeof(string) } }), false);
+			MethodName += "2";
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(List<int>), typeof(IPlugin) }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(int[]), typeof(IPlugin) }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(int), typeof(IPlugin) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(string[]), typeof(IPlugin) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(int[]), typeof(ITask) }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(int[]), typeof(MethodsCenterTest) }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "data", typeof(int[]) }, { "iplugin", typeof(IPlugin) } }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "data", typeof(int) }, { "iplugin", typeof(IPlugin) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "data", typeof(string[]) }, { "iplugin", typeof(IPlugin) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "data", typeof(int[]) }, { "iplugin", typeof(ITask) } }), false);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "data", typeof(int[]) }, { "iplugin", typeof(MethodsCenterTest) } }), true);
+			MethodName = "dummymethod3";
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Type[] { typeof(InvalidOperationException) }), true);
+			Assert.AreEqual(target.IsMethodExists(PluginName, MethodName, new Dictionary<string, Type> { { "e", typeof(InvalidOperationException) } }), true);
 		}
-
-		public void dummyaction(ITask task, UserData users, int villageId)
-		{
-			if(users == null)
-				throw new ArgumentNullException();
-			users.StringProperties["testok"] = villageId.ToString();
-		}
-
-		public int dummymethod(string arg1, string arg2)
-		{
-			return arg1.Length * arg2.Length;
-		}
-
-		#region IPlugin 成员
-
-		public void Initialize(MethodsCenter MC)
-		{
-			
-		}
-
-		#endregion
 	}
 }

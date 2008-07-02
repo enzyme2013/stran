@@ -19,11 +19,11 @@ namespace Stran2
 		public void Run()
 		{
 			LoadPlugin();
-			UserLoader.LoadUser(TDC);
-			while(true)
-			{
+			UserLoader.LoadUser(TDC, "Account");
+			//while(true)
+			//{
 
-			}
+			//}
 		}
 	}
 }

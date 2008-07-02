@@ -150,10 +150,26 @@ namespace Stran2
 				for(int i = 0; i < pinfo.Length; i++)
 				{
 					if(pinfo[i].ParameterType.IsInterface)
-						if(ParameterTypes[i].GetInterface(pinfo[i].ParameterType.Name) == null)
-							return false;
+					{
+						if(ParameterTypes[i].IsInterface)
+						{
+							if(ParameterTypes[i].FullName == pinfo[i].ParameterType.FullName)
+								continue;
+							else
+								return false;
+						}
+						else
+						{
+							Type ActualType = ParameterTypes[i].GetInterface(pinfo[i].ParameterType.Name);
+							Type NeedType = pinfo[i].ParameterType;
+							if(ActualType == null && !ParameterTypes[i].Equals(NeedType))
+								return false;
+							if(ActualType.IsGenericType && !ActualType.FullName.Equals(NeedType.FullName))
+									return false;
+						}
+					}
 					else
-						if(!ParameterTypes[i].IsSubclassOf(pinfo[i].ParameterType))
+						if(!ParameterTypes[i].IsSubclassOf(pinfo[i].ParameterType) && !ParameterTypes[i].Equals(pinfo[i].ParameterType))
 							return false;
 				}
 				return true;
@@ -168,7 +184,7 @@ namespace Stran2
 			if(Methods.ContainsKey(key))
 			{
 				var pinfo = Methods[key].GetParameters();
-				if(NamedParameterTypes.Count != pinfo.Length)
+				if(NamedParameterTypes.Count < pinfo.Length)
 					return false;
 				for(int i = 0; i < pinfo.Length; i++)
 				{
@@ -177,11 +193,27 @@ namespace Stran2
 						return false;
 					Type t = NamedParameterTypes[k];
 					if(pinfo[i].ParameterType.IsInterface)
-						if(t.GetInterface(pinfo[i].ParameterType.Name) == null)
-							return false;
-						else
-							if(!t.IsSubclassOf(pinfo[i].ParameterType))
+					{
+						if(t.IsInterface)
+						{
+							if(t.FullName == pinfo[i].ParameterType.FullName)
+								continue;
+							else
 								return false;
+						}
+						else
+						{
+							Type ActualType = t.GetInterface(pinfo[i].ParameterType.Name);
+							Type NeedType = pinfo[i].ParameterType;
+							if(ActualType == null && !t.Equals(NeedType))
+								return false;
+							if(ActualType.IsGenericType && !ActualType.FullName.Equals(NeedType.FullName))
+								return false;
+						}
+					}
+					else
+						if(!t.IsSubclassOf(pinfo[i].ParameterType) && !t.Equals(pinfo[i].ParameterType))
+							return false;
 				}
 				return true;
 			}

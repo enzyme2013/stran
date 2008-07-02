@@ -7,11 +7,11 @@ namespace Stran2
 {
 	static class UserLoader
 	{
-		static public void LoadUser(TravianDataCenter TDC)
+		static public void LoadUser(TravianDataCenter TDC, string AccountName)
 		{
-			if(File.Exists("Account"))
+			if(File.Exists(AccountName))
 			{
-				FileStream fs = new FileStream("Account", FileMode.Open, FileAccess.Read);
+				FileStream fs = new FileStream(AccountName, FileMode.Open, FileAccess.Read);
 				StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 				while(!sr.EndOfStream)
 				{
@@ -23,7 +23,7 @@ namespace Stran2
 					if(TDC.Users.ContainsKey(userkey))
 						ud = TDC.Users[userkey];
 					else
-						ud = new UserData();
+						TDC.Users.Add(userkey, ud = new UserData());
 					ud.StringProperties.Add("Username", Username);
 					ud.StringProperties.Add("Server", Server);
 					ud.StringProperties.Add("Password", Encoding.UTF8.GetString(Convert.FromBase64String(accountdata[2])));

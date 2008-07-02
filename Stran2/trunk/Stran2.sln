@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stran2", "Stran2\Stran2.csproj", "{EFEE6E8F-5101-45CA-929B-A9100EE815A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Parser.Dorf", "Plugin.Parser.Dorf\Plugin.Parser.Dorf.csproj", "{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestStran2", "TestStran2\TestStran2.csproj", "{DA6AD148-542F-4B2E-8A13-24C37A9B6432}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{893C7D37-D83C-4F65-B37F-9F3F1E3C4FE4}"
@@ -12,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		Stran2.vsmdi = Stran2.vsmdi
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.Building", "Plugin.Building\Plugin.Building.csproj", "{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -30,14 +30,14 @@ Global
 		{EFEE6E8F-5101-45CA-929B-A9100EE815A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFEE6E8F-5101-45CA-929B-A9100EE815A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFEE6E8F-5101-45CA-929B-A9100EE815A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA6AD148-542F-4B2E-8A13-24C37A9B6432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA6AD148-542F-4B2E-8A13-24C37A9B6432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA6AD148-542F-4B2E-8A13-24C37A9B6432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA6AD148-542F-4B2E-8A13-24C37A9B6432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
