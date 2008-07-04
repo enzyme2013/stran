@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -45,8 +46,11 @@
     <Compile Include="ITask.cs" />
     <Compile Include="LoadPlugin.cs" />
     <Compile Include="MethodsCenter.cs" />
+    <Compile Include="OptionCenter.cs" />
+    <Compile Include="PageQuerier.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TPoint.cs" />
     <Compile Include="TravianDataCenter.cs" />
     <Compile Include="UserLoader.cs" />
   </ItemGroup>

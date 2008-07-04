@@ -15,7 +15,7 @@ namespace Stran2
 	}
 	public partial class MainModule
 	{
-		TravianDataCenter TDC = new TravianDataCenter();
+		TravianDataCenter TDC = TravianDataCenter.Instance;
 		public void Run()
 		{
 			LoadPlugin();

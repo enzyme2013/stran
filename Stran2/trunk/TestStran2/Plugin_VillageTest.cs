@@ -1,15 +1,16 @@
 ﻿using Stran2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 namespace TestStran2
 {
     
     
     /// <summary>
-    ///这是 UserLoaderTest 的测试类，旨在
-    ///包含所有 UserLoaderTest 单元测试
+    ///这是 Plugin_VillageTest 的测试类，旨在
+    ///包含所有 Plugin_VillageTest 单元测试
     ///</summary>
 	[TestClass()]
-	public class UserLoaderTest
+	public class Plugin_VillageTest
 	{
 
 
@@ -63,19 +64,42 @@ namespace TestStran2
 
 
 		/// <summary>
-		///LoadUser 的测试
+		///Initialize 的测试
 		///</summary>
 		[TestMethod()]
-		public void LoadUserTest()
+		public void InitializeTest()
 		{
-			TravianDataCenter TDC = TravianDataCenter.Instance;
-			string AccountName = "..\\..\\..\\TestStran2\\Account"; // TODO: 初始化为适当的值
-			TDC.Users.Add("chihsun@speed.travian.tw", new UserData());
-			UserLoader.LoadUser(TDC, AccountName);
-			Assert.AreEqual<int>(TDC.Users.Count, 2);
-			Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Username"], "msg7086");
-			Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Server"], "a1.travian.cn");
-			Assert.AreEqual<int>(TDC.Users["chihsun@speed.travian.tw"].Int32Properties["Tribe"], 0);
+			Plugin_Village target = new Plugin_Village();
+			MethodsCenter MC = MethodsCenter.Instance;
+			MC.ReadyToRegisterFor("test", target);
+			target.Initialize(MC);
+			Assert.AreEqual<int>(MC.ParserCount, 1);
+			Assert.AreEqual<int>(MC.MethodsCount, 0);
+			Assert.AreEqual<int>(MC.ActionCount, 0);
+			target.PQ = new Plugin_Village_Web_Simulater();
+			Assert.Inconclusive();
 		}
+	}
+
+	public class Plugin_Village_Web_Simulater : IPageQuerier
+	{
+		#region IPageQuerier 成员
+
+		public string Get(UserData UD, int VillageID, string Uri)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string Post(UserData UD, int VillageID, string Uri, System.Collections.Generic.Dictionary<string, string> Data)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string GetEx(UserData UD, int VillageID, string Uri, System.Collections.Generic.Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
+		{
+			string b = "..\\..\\..\\test\\Plugin_Village";
+		}
+
+		#endregion
 	}
 }

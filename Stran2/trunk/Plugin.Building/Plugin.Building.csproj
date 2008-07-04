@@ -8,7 +8,7 @@
     <ProjectGuid>{F85252E2-C92C-4AAB-9A1D-C11D1F8963AB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plugin.Building</RootNamespace>
+    <RootNamespace>Stran2</RootNamespace>
     <AssemblyName>Plugin.Building</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

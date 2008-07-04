@@ -5,8 +5,14 @@ using System.Reflection;
 
 namespace Stran2
 {
+	/// <summary>
+	/// Singleton Pattern, for Dependence Injection use
+	/// </summary>
 	public class MethodsCenter
 	{
+		private MethodsCenter() { }
+		public static readonly MethodsCenter Instance = new MethodsCenter();
+
 		string nowPluginName;
 
 		Dictionary<string, MethodInfo> Methods = new Dictionary<string, MethodInfo>();
@@ -219,6 +225,30 @@ namespace Stran2
 			}
 			else
 				return false;
+		}
+
+		public int MethodsCount
+		{
+			get
+			{
+				return Methods.Count;
+			}
+		}
+
+		public int ParserCount
+		{
+			get
+			{
+				return ParserPlugins.Count;
+			}
+		}
+
+		public int ActionCount
+		{
+			get
+			{
+				return ActionPlugins.Count;
+			}
 		}
 
 	}

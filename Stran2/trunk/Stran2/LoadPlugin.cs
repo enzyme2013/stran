@@ -9,7 +9,7 @@ namespace Stran2
 	partial class MainModule
 	{
 		//Dictionary<
-		MethodsCenter MC = new MethodsCenter();
+		MethodsCenter MC = MethodsCenter.Instance;
 		
 		public void LoadPlugin()
 		{

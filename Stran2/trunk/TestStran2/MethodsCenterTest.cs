@@ -110,7 +110,7 @@ namespace TestStran2
 		[TestMethod()]
 		public void ParserTest()
 		{
-			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
+			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
 			ParserPluginCall Call = new ParserPluginCall(dummyparser);
 			UserData users = new UserData();
 			target.RegisterParser(Call);
@@ -121,9 +121,33 @@ namespace TestStran2
 			}
 			catch(InvalidOperationException)
 			{ }
+			Assert.AreEqual<int>(target.ParserCount, 1);
 			target.CallParser("hello", users, 0);
 			Assert.AreEqual<string>(users.StringProperties["testok"], "hello");
 			target.CallParser("hello", null, 0);
+		}
+
+		/// <summary>
+		///RegisterAction 的测试
+		///</summary>
+		[TestMethod()]
+		public void ActionTest()
+		{
+			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
+			ActionPluginCall Call = new ActionPluginCall(dummyaction);
+			UserData users = new UserData();
+			target.RegisterAction(Call);
+			try
+			{
+				target.RegisterAction(Call);
+				Assert.Fail();
+			}
+			catch(InvalidOperationException)
+			{ }
+			Assert.AreEqual<int>(target.ActionCount, 1);
+			target.CallAction(null, users, 5);
+			Assert.AreEqual<string>(users.StringProperties["testok"], "5");
+			target.CallAction(null, null, 5);
 		}
 
 		/// <summary>
@@ -132,7 +156,7 @@ namespace TestStran2
 		[TestMethod()]
 		public void MethodTest()
 		{
-			MethodsCenter target = new MethodsCenter();
+			MethodsCenter target = MethodsCenter.Instance;
 			target.ReadyToRegisterFor("test", this);
 			MethodInfo MI = GetType().GetMethod("dummymethod");
 			target.RegisterMethod(MI);
@@ -143,6 +167,7 @@ namespace TestStran2
 			}
 			catch(InvalidOperationException)
 			{ }
+			Assert.AreEqual<int>(target.MethodsCount, 1);
 			int result = (int)target.CallMethod("test", "dummymethod", "bcd", "mmjb");
 			Assert.AreEqual<int>(result, 12);
 			result = (int)target.CallMethod("test", "dummymethod", new Dictionary<string, object> { { "arg1", "bcd" }, { "arg2", "mmjb" } });
@@ -185,34 +210,12 @@ namespace TestStran2
 		}
 
 		/// <summary>
-		///RegisterAction 的测试
-		///</summary>
-		[TestMethod()]
-		public void ActionTest()
-		{
-			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
-			ActionPluginCall Call = new ActionPluginCall(dummyaction);
-			UserData users = new UserData();
-			target.RegisterAction(Call);
-			try
-			{
-				target.RegisterAction(Call);
-				Assert.Fail();
-			}
-			catch(InvalidOperationException)
-			{ }
-			target.CallAction(null, users, 5);
-			Assert.AreEqual<string>(users.StringProperties["testok"], "5");
-			target.CallAction(null, null, 5);
-		}
-
-		/// <summary>
 		///IsMethodExists 的测试
 		///</summary>
 		[TestMethod()]
 		public void IsMethodExistsTest()
 		{
-			MethodsCenter target = new MethodsCenter(); // TODO: 初始化为适当的值
+			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
 			target.ReadyToRegisterFor("test", this);
 			target.RegisterMethod(GetType().GetMethod("dummymethod"));
 			target.RegisterMethod(GetType().GetMethod("dummymethod2"));

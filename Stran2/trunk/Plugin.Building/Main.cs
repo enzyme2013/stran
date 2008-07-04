@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Stran2
 {
-	public class Plugin_Login : IPlugin
+	public class Plugin_Building : IPlugin
 	{
 		#region IPlugin 成员
 
