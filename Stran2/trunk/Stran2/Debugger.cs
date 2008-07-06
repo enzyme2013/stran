@@ -39,6 +39,7 @@ namespace Stran2
 			StackFrame x = new StackTrace(true).GetFrame(1);
 			string MethodName = x.GetMethod().Name;
 			string Filename = x.GetFileName();
+			Filename = string.IsNullOrEmpty(Filename) ? "null" : Filename.Substring(16);
 			int Line = x.GetFileLineNumber();
 			TDebugInfo db = new TDebugInfo()
 			{
@@ -64,6 +65,7 @@ namespace Stran2
 			StackFrame x = new StackTrace(e).GetFrame(0);
 			string MethodName = x.GetMethod().Name;
 			string Filename = x.GetFileName();
+			Filename = string.IsNullOrEmpty(Filename) ? "null" : Filename.Substring(16);
 			int Line = x.GetFileLineNumber();
 			TDebugInfo db = new TDebugInfo()
 			{
@@ -80,14 +82,14 @@ namespace Stran2
 			OnError(db);
 		}
 
-		private void OnError(TDebugInfo DB)
+		public void OnError(TDebugInfo DB)
 		{
 			string str = string.Format("[{0} {1}][{2}]{3,18}@{4,-35}:{5,-3} {6}",
 				DB.Time.Day,
 				DB.Time.ToLongTimeString(),
 				DB.Level.ToString(),
 				DB.MethodName,
-				DB.Filename.Substring(16),
+				DB.Filename,
 				DB.Line,
 				DB.Text);
 			//textBox1.AppendText(str + "\r\n");

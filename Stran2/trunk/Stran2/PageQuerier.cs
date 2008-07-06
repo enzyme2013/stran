@@ -69,8 +69,9 @@ namespace Stran2
 				MethodName = x.GetMethod().Name;
 			}
 			string Filename = x.GetFileName();
+			Filename = string.IsNullOrEmpty(Filename) ? "null" : Filename.Substring(16);
 			int Line = x.GetFileLineNumber();
-			/*
+			
 			TDebugInfo db = new TDebugInfo()
 			{
 				Filename = Filename,
@@ -80,8 +81,8 @@ namespace Stran2
 				Text = "Page: " + Uri + " (" + VillageID.ToString() + ")",
 				Time = DateTime.Now
 			};
-			OnError(this, new LogArgs() { DebugInfo = db });
-			 */
+			Debugger.Instance.OnError(db);
+			
 		}
 
 		public string GetEx(UserData UD, int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)

@@ -10,5 +10,9 @@ namespace Stran2
 		{
 		}
 		public static TaskCenter Instance = new TaskCenter();
+		public void Tick()
+		{
+
+		}
 	}
 }
