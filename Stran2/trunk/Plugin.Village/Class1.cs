@@ -5,15 +5,20 @@ using System.Text.RegularExpressions;
 
 namespace Stran2
 {
-	public class Plugin_Village : IPlugin
+	public class VillagePlugin : IPlugin
 	{
 		public IPageQuerier PQ = PageQuerier.Instance;
 
 		#region IPlugin 成员
 
-		public void Initialize(MethodsCenter MC)
+		public void Initialize()
 		{
-			MC.RegisterParser(new ParserPluginCall(VillagesParser));
+			MethodsCenter.Instance.RegisterParser(new ParserPluginCall(VillagesParser));
+		}
+
+		public bool CheckDepend()
+		{
+			return true;
 		}
 
 		#endregion
@@ -83,6 +88,12 @@ namespace Stran2
 			//if(villagecount <= LastVillageCount)
 			//	return -1;
 			//int cnt = 0;
+			if(!TD.Int32Properties.ContainsKey("UserID"))
+			{
+				var m = Regex.Match(data, "spieler.php\\?uid=(\\d*)");
+				if(m.Success)
+					TD.Int32Properties["UserID"] = Convert.ToInt32(m.Groups[1].Value);
+			}
 			data = PQ.GetEx(TD, 0, "spieler.php?uid=" + TD.Int32Properties["UserID"].ToString(), null, true, true);
 			
 			if(data == null)
@@ -129,7 +140,7 @@ namespace Stran2
 					CV.StringProperties["Name"] = m.Groups[3].Value;
 					CV.Int32Properties["X"] = Convert.ToInt32(m.Groups[4].Value);
 					CV.Int32Properties["Y"] = Convert.ToInt32(m.Groups[5].Value);
-					CV.Int32Properties["Z"] = TPoint.XYToZ(Convert.ToInt32(m.Groups[5].Value), Convert.ToInt32(m.Groups[5].Value));
+					CV.Int32Properties["Z"] = TPoint.XYToZ(Convert.ToInt32(m.Groups[4].Value), Convert.ToInt32(m.Groups[5].Value));
 					/*
 					if(userdb.ContainsKey("v" + TD.Villages[vid].ID + "role"))
 						TD.Villages[vid].Role = userdb["v" + TD.Villages[vid].ID + "role"];

@@ -1,6 +1,8 @@
 ﻿using Stran2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
+using System.IO;
 namespace TestStran2
 {
     
@@ -69,15 +71,21 @@ namespace TestStran2
 		[TestMethod()]
 		public void InitializeTest()
 		{
-			Plugin_Village target = new Plugin_Village();
+			VillagePlugin target = new VillagePlugin();
 			MethodsCenter MC = MethodsCenter.Instance;
+			UserData UD = new UserData();
+			MC.Initialize();
 			MC.ReadyToRegisterFor("test", target);
-			target.Initialize(MC);
+			target.Initialize();
 			Assert.AreEqual<int>(MC.ParserCount, 1);
 			Assert.AreEqual<int>(MC.MethodsCount, 0);
 			Assert.AreEqual<int>(MC.ActionCount, 0);
 			target.PQ = new Plugin_Village_Web_Simulater();
-			Assert.Inconclusive();
+			target.PQ.Get(UD, 0, "dorf1.php");
+			Assert.AreEqual<int>(UD.Villages.Count, 84);
+			Assert.AreEqual<string>(UD.Villages[191623].StringProperties["Name"], "00R6");
+			Assert.AreEqual<int>(UD.Villages[185668].Int32Properties["X"], 171);
+			Assert.AreEqual<int>(UD.Villages[83259].Int32Properties["isCapital"], 1);
 		}
 	}
 
@@ -87,17 +95,27 @@ namespace TestStran2
 
 		public string Get(UserData UD, int VillageID, string Uri)
 		{
-			throw new NotImplementedException();
+			return GetEx(UD, VillageID, Uri, null, false, false);
 		}
 
-		public string Post(UserData UD, int VillageID, string Uri, System.Collections.Generic.Dictionary<string, string> Data)
+		public string Post(UserData UD, int VillageID, string Uri, Dictionary<string, string> Data)
 		{
-			throw new NotImplementedException();
+			return GetEx(UD, VillageID, Uri, Data, false, false);
 		}
 
-		public string GetEx(UserData UD, int VillageID, string Uri, System.Collections.Generic.Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
+		public string GetEx(UserData UD, int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
 		{
 			string b = "..\\..\\..\\test\\Plugin_Village";
+			Uri = Path.GetFileNameWithoutExtension(Uri);
+			var fn = Path.Combine(b, Uri + ".htm");
+			if(!File.Exists(fn))
+				Assert.Fail("Cannot get file: " + fn);
+			var result = File.ReadAllText(fn);
+			Console.WriteLine("Read " + fn);
+			if(!NoParser)
+				MethodsCenter.Instance.CallParser(result, UD, VillageID);
+			return result;
+			throw new NotImplementedException();
 		}
 
 		#endregion

@@ -4,6 +4,8 @@
   <CodeCoverage enabled="true">
     <Regular>
       <CodeCoverageItem binaryFile="Stran2\bin\Debug\Stran2.exe" pdbFile="Stran2\bin\Debug\Stran2.pdb" instrumentInPlace="true" />
+      <CodeCoverageItem binaryFile="stran2\bin\Debug\Plugin.Village.dll" pdbFile="stran2\bin\Debug\Plugin.Village.pdb" instrumentInPlace="true" />
+      <CodeCoverageItem binaryFile="TestStran2\bin\Debug\TestStran2.dll" pdbFile="TestStran2\bin\Debug\TestStran2.pdb" instrumentInPlace="true" />
     </Regular>
   </CodeCoverage>
   <TestTypeSpecific>

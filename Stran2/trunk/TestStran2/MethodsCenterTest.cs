@@ -96,9 +96,11 @@ namespace TestStran2
 
 		#region IPlugin 成员
 
-		public void Initialize(MethodsCenter MC)
+		public void Initialize()
+		{ }
+		public bool CheckDepend()
 		{
-
+			return true;
 		}
 
 		#endregion
@@ -111,6 +113,7 @@ namespace TestStran2
 		public void ParserTest()
 		{
 			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
+			target.Initialize();
 			ParserPluginCall Call = new ParserPluginCall(dummyparser);
 			UserData users = new UserData();
 			target.RegisterParser(Call);
@@ -134,6 +137,7 @@ namespace TestStran2
 		public void ActionTest()
 		{
 			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
+			target.Initialize();
 			ActionPluginCall Call = new ActionPluginCall(dummyaction);
 			UserData users = new UserData();
 			target.RegisterAction(Call);
@@ -157,6 +161,7 @@ namespace TestStran2
 		public void MethodTest()
 		{
 			MethodsCenter target = MethodsCenter.Instance;
+			target.Initialize();
 			target.ReadyToRegisterFor("test", this);
 			MethodInfo MI = GetType().GetMethod("dummymethod");
 			target.RegisterMethod(MI);
@@ -216,6 +221,7 @@ namespace TestStran2
 		public void IsMethodExistsTest()
 		{
 			MethodsCenter target = MethodsCenter.Instance; // TODO: 初始化为适当的值
+			target.Initialize();
 			target.ReadyToRegisterFor("test", this);
 			target.RegisterMethod(GetType().GetMethod("dummymethod"));
 			target.RegisterMethod(GetType().GetMethod("dummymethod2"));

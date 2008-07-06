@@ -21,17 +21,16 @@ namespace Stran2
 				foreach(var type in types)
 					if(type.GetInterface("IPlugin") == typeof(IPlugin))
 					{
+						Console.WriteLine("Plugin class {0} found.", type.Name);
 						IPlugin p = Activator.CreateInstance(type) as IPlugin;
-						p.Initialize(MC);
-						
-						Console.WriteLine(type.Name);
+						p.Initialize();
+					}
+					else if(type.GetInterface("ITaskOption") == typeof(ITaskOption))
+					{
+						Console.WriteLine("TaskOptioner class {0} found.", type.Name);
+						ITaskOption to = Activator.CreateInstance(type) as ITaskOption;
 					}
 			}
 		}
-	}
-	public class CrossPluginCall
-	{
-		public Object obj;
-		public Type type;
 	}
 }

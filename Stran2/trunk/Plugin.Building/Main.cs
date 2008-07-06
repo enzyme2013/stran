@@ -4,15 +4,20 @@ using System.Text;
 
 namespace Stran2
 {
-	public class Plugin_Building : IPlugin
+	public class BuildingPlugin : IPlugin
 	{
 		#region IPlugin 成员
 
-		public void Initialize(MethodsCenter MC)
+		public void Initialize()
 		{
-			MC.RegisterParser(new ParserPluginCall(Dorf1));
-			MC.RegisterParser(new ParserPluginCall(Dorf2));
-			MC.RegisterMethod(GetType().GetMethod("GetBidLevel"));
+			MethodsCenter.Instance.RegisterParser(new ParserPluginCall(Dorf1));
+			MethodsCenter.Instance.RegisterParser(new ParserPluginCall(Dorf2));
+			MethodsCenter.Instance.RegisterMethod(GetType().GetMethod("GetBidLevel"));
+		}
+
+		public bool CheckDepend()
+		{
+			return true;
 		}
 
 		#endregion
@@ -31,4 +36,40 @@ namespace Stran2
 		}
 
 	}
+
+	public class BuildTaskOption : ITaskOption
+	{
+		#region ITaskOption 成员
+
+		public string ToDescription()
+		{
+			return string.Format("BId: {0}, GId: {1}, Level: {2}",
+				BId, GId, TargetLevel);
+		}
+
+		public string Serialization()
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool TryParse(string SerializedOptionString, ref ITaskOption Option)
+		{
+			if(!SerializedOptionString.StartsWith("-build-"))
+				return false;
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
+		public int BId { get; set; }
+		public int GId { get; set; }
+
+		/// <summary>
+		/// Delete me if TargetLevel >= CurrentLevel after executing the task
+		/// </summary>
+		public int TargetLevel { get; set; }
+
+
+	}
+
 }

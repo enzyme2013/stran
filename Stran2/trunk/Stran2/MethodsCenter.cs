@@ -20,6 +20,13 @@ namespace Stran2
 		Dictionary<string, ActionPluginCall> ActionPlugins = new Dictionary<string, ActionPluginCall>();
 		Dictionary<string, IPlugin> PluginObjects = new Dictionary<string, IPlugin>();
 
+		public void Initialize()
+		{
+			Methods = new Dictionary<string, MethodInfo>();
+			ParserPlugins = new Dictionary<string, ParserPluginCall>();
+			ActionPlugins = new Dictionary<string, ActionPluginCall>();
+			PluginObjects = new Dictionary<string, IPlugin>();
+		}
 
 		public void RegisterMethod(MethodInfo MI)
 		{
@@ -54,7 +61,7 @@ namespace Stran2
 		public void ReadyToRegisterFor(string Name, IPlugin PluginObject)
 		{
 			nowPluginName = Name;
-			PluginObjects.Add(Name, PluginObject);
+			PluginObjects[Name] = PluginObject;
 		}
 
 		private string getMethodKey(string PluginName, string MethodName)

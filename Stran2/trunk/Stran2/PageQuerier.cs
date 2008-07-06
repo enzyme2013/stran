@@ -184,7 +184,7 @@ namespace Stran2
 			}
 			catch(Exception e)
 			{
-				//DebugLog(e);
+				Debugger.Instance.DebugLog(e);
 			}
 			return null;
 		}
@@ -194,9 +194,80 @@ namespace Stran2
 			PageCount++;
 		}
 
+		private int UnixTime(DateTime time)
+		{
+			return Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds);
+		}
 		public bool Login(UserData UD)
 		{
-			return true;
+			string Username = UD.StringProperties["Username"];
+			string Password = UD.StringProperties["Password"];
+			if(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+				return false;
+			try
+			{
+				//WriteInfo("Logging in as '" + Username + "', may take a few seconds...");
+				string data = wc.DownloadString("/");
+				if(!data.Contains("Travian"))
+				{
+					Debugger.Instance.DebugLog("Cannot visit travian website!", DebugLevel.F);
+					return false;
+				}
+				string userkey, passkey, alkey;
+				Match m;
+				m = Regex.Match(data, "type=\"text\" name=\"(\\S+?)\"");
+				if(m.Success)
+					userkey = m.Groups[1].Value;
+				else
+				{
+					Debugger.Instance.DebugLog("Parse userkey error!", DebugLevel.F);
+					return false;
+				}
+				m = Regex.Match(data, "type=\"password\" name=\"(\\S+?)\"");
+				if(m.Success)
+					passkey = m.Groups[1].Value;
+				else
+				{
+					Debugger.Instance.DebugLog("Parse passkey error!", DebugLevel.F);
+					return false;
+				}
+				m = Regex.Match(data, "><input type=\"hidden\" name=\"(\\S+?)\" value");
+				if(m.Success)
+					alkey = m.Groups[1].Value;
+				else
+				{
+					Debugger.Instance.DebugLog("Parse alkey error!", DebugLevel.F);
+					return false;
+				}
+				Dictionary<string, string> PostData = new Dictionary<string, string>();
+				PostData["w"] = "1024:768";
+				PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
+				PostData[userkey] = Username;
+				PostData[passkey] = Password;
+				PostData[alkey] = "";
+				PostData["s1.x"] = "0";
+				PostData["s1.y"] = "0";
+
+				string result = PageQuerier.Instance.GetEx(UD, 0, "dorf1.php?ok", PostData, false, true);
+
+				if(result.Contains("login"))
+				{
+					Debugger.Instance.DebugLog("Username or Password error!", DebugLevel.F);
+					//MessageBox.Show("Login failed.");
+					return false;
+				}
+
+				m = Regex.Match(result, "spieler.php\\?uid=(\\d*)");
+				if(m.Success)
+					UD.Int32Properties["UserID"] = Convert.ToInt32(m.Groups[1].Value);
+
+				return true;
+			}
+			catch(Exception e)
+			{
+				Debugger.Instance.DebugLog(e);
+				return false;
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Stran2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 namespace TestStran2
 {
     
@@ -70,12 +71,17 @@ namespace TestStran2
 		{
 			TravianDataCenter TDC = TravianDataCenter.Instance;
 			string AccountName = "..\\..\\..\\TestStran2\\Account"; // TODO: 初始化为适当的值
-			TDC.Users.Add("chihsun@speed.travian.tw", new UserData());
-			UserLoader.LoadUser(TDC, AccountName);
-			Assert.AreEqual<int>(TDC.Users.Count, 2);
-			Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Username"], "msg7086");
-			Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Server"], "a1.travian.cn");
-			Assert.AreEqual<int>(TDC.Users["chihsun@speed.travian.tw"].Int32Properties["Tribe"], 0);
+			if(File.Exists(AccountName))
+			{
+				TDC.Users.Add("chihsun@speed.travian.tw", new UserData());
+				UserLoader.LoadUser(TDC, AccountName);
+				Assert.AreEqual<int>(TDC.Users.Count, 2);
+				Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Username"], "msg7086");
+				Assert.AreEqual<string>(TDC.Users["msg7086@a1.travian.cn"].StringProperties["Server"], "a1.travian.cn");
+				Assert.AreEqual<int>(TDC.Users["chihsun@speed.travian.tw"].Int32Properties["Tribe"], 0);
+			}
+			else
+				Assert.Inconclusive("Files needed by unit test do not exists.");
 		}
 	}
 }

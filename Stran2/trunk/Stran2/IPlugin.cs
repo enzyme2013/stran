@@ -9,6 +9,7 @@ namespace Stran2
 	public delegate void ActionPluginCall(ITask task, UserData users, int villageId);
 	public interface IPlugin
 	{
-		void Initialize(MethodsCenter MC);
+		void Initialize();
+		bool CheckDepend();
 	}
 }
