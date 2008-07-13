@@ -150,6 +150,7 @@ namespace Stran
 				{
 					f.Add(Convert.ToInt32(x.SubItems[0].Text));
 				}
+
 				foreach(var x in TravianData.Villages)
 				{
 					if(f.Contains(x.Key))
@@ -161,13 +162,7 @@ namespace Stran
 					else
 					{
 						var lvi = m_villagelist.listViewVillage.Items.Add(x.Value.ID.ToString());
-						string key = "v" + x.Value.ID.ToString() + "Queue";
-						var qcount = x.Value.Queue.Count.ToString();
-						if(x.Value.Queue.Count == 0 && tr.userdb.ContainsKey(key) && tr.userdb[key].Length > 0)
-						{
-							string qString = tr.userdb[key];
-							qcount = qString.Split('|').Length.ToString() + "*";
-						}
+						string qcount = x.Value.GetStatus(this.tr.userdb);
 						lvi.SubItems.Add(qcount);
 						lvi.SubItems.Add(x.Value.Name);
 						lvi.SubItems.Add(x.Value.Coord.ToString());
@@ -434,7 +429,7 @@ namespace Stran
 						if(x.Type >= 2)
 							ntype = x.Type;
 
-						string delayStr = lvi.SubItems[4].Text;
+						string delayStr = String.Empty;
 						if (x.Paused)
 						{
 							delayStr = "||";
@@ -716,20 +711,14 @@ namespace Stran
 					UpTP.Text = string.Format("{0} @ {1} ({2})", LoginInfo.Username, LoginInfo.Server.Replace("travian.", ""), QueueCount);
 				}
 			}
+
 			foreach(ListViewItem x in m_villagelist.listViewVillage.Items)
 			{
 				int index = Convert.ToInt32(x.SubItems[0].Text);
 				if(TravianData.Villages.ContainsKey(index))
 				{
-					string key = "v" + index.ToString() + "Queue";
-					var qcount = TravianData.Villages[index].Queue.Count.ToString();
-					if(TravianData.Villages[index].Queue.Count == 0 && tr.userdb.ContainsKey(key) && tr.userdb[key].Length > 0)
-					{
-						string qString = tr.userdb[key];
-						qcount = qString.Split('|').Length.ToString() + "*";
-					}
-
-					if(x.SubItems[1].Text != qcount)
+					string qcount = this.TravianData.Villages[index].GetStatus(this.tr.userdb);
+					if (x.SubItems[1].Text != qcount)
 						x.SubItems[1].Text = qcount;
 				}
 			}

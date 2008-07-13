@@ -567,26 +567,23 @@ namespace libTravian
 			if (Market[0] == Market[1])
 				Market[0] = null;
 
-			int MCount = CV.Market.ActiveMerchant, MCarry = CV.Market.SingleCarry, MLevel = CV.Market.MaxMerchant;
-			TMType MType;
-			/*
-			var m = Regex.Match(data, "var haendler = (\\d+);");
-			if(m.Success)
-				MCount = Convert.ToInt32(m.Groups[1].Value);
-			*/
-			var m = Regex.Match(data, "var carry = (\\d+);");
-			if (m.Success)
-				MCarry = Convert.ToInt32(m.Groups[1].Value);
+			Match m = Regex.Match(data, "var carry = (\\d+);");
+			if (! m.Success)
+			{
+				return;
+			}
+			
+			int MCarry = Convert.ToInt32(m.Groups[1].Value);
 
 			m = Regex.Match(data, "(\\d+)/(\\d+)<br>");
-			if (m.Success)
+			if (! m.Success)
 			{
-				MCount = Convert.ToInt32(m.Groups[1].Value);
-				MLevel = Convert.ToInt32(m.Groups[2].Value);
+				return;
 			}
-			CV.Market.ActiveMerchant = MCount;
-			CV.Market.SingleCarry = MCarry;
-			CV.Market.MaxMerchant = MLevel;
+
+			int MCount = Convert.ToInt32(m.Groups[1].Value);
+			int MLevel = Convert.ToInt32(m.Groups[2].Value);
+
 			// Market: 0 as other, 1 as my
 			string t1 = "<p class=\"b\">";
 			string[] sp = data.Split(new string[] { t1 }, StringSplitOptions.None);
@@ -598,9 +595,14 @@ namespace libTravian
 				if (Market[1] == null)
 					Market[1] = sp[2].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
 			}
+
+			CV.Market.ActiveMerchant = MCount;
+			CV.Market.SingleCarry = MCarry;
+			CV.Market.MaxMerchant = MLevel;
 			CV.Market.MarketInfo.Clear();
 			for (int i = 1; i < sp.Length; i++)
 			{
+				TMType MType;
 				if (sp[i].Contains("c f10") && Market[1] == null)
 					Market[1] = sp[i].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
 				var mc = Regex.Matches(sp[i],

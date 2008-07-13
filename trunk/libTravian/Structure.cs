@@ -202,10 +202,43 @@ namespace libTravian
 			for (int i = 1; i <= 10; i++)
 				Upgrades[i] = new TRU();
 		}
+
 		public override string ToString()
 		{
 			return TypeViewer.ToString(this);
 		}
+
+		/// <summary>
+		/// Show the number of queued tasks and upper/lower limit tags
+		/// </summary>
+		/// <param name="db">User DB storing the queue/limit info</param>
+		/// <returns>Status string</returns>
+		public string GetStatus(LocalDB db)
+		{
+			string status = this.Queue.Count.ToString();
+			if (this.Queue.Count == 0)
+			{
+				string key = "v" + this.ID.ToString() + "Queue";
+				if (db.ContainsKey(key) && db[key].Length > 0)
+				{
+					string qString = db[key];
+					status = qString.Split('|').Length.ToString() + "*";
+				}
+			}
+
+			if (this.Market.LowerLimit != null)
+			{
+				status = status + "v";
+			}
+
+			if (this.Market.UpperLimit != null)
+			{
+				status = status + "^";
+			}
+
+			return status;
+		}
+
 		public string Snapshot()
 		{
 			StringBuilder sb = new StringBuilder();
