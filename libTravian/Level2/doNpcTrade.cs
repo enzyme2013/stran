@@ -452,7 +452,7 @@ namespace libTravian
 				return NpcTradeResult.Failure;
 			}
 
-			DebugLog(string.Format("NPC trade {0} -> {1}", m1, m2), DebugLevel.I);
+			DebugLog(string.Format("NPC trade {0} -> {1} ({2}) ", m1, m2, villageID), DebugLevel.I);
 			return NpcTradeResult.Success;
 		}
 	}
