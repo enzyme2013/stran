@@ -1428,8 +1428,8 @@ namespace Stran
 				saveFileDialog.RestoreDirectory = true;
 				saveFileDialog.Filter = "Stran task queue|*.stq";
 				saveFileDialog.Title = this.mui._("ExportTaskQueue");
-				saveFileDialog.ShowDialog();
-				if (saveFileDialog.FileName != "")
+				if(saveFileDialog.ShowDialog() == DialogResult.OK)
+				//if(saveFileDialog.FileName != "")
 				{
 					village.SaveQueue(saveFileDialog.FileName);
 				}

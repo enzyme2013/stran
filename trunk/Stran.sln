@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libScript", "libScript\libScript.csproj", "{033E6CE6-31D8-4713-AEDB-6BBD5C5A3B75}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestLibScript", "UnitTestLibScript\UnitTestLibScript.csproj", "{D502D265-23D5-47D9-84C5-C50EC78D06CB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FF7AC6D-CB98-4B17-A6E9-1F37ACC9367F}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
@@ -50,14 +46,6 @@ Global
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{033E6CE6-31D8-4713-AEDB-6BBD5C5A3B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{033E6CE6-31D8-4713-AEDB-6BBD5C5A3B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{033E6CE6-31D8-4713-AEDB-6BBD5C5A3B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{033E6CE6-31D8-4713-AEDB-6BBD5C5A3B75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D502D265-23D5-47D9-84C5-C50EC78D06CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D502D265-23D5-47D9-84C5-C50EC78D06CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D502D265-23D5-47D9-84C5-C50EC78D06CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D502D265-23D5-47D9-84C5-C50EC78D06CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
