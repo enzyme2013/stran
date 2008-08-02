@@ -751,6 +751,15 @@ namespace Stran
 			LastDebug.Text = str;
 		}
 
+		string FilterFilename(string fn)
+		{
+			foreach(char ch in Path.GetInvalidPathChars())
+			{
+				fn = fn.Replace(ch, '_');
+			}
+			return fn;
+		}
+
 		void UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			Exception ex = e.ExceptionObject as Exception;
@@ -791,7 +800,7 @@ namespace Stran
 				m_villagelist.UpCall = this;
 
 
-			string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
+			string fn = FilterFilename("style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml");
 			if(!File.Exists(fn))
 				fn = "style\\default!style.xml";
 			SuspendLayout();
@@ -1696,7 +1705,7 @@ namespace Stran
 		{
 			if(dockPanel1.Contents.Count != 0)
 			{
-				string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
+				string fn = FilterFilename("style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml");
 				dockPanel1.SaveAsXml(fn);
 			}
 		}

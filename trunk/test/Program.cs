@@ -25,8 +25,6 @@ namespace test
 			Debug.Assert(X(a) == -75);
 			Debug.Assert(Y(a) == 147);
 
-			Console.ReadLine();
-			*/
 			TVillage village = new TVillage() { Name = "我的村庄" };
 			for (int i = 0; i < village.Resource.Length; i ++)
 			{
@@ -44,6 +42,9 @@ namespace test
 			};
 
 			limit.ShowDialog();
+			*/
+			parsertroop();
+			Console.ReadLine();
 		}
 		public enum TMType
 		{
@@ -139,6 +140,43 @@ namespace test
 		{
 			return 400 - value / 801;
 		}
+
+		static void parsertroop()
+		{
+			var data = @"""1"" cellpadding=""2"" class=""tbg"">
+
+<tr class=""cbg1"">
+<td width=""21%""><a href=""karte.php?d=111909&c=09""><span class=""c0"">C1M9相坂さよ</span></a></td>
+<td colspan=""11"" class=""b"">从0_0返回</td>
+</tr>
+
+<tr class=""unit"">
+<td>&nbsp;</td><td><img src=""img/un/u/21.gif"" title=""方阵兵""></td><td><img src=""img/un/u/22.gif"" title=""剑士""></td><td><img src=""img/un/u/23.gif"" title=""探路者""></td><td><img src=""img/un/u/24.gif"" title=""雷法师""></td><td><img src=""img/un/u/25.gif"" title=""德鲁伊骑兵""></td><td><img src=""img/un/u/26.gif"" title=""海顿圣骑士""></td><td><img src=""img/un/u/27.gif"" title=""冲撞车""></td><td><img src=""img/un/u/28.gif"" title=""投石器""></td><td><img src=""img/un/u/29.gif"" title=""首领""></td><td><img src=""img/un/u/30.gif"" title=""拓荒者""></td><td><img src=""img/un/u/hero.gif"" title=""英雄""></td></tr><tr><td>军队</td><td class=""c"">0</td><td>9836</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>118</td><td class=""c"">0</td><td class=""c"">0</td><td>1</td></tr></tr><tr class=""cbg1""><td>目的地</td><td colspan=""11"">
+<table width=""100%"" cellspacing=""0"" cellpadding=""0"" class=""f10"">
+<tr align=""center"">
+<td width=""50%"">&nbsp; 需要 <span id=timer1>18:18:46</span> 小时</td>
+<td width=""50%"">于 19:02:08</span><span> 点</td>
+</tr></table></td></table><p><b>村庄里的军队</b></p><p>
+";
+			var items = data.Split(new string[] { "<table cellspacing=" }, StringSplitOptions.None);
+			foreach(var item in items)
+			{
+				var m = Regex.Match(item, "<td width=\"\\d+%\"><a href=\".*?\"><span class=\"c0\">(.*?)</span></a></td>.*<td colspan=.*?>(.*?)</td>.*?img/un/u/(\\d+)\\.gif.*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img class=\"res|<span id=timer1>(.*?)</span>)", RegexOptions.Singleline);
+				/*
+				 * @@1 from vname
+				 * @@2 to vname
+				 * @@3 gif index for tribe
+				 * @@4 troopcount
+				 * @@5 cropcost
+				 * @@6 time on way
+				 */
+				if(!m.Success)
+					continue;
+				Console.WriteLine("Success1");
+				Debugger.Break();
+			}
+		}
 	}
 }
 //801 * 400 - 801y + x
+// 
