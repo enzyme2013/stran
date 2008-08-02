@@ -814,10 +814,22 @@ namespace libTravian
 		public int Tribe;
 		public int[] Troops;
 		public TTroopType TroopType;
+		public DateTime FinishTime;
+		public string VillageName;
 	}
+	/*
+ link  time  troopcount
+  -     O       O      MyReturnWay
+  O     O       O      MyAttackWay
+  O     O       O      MySupportWay
+  O     -       O      MySupportOther
+  -     O       -      BeAttackedWay
+  -     O       -      BeSupportedWay
+  -     -       O      MySelf
+	 */
 	public enum TTroopType
 	{
-		My
+		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, MySelf
 	}
 
 	public static class TypeViewer
