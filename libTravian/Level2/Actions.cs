@@ -38,6 +38,14 @@ namespace libTravian
 					{
 						DebugLog(ex, DebugLevel.W);
 					}
+					try
+					{
+						CV.Troop.tick(ref CV);
+					}
+					catch(Exception ex)
+					{
+						DebugLog(ex, DebugLevel.W);
+					}
 				}
 			}
 			catch (InvalidOperationException e)

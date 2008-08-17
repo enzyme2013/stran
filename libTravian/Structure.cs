@@ -157,6 +157,7 @@ namespace libTravian
 		{
 			isBuildingInitialized = 1;
 			UpCall.FetchVillageBuilding(ID);
+			InitializeTroop();
 		}
 		public void InitializeUpgrade()
 		{
@@ -191,14 +192,15 @@ namespace libTravian
 		}
 		public TInBuilding[] RB = new TInBuilding[5];
 		public TMarket Market;
+		public TTroop Troop;
 		public TVillage()
 		{
 			Resource = new TResource[4];
 			InBuilding = new TInBuilding[7];
 			Queue = new List<TQueue>();
 			Upgrades = new Dictionary<int, TRU>();
-			Troops = new List<TTroop>();
 			Market = new TMarket();
+			Troop = new TTroop();
 			for (int i = 1; i <= 10; i++)
 				Upgrades[i] = new TRU();
 		}
@@ -386,8 +388,6 @@ namespace libTravian
 				this.Market.UpperLimit = TResAmount.FromString(db[key]);
 			}
 		}
-
-		public List<TTroop> Troops { get; set; }
 
 		/// <summary>
 		/// Convert current task queue into a string
@@ -811,11 +811,54 @@ namespace libTravian
 
 	public class TTroop
 	{
+		public int TournamentLevel { get; set; }
+		public List<TTInfo> Troops { get; set; }
+		public bool ShouldRefresh { get; set; }
+		public void tick(ref TVillage CV)
+		{
+			for(int i = Troops.Count - 1; i >= 0; i--)
+			{
+				var T = Troops[i];
+				if(T.FinishTime == DateTime.MinValue)
+					continue;
+				if(T.FinishTime < DateTime.Now)
+				{
+					ShouldRefresh = true;
+					break;
+					// could be better written in the future
+				}
+			}
+		}
+		public TTroop()
+		{
+			TournamentLevel = 0;
+			Troops = new List<TTInfo>();
+		}
+	}
+
+	public class TTInfo
+	{
 		public int Tribe;
 		public int[] Troops;
 		public TTroopType TroopType;
 		public DateTime FinishTime;
 		public string VillageName;
+		public override string ToString()
+		{
+			return String.Format(
+				"{0},{1},{2},{3}",
+				this.Tribe,
+				this.TroopType,
+				this.FinishTime,
+				this.VillageName);
+		}
+		public string FriendlyName
+		{
+			get
+			{
+
+			}
+		}
 	}
 	/*
  link  time  troopcount

@@ -42,6 +42,7 @@ namespace Stran
 		private ResourceShow m_resourceshow = new ResourceShow();
 		private TransferStatus m_transferstatus = new TransferStatus();
 		private VillageList m_villagelist = new VillageList();
+		private TroopInfoList m_troopinfolist = new TroopInfoList();
 
 		private delegate void StatusEvent_d(object sender, Travian.StatusChanged e);
 		private delegate void LogEvent_d(TDebugInfo e);
@@ -647,6 +648,25 @@ namespace Stran
 			}
 			m_transferstatus.listViewMarket.ResumeLayout();
 		}
+		private void DisplayTroop()
+		{
+			if(!TravianData.Villages.ContainsKey(SelectVillage))
+				return;
+			var CV = TravianData.Villages[SelectVillage];
+			if(CV.isTroopInitialized != 2)
+				return;
+			m_troopinfolist.listViewTroop.Items.Clear();
+			m_troopinfolist.listViewTroop.Items.SuspendLayout();
+			foreach(var x in CV.Troop.Troops)
+			{
+				var lvi = m_troopinfolist.listViewTroop.Items.Add(TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5));
+				lvi.SubItems.Add(x.CarryAmount.ToString());
+				lvi.SubItems.Add(x.VillageName);
+				lvi.SubItems.Add(x.TroopType.ToString());
+			}
+			m_troopinfolist.listViewTroop.Items.ResumeLayout();
+		}
+
 		private string TimeToString(long timecost)
 		{
 			if(timecost >= 86400)
@@ -700,6 +720,7 @@ namespace Stran
 				RefreshBuildings();
 				DisplayQueue();
 				DisplayMarket();
+				DisplayTroop();
 				tr.Tick();
 				int QCount = 0;
 				foreach(var x in TravianData.Villages)
@@ -751,8 +772,9 @@ namespace Stran
 			LastDebug.Text = str;
 		}
 
-		string FilterFilename(string fn)
+		string GetStyleFilename()
 		{
+			string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
 			foreach(char ch in Path.GetInvalidPathChars())
 			{
 				fn = fn.Replace(ch, '_');
@@ -797,10 +819,11 @@ namespace Stran
 				m_transferstatus.UpCall =
 				m_resourceshow.UpCall =
 				m_inbuildinglist.UpCall =
-				m_villagelist.UpCall = this;
+				m_villagelist.UpCall = 
+				m_troopinfolist.UpCall = this;
 
 
-			string fn = FilterFilename("style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml");
+			string fn = GetStyleFilename();
 			if(!File.Exists(fn))
 				fn = "style\\default!style.xml";
 			SuspendLayout();
@@ -815,7 +838,10 @@ namespace Stran
 				m_transferstatus.Show(dockPanel1);
 				m_researchstatus.Show(dockPanel1);
 				m_villagelist.Show(dockPanel1);
+				m_troopinfolist.Show(dockPanel1);
 			}
+			if(!dockPanel1.Contains(m_troopinfolist))
+				m_troopinfolist.Show(dockPanel1);
 			ResumeLayout();
 		}
 
@@ -1705,7 +1731,7 @@ namespace Stran
 		{
 			if(dockPanel1.Contents.Count != 0)
 			{
-				string fn = FilterFilename("style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml");
+				string fn = GetStyleFilename();
 				dockPanel1.SaveAsXml(fn);
 			}
 		}
@@ -1752,12 +1778,21 @@ namespace Stran
 			TVillage CV = TravianData.Villages[SelectVillage];
 			if(CV.isTroopInitialized == 2)
 			{
+				TTInfo Troop = null;
+				foreach(var T in CV.Troop.Troops)
+					if(T.TroopType == TTroopType.MySelf)
+					{
+						Troop = T;
+						break;
+					}
+				if(Troop == null)
+					return;
 				RaidOptForm rof = new RaidOptForm()
 				{
 					mui = this.mui,
-					Troops = CV.Troops[0].Troops,
+					Troops = Troop.Troops,
 					dl = this.dl,
-					Tribe = TravianData.Tribe
+					Tribe = Troop.Tribe
 				};
 
 				if(rof.ShowDialog() == DialogResult.OK && rof.Return != null)
