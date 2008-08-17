@@ -814,7 +814,7 @@ namespace libTravian
 ";
 			//*/
 			var CV = TD.Villages[VillageID];
-			CV.Troops.Clear();
+			CV.Troop.Troops.Clear();
 			var items = data.Split(new string[] { "<table cellspacing=" }, StringSplitOptions.None);
 			foreach(var item in items)
 			{
@@ -865,7 +865,7 @@ namespace libTravian
 				int tribe = Convert.ToInt32(m.Groups[3].Value) / 10;
 				if(hasTime)
 					finishTime = DateTime.Now.Add(TimeSpanParse(m.Groups[6].Value)).AddSeconds(20);
-				TTroop ttro = new TTroop
+				TTInfo ttro = new TTInfo
 				{
 					Tribe = tribe,
 					Troops = tro,
@@ -873,7 +873,7 @@ namespace libTravian
 					FinishTime = finishTime,
 					VillageName = vname
 				};
-				CV.Troops.Add(ttro);
+				CV.Troop.Troops.Add(ttro);
 				Console.WriteLine(ttro.VillageName);
 			}
 		}
