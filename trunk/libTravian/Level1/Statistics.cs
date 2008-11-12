@@ -22,18 +22,17 @@ namespace libTravian
 {
 	partial class Travian
 	{
-		public static int Pagecount = 0, Buildcount = 0, Eventcount = 0;
-		private static void FetchPageCount()
+		public static int Pagecount = 0, Buildcount = 0;
+		public int pcount = 0, bcount = 0;
+		private void FetchPageCount()
 		{
+			pcount++;
 			Pagecount++;
 		}
-		private static void BuildCount()
+		public void BuildCount()
 		{
+			bcount++;
 			Buildcount++;
-		}
-		private static void EventCount()
-		{
-			Eventcount++;
 		}
 	}
 }

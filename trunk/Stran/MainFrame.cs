@@ -67,39 +67,54 @@ namespace Stran
 		{
 			InitializeComponent();
 			reslabel = new ResourceLabel[] { m_resourceshow.resourceLabel1, m_resourceshow.resourceLabel2, m_resourceshow.resourceLabel3, m_resourceshow.resourceLabel4 };
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 			for (int i = 0; i < 7; i ++)
 			{
 				var lvi = m_inbuildinglist.listViewInBuilding.Items.Add(typelist[i]);
 				lvi.SubItems.Add("");
 			}
+			CMBEnableCoin_CheckedChanged(null, null);
 		}
 
 		public void Login()
 		{
 			if(tr != null)
 				tr = null;
-			TravianData = new Data()
-			{
-				Username = LoginInfo.Username,
-				Password = LoginInfo.Password,
-				Tribe = LoginInfo.Tribe,
-				Server = LoginInfo.Server
-			};
+			TravianData = DB.Instance.RestoreData(DB.Instance.GetKey(LoginInfo.Username, LoginInfo.Server));
+			if(TravianData == null)
+				TravianData = new Data();
+			TravianData.Username = LoginInfo.Username;
+			TravianData.Password = LoginInfo.Password;
+			TravianData.Tribe = LoginInfo.Tribe;
+			TravianData.Server = LoginInfo.Server;
 			if(MainForm.Options.ContainsKey("proxy"))
 			{
 				string proxy = MainForm.Options["proxy"];
 				TravianData.Proxy = new WebProxy(proxy);
 			}
-			tr = new Travian(TravianData, MainForm.Options);
+			tr = DB.Instance.RestoreTravian(LoginInfo.Server);
+			if(tr == null)
+				tr = new Travian(TravianData, MainForm.Options);
+			else
+			{
+				tr.TD = TravianData;
+				tr.LoadOptions(MainForm.Options);
+			}
+			foreach(var v in TravianData.Villages)
+			{
+				v.Value.UpCall = tr;
+				foreach(var q in v.Value.Queue)
+					q.UpCall = tr;
+			}
 			dl = new DisplayLang(LoginInfo.Language);
+			DisplayLang.Instance = dl;
 			tr.StatusUpdate += new EventHandler<Travian.StatusChanged>(tr_StatusUpdate);
 			tr.OnError += new EventHandler<LogArgs>(tr_OnError);
 
 			m_villagelist.listViewVillage.Items.Clear();
 			m_buildinglist.listViewBuilding.Items.Clear();
-			tr.FetchVillages();
+			tr.CachedFetchVillages();
 			UpTP.Text = string.Format("{0} @ {1}", LoginInfo.Username, LoginInfo.Server.Replace("travian.", ""));
 		}
 
@@ -163,11 +178,10 @@ namespace Stran
 					else
 					{
 						var lvi = m_villagelist.listViewVillage.Items.Add(x.Value.ID.ToString());
-						string qcount = x.Value.GetStatus(this.tr.userdb);
+						string qcount = x.Value.GetStatus();
 						lvi.SubItems.Add(qcount);
 						lvi.SubItems.Add(x.Value.Name);
 						lvi.SubItems.Add(x.Value.Coord.ToString());
-						lvi.SubItems.Add(x.Value.Role);
 						if(e.VillageID == x.Key)
 							i = m_villagelist.listViewVillage.Items.Count - 1;
 					}
@@ -181,8 +195,17 @@ namespace Stran
 			}
 			else if(e.ChangedData == Travian.ChangedType.Queue && e.Param == -1)
 			{
-				RestoreQueue(e.VillageID);
+				//RestoreQueue(e.VillageID);
 
+			}
+			else if(e.ChangedData == Travian.ChangedType.PageCount)
+			{
+				lock(MainForm.Instance)
+				{
+					MainForm.Instance.notifyIcon1.Icon = Properties.Resources.full;
+					MainForm.Instance.timerIcon.Enabled = false;
+					MainForm.Instance.timerIcon.Enabled = true;
+				}
 			}
 			else if(e.VillageID == SelectVillage)
 				switch(e.ChangedData)
@@ -206,10 +229,11 @@ namespace Stran
 		/// Extract CV.Queue from userdb[v#vid#Queue]
 		/// </summary>
 		/// <param name="VillageID">Village unqiue id</param>
+		[Obsolete]
 		private void RestoreQueue(int VillageID)
 		{
 			TVillage CV = TravianData.Villages[VillageID];
-			CV.RestoreQueue(this.tr.userdb);
+			//CV.RestoreQueue(this.tr.userdb);
 		}
 
 		private void RefreshBuildings()
@@ -264,20 +288,27 @@ namespace Stran
 				int[] TL = new int[45]; // Less than 0 => CurrLevel-TL[], Greater than 0 => TL[], 0 => Destroy
 
 				foreach(var Q in CV.Queue)
-					if(Q.QueueType == TQueueType.Building && Q.Bid > 0) // Not AI
+					if(Q is BuildingQueue) // Not AI
 					{
-						if(TL[Q.Bid] == -1024)
+						BuildingQueue q = Q as BuildingQueue;
+						if(TL[q.Bid] == -1024)
 							continue;
-						if(Q.QueueType == TQueueType.Destroy)
-							TL[Q.Bid] = -1024;
-						else if(Q.TargetLevel == 0)
-							if(TL[Q.Bid] > 0)
-								TL[Q.Bid]++;
+						else if(q.TargetLevel == 0)
+							if(TL[q.Bid] > 0)
+								TL[q.Bid]++;
 							else
-								TL[Q.Bid]--;
+								TL[q.Bid]--;
 						else // build to level
-							TL[Q.Bid] = Q.TargetLevel;
+							TL[q.Bid] = q.TargetLevel;
 					}
+						//TODO
+						/*
+					else if(Q is DestroyQueue)
+					{
+						DestroyQueue q = Q as DestroyQueue;
+						TL[q.Bid] = -1024;
+					}
+						 */
 				SortedDictionary<int, ListViewItem> lvid = new SortedDictionary<int, ListViewItem>();
 				foreach(var x in CV.Buildings)
 				{
@@ -374,45 +405,9 @@ namespace Stran
 					foreach(var x in CV.Queue)
 					{
 						ListViewItem lvi;
-						if(x.Bid == TQueue.AIBID)
-						{
-							lvi = m_queuelist.listViewQueue.Items.Add("*");
-							lvi.SubItems.Add("AI");
-							if(x.Gid == 0)
-								lvi.SubItems.Add("Amount");
-							else
-								lvi.SubItems.Add("Level");
-						}
-						else
-						{
-							lvi = m_queuelist.listViewQueue.Items.Add(x.Bid <= 0 ? "*" : x.Bid.ToString());
-							lvi.SubItems.Add(typelist[x.Type]);
-							if (x.Type < 3)
-							{
-								lvi.SubItems.Add(dl.GetGidLang(x.Gid));
-							}
-							else if (x.Type < 6)
-							{
-								lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, x.Bid));
-							}
-							else if (x.Type == (int) TQueueType.Party)
-							{
-								lvi.SubItems.Add(x.Bid == 1 ? "500" : "2000");
-							}
-							else if (x.Type == (int)TQueueType.Transfer)
-							{
-								TransferOption transferOption = TransferOption.FromString(x.ExtraOptions);
-								lvi.SubItems.Add(transferOption.GetTitle(TravianData));
-								x.Status = transferOption.Status;
-							}
-							else if (x.Type == (int)TQueueType.NpcTrade)
-							{
-								NpcTradeOption npcTradeOption = NpcTradeOption.FromString(x.ExtraOptions);
-								lvi.SubItems.Add(npcTradeOption.Title);
-								x.Status = npcTradeOption.Status;
-							}
-						}
+						lvi = m_queuelist.listViewQueue.Items.Add(x.GetType().Name);
 
+						lvi.SubItems.Add(x.Title);
 						lvi.SubItems.Add(x.Status);
 						lvi.SubItems.Add("");//tr.GetDelay(SelectVillage, x).ToString());
 					}
@@ -422,22 +417,27 @@ namespace Stran
 					bool[] status = new bool[10];
 					for(int i = 0; i < CV.Queue.Count; i++)
 					{
-						TQueue x = CV.Queue[i];
+						var x = CV.Queue[i];
 						var lvi = m_queuelist.listViewQueue.Items[i];
-						if(lvi.SubItems[3].Text != x.Status)
-							lvi.SubItems[3].Text = x.Status;
-						int ntype = TravianData.isRomans ? x.Type : 0;
-						if(x.Type >= 2)
-							ntype = x.Type;
+						if(lvi.SubItems[2].Text != x.Status)
+							lvi.SubItems[2].Text = x.Status;
+						
+						int ntype = 0;
+						if(x is BuildingQueue)
+						{
+							ntype = (x as BuildingQueue).Bid > 19 && TravianData.isRomans ? 1 : 0;
+						}
+						else if(x is TransferQueue)
+							ntype = 7;
 
 						string delayStr = String.Empty;
 						if (x.Paused)
 						{
 							delayStr = "||";
 						}
-						else if(x.QueueType == TQueueType.Transfer || ! status[ntype])
+						else if(x is TransferQueue || !status[ntype])
 						{
-							int n = tr.GetDelay(SelectVillage, x);
+							int n = x.CountDown;
 							if (n > 0)
 							{
 								delayStr = this.TimeToString(n);
@@ -446,9 +446,9 @@ namespace Stran
 							status[ntype] = true;
 						}
 
-						if (lvi.SubItems[4].Text != delayStr)
+						if (lvi.SubItems[3].Text != delayStr)
 						{
-							lvi.SubItems[4].Text = delayStr;
+							lvi.SubItems[3].Text = delayStr;
 						}
 					}
 				}
@@ -656,15 +656,17 @@ namespace Stran
 			if(CV.isTroopInitialized != 2)
 				return;
 			m_troopinfolist.listViewTroop.Items.Clear();
-			m_troopinfolist.listViewTroop.Items.SuspendLayout();
+			m_troopinfolist.listViewTroop.SuspendLayout();
 			foreach(var x in CV.Troop.Troops)
 			{
-				var lvi = m_troopinfolist.listViewTroop.Items.Add(TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5));
-				lvi.SubItems.Add(x.CarryAmount.ToString());
+				var lvi = m_troopinfolist.listViewTroop.Items.Add("-");
+				if(x.TroopType != TTroopType.MySelf && x.TroopType != TTroopType.MySupportOther)
+					lvi.Text = TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5);
+				lvi.SubItems.Add(x.FriendlyName);
 				lvi.SubItems.Add(x.VillageName);
 				lvi.SubItems.Add(x.TroopType.ToString());
 			}
-			m_troopinfolist.listViewTroop.Items.ResumeLayout();
+			m_troopinfolist.listViewTroop.ResumeLayout();
 		}
 
 		private string TimeToString(long timecost)
@@ -680,7 +682,7 @@ namespace Stran
 			if(tr == null)
 				return;
 			if(m_villagelist.listViewVillage.SelectedIndices.Count == 1)
-				SelectVillage = Convert.ToInt32(m_villagelist.listViewVillage.SelectedItems[0].Text);
+				TravianData.ActiveDid = SelectVillage = Convert.ToInt32(m_villagelist.listViewVillage.SelectedItems[0].Text);
 			if(TravianData.Villages == null)
 				return;
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
@@ -698,6 +700,7 @@ namespace Stran
 			DisplayQueue();
 			DisplayUpgrade();
 			DisplayMarket();
+			DisplayTroop();
 		}
 
 		public void listViewVillage_Click(object sender, EventArgs e)
@@ -738,7 +741,9 @@ namespace Stran
 				int index = Convert.ToInt32(x.SubItems[0].Text);
 				if(TravianData.Villages.ContainsKey(index))
 				{
-					string qcount = this.TravianData.Villages[index].GetStatus(this.tr.userdb);
+					string qcount = this.TravianData.Villages[index].GetStatus();
+					if(TravianData.Villages[index].isBuildingInitialized != 2)
+						qcount += " -";
 					if (x.SubItems[1].Text != qcount)
 						x.SubItems[1].Text = qcount;
 				}
@@ -760,15 +765,16 @@ namespace Stran
 
 		private void DebugWriteError(TDebugInfo DB)
 		{
-			string str = string.Format("[{0} {1}][{2}]{3,18}@{4,-35}:{5,-3} {6}",
+			string str = string.Format("[{7,-3}{0} {1}][{2}]{3,20}@{4,-35}:{5,-3} {6}",
 				DB.Time.Day,
 				DB.Time.ToLongTimeString(),
 				DB.Level.ToString(),
 				DB.MethodName,
-				DB.Filename.Substring(16),
+				DB.Filename.Substring(13),
 				DB.Line,
-				DB.Text);
-			textBox1.AppendText(str + "\r\n");
+				DB.Text, DB.Level.ToString());
+			if(checkBoxVerbose.Checked || DB.Level != DebugLevel.II)
+				textBox1.AppendText(str + "\r\n");
 			LastDebug.Text = str;
 		}
 
@@ -842,6 +848,7 @@ namespace Stran
 			}
 			if(!dockPanel1.Contains(m_troopinfolist))
 				m_troopinfolist.Show(dockPanel1);
+			m_buildinglist.Activate();
 			ResumeLayout();
 		}
 
@@ -855,23 +862,10 @@ namespace Stran
 			return null;
 		}
 
-
 		#region CMV
 		private void CMV_Opening(object sender, CancelEventArgs e)
 		{
-			bool Enabled = CMVSnapshot.Enabled = CMVRefresh.Enabled = CMVRole.Enabled = m_villagelist.listViewVillage.SelectedItems.Count == 1;
-			List<string> RoleList = new List<string>();
-			if(Enabled)
-			{
-				if(!TravianData.Villages.ContainsKey(SelectVillage))
-					return;
-				foreach(var x in TravianData.Villages)
-					if(!RoleList.Contains(x.Value.Role))
-						RoleList.Add(x.Value.Role);
-				CMVRoleText.Items.Clear();
-				RoleList.ForEach(s => { CMVRoleText.Items.Add(s); });
-				CMVRoleText.Text = TravianData.Villages[SelectVillage].Role;
-			}
+			bool Enabled = CMVSnapshot.Enabled = CMVRefresh.Enabled = m_villagelist.listViewVillage.SelectedItems.Count == 1;
 		}
 
 		private void CMVRefresh_Click(object sender, EventArgs e)
@@ -911,7 +905,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				village.Market.LowerLimit = limit.Return;
-				village.SaveResourceLimits(this.tr.userdb);
+				// TODO: village.SaveResourceLimits(this.tr.userdb);
 			}
 		}
 
@@ -944,7 +938,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				village.Market.UpperLimit = limit.Return;
-				village.SaveResourceLimits(this.tr.userdb);
+				//TODO: village.SaveResourceLimits(this.tr.userdb);
 			}
 		}
 
@@ -969,37 +963,6 @@ namespace Stran
 			MsgBox mb = new MsgBox() { message = sb.ToString() };
 			mb.ShowDialog();
 		}
-		private void CMVRoleText_KeyDown(object sender, KeyEventArgs e)
-		{
-			if(e.KeyCode == Keys.Enter)
-			{
-				if(!TravianData.Villages.ContainsKey(SelectVillage))
-					return;
-				tr.userdb["v" + SelectVillage + "role"] = TravianData.Villages[SelectVillage].Role = CMVRoleText.Text;
-				foreach(ListViewItem x in m_villagelist.listViewVillage.Items)
-				{
-					if(x.SubItems[0].Text == SelectVillage.ToString())
-					{
-						x.SubItems[4].Text = CMVRoleText.Text;
-						break;
-					}
-				}
-			}
-		}
-		private void CMVRoleText_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if(!TravianData.Villages.ContainsKey(SelectVillage))
-				return;
-			tr.userdb["v" + SelectVillage + "role"] = TravianData.Villages[SelectVillage].Role = CMVRoleText.SelectedItem as string;
-			foreach(ListViewItem x in m_villagelist.listViewVillage.Items)
-			{
-				if(x.SubItems[0].Text == SelectVillage.ToString())
-				{
-					x.SubItems[4].Text = CMVRoleText.Text;
-					break;
-				}
-			}
-		}
 		#endregion
 
 		#region CMB
@@ -1020,19 +983,15 @@ namespace Stran
 					int Bid = Convert.ToInt32(m_buildinglist.listViewBuilding.SelectedItems[i].Text);
 					if(Buildings.CheckLevelFull(CV.Buildings[Bid].Gid, CV.Buildings[Bid].Level, CV.isCapital))
 						continue;
-					CV.Queue.Add(new TQueue()
+					var Q = new BuildingQueue()
 					{
+						UpCall = tr,
+						VillageID = CV.ID,
 						Bid = Bid,
 						Gid = CV.Buildings[Bid].Gid,
-						QueueType = TQueueType.Building
-					});
-					CV.SaveQueue(tr.userdb);
-					int j = CV.Queue.Count - 1;
-					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add(CV.Queue[j].Bid.ToString());
-					lvi.SubItems.Add(typelist[CV.Queue[j].Type]);
-					lvi.SubItems.Add(dl.GetGidLang(CV.Queue[j].Gid));
-					lvi.SubItems.Add("");
-					lvi.SubItems.Add("");
+					};
+					CV.Queue.Add(Q);
+					lvi(Q);
 
 					m_buildinglist.listViewBuilding.Items[m_buildinglist.listViewBuilding.SelectedIndices[i]].SubItems[1].Text += "*";
 				}
@@ -1093,23 +1052,16 @@ namespace Stran
 					{
 						if(btl.Return < 0)
 							continue;
-						TQueue Q = new TQueue()
+						var Q = new BuildingQueue()
 						{
+							UpCall = tr,
+							VillageID = CV.ID,
 							Bid = Bid,
 							Gid = CV.Buildings[Bid].Gid,
-							QueueType = TQueueType.Building,
-							Status = " -> " + btl.Return.ToString(),
 							TargetLevel = btl.Return
 						};
 						CV.Queue.Add(Q);
-						CV.SaveQueue(tr.userdb);
-						//int j = CV.Queue.Count - 1;
-						ListViewItem lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-						lvi.SubItems.Add(typelist[Q.Type]);
-						lvi.SubItems.Add(dl.GetGidLang(Q.Gid));
-						lvi.SubItems.Add(Q.Status);
-						lvi.SubItems.Add("");
-
+						lvi(Q);
 						if(m_buildinglist.listViewBuilding.SelectedItems.Count > i)
 							m_buildinglist.listViewBuilding.SelectedItems[i].SubItems[1].Text += "!";
 					}
@@ -1133,22 +1085,14 @@ namespace Stran
 					int Bid = Convert.ToInt32(m_buildinglist.listViewBuilding.SelectedItems[i].Text);
 					if(Bid < 19)
 						continue;
-					CV.Queue.Add(new TQueue()
+					var Q = new DestroyQueue
 					{
+						UpCall = tr,
+						VillageID = SelectVillage,
 						Bid = Bid,
-						Gid = CV.Buildings[Bid].Gid,
-						QueueType = TQueueType.Destroy,
-						Status = " -> 0",
-						TargetLevel = 0
-					});
-					CV.SaveQueue(tr.userdb);
-					int j = CV.Queue.Count - 1;
-					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add(CV.Queue[j].Bid.ToString());
-					lvi.SubItems.Add(typelist[CV.Queue[j].Type]);
-					lvi.SubItems.Add(dl.GetGidLang(CV.Queue[j].Gid));
-					lvi.SubItems.Add(CV.Queue[j].Status);
-					lvi.SubItems.Add("");
-
+						Gid = CV.Buildings[Bid].Gid
+					};
+					lvi(Q);
 					m_buildinglist.listViewBuilding.Items[m_buildinglist.listViewBuilding.SelectedIndices[i]].SubItems[1].Text += "X";
 				}
 			}
@@ -1160,23 +1104,18 @@ namespace Stran
 			var CV = TravianData.Villages[SelectVillage];
 			if(TravianData.Villages[SelectVillage].isBuildingInitialized == 2)
 			{
-				NewBuilding nb = new NewBuilding(TravianData, SelectVillage, dl) { mui = mui };
+				NewBuilding nb = new NewBuilding(TravianData, SelectVillage) { mui = mui };
 				if(nb.ShowDialog() == DialogResult.OK)
 				{
-					CV.Queue.Add(new TQueue()
+					var Q = new BuildingQueue()
 					{
+						UpCall = tr,
+						VillageID = CV.ID,
 						Bid = nb.OutBid,
 						Gid = nb.OutGid,
-						Status = "+",
-						QueueType = TQueueType.Building
-					});
-					CV.SaveQueue(tr.userdb);
-					int j = CV.Queue.Count - 1;
-					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add(CV.Queue[j].Bid.ToString());
-					lvi.SubItems.Add(typelist[CV.Queue[j].Type]);
-					lvi.SubItems.Add(dl.GetGidLang(CV.Queue[j].Gid));
-					lvi.SubItems.Add(CV.Queue[j].Status);
-					lvi.SubItems.Add("");
+					};
+					CV.Queue.Add(Q);
+					lvi(Q);
 
 					CV.Buildings[nb.OutBid] = new TBuilding() { Gid = nb.OutGid };
 				}
@@ -1193,19 +1132,14 @@ namespace Stran
 			var CV = TravianData.Villages[SelectVillage];
 			if(CV.isBuildingInitialized == 2)
 			{
-				CV.Queue.Add(new TQueue()
+				var Q = new AIQueue
 				{
-					Bid = TQueue.AIBID,
-					Gid = 0,
-					Status = "N/A",
-					QueueType = TQueueType.Building
-				});
-				CV.SaveQueue(tr.userdb);
-				ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
-				lvi.SubItems.Add("AI");
-				lvi.SubItems.Add("Amount");
-				lvi.SubItems.Add("");
-				lvi.SubItems.Add("");
+					AIType = AIQueue.TAIType.Resource,
+					UpCall = tr,
+					VillageID = SelectVillage
+				};
+				CV.Queue.Add(Q);
+				lvi(Q);
 			}
 
 		}
@@ -1216,19 +1150,14 @@ namespace Stran
 			var CV = TravianData.Villages[SelectVillage];
 			if(CV.isBuildingInitialized == 2)
 			{
-				CV.Queue.Add(new TQueue()
+				var Q = new AIQueue
 				{
-					Bid = TQueue.AIBID,
-					Gid = 1,
-					Status = "N/A",
-					QueueType = TQueueType.Building
-				});
-				CV.SaveQueue(tr.userdb);
-				ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
-				lvi.SubItems.Add("AI");
-				lvi.SubItems.Add("Level");
-				lvi.SubItems.Add("");
-				lvi.SubItems.Add("");
+					AIType = AIQueue.TAIType.Level,
+					UpCall = tr,
+					VillageID = SelectVillage
+				};
+				CV.Queue.Add(Q);
+				lvi(Q);
 			}
 
 		}
@@ -1249,38 +1178,28 @@ namespace Stran
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
 			var CV = TravianData.Villages[SelectVillage];
-			CV.Queue.Add(new TQueue()
+			var Q = new PartyQueue
 			{
-				Bid = 1,
-				Gid = 0,
-				Status = "",
-				QueueType = TQueueType.Party
-			});
-			CV.SaveQueue(tr.userdb);
-			ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("1");
-			lvi.SubItems.Add(typelist[6]);
-			lvi.SubItems.Add("500");
-			lvi.SubItems.Add("");
-			lvi.SubItems.Add("");
+				PartyType = PartyQueue.TPartyType.P500,
+				UpCall = tr,
+				VillageID = SelectVillage
+			};
+			CV.Queue.Add(Q);
+			lvi(Q);
 		}
 		private void CMBParty2000_Click(object sender, EventArgs e)
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
 			var CV = TravianData.Villages[SelectVillage];
-			CV.Queue.Add(new TQueue()
+			var Q = new PartyQueue
 			{
-				Bid = 2,
-				Gid = 0,
-				Status = "",
-				QueueType = TQueueType.Party
-			});
-			CV.SaveQueue(tr.userdb);
-			ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("2");
-			lvi.SubItems.Add(typelist[6]);
-			lvi.SubItems.Add("2000");
-			lvi.SubItems.Add("");
-			lvi.SubItems.Add("");
+				PartyType = PartyQueue.TPartyType.P2000,
+				UpCall = tr,
+				VillageID = SelectVillage
+			};
+			CV.Queue.Add(Q);
+			lvi(Q);
 		}
 		#endregion
 
@@ -1302,7 +1221,7 @@ namespace Stran
 						if(CV.Queue.Count > QID)
 						{
 							CV.Queue.RemoveAt(QID);
-							CV.SaveQueue(tr.userdb);
+							TravianData.Dirty = true;
 						}
 						if(m_queuelist.listViewQueue.Items.Count > QID)
 							m_queuelist.listViewQueue.Items.RemoveAt(QID);
@@ -1320,7 +1239,7 @@ namespace Stran
 				if(CV.isBuildingInitialized == 2)
 				{
 					CV.Queue.Clear();
-					CV.SaveQueue(tr.userdb);
+					TravianData.Dirty = true;
 					m_queuelist.listViewQueue.Items.Clear();
 				}
 			}
@@ -1344,7 +1263,7 @@ namespace Stran
 						m_queuelist.listViewQueue.Items.RemoveAt(n - 1);
 						m_queuelist.listViewQueue.Items.Insert(n, tlvi);
 					}
-					CV.SaveQueue(tr.userdb);
+					TravianData.Dirty = true;
 				}
 			}
 		}
@@ -1368,7 +1287,7 @@ namespace Stran
 						m_queuelist.listViewQueue.Items.RemoveAt(n + 1);
 						m_queuelist.listViewQueue.Items.Insert(n, tlvi);
 					}
-					CV.SaveQueue(tr.userdb);
+					TravianData.Dirty = true;
 				}
 			}
 		}
@@ -1395,11 +1314,11 @@ namespace Stran
 				{
 					foreach (int i in m_queuelist.listViewQueue.SelectedIndices)
 					{
-						TQueue task = village.Queue[i];
+						var task = village.Queue[i];
 						task.Paused = !task.Paused;
 					}
 
-					village.SaveQueue(this.tr.userdb);
+					TravianData.Dirty = true;
 				}
 			}
 
@@ -1417,7 +1336,8 @@ namespace Stran
 		/// </summary>
 		private void CMQImport_Click(object sender, EventArgs e)
 		{
-			if (!this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			MessageBox.Show("尚未完成的功能！");
+			if(!this.TravianData.Villages.ContainsKey(this.SelectVillage))
 			{
 				return;
 			}
@@ -1446,7 +1366,8 @@ namespace Stran
 		/// </summary>
 		private void CMQExport_Click(object sender, EventArgs e)
 		{
-			if (! this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			MessageBox.Show("尚未完成的功能！");
+			if(!this.TravianData.Villages.ContainsKey(this.SelectVillage))
 			{
 				return;
 			}
@@ -1497,18 +1418,14 @@ namespace Stran
 			{
 				if(x.SubItems[1].BackColor != Color.White)
 				{
-					TQueue Q = new TQueue()
+					var Q = new ResearchQueue
 					{
-						QueueType = TQueueType.Research,
-						Bid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
+						UpCall = tr,
+						VillageID = SelectVillage,
+						ResearchType = ResearchQueue.TResearchType.Research,
+						Aid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
 					};
-					TravianData.Villages[SelectVillage].Queue.Add(Q);
-					TravianData.Villages[SelectVillage].SaveQueue(tr.userdb);
-					var lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-					lvi.SubItems.Add(typelist[Q.Type]);
-					lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, Q.Bid));
-					lvi.SubItems.Add(Q.Status);
-					lvi.SubItems.Add("");
+					lvi(Q);
 				}
 			}
 		}
@@ -1520,18 +1437,14 @@ namespace Stran
 			{
 				if(x.SubItems[2].BackColor != Color.White)
 				{
-					TQueue Q = new TQueue()
+					var Q = new ResearchQueue
 					{
-						QueueType = TQueueType.UAttack,
-						Bid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
+						UpCall = tr,
+						VillageID = SelectVillage,
+						ResearchType = ResearchQueue.TResearchType.UpAttack,
+						Aid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
 					};
-					TravianData.Villages[SelectVillage].Queue.Add(Q);
-					TravianData.Villages[SelectVillage].SaveQueue(tr.userdb);
-					var lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-					lvi.SubItems.Add(typelist[Q.Type]);
-					lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, Q.Bid));
-					lvi.SubItems.Add(Q.Status);
-					lvi.SubItems.Add("");
+					lvi(Q);
 				}
 			}
 		}
@@ -1543,18 +1456,14 @@ namespace Stran
 			{
 				if(x.SubItems[3].BackColor != Color.White)
 				{
-					TQueue Q = new TQueue()
+					var Q = new ResearchQueue
 					{
-						QueueType = TQueueType.UDefense,
-						Bid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
+						UpCall = tr,
+						VillageID = SelectVillage,
+						ResearchType = ResearchQueue.TResearchType.UpDefence,
+						Aid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
 					};
-					TravianData.Villages[SelectVillage].Queue.Add(Q);
-					TravianData.Villages[SelectVillage].SaveQueue(tr.userdb);
-					var lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-					lvi.SubItems.Add(typelist[Q.Type]);
-					lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, Q.Bid));
-					lvi.SubItems.Add(Q.Status);
-					lvi.SubItems.Add("");
+					lvi(Q);
 				}
 			}
 		}
@@ -1582,20 +1491,15 @@ namespace Stran
 						if(btl.Return < 0)
 							continue;
 
-						TQueue Q = new TQueue()
+						var Q = new ResearchQueue
 						{
-							QueueType = TQueueType.UAttack,
-							Bid = Bid,
-							Status = " -> " + btl.Return.ToString(),
-							TargetLevel = btl.Return
+							UpCall = tr,
+							VillageID = SelectVillage,
+							TargetLevel = btl.Return,
+							ResearchType = ResearchQueue.TResearchType.UpAttack,
+							Aid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
 						};
-						TravianData.Villages[SelectVillage].Queue.Add(Q);
-						CV.SaveQueue(tr.userdb);
-						var lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-						lvi.SubItems.Add(typelist[Q.Type]);
-						lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, Q.Bid));
-						lvi.SubItems.Add(Q.Status);
-						lvi.SubItems.Add("");
+						lvi(Q);
 					}
 				}
 			}
@@ -1624,20 +1528,15 @@ namespace Stran
 						if(btl.Return < 0)
 							continue;
 
-						TQueue Q = new TQueue()
+						var Q = new ResearchQueue
 						{
-							QueueType = TQueueType.UDefense,
-							Bid = Bid,
-							Status = " -> " + btl.Return.ToString(),
-							TargetLevel = btl.Return
+							UpCall = tr,
+							VillageID = SelectVillage,
+							TargetLevel = btl.Return,
+							ResearchType = ResearchQueue.TResearchType.UpDefence,
+							Aid = m_researchstatus.listViewUpgrade.Items.IndexOf(x) + 1
 						};
-						TravianData.Villages[SelectVillage].Queue.Add(Q);
-						CV.SaveQueue(tr.userdb);
-						var lvi = m_queuelist.listViewQueue.Items.Add(Q.Bid.ToString());
-						lvi.SubItems.Add(typelist[Q.Type]);
-						lvi.SubItems.Add(dl.GetAidLang(TravianData.Tribe, Q.Bid));
-						lvi.SubItems.Add(Q.Status);
-						lvi.SubItems.Add("");
+						lvi(Q);
 					}
 				}
 			}
@@ -1659,29 +1558,17 @@ namespace Stran
 			TVillage CV = TravianData.Villages[SelectVillage];
 			if(CV.isBuildingInitialized == 2)
 			{
-				TransferSetting ts = new TransferSetting()
+				TransferSetting ts = new TransferSetting(tr)
 				{
 					FromVillageID = this.SelectVillage,
 					TravianData = this.TravianData,
-					UserDB = this.tr.userdb,
 					mui = this.mui
 				};
 
 				if(ts.ShowDialog() == DialogResult.OK && ts.Return != null)
 				{
-					TQueue Q = new TQueue() {
-						QueueType = TQueueType.Transfer,
-						ExtraOptions = ts.Return.ToString(),
-						Status = ts.Return.Status
-					};
-					CV.Queue.Add(Q);
-					CV.SaveQueue(tr.userdb);
-
-					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
-					lvi.SubItems.Add(typelist[(int) TQueueType.Transfer]);
-					lvi.SubItems.Add(ts.Return.GetTitle(TravianData));
-					lvi.SubItems.Add(Q.Status);
-					lvi.SubItems.Add("");
+					CV.Queue.Add(ts.Return);
+					lvi(ts.Return);
 				}
 			}
 		}
@@ -1690,15 +1577,11 @@ namespace Stran
 		private void CMMNpcTrade_Click(object sender, EventArgs e)
 		{
 			if (!TravianData.Villages.ContainsKey(SelectVillage))
-			{
 				return;
-			}
 
 			TVillage CV = TravianData.Villages[SelectVillage];
 			if (CV.isBuildingInitialized != 2)
-			{
 				return;
-			}
 
 			NpcTradeSetting setting = new NpcTradeSetting()
 			{
@@ -1708,21 +1591,9 @@ namespace Stran
 
 			if (setting.ShowDialog() == DialogResult.OK && setting.Return != null)
 			{
-				NpcTradeOption option = setting.Return;
-				TQueue Q = new TQueue()
-				{
-					QueueType = TQueueType.NpcTrade,
-					ExtraOptions = option.ToString(),
-					Status = option.Status
-				};
-				CV.Queue.Add(Q);
-				CV.SaveQueue(tr.userdb);
-
-				ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
-				lvi.SubItems.Add(typelist[(int)TQueueType.NpcTrade]);
-				lvi.SubItems.Add(option.Title);
-				lvi.SubItems.Add(Q.Status);
-				lvi.SubItems.Add("");
+				var Q = setting.Return;
+				Q.UpCall = tr;
+				lvi(Q);
 			}
 		}
 		#endregion
@@ -1742,6 +1613,11 @@ namespace Stran
 		{
 			LCLTime.Text = LCLTime.ToolTipText + " " + DateTime.Now.ToLongTimeString();
 			SVRTime.Text = SVRTime.ToolTipText + " " + DateTime.Now.AddSeconds(TravianData.ServerTimeOffset).ToLongTimeString();
+			if(tr != null)
+			{
+				PageCount.Text = "Page: " + tr.pcount;
+				ActionCount.Text = "Action: " + tr.bcount;
+			}
 		}
 
 		private void CMICancel_Click(object sender, EventArgs e)
@@ -1817,6 +1693,21 @@ namespace Stran
 			}
 			else
 				CV.InitializeTroop();
+		}
+
+		private void lvi(IQueue Q)
+		{
+			ListViewItem lvi = m_queuelist.listViewQueue.Items.Add(Q.GetType().Name);
+			lvi.SubItems.Add(Q.Title);
+			lvi.SubItems.Add(Q.Status);
+			lvi.SubItems.Add("");
+			TravianData.Dirty = true;
+		}
+
+		private void CMBEnableCoin_CheckedChanged(object sender, EventArgs e)
+		{
+			CMMNpcTrade.Enabled = CMMNpcTrade2.Enabled = CMBEnableCoin.Checked;
+			CMBEnableCoin.ForeColor = CMBEnableCoin.Checked ? Color.DarkRed : Color.DarkBlue;
 		}
 	}
 }

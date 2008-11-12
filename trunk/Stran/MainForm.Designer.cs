@@ -46,6 +46,7 @@
 			this.deleteAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.timerIcon = new System.Windows.Forms.Timer(this.components);
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
@@ -191,6 +192,11 @@
 			this.timer1.Interval = 60000;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
+			// timerIcon
+			// 
+			this.timerIcon.Interval = 1000;
+			this.timerIcon.Tick += new System.EventHandler(this.timerIcon_Tick);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -221,7 +227,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
 		private System.Windows.Forms.TextBox textLog;
-		private System.Windows.Forms.NotifyIcon notifyIcon1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem loginAllToolStripMenuItem;
@@ -230,6 +235,8 @@
 		private System.Windows.Forms.ToolStripMenuItem editAccountToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem deleteAccountToolStripMenuItem;
 		private System.Windows.Forms.Timer timer1;
+		public System.Windows.Forms.NotifyIcon notifyIcon1;
+		public System.Windows.Forms.Timer timerIcon;
 	}
 }
 

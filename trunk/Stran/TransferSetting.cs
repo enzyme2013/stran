@@ -25,19 +25,20 @@ namespace Stran
 		private TVillage CV = null;
 		private TVillage TV = null;
 		private int targetVillageID = 0;
+		private Travian UpCall = null;
 
 		private DateTime transferAt = DateTime.Now;
 		private int minimumInterval = 0;
 
 		public Data TravianData { get; set; }
 		public int FromVillageID { get; set; }
-		public LocalDB UserDB { get; set; }
 		public MUI mui { get; set; }
-		public TransferOption Return { get; private set; }
+		public TransferQueue Return { get; private set; }
 
-		public TransferSetting()
+		public TransferSetting(Travian UpCall)
 		{
 			InitializeComponent();
+			this.UpCall = UpCall;
 		}
 
 		private void TransferSetting_Load(object sender, EventArgs e)
@@ -116,7 +117,7 @@ namespace Stran
 
 		private void numericUpDownMechantCount_ValueChanged(object sender, EventArgs e)
 		{
-			TransferOption option = this.GetTransferOption();
+			var option = this.GetTransferOption();
 			if (option != null && option.Distribution != ResourceDistributionType.None)
 			{
 				int total = this.CV.Market.SingleCarry * Convert.ToInt32(this.numericUpDownMerchantCount.Value);
@@ -175,7 +176,7 @@ namespace Stran
 				CV.Market.SingleCarry = 750;
 			sb.AppendFormat(mui._("merchantsformat"), Convert.ToInt32(Math.Ceiling(Convert.ToDouble(all) / CV.Market.SingleCarry)), CV.Market.ActiveMerchant);
 
-			TransferOption option = this.GetTransferOption();
+			var option = this.GetTransferOption();
 			if (option != null)
 			{
 				sb.AppendFormat(" {0}", option.Status);
@@ -185,7 +186,10 @@ namespace Stran
 				}
 			}
 
+			buttonOK.Enabled = option != null;
+
 			labelDetail.Text = sb.ToString();
+			
 		}
 
 		private void radio_CheckedChanged(object sender, EventArgs e)
@@ -202,7 +206,7 @@ namespace Stran
 				mui = this.mui
 			};
 
-			TransferOption option = this.GetTransferOption();
+			var option = this.GetTransferOption();
 			if (option != null && !option.TargetPos.IsEmpty)
 			{
 				int speed = this.TravianData.MarketSpeed == 0 ? 24 : this.TravianData.MarketSpeed;
@@ -220,9 +224,9 @@ namespace Stran
 		/// Assemble a TransferOption object using current control values
 		/// </summary>
 		/// <returns></returns>
-		private TransferOption GetTransferOption()
+		private TransferQueue GetTransferOption()
 		{
-			TransferOption option = new TransferOption();
+			TransferQueue option = new TransferQueue { UpCall = UpCall, VillageID = CV.ID };
 
 			option.MaxCount = Convert.ToInt32(this.numericUpDownTransferCount.Value);
 			option.TargetVillageID = this.targetVillageID;
@@ -290,7 +294,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				this.CV.Market.LowerLimit = limit.Return;
-				this.CV.SaveResourceLimits(this.UserDB);
+				//TODO: this.CV.SaveResourceLimits(this.UserDB);
 			}
 		}
 
@@ -312,7 +316,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				this.TV.Market.UpperLimit = limit.Return;
-				this.TV.SaveResourceLimits(this.UserDB);
+				//TODO: this.TV.SaveResourceLimits(this.UserDB);
 			}
 		}
 	}

@@ -54,6 +54,8 @@ namespace libTravian
 			{
 				DebugLog(ex, DebugLevel.E);
 			}
+			DB.Instance.Snapshot(TD);
+			DB.Instance.Snapshot(this);
 		}
 
 		private void NewParseResource(int VillageID, string data)
@@ -96,8 +98,14 @@ namespace libTravian
 				{
 					Match m = mc[i];
 					int vid = Convert.ToInt32(m.Groups[2].Value);
-					if (TD.Villages.ContainsKey(vid))
-						TD.Villages[vid].Name = m.Groups[3].Value;
+					if(TD.Villages.ContainsKey(vid))
+					{
+						if(TD.Villages[vid].Name != m.Groups[3].Value)
+						{
+							TD.Dirty = true;
+							TD.Villages[vid].Name = m.Groups[3].Value;
+						}
+					}
 					else
 					{
 						TD.Villages[vid] = new TVillage()
@@ -108,10 +116,7 @@ namespace libTravian
 							Y = Convert.ToInt32(m.Groups[5].Value),
 							UpCall = this
 						};
-						if (userdb.ContainsKey("v" + TD.Villages[vid].ID + "role"))
-							TD.Villages[vid].Role = userdb["v" + TD.Villages[vid].ID + "role"];
-						else
-							TD.Villages[vid].Role = "None";
+						TD.Dirty = true;
 					}
 				}
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
@@ -160,10 +165,6 @@ namespace libTravian
 						return;
 					m = Regex.Match(viddata, "newdid=(\\d+)");
 					tv.ID = Convert.ToInt32(m.Groups[1].Value);
-					if (userdb.ContainsKey("v" + tv.ID + "role"))
-						tv.Role = userdb["v" + tv.ID + "role"];
-					else
-						tv.Role = "None";
 					TD.Villages[tv.ID] = tv;
 					Currid = tv.ID;
 				}
@@ -185,10 +186,6 @@ namespace libTravian
 						UpCall = this
 					};
 
-					if (userdb.ContainsKey("v" + TD.Villages[vid].ID + "role"))
-						TD.Villages[vid].Role = userdb["v" + TD.Villages[vid].ID + "role"];
-					else
-						TD.Villages[vid].Role = "None";
 					if (m.Groups[1].Value != "")
 						Currid = vid;
 				}
@@ -209,10 +206,11 @@ namespace libTravian
 				}
 			}
 			//LastVillageCount = villagecount;
+			TD.Dirty = true;
 			TD.ActiveDid = Currid;
 		}
 
-		private TimeSpan TimeSpanParse(string time)
+		public TimeSpan TimeSpanParse(string time)
 		{
 			string[] data = time.Split(':');
 			int hours = 0, mins = 0, secs = 0;
@@ -254,7 +252,7 @@ namespace libTravian
 						break;
 					}
 
-				if (gid != -1)
+				if(gid != -1)
 					tinb = new TInBuilding()
 					{
 						CancelURL = "dorf1.php" + m[i].Groups[1].Value,
@@ -263,7 +261,10 @@ namespace libTravian
 						FinishTime = DateTime.Now.Add(TimeSpanParse(m[i].Groups[4].Value))
 					};
 				else
+				{
+					DebugLog("Cannot recognize Gid", DebugLevel.E);
 					continue;
+				}
 				int tinbtype = TD.isRomans ? (tinb.Gid < 5 ? 0 : 1) : 0;
 				CV.InBuilding[tinbtype] = tinb;
 				if (CV.RB[tinbtype] != null &&
@@ -273,6 +274,7 @@ namespace libTravian
 				{
 					CV.Buildings[CV.RB[tinbtype].ABid].Level++;
 					CV.Buildings[CV.RB[tinbtype].ABid].InBuilding = true;
+					TD.Dirty = true;
 				}
 				else
 				{
@@ -288,6 +290,7 @@ namespace libTravian
 						CV.InBuilding[tinbtype].ABid = ibbid;
 						CV.Buildings[ibbid].Level++;
 						CV.Buildings[ibbid].InBuilding = true;
+						TD.Dirty = true;
 					}
 				}
 			}
@@ -319,24 +322,28 @@ namespace libTravian
 						Level = Convert.ToInt32(m.Groups[2].Value),
 						FinishTime = DateTime.Now.Add(TimeSpanParse(m.Groups[3].Value))
 					};
-				if (CV.RB[2] != null &&
+				if(CV.RB[2] != null &&
 					CV.Buildings.ContainsKey(CV.RB[2].ABid) &&
 					CV.RB[2].Gid == CV.Buildings[CV.RB[2].ABid].Gid &&
 					CV.RB[2].Level == CV.Buildings[CV.RB[2].ABid].Level)
+				{
 					CV.Buildings[CV.RB[2].ABid].InBuilding = true;
+					TD.Dirty = true;
+				}
 				else
 				{
 					int ibbid = 0, ibbcount = 0;
-					foreach (var x in CV.Buildings)
-						if (x.Value.Gid == CV.InBuilding[2].Gid && x.Value.Level == CV.InBuilding[2].Level + 1)
+					foreach(var x in CV.Buildings)
+						if(x.Value.Gid == CV.InBuilding[2].Gid && x.Value.Level == CV.InBuilding[2].Level + 1)
 						{
 							ibbid = x.Key;
 							ibbcount++;
 						}
-					if (ibbid != 0 && ibbcount == 1)
+					if(ibbid != 0 && ibbcount == 1)
 					{
 						CV.InBuilding[2].ABid = ibbid;
 						CV.Buildings[ibbid].InBuilding = true;
+						TD.Dirty = true;
 					}
 				}
 				m = Regex.Match(data, "build\\.php\\?gid=15&del=\\d+");
@@ -375,19 +382,20 @@ namespace libTravian
 				int bid = Convert.ToInt32(m1.Groups[2].Value);
 				CV.Buildings[bid].Level = Convert.ToInt32(m1.Groups[1].Value);
 			}
+			TD.Dirty = true;
 		}
 
 		private void NewParseDorf2Building(int VillageID, string data)
 		{
 			Match mm = Regex.Match(data, "d2_(\\d+)");
-			if (!mm.Success)
+			if(!mm.Success)
 				return;
 
 			var CV = TD.Villages[VillageID];
 			MatchCollection mc = Regex.Matches(data, "<img class=\"d(\\d+)\" src=\"[^\"]*?img/un/g/g(\\d+)[^.]*\\.gif\">");
-			if (mc.Count == 0)
+			if(mc.Count == 0)
 				return;
-			foreach (Match m in mc)
+			foreach(Match m in mc)
 				CV.Buildings[Convert.ToInt32(m.Groups[1].Value) + 18] = new TBuilding() { Gid = Convert.ToInt32(m.Groups[2].Value) };
 			CV.Buildings[39] = new TBuilding() { Gid = 16 };
 			CV.Buildings[40] = new TBuilding() { Gid = TD.Tribe + 30 };
@@ -395,9 +403,9 @@ namespace libTravian
 				CV.Buildings[26] = new TBuilding { Gid = 40 };
 
 			mc = Regex.Matches(data, "<area href=\"build.php\\?id=(\\d+)\" title=\"[^0-9\"]*?(\\d+)[^0-9\"]*?\" coords");
-			if (mc.Count == 0)
+			if(mc.Count == 0)
 				return;
-			foreach (Match m in mc)
+			foreach(Match m in mc)
 			{
 				int bid = Convert.ToInt32(m.Groups[1].Value);
 				if(CV.Buildings.ContainsKey(bid))
@@ -405,9 +413,14 @@ namespace libTravian
 				else
 					DebugLog("Unknown bid on parsing dorf2: " + bid, DebugLevel.W);
 			}
-			foreach (var x in CV.Queue)
-				if (x.QueueType == TQueueType.Building && x.Bid != TQueue.AIBID && !CV.Buildings.ContainsKey(x.Bid))
-					CV.Buildings[x.Bid] = new TBuilding() { Gid = x.Gid };
+			foreach(var x in CV.Queue)
+				if(x is BuildingQueue)
+				{
+					var y = x as BuildingQueue;
+					if(y.Bid != TQueue.AIBID && !CV.Buildings.ContainsKey(y.Bid))
+						CV.Buildings[y.Bid] = new TBuilding() { Gid = y.Gid };
+				}
+			TD.Dirty = true;
 		}
 
 		private void NewParseGLanguage(int VillageID, string data)
@@ -557,6 +570,7 @@ namespace libTravian
 			}
 		}
 
+		public TResAmount JustTransferredData = null;
 
 		private void NewParseMarket(int VillageID, string data)
 		{
@@ -564,6 +578,7 @@ namespace libTravian
 				return;
 			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];
+			//CV.isMarketInitialized = 2;
 			if (Market[0] == Market[1])
 				Market[0] = null;
 
@@ -656,10 +671,10 @@ namespace libTravian
 					});
 				}
 			}
-			if (Market[0] != null)
-				svrdb["market0"] = Market[0];
-			if (Market[1] != null)
-				svrdb["market1"] = Market[1];
+			//if (Market[0] != null)
+				//TODO:DB.Instance.SetString(TD.Server, "market0", Market[0]);
+			//if (Market[1] != null)
+				//TODO:DB.Instance.SetString(TD.Server, "market1", Market[1]);
 		}
 
 		/// <summary>
@@ -862,7 +877,7 @@ namespace libTravian
 				else
 					vname = m.Groups[2].Value;
 				DateTime finishTime = DateTime.MinValue;
-				int tribe = Convert.ToInt32(m.Groups[3].Value) / 10;
+				int tribe = Convert.ToInt32(m.Groups[3].Value) / 10 + 1;
 				if(hasTime)
 					finishTime = DateTime.Now.Add(TimeSpanParse(m.Groups[6].Value)).AddSeconds(20);
 				TTInfo ttro = new TTInfo

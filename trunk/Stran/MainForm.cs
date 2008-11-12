@@ -24,14 +24,17 @@ using libTravian;
 using System.Reflection;
 using System.IO;
 using System.Threading;
+using System.Resources;
+using Stran.Properties;
 
 namespace Stran
 {
 	public partial class MainForm : Form
 	{
+		static public MainForm Instance;
 		static public List<TLoginInfo> accounts = new List<TLoginInfo>();
 		static public Dictionary<string, string> Options = new Dictionary<string, string>();
-		static int Pagecount = 0, Buildcount = 0, Eventcount = 0;
+		static int Pagecount = 0, Buildcount = 0;
 		static object writelock = new object();
 		// svn propset svn:keywords "Rev" MainForm.cs
 		string svnid = "$Rev$";
@@ -43,6 +46,7 @@ namespace Stran
 		public MainForm()
 		{
 			InitializeComponent();
+			Instance = this;
 			Assembly myAsm = Assembly.Load("Stran");
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
@@ -50,7 +54,8 @@ namespace Stran
 			VERSION = Text = string.Format("Stran {0}.{1}-{2}(SVN:{3})", v.Major, v.Minor, v.Build, rev);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+			
 			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 		}
 
@@ -215,7 +220,6 @@ namespace Stran
 					StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 					Pagecount = Convert.ToInt32(sr.ReadLine());
 					Buildcount = Convert.ToInt32(sr.ReadLine());
-					Eventcount = Convert.ToInt32(sr.ReadLine());
 					sr.Close();
 				}
 			}
@@ -232,17 +236,12 @@ namespace Stran
 			Travian.Buildcount -= bcount;
 			Buildcount += bcount;
 
-			int ecount = Travian.Eventcount;
-			Travian.Eventcount -= ecount;
-			Eventcount += ecount;
-
 			lock(writelock)
 			{
 				FileStream fs = new FileStream("Statistics", FileMode.Create, FileAccess.Write);
 				StreamWriter sr = new StreamWriter(fs, Encoding.UTF8);
 				sr.WriteLine(Pagecount);
 				sr.WriteLine(Buildcount);
-				sr.WriteLine(Eventcount);
 				sr.Close();
 			}
 		}
@@ -340,6 +339,12 @@ namespace Stran
 			}
 			
 			//timer1.Enabled = false;
+		}
+
+		private void timerIcon_Tick(object sender, EventArgs e)
+		{
+			notifyIcon1.Icon = Resources.free;
+			timerIcon.Enabled = false;
 		}
 	}
 

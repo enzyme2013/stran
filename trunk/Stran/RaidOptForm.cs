@@ -58,6 +58,10 @@ namespace Stran
 
 		private void button1_Click(object sender, EventArgs e)
 		{
+			MessageBox.Show("尚未完成的功能！");
+			Return = null;
+			return;
+
 			int[] troops = new int[11];
 			for(int i = 0; i < 11; i++)
 				troops[i] = Convert.ToInt32(Nums[i].Value);
@@ -66,7 +70,8 @@ namespace Stran
 				Troops = troops,
 				Targets = null
 			};
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+			
 		}
 	}
 }

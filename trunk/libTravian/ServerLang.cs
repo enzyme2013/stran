@@ -16,14 +16,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LitJson;
 
 namespace libTravian
 {
 	partial class Travian
 	{
-		private Dictionary<int, string> GidLang;
-		private Dictionary<int, string> AidLang;
+		[Json]
+		public Dictionary<int, string> GidLang = new Dictionary<int, string>(40);
+		[Json]
+		public Dictionary<int, string> AidLang = new Dictionary<int, string>(30);
+		[Json]
 		public string[] Market = new string[2];
+
+		public bool Dirty;
+
 		public string GetGidLang(int Gid)
 		{
 			if(GidLang.ContainsKey(Gid))
@@ -36,7 +43,9 @@ namespace libTravian
 			if(GidLang.ContainsKey(Gid) && GidLang[Gid] == Value)
 				return;
 			GidLang[Gid] = Value;
-			svrdb["gid" + Gid.ToString()] = Value;
+			Dirty = true;
+
+			//TODO:DB.Instance.SetString(TD.Server, "gid" + Gid.ToString(), Value);
 		}
 		public string GetAidLang(int Tribe, int Aid)
 		{
@@ -50,13 +59,15 @@ namespace libTravian
 		{
 			int key = (Tribe - 1) * 10 + Aid;
 			AidLang[key] = Value;
+			Dirty = true;
 		}
 		public void SetAidLang(int Aid, string Value)
 		{
 			if(GidLang.ContainsKey(Aid) && GidLang[Aid] == Value)
 				return;
 			AidLang[Aid] = Value;
-			svrdb["aid" + Aid.ToString()] = Value;
+			Dirty = true;
+			//TODO:DB.Instance.SetString(TD.Server, "aid" + Aid.ToString(), Value);
 		}
 	}
 }

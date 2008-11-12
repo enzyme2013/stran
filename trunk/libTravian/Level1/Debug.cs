@@ -34,7 +34,8 @@ namespace libTravian
 		I,
 		W,
 		E,
-		F
+		F,
+		II
 	}
 	public class LogArgs : EventArgs
 	{
@@ -46,7 +47,7 @@ namespace libTravian
 		public event EventHandler<LogArgs> OnError;
 		public const int DebugCount = 16;
 		public List<TDebugInfo> DebugList = new List<TDebugInfo>(DebugCount);
-		private void DebugLog(string Text, DebugLevel Level)
+		public void DebugLog(string Text, DebugLevel Level)
 		{
 			StackFrame x = new StackTrace(true).GetFrame(1);
 			string MethodName = x.GetMethod().Name;
@@ -70,11 +71,11 @@ namespace libTravian
 				OnError(this, new LogArgs() { DebugInfo = db });
 			}
 		}
-		private void DebugLog(Exception e)
+		public void DebugLog(Exception e)
 		{
 			DebugLog(e, DebugLevel.F);
 		}
-		private void DebugLog(Exception e, DebugLevel Level)
+		public void DebugLog(Exception e, DebugLevel Level)
 		{
 			StackFrame x = new StackTrace(e).GetFrame(0);
 			string MethodName = x.GetMethod().Name;

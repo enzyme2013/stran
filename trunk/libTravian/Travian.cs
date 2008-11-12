@@ -27,6 +27,11 @@ namespace libTravian
 	{
 		public event EventHandler<StatusChanged> StatusUpdate;
 
+		public void CallStatusUpdate(Object sender, StatusChanged e)
+		{
+			StatusUpdate(sender, e);
+		}
+
 		public enum ChangedType
 		{
 			None,
@@ -35,7 +40,8 @@ namespace libTravian
 			Queue,
 			Research,
 			Stop,
-			Market
+			Market,
+			PageCount
 		}
 		public class StatusChanged : EventArgs
 		{
@@ -45,33 +51,26 @@ namespace libTravian
 		}
 
 		private WebClient wc;
-		public LocalDB svrdb;
-		public LocalDB userdb;
 		public IPageQuerier pageQuerier;
 
-		private bool NoMB = false;
+		static public bool NoMB = false;
+		static public double[] resrate = new double[4] { 10, 10, 9, 7 };
 
 		public Data TD { get; set; }
-		public Travian(Data TravianData, Dictionary<string, string> Options)
+		public Travian()
 		{
-			GidLang = new Dictionary<int, string>(40);
-			AidLang = new Dictionary<int, string>(30);
-			TD = TravianData;
-			svrdb = LocalDBCenter.getDB(TravianData.Server);
-			userdb = LocalDBCenter.getDB(TravianData.Username, TravianData.Server);
 			this.pageQuerier = this;
 
-			// loading cached data into Language class
-			for(int i = 1; i <= 40; i++)
-			{
-				if(svrdb.ContainsKey("gid" + i.ToString()))
-					GidLang[i] = svrdb["gid" + i.ToString()];
-			}
-			for(int i = 1; i <= 30; i++)
-			{
-				if(svrdb.ContainsKey("aid" + i.ToString()))
-					AidLang[i] = svrdb["aid" + i.ToString()];
-			}
+			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+		}
+
+		public Travian(Data TravianData, Dictionary<string, string> Options)
+		{
+			TD = TravianData;
+			//DB.Instance.Initialize(TravianData.Server);
+			//DB.Instance.Initialize(TravianData.key);
+			this.pageQuerier = this;
+
 			int StdSpeed;
 			if(TD.Tribe == 1)
 				StdSpeed = 16;
@@ -80,10 +79,18 @@ namespace libTravian
 			else
 				StdSpeed = 24;
 			int MarketSpeedX = 1;
-			if(svrdb.ContainsKey("MarketSpeedX"))
-				MarketSpeedX = Convert.ToInt32(svrdb["MarketSpeedX"]);
+			
 			TD.MarketSpeed = StdSpeed * MarketSpeedX;
 
+			LoadOptions(Options);
+			TD.Dirty = true;
+
+			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+		}
+
+		public void LoadOptions(Dictionary<string, string> Options)
+		{
 			if(Options.ContainsKey("NoMB"))
 			{
 				//DebugLog("Get option: NoMB", DebugLevel.I);
@@ -102,9 +109,6 @@ namespace libTravian
 			}
 			if(Options.ContainsKey("remotestop"))
 				RemoteStopWord = Options["remotestop"];
-
-			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 		}
 
 		static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -113,6 +117,114 @@ namespace libTravian
 
 		static void UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="VillageID"></param>
+		/// <param name="Q"></param>
+		/// <returns>0 -> Directly buildable. positive -> pre-build gid. negative -> impossible.</returns>
+		public int testPossibleNow(int VillageID, TQueue Q)
+		{
+			var CV = TD.Villages[VillageID];
+			if(CV.Buildings.ContainsKey(Q.Bid) && CV.Buildings[Q.Bid].Gid == Q.Gid && CV.Buildings[Q.Bid].Level != 0)
+				return Buildings.CheckLevelFull(Q.Gid, CV.Buildings[Q.Bid].Level, CV.isCapital) ? -1 : 0;
+			return testPossibleNewNow(TD.Villages, CV, Q.Gid, Q.Bid);
+		}
+
+		public int testPossibleNow(int VillageID, BuildingQueue Q)
+		{
+			var CV = TD.Villages[VillageID];
+			if(CV.Buildings.ContainsKey(Q.Bid) && CV.Buildings[Q.Bid].Gid == Q.Gid && CV.Buildings[Q.Bid].Level != 0)
+				return Buildings.CheckLevelFull(Q.Gid, CV.Buildings[Q.Bid].Level, CV.isCapital) ? -1 : 0;
+			return testPossibleNewNow(TD.Villages, CV, Q.Gid, Q.Bid);
+		}
+
+		static public int testPossibleNewNow(Dictionary<int, TVillage> Villages, TVillage CV, int Gid, int Bid)
+		{
+			List<int> CapitalNo = new List<int> { 27, 29, 30 };
+			List<int> NotCapitalNo = new List<int> { 34 };
+			List<int> Repeatable = new List<int> { 10, 11, 23, 38, 39 };
+			//TQueue Q = CV.Queue[QueueID];
+			// Extend
+
+			if(Gid < 5)
+				return 0;
+
+			// Below are building new one
+			if(CV.isCapital && CapitalNo.Contains(Gid))
+				return -1;
+			if(!CV.isCapital && NotCapitalNo.Contains(Gid))
+				return -1;
+			// Residence/Palace problem
+			if(Gid == 26)
+			{
+				int PCount = 0;
+				foreach(var x in Villages)
+					if(x.Value.isBuildingInitialized == 2)
+						foreach(var y in x.Value.Buildings)
+							if(y.Value.Gid == 26)
+							{
+								PCount++;
+								break;
+							}
+							else if(y.Value.Gid == 25)
+								break;
+				return PCount == 0 ? 0 : -1;
+			}
+
+			// Check duplicate
+			int toBuild = 0;
+			if(Repeatable.Contains(Gid))
+			{
+				foreach(var x in CV.Buildings)
+				{
+					if(x.Key == Bid)
+						continue;
+					if(x.Value.Gid == Gid)
+						if(Buildings.CheckLevelFull(x.Value.Gid, x.Value.Level, CV.isCapital))
+						{
+							toBuild = 0;
+							break;
+						}
+						else
+							toBuild = x.Key;
+				}
+				if(toBuild != 0)
+					return toBuild;
+				else
+					return 0;
+			}
+			// Check duplicate for non-repeatable
+			foreach(var x in CV.Buildings)
+				if(x.Value.Gid == Gid && x.Key != Bid)
+					return -1;
+
+			// Check depend
+			if(!Buildings.Depends.ContainsKey(Gid))
+				return 0;
+			bool gNotFound = false;
+			foreach(var x in Buildings.Depends[Gid])
+			{
+				bool NotFound = true;
+				int canUp = 0;
+				foreach(var y in CV.Buildings)
+					if(x.Gid == y.Value.Gid)
+						if(x.Level > y.Value.Level)
+							canUp = y.Key;
+						else
+						{
+							NotFound = false;
+							break;
+						}
+				if(NotFound && canUp != 0)
+					return canUp;
+				gNotFound = gNotFound || NotFound;
+				if(gNotFound)
+					break;
+			}
+			return gNotFound ? -1 : 0;
 		}
 	}
 }

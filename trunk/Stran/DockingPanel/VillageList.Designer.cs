@@ -33,7 +33,6 @@
 			this.columnHeader15 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader12 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader27 = new System.Windows.Forms.ColumnHeader();
 			this.SuspendLayout();
 			// 
 			// listViewVillage
@@ -43,8 +42,7 @@
             this.columnHeader14,
             this.columnHeader15,
             this.columnHeader12,
-            this.columnHeader13,
-            this.columnHeader27});
+            this.columnHeader13});
 			this.listViewVillage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewVillage.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.listViewVillage.FullRowSelect = true;
@@ -86,11 +84,6 @@
 			this.columnHeader13.Tag = "coord";
 			this.columnHeader13.Text = "坐标";
 			// 
-			// columnHeader27
-			// 
-			this.columnHeader27.Tag = "role";
-			this.columnHeader27.Text = "用途";
-			// 
 			// VillageList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -118,6 +111,5 @@
 		private System.Windows.Forms.ColumnHeader columnHeader15;
 		private System.Windows.Forms.ColumnHeader columnHeader12;
 		private System.Windows.Forms.ColumnHeader columnHeader13;
-		private System.Windows.Forms.ColumnHeader columnHeader27;
 	}
 }

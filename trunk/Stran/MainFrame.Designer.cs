@@ -38,11 +38,6 @@
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.listViewEvent = new System.Windows.Forms.ListView();
-			this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader10 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader16 = new System.Windows.Forms.ColumnHeader();
 			this.contextMenuEvent = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.textBox1 = new System.Windows.Forms.TextBox();
@@ -91,12 +86,11 @@
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMQPause = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMQTimer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMQExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMQImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuVillage = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMVRefresh = new System.Windows.Forms.ToolStripMenuItem();
-			this.CMVRole = new System.Windows.Forms.ToolStripMenuItem();
-			this.CMVRoleText = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +101,8 @@
 			this.button1 = new System.Windows.Forms.Button();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.LastDebug = new System.Windows.Forms.ToolStripStatusLabel();
+			this.PageCount = new System.Windows.Forms.ToolStripStatusLabel();
+			this.ActionCount = new System.Windows.Forms.ToolStripStatusLabel();
 			this.SVRTime = new System.Windows.Forms.ToolStripStatusLabel();
 			this.LCLTime = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timersec1 = new System.Windows.Forms.Timer(this.components);
@@ -115,10 +111,12 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.checkBoxVerbose = new System.Windows.Forms.CheckBox();
+			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMBEnableCoin = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
-			this.tabPage3.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.contextMenuBuilding.SuspendLayout();
 			this.contextMenuResearch.SuspendLayout();
@@ -127,12 +125,12 @@
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuMarket.SuspendLayout();
 			this.contextMenuInbuilding.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl2
 			// 
 			this.tabControl2.Controls.Add(this.tabPage2);
-			this.tabControl2.Controls.Add(this.tabPage3);
 			this.tabControl2.Controls.Add(this.tabPage1);
 			this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl2.Location = new System.Drawing.Point(0, 0);
@@ -145,10 +143,10 @@
 			// 
 			this.tabPage2.Controls.Add(this.dockPanel1);
 			this.tabPage2.Controls.Add(this.panel2);
-			this.tabPage2.Location = new System.Drawing.Point(4, 23);
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(926, 585);
+			this.tabPage2.Size = new System.Drawing.Size(926, 586);
 			this.tabPage2.TabIndex = 0;
 			this.tabPage2.Tag = "villagebuilding";
 			this.tabPage2.Text = "村庄建设";
@@ -161,7 +159,7 @@
 			this.dockPanel1.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
 			this.dockPanel1.Location = new System.Drawing.Point(3, 3);
 			this.dockPanel1.Name = "dockPanel1";
-			this.dockPanel1.Size = new System.Drawing.Size(919, 579);
+			this.dockPanel1.Size = new System.Drawing.Size(919, 580);
 			this.dockPanel1.TabIndex = 22;
 			this.dockPanel1.Resize += new System.EventHandler(this.dockPanel1_Resize);
 			// 
@@ -170,57 +168,8 @@
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
 			this.panel2.Location = new System.Drawing.Point(922, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(1, 579);
+			this.panel2.Size = new System.Drawing.Size(1, 580);
 			this.panel2.TabIndex = 21;
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Controls.Add(this.listViewEvent);
-			this.tabPage3.Location = new System.Drawing.Point(4, 23);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(926, 585);
-			this.tabPage3.TabIndex = 1;
-			this.tabPage3.Tag = "event";
-			this.tabPage3.Text = "事件";
-			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
-			// listViewEvent
-			// 
-			this.listViewEvent.AllowColumnReorder = true;
-			this.listViewEvent.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader3,
-            this.columnHeader10,
-            this.columnHeader16});
-			this.listViewEvent.ContextMenuStrip = this.contextMenuEvent;
-			this.listViewEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listViewEvent.FullRowSelect = true;
-			this.listViewEvent.GridLines = true;
-			this.listViewEvent.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.listViewEvent.Location = new System.Drawing.Point(3, 3);
-			this.listViewEvent.Name = "listViewEvent";
-			this.listViewEvent.Size = new System.Drawing.Size(920, 579);
-			this.listViewEvent.TabIndex = 5;
-			this.listViewEvent.UseCompatibleStateImageBehavior = false;
-			this.listViewEvent.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader3
-			// 
-			this.columnHeader3.Tag = "trigger";
-			this.columnHeader3.Text = "触发条件";
-			this.columnHeader3.Width = 300;
-			// 
-			// columnHeader10
-			// 
-			this.columnHeader10.Tag = "action";
-			this.columnHeader10.Text = "动作";
-			this.columnHeader10.Width = 260;
-			// 
-			// columnHeader16
-			// 
-			this.columnHeader16.Tag = "status";
-			this.columnHeader16.Text = "状态";
-			this.columnHeader16.Width = 290;
 			// 
 			// contextMenuEvent
 			// 
@@ -231,10 +180,11 @@
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.textBox1);
-			this.tabPage1.Location = new System.Drawing.Point(4, 23);
+			this.tabPage1.Controls.Add(this.panel1);
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(926, 585);
+			this.tabPage1.Size = new System.Drawing.Size(926, 586);
 			this.tabPage1.TabIndex = 2;
 			this.tabPage1.Tag = "log";
 			this.tabPage1.Text = "日志";
@@ -244,11 +194,11 @@
 			// 
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBox1.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox1.Location = new System.Drawing.Point(3, 3);
+			this.textBox1.Location = new System.Drawing.Point(3, 33);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(920, 579);
+			this.textBox1.Size = new System.Drawing.Size(920, 550);
 			this.textBox1.TabIndex = 0;
 			// 
 			// contextMenuBuilding
@@ -271,16 +221,18 @@
             this.toolStripSeparator9,
             this.CMBParty,
             this.toolStripSeparator13,
-            this.CMBRaid});
+            this.CMBRaid,
+            this.toolStripSeparator15,
+            this.CMBEnableCoin});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
 			this.contextMenuBuilding.ShowImageMargin = false;
-			this.contextMenuBuilding.Size = new System.Drawing.Size(183, 304);
+			this.contextMenuBuilding.Size = new System.Drawing.Size(182, 354);
 			this.contextMenuBuilding.Text = "添加到队列";
 			// 
 			// CMBUp
 			// 
 			this.CMBUp.Name = "CMBUp";
-			this.CMBUp.Size = new System.Drawing.Size(182, 22);
+			this.CMBUp.Size = new System.Drawing.Size(181, 22);
 			this.CMBUp.Tag = "cmbup";
 			this.CMBUp.Text = "&A. 升级建筑 - 添加到队列";
 			this.CMBUp.Click += new System.EventHandler(this.CMBUp_Click);
@@ -292,14 +244,14 @@
             this.CMBUp5,
             this.CMBUp9});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
 			this.toolStripMenuItem1.Tag = "cmpupmulti";
 			this.toolStripMenuItem1.Text = "&U. 升级建筑 - 多次";
 			// 
 			// CMBUp2
 			// 
 			this.CMBUp2.Name = "CMBUp2";
-			this.CMBUp2.Size = new System.Drawing.Size(134, 22);
+			this.CMBUp2.Size = new System.Drawing.Size(135, 22);
 			this.CMBUp2.Tag = "cmpup2";
 			this.CMBUp2.Text = "&2. 添加 2 次";
 			this.CMBUp2.Click += new System.EventHandler(this.CMBUp2_Click);
@@ -307,7 +259,7 @@
 			// CMBUp5
 			// 
 			this.CMBUp5.Name = "CMBUp5";
-			this.CMBUp5.Size = new System.Drawing.Size(134, 22);
+			this.CMBUp5.Size = new System.Drawing.Size(135, 22);
 			this.CMBUp5.Tag = "cmpup5";
 			this.CMBUp5.Text = "&5. 添加 5 次";
 			this.CMBUp5.Click += new System.EventHandler(this.CMBUp5_Click);
@@ -315,7 +267,7 @@
 			// CMBUp9
 			// 
 			this.CMBUp9.Name = "CMBUp9";
-			this.CMBUp9.Size = new System.Drawing.Size(134, 22);
+			this.CMBUp9.Size = new System.Drawing.Size(135, 22);
 			this.CMBUp9.Tag = "cmpup9";
 			this.CMBUp9.Text = "&9. 添加 9 次";
 			this.CMBUp9.Click += new System.EventHandler(this.CMBUp9_Click);
@@ -323,7 +275,7 @@
 			// CMBUpTo
 			// 
 			this.CMBUpTo.Name = "CMBUpTo";
-			this.CMBUpTo.Size = new System.Drawing.Size(182, 22);
+			this.CMBUpTo.Size = new System.Drawing.Size(181, 22);
 			this.CMBUpTo.Tag = "cmpupto";
 			this.CMBUpTo.Text = "&L. 升级建筑到指定等级...";
 			this.CMBUpTo.Click += new System.EventHandler(this.CMBUpTo_Click);
@@ -331,12 +283,12 @@
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMBDestroy
 			// 
 			this.CMBDestroy.Name = "CMBDestroy";
-			this.CMBDestroy.Size = new System.Drawing.Size(182, 22);
+			this.CMBDestroy.Size = new System.Drawing.Size(181, 22);
 			this.CMBDestroy.Tag = "cmpdestroy";
 			this.CMBDestroy.Text = "&D. 拆除建筑";
 			this.CMBDestroy.Click += new System.EventHandler(this.CMBDestroy_Click);
@@ -344,7 +296,7 @@
 			// CMBNew
 			// 
 			this.CMBNew.Name = "CMBNew";
-			this.CMBNew.Size = new System.Drawing.Size(182, 22);
+			this.CMBNew.Size = new System.Drawing.Size(181, 22);
 			this.CMBNew.Tag = "cmbnew";
 			this.CMBNew.Text = "&N. 新建建筑";
 			this.CMBNew.Click += new System.EventHandler(this.CMBNew_Click);
@@ -352,7 +304,7 @@
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMBAI
 			// 
@@ -360,7 +312,7 @@
             this.CMBAI_C,
             this.CMBAI_L});
 			this.CMBAI.Name = "CMBAI";
-			this.CMBAI.Size = new System.Drawing.Size(182, 22);
+			this.CMBAI.Size = new System.Drawing.Size(181, 22);
 			this.CMBAI.Tag = "cmbai";
 			this.CMBAI.Text = "&E. 启用人工智能模块";
 			// 
@@ -383,12 +335,12 @@
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMBRefresh
 			// 
 			this.CMBRefresh.Name = "CMBRefresh";
-			this.CMBRefresh.Size = new System.Drawing.Size(182, 22);
+			this.CMBRefresh.Size = new System.Drawing.Size(181, 22);
 			this.CMBRefresh.Tag = "refreshbuilding";
 			this.CMBRefresh.Text = "刷新建筑列表";
 			this.CMBRefresh.Click += new System.EventHandler(this.CMBRefresh_Click);
@@ -396,7 +348,7 @@
 			// CMBRefreshDestroy
 			// 
 			this.CMBRefreshDestroy.Name = "CMBRefreshDestroy";
-			this.CMBRefreshDestroy.Size = new System.Drawing.Size(182, 22);
+			this.CMBRefreshDestroy.Size = new System.Drawing.Size(181, 22);
 			this.CMBRefreshDestroy.Tag = "refreshdestroy";
 			this.CMBRefreshDestroy.Text = "刷新拆除项目";
 			this.CMBRefreshDestroy.Click += new System.EventHandler(this.CMBRefreshDestroy_Click);
@@ -404,12 +356,12 @@
 			// toolStripSeparator12
 			// 
 			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			this.toolStripSeparator12.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator12.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMMNew2
 			// 
 			this.CMMNew2.Name = "CMMNew2";
-			this.CMMNew2.Size = new System.Drawing.Size(182, 22);
+			this.CMMNew2.Size = new System.Drawing.Size(181, 22);
 			this.CMMNew2.Tag = "newtransfer";
 			this.CMMNew2.Text = "新运输";
 			this.CMMNew2.Click += new System.EventHandler(this.CMMNew_Click);
@@ -417,7 +369,7 @@
 			// CMMNpcTrade2
 			// 
 			this.CMMNpcTrade2.Name = "CMMNpcTrade2";
-			this.CMMNpcTrade2.Size = new System.Drawing.Size(182, 22);
+			this.CMMNpcTrade2.Size = new System.Drawing.Size(181, 22);
 			this.CMMNpcTrade2.Tag = "npctrade";
 			this.CMMNpcTrade2.Text = "自动平仓";
 			this.CMMNpcTrade2.Click += new System.EventHandler(this.CMMNpcTrade_Click);
@@ -425,7 +377,7 @@
 			// toolStripSeparator9
 			// 
 			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator9.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMBParty
 			// 
@@ -433,14 +385,14 @@
             this.CMBParty500,
             this.CMBParty2000});
 			this.CMBParty.Name = "CMBParty";
-			this.CMBParty.Size = new System.Drawing.Size(182, 22);
+			this.CMBParty.Size = new System.Drawing.Size(181, 22);
 			this.CMBParty.Tag = "cmbparty";
 			this.CMBParty.Text = "启用自动派对模块";
 			// 
 			// CMBParty500
 			// 
 			this.CMBParty500.Name = "CMBParty500";
-			this.CMBParty500.Size = new System.Drawing.Size(122, 22);
+			this.CMBParty500.Size = new System.Drawing.Size(152, 22);
 			this.CMBParty500.Tag = "cmbparty500";
 			this.CMBParty500.Text = "5. 小派对";
 			this.CMBParty500.Click += new System.EventHandler(this.CMBParty500_Click);
@@ -448,7 +400,7 @@
 			// CMBParty2000
 			// 
 			this.CMBParty2000.Name = "CMBParty2000";
-			this.CMBParty2000.Size = new System.Drawing.Size(122, 22);
+			this.CMBParty2000.Size = new System.Drawing.Size(152, 22);
 			this.CMBParty2000.Tag = "cmbparty2000";
 			this.CMBParty2000.Text = "2. 大派对";
 			this.CMBParty2000.Click += new System.EventHandler(this.CMBParty2000_Click);
@@ -456,12 +408,12 @@
 			// toolStripSeparator13
 			// 
 			this.toolStripSeparator13.Name = "toolStripSeparator13";
-			this.toolStripSeparator13.Size = new System.Drawing.Size(179, 6);
+			this.toolStripSeparator13.Size = new System.Drawing.Size(178, 6);
 			// 
 			// CMBRaid
 			// 
 			this.CMBRaid.Name = "CMBRaid";
-			this.CMBRaid.Size = new System.Drawing.Size(182, 22);
+			this.CMBRaid.Size = new System.Drawing.Size(181, 22);
 			this.CMBRaid.Text = "出兵";
 			this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
 			// 
@@ -479,14 +431,14 @@
             this.CMRRefresh});
 			this.contextMenuResearch.Name = "contextMenuResearch";
 			this.contextMenuResearch.ShowImageMargin = false;
-			this.contextMenuResearch.Size = new System.Drawing.Size(130, 154);
+			this.contextMenuResearch.Size = new System.Drawing.Size(125, 154);
 			this.contextMenuResearch.Tag = "mresearch";
 			this.contextMenuResearch.Opening += new System.ComponentModel.CancelEventHandler(this.CMR_Opening);
 			// 
 			// CMRResearch
 			// 
 			this.CMRResearch.Name = "CMRResearch";
-			this.CMRResearch.Size = new System.Drawing.Size(129, 22);
+			this.CMRResearch.Size = new System.Drawing.Size(124, 22);
 			this.CMRResearch.Tag = "mresearch";
 			this.CMRResearch.Text = "research";
 			this.CMRResearch.Click += new System.EventHandler(this.CMRResearch_Click);
@@ -494,12 +446,12 @@
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(126, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(121, 6);
 			// 
 			// CMRUpgradeAtk
 			// 
 			this.CMRUpgradeAtk.Name = "CMRUpgradeAtk";
-			this.CMRUpgradeAtk.Size = new System.Drawing.Size(129, 22);
+			this.CMRUpgradeAtk.Size = new System.Drawing.Size(124, 22);
 			this.CMRUpgradeAtk.Tag = "upgradeatk";
 			this.CMRUpgradeAtk.Text = "upgradeatk";
 			this.CMRUpgradeAtk.Click += new System.EventHandler(this.CMRUpgradeAtk_Click);
@@ -507,7 +459,7 @@
 			// CMRUpgradeAtkTo
 			// 
 			this.CMRUpgradeAtkTo.Name = "CMRUpgradeAtkTo";
-			this.CMRUpgradeAtkTo.Size = new System.Drawing.Size(129, 22);
+			this.CMRUpgradeAtkTo.Size = new System.Drawing.Size(124, 22);
 			this.CMRUpgradeAtkTo.Tag = "upgradeatkto";
 			this.CMRUpgradeAtkTo.Text = "upgradeatkto";
 			this.CMRUpgradeAtkTo.Click += new System.EventHandler(this.CMRUpgradeAtkTo_Click);
@@ -515,12 +467,12 @@
 			// toolStripSeparator7
 			// 
 			this.toolStripSeparator7.Name = "toolStripSeparator7";
-			this.toolStripSeparator7.Size = new System.Drawing.Size(126, 6);
+			this.toolStripSeparator7.Size = new System.Drawing.Size(121, 6);
 			// 
 			// CMRUpgradeDef
 			// 
 			this.CMRUpgradeDef.Name = "CMRUpgradeDef";
-			this.CMRUpgradeDef.Size = new System.Drawing.Size(129, 22);
+			this.CMRUpgradeDef.Size = new System.Drawing.Size(124, 22);
 			this.CMRUpgradeDef.Tag = "upgradedef";
 			this.CMRUpgradeDef.Text = "upgradedef";
 			this.CMRUpgradeDef.Click += new System.EventHandler(this.CMRUpgradeDef_Click);
@@ -528,7 +480,7 @@
 			// CMRUpgradeDefTo
 			// 
 			this.CMRUpgradeDefTo.Name = "CMRUpgradeDefTo";
-			this.CMRUpgradeDefTo.Size = new System.Drawing.Size(129, 22);
+			this.CMRUpgradeDefTo.Size = new System.Drawing.Size(124, 22);
 			this.CMRUpgradeDefTo.Tag = "upgradedefto";
 			this.CMRUpgradeDefTo.Text = "upgradedefto";
 			this.CMRUpgradeDefTo.Click += new System.EventHandler(this.CMRUpgradeDefTo_Click);
@@ -536,12 +488,12 @@
 			// toolStripSeparator10
 			// 
 			this.toolStripSeparator10.Name = "toolStripSeparator10";
-			this.toolStripSeparator10.Size = new System.Drawing.Size(126, 6);
+			this.toolStripSeparator10.Size = new System.Drawing.Size(121, 6);
 			// 
 			// CMRRefresh
 			// 
 			this.CMRRefresh.Name = "CMRRefresh";
-			this.CMRRefresh.Size = new System.Drawing.Size(129, 22);
+			this.CMRRefresh.Size = new System.Drawing.Size(124, 22);
 			this.CMRRefresh.Tag = "refreshupgrade";
 			this.CMRRefresh.Text = "refreshupgrade";
 			this.CMRRefresh.Click += new System.EventHandler(this.CMRRefresh_Click);
@@ -563,12 +515,12 @@
 			this.contextMenuQueue.Name = "contextMenuStrip3";
 			this.contextMenuQueue.ShowCheckMargin = true;
 			this.contextMenuQueue.ShowImageMargin = false;
-			this.contextMenuQueue.Size = new System.Drawing.Size(195, 220);
+			this.contextMenuQueue.Size = new System.Drawing.Size(196, 198);
 			// 
 			// CMQDel
 			// 
 			this.CMQDel.Name = "CMQDel";
-			this.CMQDel.Size = new System.Drawing.Size(194, 22);
+			this.CMQDel.Size = new System.Drawing.Size(195, 22);
 			this.CMQDel.Tag = "cmqdel";
 			this.CMQDel.Text = "&D. 删除";
 			this.CMQDel.Click += new System.EventHandler(this.CMQDel_Click);
@@ -576,7 +528,7 @@
 			// CMQClear
 			// 
 			this.CMQClear.Name = "CMQClear";
-			this.CMQClear.Size = new System.Drawing.Size(194, 22);
+			this.CMQClear.Size = new System.Drawing.Size(195, 22);
 			this.CMQClear.Tag = "cmqclear";
 			this.CMQClear.Text = "&C. 清空";
 			this.CMQClear.Click += new System.EventHandler(this.CMQClear_Click);
@@ -584,13 +536,13 @@
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(191, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(192, 6);
 			// 
 			// CMQUp
 			// 
 			this.CMQUp.Name = "CMQUp";
 			this.CMQUp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
-			this.CMQUp.Size = new System.Drawing.Size(194, 22);
+			this.CMQUp.Size = new System.Drawing.Size(195, 22);
 			this.CMQUp.Tag = "cmqup";
 			this.CMQUp.Text = "&U. 上移";
 			this.CMQUp.Click += new System.EventHandler(this.CMQUp_Click);
@@ -599,7 +551,7 @@
 			// 
 			this.CMQDown.Name = "CMQDown";
 			this.CMQDown.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
-			this.CMQDown.Size = new System.Drawing.Size(194, 22);
+			this.CMQDown.Size = new System.Drawing.Size(195, 22);
 			this.CMQDown.Tag = "cmqdown";
 			this.CMQDown.Text = "&D. 下移";
 			this.CMQDown.Click += new System.EventHandler(this.CMQDown_Click);
@@ -607,12 +559,12 @@
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(191, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(192, 6);
 			// 
 			// CMQPause
 			// 
 			this.CMQPause.Name = "CMQPause";
-			this.CMQPause.Size = new System.Drawing.Size(194, 22);
+			this.CMQPause.Size = new System.Drawing.Size(195, 22);
 			this.CMQPause.Tag = "cmqpause";
 			this.CMQPause.Text = "&P. 暂停";
 			this.CMQPause.Click += new System.EventHandler(this.CMQPause_Click);
@@ -622,15 +574,20 @@
 			this.CMQTimer.Checked = true;
 			this.CMQTimer.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.CMQTimer.Name = "CMQTimer";
-			this.CMQTimer.Size = new System.Drawing.Size(194, 22);
+			this.CMQTimer.Size = new System.Drawing.Size(195, 22);
 			this.CMQTimer.Tag = "cmqtimer";
 			this.CMQTimer.Text = "&E. 延迟倒计时正在工作";
 			this.CMQTimer.Click += new System.EventHandler(this.CMQTimer_Click);
 			// 
+			// toolStripSeparator14
+			// 
+			this.toolStripSeparator14.Name = "toolStripSeparator14";
+			this.toolStripSeparator14.Size = new System.Drawing.Size(192, 6);
+			// 
 			// CMQExport
 			// 
 			this.CMQExport.Name = "CMQExport";
-			this.CMQExport.Size = new System.Drawing.Size(194, 22);
+			this.CMQExport.Size = new System.Drawing.Size(195, 22);
 			this.CMQExport.Tag = "cmqexport";
 			this.CMQExport.Text = "&X. 导出";
 			this.CMQExport.Click += new System.EventHandler(this.CMQExport_Click);
@@ -638,7 +595,7 @@
 			// CMQImport
 			// 
 			this.CMQImport.Name = "CMQImport";
-			this.CMQImport.Size = new System.Drawing.Size(194, 22);
+			this.CMQImport.Size = new System.Drawing.Size(195, 22);
 			this.CMQImport.Tag = "cmqimport";
 			this.CMQImport.Text = "&I. 导入";
 			this.CMQImport.Click += new System.EventHandler(this.CMQImport_Click);
@@ -647,7 +604,6 @@
 			// 
 			this.contextMenuVillage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CMVRefresh,
-            this.CMVRole,
             this.toolStripSeparator8,
             this.CMVLowerLimit,
             this.CMVUpperLimit,
@@ -656,43 +612,26 @@
             this.CMVSnapAll});
 			this.contextMenuVillage.Name = "contextMenuStrip1";
 			this.contextMenuVillage.ShowImageMargin = false;
-			this.contextMenuVillage.Size = new System.Drawing.Size(155, 148);
+			this.contextMenuVillage.Size = new System.Drawing.Size(142, 126);
 			this.contextMenuVillage.Opening += new System.ComponentModel.CancelEventHandler(this.CMV_Opening);
 			// 
 			// CMVRefresh
 			// 
 			this.CMVRefresh.Name = "CMVRefresh";
-			this.CMVRefresh.Size = new System.Drawing.Size(154, 22);
+			this.CMVRefresh.Size = new System.Drawing.Size(141, 22);
 			this.CMVRefresh.Tag = "refresh";
 			this.CMVRefresh.Text = "刷新";
 			this.CMVRefresh.Click += new System.EventHandler(this.CMVRefresh_Click);
 			// 
-			// CMVRole
-			// 
-			this.CMVRole.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CMVRoleText});
-			this.CMVRole.Name = "CMVRole";
-			this.CMVRole.Size = new System.Drawing.Size(154, 22);
-			this.CMVRole.Tag = "role";
-			this.CMVRole.Text = "Role";
-			// 
-			// CMVRoleText
-			// 
-			this.CMVRoleText.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
-			this.CMVRoleText.Name = "CMVRoleText";
-			this.CMVRoleText.Size = new System.Drawing.Size(100, 150);
-			this.CMVRoleText.SelectedIndexChanged += new System.EventHandler(this.CMVRoleText_SelectedIndexChanged);
-			this.CMVRoleText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CMVRoleText_KeyDown);
-			// 
 			// toolStripSeparator8
 			// 
 			this.toolStripSeparator8.Name = "toolStripSeparator8";
-			this.toolStripSeparator8.Size = new System.Drawing.Size(151, 6);
+			this.toolStripSeparator8.Size = new System.Drawing.Size(138, 6);
 			// 
 			// CMVLowerLimit
 			// 
 			this.CMVLowerLimit.Name = "CMVLowerLimit";
-			this.CMVLowerLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVLowerLimit.Size = new System.Drawing.Size(141, 22);
 			this.CMVLowerLimit.Tag = "ResourceLowerLimit";
 			this.CMVLowerLimit.Text = "Minimum Resource";
 			this.CMVLowerLimit.Click += new System.EventHandler(this.CMVLowerLimit_Click);
@@ -700,7 +639,7 @@
 			// CMVUpperLimit
 			// 
 			this.CMVUpperLimit.Name = "CMVUpperLimit";
-			this.CMVUpperLimit.Size = new System.Drawing.Size(154, 22);
+			this.CMVUpperLimit.Size = new System.Drawing.Size(141, 22);
 			this.CMVUpperLimit.Tag = "ResourceUpperLimit";
 			this.CMVUpperLimit.Text = "Maximum Resource";
 			this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
@@ -708,12 +647,12 @@
 			// toolStripSeparator11
 			// 
 			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(151, 6);
+			this.toolStripSeparator11.Size = new System.Drawing.Size(138, 6);
 			// 
 			// CMVSnapshot
 			// 
 			this.CMVSnapshot.Name = "CMVSnapshot";
-			this.CMVSnapshot.Size = new System.Drawing.Size(154, 22);
+			this.CMVSnapshot.Size = new System.Drawing.Size(141, 22);
 			this.CMVSnapshot.Tag = "snapshot";
 			this.CMVSnapshot.Text = "snapshot";
 			this.CMVSnapshot.Click += new System.EventHandler(this.CMVSnapshot_Click);
@@ -721,7 +660,7 @@
 			// CMVSnapAll
 			// 
 			this.CMVSnapAll.Name = "CMVSnapAll";
-			this.CMVSnapAll.Size = new System.Drawing.Size(154, 22);
+			this.CMVSnapAll.Size = new System.Drawing.Size(141, 22);
 			this.CMVSnapAll.Tag = "snapall";
 			this.CMVSnapAll.Text = "snapall";
 			this.CMVSnapAll.Click += new System.EventHandler(this.CMVSnapAll_Click);
@@ -748,6 +687,8 @@
 			this.statusStrip1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LastDebug,
+            this.PageCount,
+            this.ActionCount,
             this.SVRTime,
             this.LCLTime});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 612);
@@ -758,23 +699,44 @@
 			// 
 			// LastDebug
 			// 
-			this.LastDebug.AutoSize = false;
 			this.LastDebug.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.LastDebug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.LastDebug.Name = "LastDebug";
-			this.LastDebug.Size = new System.Drawing.Size(779, 25);
+			this.LastDebug.Size = new System.Drawing.Size(479, 25);
 			this.LastDebug.Spring = true;
 			this.LastDebug.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// PageCount
+			// 
+			this.PageCount.AutoSize = false;
+			this.PageCount.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.PageCount.Name = "PageCount";
+			this.PageCount.Size = new System.Drawing.Size(80, 25);
+			this.PageCount.Text = "Page:";
+			this.PageCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ActionCount
+			// 
+			this.ActionCount.AutoSize = false;
+			this.ActionCount.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.ActionCount.Name = "ActionCount";
+			this.ActionCount.Size = new System.Drawing.Size(80, 25);
+			this.ActionCount.Text = "Action:";
+			this.ActionCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SVRTime
 			// 
 			this.SVRTime.AutoSize = false;
 			this.SVRTime.AutoToolTip = true;
 			this.SVRTime.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.SVRTime.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.SVRTime.Name = "SVRTime";
 			this.SVRTime.Size = new System.Drawing.Size(140, 25);
@@ -785,8 +747,8 @@
 			this.LCLTime.AutoSize = false;
 			this.LCLTime.AutoToolTip = true;
 			this.LCLTime.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
-						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+									| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.LCLTime.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.LCLTime.Name = "LCLTime";
 			this.LCLTime.Size = new System.Drawing.Size(140, 25);
@@ -840,10 +802,40 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// toolStripSeparator14
+			// panel1
 			// 
-			this.toolStripSeparator14.Name = "toolStripSeparator14";
-			this.toolStripSeparator14.Size = new System.Drawing.Size(191, 6);
+			this.panel1.Controls.Add(this.checkBoxVerbose);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel1.Location = new System.Drawing.Point(3, 3);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(920, 30);
+			this.panel1.TabIndex = 1;
+			// 
+			// checkBoxVerbose
+			// 
+			this.checkBoxVerbose.AutoSize = true;
+			this.checkBoxVerbose.Checked = true;
+			this.checkBoxVerbose.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBoxVerbose.Location = new System.Drawing.Point(3, 6);
+			this.checkBoxVerbose.Name = "checkBoxVerbose";
+			this.checkBoxVerbose.Size = new System.Drawing.Size(72, 18);
+			this.checkBoxVerbose.TabIndex = 0;
+			this.checkBoxVerbose.Text = "Verbose";
+			this.checkBoxVerbose.UseVisualStyleBackColor = true;
+			// 
+			// toolStripSeparator15
+			// 
+			this.toolStripSeparator15.Name = "toolStripSeparator15";
+			this.toolStripSeparator15.Size = new System.Drawing.Size(178, 6);
+			// 
+			// CMBEnableCoin
+			// 
+			this.CMBEnableCoin.CheckOnClick = true;
+			this.CMBEnableCoin.ForeColor = System.Drawing.Color.DarkBlue;
+			this.CMBEnableCoin.Name = "CMBEnableCoin";
+			this.CMBEnableCoin.Size = new System.Drawing.Size(181, 22);
+			this.CMBEnableCoin.Text = "启用金币功能";
+			this.CMBEnableCoin.CheckedChanged += new System.EventHandler(this.CMBEnableCoin_CheckedChanged);
 			// 
 			// MainFrame
 			// 
@@ -858,7 +850,6 @@
 			this.Load += new System.EventHandler(this.MainFrame_Load);
 			this.tabControl2.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
 			this.contextMenuBuilding.ResumeLayout(false);
@@ -869,6 +860,8 @@
 			this.statusStrip1.PerformLayout();
 			this.contextMenuMarket.ResumeLayout(false);
 			this.contextMenuInbuilding.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -890,11 +883,6 @@
 		private System.Windows.Forms.ToolStripMenuItem CMBNew;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem CMBAI;
-		private System.Windows.Forms.TabPage tabPage3;
-		public System.Windows.Forms.ListView listViewEvent;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ColumnHeader columnHeader10;
-		private System.Windows.Forms.ColumnHeader columnHeader16;
 		private System.Windows.Forms.ContextMenuStrip contextMenuEvent;
 		public System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.Button button1;
@@ -920,8 +908,6 @@
 		private System.Windows.Forms.ToolStripMenuItem CMBAI_L;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
 		private System.Windows.Forms.ToolStripMenuItem CMMNew2;
-		private System.Windows.Forms.ToolStripMenuItem CMVRole;
-		private System.Windows.Forms.ToolStripComboBox CMVRoleText;
 		public System.Windows.Forms.ContextMenuStrip contextMenuVillage;
 		public System.Windows.Forms.ContextMenuStrip contextMenuBuilding;
 		public System.Windows.Forms.ContextMenuStrip contextMenuQueue;
@@ -958,6 +944,12 @@
 		private System.Windows.Forms.ToolStripMenuItem CMQExport;
 		private System.Windows.Forms.ToolStripMenuItem CMQImport;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+		private System.Windows.Forms.ToolStripStatusLabel PageCount;
+		private System.Windows.Forms.ToolStripStatusLabel ActionCount;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.CheckBox checkBoxVerbose;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
+		private System.Windows.Forms.ToolStripMenuItem CMBEnableCoin;
 
 
 	}

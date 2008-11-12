@@ -27,10 +27,10 @@ namespace Stran
 		DisplayLang dl;
 		public MUI mui { get; set; }
 
-		public NewBuilding(Data TD, int VillageID, DisplayLang dl)
+		public NewBuilding(Data TD, int VillageID)
 		{
 			InitializeComponent();
-			this.dl = dl;
+			this.dl = DisplayLang.Instance;
 			for(int i = 5; i <= dl.GidLang.Count; i++)
 			{
 				if(i >= 31 && i <= 33 || i == 16)

@@ -124,7 +124,7 @@ namespace libTravian
 		/// <summary>
 		/// Convert all negative amounts to 0
 		/// </summary>
-		public void Normalize()
+		public void NoNegative()
 		{
 			for (int i = 0; i < this.Resources.Length; i++)
 			{
@@ -168,6 +168,11 @@ namespace libTravian
 			}
 
 			return true;
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
 		}
 	}
 

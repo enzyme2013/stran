@@ -23,6 +23,7 @@ namespace libTravian
 	// MultiLanguage Interface
 	public class DisplayLang
 	{
+		static public DisplayLang Instance;
 		public Dictionary<int, string> GidLang;
 		public Dictionary<int, string> AidLang;
 		public string Auther { get; private set; }
@@ -35,7 +36,7 @@ namespace libTravian
 		}
 		public string GetAidLang(int Tribe, int Aid)
 		{
-			int key = (Tribe - 1) * 10 + Aid;
+			int key = (Tribe - 1) * 11 + Aid;
 			if(AidLang.ContainsKey(key))
 				return AidLang[key];
 			else
@@ -43,13 +44,13 @@ namespace libTravian
 		}
 		public void SetAidLang(int Tribe, int Aid, string Value)
 		{
-			int key = (Tribe - 1) * 10 + Aid;
+			int key = (Tribe - 1) * 11 + Aid;
 			AidLang[key] = Value;
 		}
 		public DisplayLang(string language)
 		{
 			GidLang = new Dictionary<int, string>(40);
-			AidLang = new Dictionary<int, string>(30);
+			AidLang = new Dictionary<int, string>(33);
 			string lang_file = string.Format("lang\\svr_{0}.txt", language);
 			if(!File.Exists(lang_file))
 				lang_file = "lang\\svr_cn.txt";

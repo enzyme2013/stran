@@ -22,6 +22,15 @@ namespace libTravian
 {
 	partial class Travian
 	{
+		public void CachedFetchVillages()
+		{
+			if(TD.Villages.Count != 0)
+			{
+				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages, VillageID = TD.ActiveDid });
+				return;
+			}
+			FetchVillages();
+		}
 		public void FetchVillages()
 		{
 			Thread t = new Thread(new ThreadStart(doFetchVillages));
