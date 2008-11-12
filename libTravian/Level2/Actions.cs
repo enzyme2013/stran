@@ -30,9 +30,11 @@ namespace libTravian
 				//for(int i = 0; i < TD.Villages.Count; i++)
 				{
 					var CV = TD.Villages[vid];
+					//if(CV.isBuildingInitialized == 2 && CV.isMarketInitialized == 0)
+					//	FetchVillageMarket(vid);
 					try
 					{
-						CV.Market.tick(ref CV, TD.MarketSpeed);
+						CV.Market.tick(CV, TD.MarketSpeed);
 					}
 					catch (Exception ex)
 					{
@@ -40,7 +42,12 @@ namespace libTravian
 					}
 					try
 					{
-						CV.Troop.tick(ref CV);
+						CV.Troop.tick(CV);
+						if(CV.Troop.ShouldRefresh)
+						{
+							CV.Troop.ShouldRefresh = false;
+							FetchVillageTroop(vid);
+						}
 					}
 					catch(Exception ex)
 					{
@@ -61,123 +68,83 @@ namespace libTravian
 
 		public void doTick()
 		{
-			if (!Monitor.TryEnter(Level2Lock))
+			if(!Monitor.TryEnter(Level2Lock))
 				return;
 			//foreach(var CV in TD.Villages)
 			try
 			{
-				foreach (var vid in TD.Villages.Keys)
+				foreach(var vid in TD.Villages.Keys)
 				//for(int iii = 0; iii < TD.Villages.Count; iii++)
 				{
 					TVillage CV = TD.Villages[vid];
 					List<int> status = new List<int>();
 
-					for (int i = 0; i < CV.Queue.Count; i++)
+					foreach(var task in CV.Queue)
 					{
-						TQueue task = CV.Queue[i];
-						if (task.Paused)
+						if(task.Paused)
 						{
 							continue;
 						}
 
-						switch (task.QueueType)
+						switch(task.GetType().Name)
 						{
-							case TQueueType.Building:
-								if (CV.isBuildingInitialized == 0)
+							case "BuildingQueue":
+								if(CV.isBuildingInitialized == 0)
 								{
 									CV.InitializeBuilding();
 									continue;
 								}
-								else if (CV.isBuildingInitialized == 1)
+								else if(CV.isBuildingInitialized == 1)
 									continue;
-								if (!status.Contains(TD.isRomans ? task.Type : 0))
-								{
-									status.Add(TD.isRomans ? task.Type : 0);
-
-									if (task.Bid == TQueue.AIBID && AIDelay(CV.ID, task) <= 0)
-									{
-										doAI(CV.ID, i);
-										break;
-									}
-									if (GetDelay(CV.ID, task) <= 0)
-									{
-										doBuild(CV.ID, i);
-										break;
-									}
-								}
 								break;
-							case TQueueType.Destroy:
-								if (CV.isDestroyInitialized == 0)
+							case "DestroyQueue":
+								if(CV.isDestroyInitialized == 0)
 								{
 									CV.InitializeDestroy();
 									continue;
 								}
-								else if (CV.isDestroyInitialized == 1)
+								else if(CV.isDestroyInitialized == 1)
 									continue;
-								if (!status.Contains(2))
-								{
-									status.Add(2);
-									if (GetDelay(CV.ID, task) <= 0)
-									{
-										doDestroy(CV.ID, i);
-										break;
-									}
-								}
 								break;
-							case TQueueType.UAttack:
-							case TQueueType.UDefense:
-							case TQueueType.Research:
-								if (CV.isUpgradeInitialized == 0)
+							case "ADRQueue":
+								if(CV.isUpgradeInitialized == 0)
 								{
 									CV.InitializeUpgrade();
 									continue;
 								}
-								else if (CV.isUpgradeInitialized == 1)
+								else if(CV.isUpgradeInitialized == 1)
 									continue;
-								if (!status.Contains(task.Type))
-								{
-									status.Add(task.Type);
-									if (GetDelay(CV.ID, task) <= 0)
-									{
-										doUp(CV.ID, i, task.QueueType);
-										break;
-									}
-								}
 								break;
-							case TQueueType.Party:
-								if (!status.Contains(task.Type))
-								{
-									status.Add(task.Type);
-									if (GetDelay(CV.ID, task) <= 0)
-									{
-										doParty(CV.ID, i);
-										break;
-									}
-								}
+							case "PartyQueue":
 								break;
-							case TQueueType.Transfer:
-								if (GetDelay(CV.ID, task) <= 0)
-								{
-									doTransfer(CV.ID, task);
-								}
+							case "TransferOption":
 								break;
-							case TQueueType.NpcTrade:
-								if (GetDelay(CV.ID, task) <= 0)
-								{
-									doNpcTrade(CV.ID, task);
-								}
+							case "NpcTradeOption":
 								break;
-							case TQueueType.Raid:
+							case "RaidOption":
 								break;
 						}
+						if(task.CountDown <= 0)
+							task.Action();
 					}
+					for(int i = CV.Queue.Count - 1; i >= 0; i--)
+						if(CV.Queue[i].MarkDeleted)
+							CV.Queue.RemoveAt(i);
 				}
 			}
-			catch (InvalidOperationException e)
+			catch(InvalidOperationException e)
 			{
 				// Good bye! Collection was modified; enumeration operation may not execute.
 				DebugLog(e, DebugLevel.I);
 			}
+			try 
+			{
+				if(Dirty)
+					DB.Instance.Snapshot(this);
+				if(TD.Dirty)
+					DB.Instance.Snapshot(TD); 
+			}
+			catch { }
 			Monitor.Exit(Level2Lock);
 		}
 
@@ -187,6 +154,7 @@ namespace libTravian
 		/// <param name="VillageID">which village the queued task belongs to</param>
 		/// <param name="Q">A queued task</param>
 		/// <returns>Delay in seconds</returns>
+		/*
 		public int GetDelay(int VillageID, TQueue Q)
 		{
 			var CV = TD.Villages[VillageID];
@@ -265,5 +233,6 @@ namespace libTravian
 			}
 			return 1;
 		}
+		*/
 	}
 }

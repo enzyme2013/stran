@@ -17,101 +17,75 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Xml.Serialization;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Reflection;
+using LitJson;
 
 namespace libTravian
 {
 	// for saving server related data into cache database
-	static public class LocalDBCenter
+	public class DB
 	{
-		static Dictionary<string, LocalDB> m_Cache = new Dictionary<string, LocalDB>();
-		static public LocalDB getDB(string Server)
+		static public DB Instance = new DB();
+		private DB()
 		{
-			if(m_Cache.ContainsKey(Server))
-				return m_Cache[Server];
-			string dbPath = "db";
-			if(File.Exists(dbPath))
-				File.Delete(dbPath);
-			if(!Directory.Exists(dbPath))
-				Directory.CreateDirectory(dbPath);
-			string Filename = dbPath + Path.DirectorySeparatorChar + Server.Replace(Path.DirectorySeparatorChar, '-');
-			if(File.Exists(Filename))
+		}
+
+		public string GetKey(string Username, string Server)
+		{
+			string str = string.Format("{0}@{1}", Username, Server);
+			foreach(var x in Path.GetInvalidPathChars())
 			{
-				try
-				{
-					Stream s = File.Open(Filename, FileMode.Open);
-					BinaryFormatter b = new BinaryFormatter();
-					m_Cache[Server] = (LocalDB)b.Deserialize(s);
-					s.Close();
-				}
-				catch(Exception e)
-				{
-					Console.WriteLine(e.Message);
-				}
+				str.Replace(x, '-');
 			}
-			if(!m_Cache.ContainsKey(Server))
-				m_Cache[Server] = new LocalDB();
-			m_Cache[Server].Server = Server;
-			return m_Cache[Server];
+			return str;
 		}
-		static public LocalDB getDB(string Username, string Server)
+
+		public void Snapshot(Data data)
 		{
-			var db = getDB(Username + "@" + Server);
-			db.Username = Username;
-			db.Server = Server;
-			return db;
+			var fn = Filename(data.key);
+			string jsondata = JsonMapper.ToJson(data);
+			File.WriteAllText(fn, jsondata);
+			data.Dirty = false;
 		}
+
+		public void Snapshot(Travian tr)
+		{
+			var fn = Filename(tr.TD.Server);
+			string jsondata = JsonMapper.ToJson(tr);
+			File.WriteAllText(fn, jsondata);
+			tr.Dirty = false;
+		}
+
+		public Travian RestoreTravian(string key)
+		{
+			var fn = Filename(key);
+			if(!File.Exists(fn))
+				return null;
+			string jsondata = File.ReadAllText(fn);
+			return JsonMapper.ToObject<Travian>(jsondata);
+		}
+
+		public Data RestoreData(string key)
+		{
+			var fn = Filename(key);
+			if(!File.Exists(fn))
+				return null;
+			string jsondata = File.ReadAllText(fn);
+			return JsonMapper.ToObject<Data>(jsondata);
+		}
+
+		private string Filename(string key)
+		{
+			if(!Directory.Exists("db"))
+				Directory.CreateDirectory("db");
+			return "db\\" + key + ".json";
+		}
+
 	}
-	[Serializable]
-	public class LocalDB : Dictionary<string, string>
-	{
-		public LocalDB()
-			: base()
-		{
-		}
-		public LocalDB(SerializationInfo si, StreamingContext context)
-			: base(si, context)
-		{
-		}
-		[NonSerialized]
-		public string Server;
-		[NonSerialized]
-		public string Username;
-		public new string this[string key]
-		{
-			get
-			{
-				return base[key];
-			}
-			set
-			{
-				if(ContainsKey(key) && base[key] == value)
-					return;
-				base[key] = value;
-				string dbPath = "db";
-				if(File.Exists(dbPath))
-					File.Delete(dbPath);
-				if(!Directory.Exists(dbPath))
-					Directory.CreateDirectory(dbPath);
-				string Filename;
-				if(Username == null)
-					Filename = dbPath + Path.DirectorySeparatorChar + Server.Replace(Path.DirectorySeparatorChar, '-');
-				else
-					Filename = dbPath + Path.DirectorySeparatorChar + Username + "@" + Server.Replace(Path.DirectorySeparatorChar, '-');
-				try
-				{
-					Stream s = File.Open(Filename, FileMode.Create);
-					BinaryFormatter b = new BinaryFormatter();
-					b.Serialize(s, this);
-					s.Close();
-				}
-				catch(Exception e)
-				{
-					Console.WriteLine(e.Message);
-				}
-			}
-		}
+
+	public class JsonDataWrapper
+	{		
+		public string xData;
+		public string[] xVillages;
 	}
 }

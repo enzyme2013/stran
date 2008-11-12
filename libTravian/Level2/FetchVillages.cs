@@ -28,7 +28,10 @@ namespace libTravian
 			lock(Level2Lock)
 			{
 				if(TD.Tribe == 0)
+				{
+					TD.Dirty = true;
 					TD.Tribe = NewParseTribe();
+				}
 				if(TD.Tribe != 0)
 					PageQuery(0, "dorf1.php");
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages, VillageID = TD.ActiveDid });
@@ -45,12 +48,13 @@ namespace libTravian
 				PageQuery(VillageID, "dorf1.php");
 				PageQuery(VillageID, "dorf2.php");
 				PageQuery(VillageID, "build.php?gid=17");
-				TD.Villages[VillageID].RestoreResourceLimits(userdb);
+				TD.Dirty = true;
+				//TD.Villages[VillageID].RestoreResourceLimits(userdb);
 				TD.Villages[VillageID].isBuildingInitialized = 2;
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Buildings, VillageID = VillageID });
 				string key = "v" + VillageID.ToString() + "Queue";
-				if(TD.Villages[VillageID].Queue.Count == 0 && userdb.ContainsKey(key) && userdb[key] != "")
-					StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = -1 });
+				//if(TD.Villages[VillageID].Queue.Count == 0 && userdb.ContainsKey(key) && userdb[key] != "")
+				//	StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = -1 });
 			}
 		}
 

@@ -36,11 +36,11 @@ namespace libTravian
 
 	public partial class Travian
 	{
-		private string PageQuery(int VillageID, string Uri)
+		public string PageQuery(int VillageID, string Uri)
 		{
 			return this.pageQuerier.PageQuery(VillageID, Uri, null, true, false);
 		}
-		private string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data)
+		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data)
 		{
 			return this.pageQuerier.PageQuery(VillageID, Uri, Data, true, false);
 		}
@@ -77,7 +77,7 @@ namespace libTravian
 			TDebugInfo db = new TDebugInfo()
 			{
 				Filename = Filename,
-				Level = DebugLevel.I,
+				Level = DebugLevel.II,
 				Line = Line,
 				MethodName = MethodName,
 				Text = "Page: " + Uri + " (" + VillageID.ToString() + ")",
@@ -97,6 +97,8 @@ namespace libTravian
 					wc.BaseAddress = string.Format("http://{0}/", TD.Server);
 					wc.Encoding = Encoding.UTF8;
 					wc.Headers[HttpRequestHeader.Referer] = wc.BaseAddress;
+					wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
+					wc.Headers[HttpRequestHeader.Cookie] = TD.Cookie;
 					if(TD.Proxy != null)
 						wc.Proxy = TD.Proxy;
 				}
@@ -136,7 +138,10 @@ namespace libTravian
 				{
 					foreach(string t1 in t)
 						if(t1.Contains("T3E"))
-							TD.Cookie = t1;
+						{
+							TD.Dirty = true;
+							TD.Cookie = t1.Split(';')[0];
+						}
 					wc.Headers[HttpRequestHeader.Cookie] = TD.Cookie;
 				}
 
@@ -167,6 +172,7 @@ namespace libTravian
 						result = wc.DownloadString(Uri);
 				}
 				FetchPageCount();
+				StatusUpdate(this, new StatusChanged { ChangedData = ChangedType.PageCount });
 
 				var m = Regex.Match(result, "<span id=\"tp1\" class=\"b\">([0-9:]+)</span>");
 				if(m.Success)

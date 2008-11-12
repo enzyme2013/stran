@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LitJson;
 
 namespace libTravian
 {
-	public class RaidOption : IOption
+	public class RaidOption : IQueue
 	{
-		#region IOption 成员
+		#region IQueue 成员
+
+		public Travian UpCall { get; set; }
 
 		public string Title
 		{
@@ -43,9 +46,49 @@ namespace libTravian
 			throw new NotImplementedException();
 		}
 
+		public bool MarkDeleted
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public int CountDown
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Action()
+		{
+			throw new NotImplementedException();
+		}
+
+		[Json]
+		public bool Paused
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		[Json]
+		public int VillageID
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+			set
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 		#endregion
 
-		public Travian UpCall { get; set; }
 
 		public IList<TPoint> Targets { get; set; }
 		public int TargetID { get; set; }
@@ -57,5 +100,9 @@ namespace libTravian
 			else
 				TargetID++;
 		}
+
+		#region IQueue 成员
+		//public string IO { get { return Export(); } set { Import(value); } }
+		#endregion
 	}
 }

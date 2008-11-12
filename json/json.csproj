@@ -5,13 +5,17 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>test</RootNamespace>
-    <AssemblyName>test</AssemblyName>
+    <RootNamespace>json</RootNamespace>
+    <AssemblyName>json</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,23 +37,18 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="IJsonWrapper.cs" />
+    <Compile Include="JsonData.cs" />
+    <Compile Include="JsonException.cs" />
+    <Compile Include="JsonMapper.cs" />
+    <Compile Include="JsonReader.cs" />
+    <Compile Include="JsonWriter.cs" />
+    <Compile Include="Lexer.cs" />
+    <Compile Include="ParserToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libTravian\libTravian.csproj">
-      <Project>{935028A9-A233-4FFE-8FC6-37C34847A0F8}</Project>
-      <Name>libTravian</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Stran\Stran.csproj">
-      <Project>{A361E172-DB43-4782-A032-878EE055F5A0}</Project>
-      <Name>Stran</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,102 +1,47 @@
-﻿/*
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
- * The Initial Developer of the Original Code is [MeteorRain <msg7086@gmail.com>].
- * Copyright (C) MeteorRain 2007, 2008. All Rights Reserved.
- * Contributor(s): [MeteorRain].
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using System.Net;
-using System.Collections;
+using LitJson;
+using System.IO;
 using System.Reflection;
-
 
 namespace libTravian
 {
-	public class Data
-	{
-		public WebProxy Proxy { get; set; }
-		public string Server { get; set; }
-		public string Username { get; set; }
-		public string Password { get; set; }
-		public string Cookie { get; set; }
-		public int Tribe { get; set; }
-		public bool isRomans
-		{
-			get
-			{
-				return Tribe == 1;
-			}
-		}
-		public int UserID { get; set; }
-		public Dictionary<int, TVillage> Villages { get; set; }
-		public List<TEvent> Events { get; set; }
-		public int MarketSpeed { get; set; }
-		public int ServerTimeOffset { get; set; }
-		public int NewIGMCount
-		{
-			get
-			{
-				return IGMData.Count;
-			}
-		}
-		public Dictionary<int, TIGM> IGMData { get; set; }
-		//public Travian UpCall { get; set; }
-		public Data()
-		{
-			Villages = new Dictionary<int, TVillage>();
-			Events = new List<TEvent>();
-			ActiveDid = -1;
-		}
-		public int ActiveDid { get; set; }
-	}
-
-	public class TIGM
-	{
-		string Sender { get; set; }
-		string Subject { get; set; }
-		string Text { get; set; }
-	}
-
-	public class TEvent
-	{
-		public IExpression<bool> Condition { get; set; }
-		public IAction Action { get; set; }
-		public TStatus Status { get; set; }
-		public DateTime NextRun { get; set; }
-	}
-
-	public interface IExpression<T>
-	{
-	}
-
-	public interface IAction
-	{
-	}
-
-	public class TStatus
-	{
-		public string Status { get; set; }
-		public string Details { get; set; }
-	}
-
 	public class TVillage
 	{
+		[Json]
 		public int ID { get; set; }
-		public Travian UpCall { get; set; }
+		[Json]
 		public int X { get; set; }
+		[Json]
 		public int Y { get; set; }
+		[Json]
+		public string Name { get; set; }
+		[Json]
+		public bool isCapital { get; set; }
+		[Json]
+		public SortedDictionary<int, TBuilding> Buildings { get; set; }
+		[Json]
+		public Dictionary<int, TRU> Upgrades { get; set; }
+		[Json]
+		public int BlacksmithLevel { get; set; }
+		[Json]
+		public int ArmouryLevel { get; set; }
+		[Json]
+		public TResource[] Resource { get; set; }
+		[Json]
+		public TInBuilding[] InBuilding { get; set; }
+		[Json]
+		public List<IQueue> Queue { get; set; }
+		[Json]
+		public int isBuildingInitialized { get; set; }
+		[Json]
+		public int isUpgradeInitialized { get; set; }
+		[Json]
+		public int isDestroyInitialized { get; set; }
+		[Json]
+		public int isTroopInitialized { get; set; }
+		public Travian UpCall { get; set; }
 		public TPoint Coord
 		{
 			get
@@ -126,8 +71,8 @@ namespace libTravian
 		{
 			get
 			{
-				int [] capacity = new int[this.Resource.Length];
-				for (int i = 0; i < capacity.Length; i++)
+				int[] capacity = new int[this.Resource.Length];
+				for(int i = 0; i < capacity.Length; i++)
 				{
 					capacity[i] = this.Resource[i].Capacity;
 				}
@@ -136,23 +81,6 @@ namespace libTravian
 			}
 		}
 
-		//[Obsolete("The role function hasn't been used now. Don't use it.", false)]
-		public string Role { get; set; }
-		public string Name { get; set; }
-		public bool isCapital { get; set; }
-		//private Dictionary<int, TBuilding> m_buildings;
-		public SortedDictionary<int, TBuilding> Buildings { get; set; }
-		public Dictionary<int, TRU> Upgrades { get; set; }
-		public int BlacksmithLevel { get; set; }
-		public int ArmouryLevel { get; set; }
-		public DateTime RefreshTime { get; set; }
-		public TResource[] Resource { get; set; }
-		public TInBuilding[] InBuilding { get; set; }
-		public List<TQueue> Queue { get; set; }
-		public int isBuildingInitialized { get; set; }
-		public int isUpgradeInitialized { get; set; }
-		public int isDestroyInitialized { get; set; }
-		public int isTroopInitialized { get; set; }
 		public void InitializeBuilding()
 		{
 			isBuildingInitialized = 1;
@@ -177,31 +105,34 @@ namespace libTravian
 		public int TimeCost(TResAmount ResCost)
 		{
 			int time = 0;
-			for (int i = 0; i < 4; i++)
-				if (ResCost.Resources[i] > Resource[i].CurrAmount)
+			for(int i = 0; i < 4; i++)
+				if(ResCost.Resources[i] > Resource[i].CurrAmount)
 				{
 					int costtime = -1;
-					if (Resource[i].Produce > 0)
+					if(Resource[i].Produce > 0)
 						costtime = (ResCost.Resources[i] - Resource[i].CurrAmount) * 3600 / Resource[i].Produce;
-					if (costtime < 0)
+					if(costtime < 0)
 						costtime = 32767;
-					if (costtime > time)
+					if(costtime > time)
 						time = costtime;
 				}
 			return time;
 		}
+		[Json]
 		public TInBuilding[] RB = new TInBuilding[5];
+		[Json]
 		public TMarket Market;
+		[Json]
 		public TTroop Troop;
 		public TVillage()
 		{
 			Resource = new TResource[4];
 			InBuilding = new TInBuilding[7];
-			Queue = new List<TQueue>();
+			Queue = new List<IQueue>();
 			Upgrades = new Dictionary<int, TRU>();
 			Market = new TMarket();
 			Troop = new TTroop();
-			for (int i = 1; i <= 10; i++)
+			for(int i = 1; i <= 10; i++)
 				Upgrades[i] = new TRU();
 		}
 
@@ -215,25 +146,16 @@ namespace libTravian
 		/// </summary>
 		/// <param name="db">User DB storing the queue/limit info</param>
 		/// <returns>Status string</returns>
-		public string GetStatus(LocalDB db)
+		public string GetStatus()
 		{
 			string status = this.Queue.Count.ToString();
-			if (this.Queue.Count == 0)
-			{
-				string key = "v" + this.ID.ToString() + "Queue";
-				if (db.ContainsKey(key) && db[key].Length > 0)
-				{
-					string qString = db[key];
-					status = qString.Split('|').Length.ToString() + "*";
-				}
-			}
 
-			if (this.Market.LowerLimit != null)
+			if(this.Market.LowerLimit != null)
 			{
 				status = status + "v";
 			}
 
-			if (this.Market.UpperLimit != null)
+			if(this.Market.UpperLimit != null)
 			{
 				status = status + "^";
 			}
@@ -247,16 +169,16 @@ namespace libTravian
 			sb.AppendLine("Basic data:");
 			sb.AppendLine(TypeViewer.Snapshot(this));
 			sb.AppendLine(TypeViewer.Snapshot(this.Market));
-			if (isBuildingInitialized == 2)
+			if(isBuildingInitialized == 2)
 			{
 				sb.AppendLine("Market:");
-				foreach (TMInfo info in this.Market.MarketInfo)
+				foreach(TMInfo info in this.Market.MarketInfo)
 				{
 					sb.Append("\t");
 					sb.AppendLine(info.ToString());
 				}
 				sb.AppendLine("Building:");
-				foreach (var b in Buildings)
+				foreach(var b in Buildings)
 				{
 					sb.Append("\t");
 					sb.Append(b.Key);
@@ -264,7 +186,7 @@ namespace libTravian
 					sb.AppendLine(b.Value.ToString());
 				}
 				sb.AppendLine("Upgrades:");
-				foreach (var b in Upgrades)
+				foreach(var b in Upgrades)
 				{
 					sb.Append("\t");
 					sb.Append(b.Key);
@@ -272,35 +194,35 @@ namespace libTravian
 					sb.AppendLine(b.Value.ToString());
 				}
 				sb.AppendLine("Resource:");
-				foreach (var b in Resource)
+				foreach(var b in Resource)
 				{
 					sb.Append("\t");
 					sb.AppendLine(b.ToString());
 				}
 				sb.AppendLine("InBuilding:");
-				for (var i = 0; i < InBuilding.Length; i++)
+				for(var i = 0; i < InBuilding.Length; i++)
 				{
 					sb.Append("\t");
 					sb.Append(i);
 					sb.Append(": ");
-					if (InBuilding[i] == null)
+					if(InBuilding[i] == null)
 						sb.AppendLine("NULL");
 					else
 						sb.AppendLine(InBuilding[i].ToString());
 				}
 				sb.AppendLine("RecentBuilt:");
-				for (var i = 0; i < RB.Length; i++)
+				for(var i = 0; i < RB.Length; i++)
 				{
 					sb.Append("\t");
 					sb.Append(i);
 					sb.Append(": ");
-					if (RB[i] == null)
+					if(RB[i] == null)
 						sb.AppendLine("NULL");
 					else
 						sb.AppendLine(RB[i].ToString());
 				}
 				sb.AppendLine("Queue:");
-				foreach (var b in Queue)
+				foreach(var b in Queue)
 				{
 					sb.Append("\t");
 					sb.AppendLine(b.ToString());
@@ -310,37 +232,15 @@ namespace libTravian
 		}
 
 		/// <summary>
-		/// Save task queue to user DB
-		/// </summary>
-		/// <param name="User DB"></param>
-		public void SaveQueue(LocalDB db)
-		{
-			string key = "v" + ID.ToString() + "Queue";
-			db[key] = this.EncodeQueue();
-		}
-
-		/// <summary>
-		/// Restore task queue from user DB
-		/// </summary>
-		/// <param name="User DB"></param>
-		public void RestoreQueue(LocalDB db)
-		{
-			string key = "v" + ID.ToString() + "Queue";
-			if (db.ContainsKey(key))
-			{
-				this.DecodeQueue(db[key]);
-			}
-		}
-
-		/// <summary>
 		/// Export task queue to a text file
 		/// </summary>
 		/// <param name="filename">Text file name</param>
+		[Obsolete]
 		public void SaveQueue(string filename)
 		{
-			using (StreamWriter sw = new StreamWriter(filename))
+			using(StreamWriter sw = new StreamWriter(filename))
 			{
-				sw.Write(this.EncodeQueue().Replace("|","\r\n").Replace("<_!!!_>", "|"));
+				sw.Write(this.EncodeQueue().Replace("|", "\r\n").Replace("<_!!!_>", "|"));
 			}
 		}
 
@@ -348,16 +248,17 @@ namespace libTravian
 		/// Import task queue from a text file
 		/// </summary>
 		/// <param name="filename">Text file name</param>
+		[Obsolete]
 		public void RestoreQueue(string filename)
 		{
-			using (StreamReader sr = new StreamReader(filename))
+			using(StreamReader sr = new StreamReader(filename))
 			{
 				string encodedQueue = sr.ReadToEnd();
 				encodedQueue = encodedQueue.Replace("|", "<_!!!_>").Replace("\r\n", "|");
 				this.DecodeQueue(encodedQueue);
 			}
 		}
-
+		/*
 		public void SaveResourceLimits(LocalDB db)
 		{
 			string key;
@@ -388,22 +289,22 @@ namespace libTravian
 				this.Market.UpperLimit = TResAmount.FromString(db[key]);
 			}
 		}
+		 * 
+		 */
 
 		/// <summary>
 		/// Convert current task queue into a string
 		/// </summary>
 		/// <returns>Encoded task queue</returns>
+		[Obsolete]
 		private string EncodeQueue()
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach (TQueue task in Queue)
+			foreach(var task in Queue)
 			{
-				if (sb.Length != 0)
+				if(sb.Length != 0)
 					sb.Append('|');
-				if (task.NewOptions == null)
-					sb.Append(task.ToString().Replace("|", "<_!!!_>"));
-				else
-					sb.Append(task.NewOptions.Export().Replace("|", "<_!!!_>"));
+				sb.Append(task.Export());
 			}
 
 			return sb.ToString();
@@ -413,10 +314,27 @@ namespace libTravian
 		/// Restore task queue from a previously encode string
 		/// </summary>
 		/// <param name="data">Encoded task queue</param>
+		[Obsolete]
 		private void DecodeQueue(string data)
 		{
-			foreach (string taskStr in data.Split('|'))
+			foreach(string taskStr in data.Split('|'))
 			{
+				// TODO: check this
+				string[] queueInfo = taskStr.Split(new char[] { ':' }, 2);
+				Assembly asm = Assembly.GetExecutingAssembly();
+				object o = asm.CreateInstance(queueInfo[0], false);
+				if(o is IQueue)
+				{
+					IQueue q = o as IQueue;
+					if(q is BuildingQueue)
+					{
+						BuildingQueue bq = q as BuildingQueue;
+						if(bq.Bid > 0 && !this.Buildings.ContainsKey(bq.Bid))
+							this.Buildings[bq.Bid] = new TBuilding() { Gid = bq.Gid };
+					}
+					Queue.Add(q);
+				}
+				/*
 				TQueue task = TQueue.FromString(taskStr.Replace("<_!!!_>", "|"));
 				if (task.QueueType == TQueueType.Building && task.Bid > 0 && ! this.Buildings.ContainsKey(task.Bid))
 				{
@@ -425,15 +343,21 @@ namespace libTravian
 
 				task.NextExec = DateTime.Now.AddSeconds(15);
 				this.Queue.Add(task);
+				 */
 			}
 		}
 	}
 
 	public class TResource
 	{
-		public int Capacity { private set; get; }
+		[Json]
+		public int Capacity { set; get; }
+		[Json]
 		public int Amount;// { private set; get; }
-		public int Produce { private set; get; }
+		[Json]
+		public int Produce { set; get; }
+		[Json]
+		public long Time { get { return UpdateTime.Ticks; } set { UpdateTime = new DateTime(value); } }
 		private DateTime UpdateTime;
 		public TResource(int Produce, int Amount, int Capacity)
 		{
@@ -441,6 +365,9 @@ namespace libTravian
 			this.Amount = Amount;
 			this.Capacity = Capacity;
 			UpdateTime = DateTime.Now;
+		}
+		public TResource()
+		{
 		}
 		public void Write(int Amount)
 		{
@@ -451,9 +378,9 @@ namespace libTravian
 		{
 			get
 			{
-				if (Produce < 0)
+				if(Produce < 0)
 					return new TimeSpan(0, 0, CurrAmount * 3600 / -Produce);
-				else if (Produce > 0)
+				else if(Produce > 0)
 					return new TimeSpan(0, 0, (Capacity - CurrAmount) * 3600 / Produce);
 				else
 					return new TimeSpan(1, 0, 0, 0);
@@ -478,9 +405,16 @@ namespace libTravian
 	/// </summary>
 	public class TBuilding
 	{
+		[Json]
 		public int Gid { get; set; }
+		[Json]
 		public int Level { get; set; }
+		[Json]
 		public bool InBuilding { get; set; }
+		public TBuilding()
+		{
+			//Console.WriteLine("TBuilding init");
+		}
 		public override string ToString()
 		{
 			return TypeViewer.ToString(this);
@@ -496,15 +430,21 @@ namespace libTravian
 		/// <summary>
 		/// Bid for building, Aid for upgrade.
 		/// </summary>
+		[Json]
 		public int ABid { get; set; }
+		[Json]
 		public int Gid { get; set; }
+		[Json]
 		public int Level { get; set; }
+		[Json]
 		public DateTime FinishTime { get; set; }
+		public TInBuilding() { }
 		public override string ToString()
 		{
 			return TypeViewer.ToString(this);
 			//return string.Format("GID:{0}, BID:{1}, Level:{2}, FinishTime:{3}", Gid, ABid, Level, FinishTime.ToString());
 		}
+		[Json]
 		public string CancelURL { get; set; }
 		public bool Cancellable
 		{
@@ -566,7 +506,7 @@ namespace libTravian
 		{
 			get
 			{
-				if (QueueType == TQueueType.Building)
+				if(QueueType == TQueueType.Building)
 					return Bid < 19 && Bid > 0 ? 0 : Bid != AIBID ? 1 : 0;
 				else
 					return (int)QueueType;
@@ -586,7 +526,7 @@ namespace libTravian
 		/// <summary>
 		/// New Options for taking the place of the old option string
 		/// </summary>
-		public IOption NewOptions { get; set; }
+		public IQueue NewOptions { get; set; }
 
 		/// <summary>
 		/// When the queued task is ready to go (for display only)
@@ -621,15 +561,15 @@ namespace libTravian
 		{
 			TQueue task = new TQueue();
 
-			foreach (string attribute in data.Split(','))
+			foreach(string attribute in data.Split(','))
 			{
 				string[] kvpair = attribute.Trim().Split(':');
-				if (kvpair.Length != 2)
+				if(kvpair.Length != 2)
 				{
 					continue;
 				}
 
-				switch (kvpair[0])
+				switch(kvpair[0])
 				{
 					case "Bid":
 						task.Bid = Convert.ToInt32(kvpair[1]);
@@ -670,10 +610,15 @@ namespace libTravian
 
 	public class TRU
 	{
+		[Json]
 		public bool CanResearch { get; set; }
+		[Json]
 		public bool Researched { get; set; }
+		[Json]
 		public int AttackLevel { get; set; }
+		[Json]
 		public int DefenceLevel { get; set; }
+		[Json]
 		public bool InUpgrading { get; set; }
 		public TRU()
 		{
@@ -688,19 +633,25 @@ namespace libTravian
 
 	public class TMarket
 	{
+		[Json]
 		public int SingleCarry { get; set; }
+		[Json]
 		public int ActiveMerchant { get; set; }
+		[Json]
 		public int MaxMerchant { get; set; }
+		[Json]
 		public List<TMInfo> MarketInfo { get; set; }
 
 		/// <summary>
 		/// When transfer outward, don't let remaining resource below this 
 		/// </summary>
+		[Json]
 		public TResAmount UpperLimit { get; set; }
 
 		/// <summary>
 		/// Stop receiving transporations when current resource amount is higher than this
 		/// </summary>
+		[Json]
 		public TResAmount LowerLimit { get; set; }
 
 		/// <summary>
@@ -711,15 +662,15 @@ namespace libTravian
 			get
 			{
 				DateTime nextEventAt = DateTime.MaxValue;
-				foreach (TMInfo transfer in this.MarketInfo)
+				foreach(TMInfo transfer in this.MarketInfo)
 				{
-					if (transfer.FinishTime < nextEventAt)
+					if(transfer.FinishTime < nextEventAt)
 					{
 						nextEventAt = transfer.FinishTime;
 					}
 				}
 
-				if (nextEventAt < DateTime.MaxValue)
+				if(nextEventAt < DateTime.MaxValue)
 				{
 					return (int)Math.Round((nextEventAt - DateTime.Now).TotalSeconds);
 				}
@@ -730,7 +681,7 @@ namespace libTravian
 			}
 		}
 
-		public void tick(ref TVillage CV, int MarketSpeed)
+		public void tick(TVillage CV, int MarketSpeed)
 		{
 			for(int i = MarketInfo.Count - 1; i >= 0; i--)
 			{
@@ -778,6 +729,22 @@ namespace libTravian
 			MaxMerchant = 0;
 			MarketInfo = new List<TMInfo>();
 		}
+		[Obsolete]
+		public string Export()
+		{
+			return string.Format("{0}&{1}&{2}", SingleCarry, ActiveMerchant, MaxMerchant);
+		}
+		[Obsolete]
+		public void Import(string s)
+		{
+			string[] p = s.Split('&');
+			if(p.Length == 3)
+			{
+				SingleCarry = Convert.ToInt32(p[0]);
+				ActiveMerchant = Convert.ToInt32(p[1]);
+				MaxMerchant = Convert.ToInt32(p[2]);
+			}
+		}
 	}
 	public enum TMType
 	{
@@ -791,10 +758,15 @@ namespace libTravian
 	/// </summary>
 	public class TMInfo
 	{
+		[Json]
 		public TMType MType { get; set; }
+		[Json]
 		public TResAmount CarryAmount { get; set; }
+		[Json]
 		public TPoint Coord { get; set; }
+		[Json]
 		public string VillageName { get; set; }
+		[Json]
 		public DateTime FinishTime { get; set; }
 
 		public override string ToString()
@@ -811,10 +783,12 @@ namespace libTravian
 
 	public class TTroop
 	{
+		[Json]
 		public int TournamentLevel { get; set; }
+		[Json]
 		public List<TTInfo> Troops { get; set; }
 		public bool ShouldRefresh { get; set; }
-		public void tick(ref TVillage CV)
+		public void tick(TVillage CV)
 		{
 			for(int i = Troops.Count - 1; i >= 0; i--)
 			{
@@ -825,7 +799,7 @@ namespace libTravian
 				{
 					ShouldRefresh = true;
 					break;
-					// could be better written in the future
+					// could be written better in the future
 				}
 			}
 		}
@@ -838,10 +812,15 @@ namespace libTravian
 
 	public class TTInfo
 	{
+		[Json]
 		public int Tribe;
+		[Json]
 		public int[] Troops;
+		[Json]
 		public TTroopType TroopType;
+		[Json]
 		public DateTime FinishTime;
+		[Json]
 		public string VillageName;
 		public override string ToString()
 		{
@@ -856,7 +835,17 @@ namespace libTravian
 		{
 			get
 			{
-
+				StringBuilder sb = new StringBuilder();
+				for(int i = 0; i < Troops.Length; i++)
+				{
+					if(Troops[i] != 0)
+						sb.AppendFormat("{0} {1}, ", DisplayLang.Instance.GetAidLang(Tribe, i + 1), Troops[i]);
+				}
+				if(sb.Length > 2)
+					sb.Remove(sb.Length - 2, 2);
+				else
+					return "None";
+				return sb.ToString();
 			}
 		}
 	}
@@ -873,49 +862,5 @@ namespace libTravian
 	public enum TTroopType
 	{
 		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, MySelf
-	}
-
-	public static class TypeViewer
-	{
-		public static string ToString(object sender)
-		{
-			StringBuilder sb = new StringBuilder();
-			Type t = sender.GetType();
-			var p = t.GetProperties();//BindingFlags.Public);
-			foreach (var x in p)
-			{
-				if (x.GetIndexParameters().Length == 0)
-				{
-					if (sb.Length != 0)
-						sb.Append(", ");
-					sb.Append(x.Name);
-					sb.Append(":");
-					sb.Append(x.GetValue(sender, null));
-				}
-			}
-			return sb.ToString();
-		}
-		public static string Snapshot(object sender)
-		{
-			StringBuilder sb = new StringBuilder();
-			Type t = sender.GetType();
-			var p = t.GetProperties();//BindingFlags.Public);
-			foreach (var x in p)
-			{
-				if (x.PropertyType == typeof(int) ||
-					x.PropertyType == typeof(string) ||
-					x.PropertyType == typeof(bool) ||
-					x.PropertyType == typeof(DateTime)
-					)
-				{
-					if (sb.Length != 0)
-						sb.Append(Environment.NewLine);
-					sb.Append(x.Name);
-					sb.Append(":");
-					sb.Append(x.GetValue(sender, null));
-				}
-			}
-			return sb.ToString();
-		}
 	}
 }

@@ -58,7 +58,7 @@
 			// 
 			this.columnHeader22.Tag = "troopname";
 			this.columnHeader22.Text = "兵种";
-			this.columnHeader22.Width = 150;
+			this.columnHeader22.Width = 140;
 			// 
 			// columnHeader23
 			// 

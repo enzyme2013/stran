@@ -1,45 +1,71 @@
-﻿/*
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- * 
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- * 
- * The Initial Developer of the Original Code is [MeteorRain <msg7086@gmail.com>].
- * Copyright (C) MeteorRain 2007, 2008. All Rights Reserved.
- * Contributor(s): [MeteorRain].
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LitJson;
 
 namespace libTravian
 {
-	partial class Travian
+	public class AIQueue : IQueue
 	{
-		private int AIDelay(int VillageID, TQueue Q)
+		#region IQueue 成员
+
+		public Travian UpCall { get; set; }
+
+		[Json]
+		public int VillageID { get; set; }
+
+		[Json]
+		public bool Paused { get; set; }
+
+		public bool MarkDeleted { get; private set; }
+
+		public string Title
 		{
-			var CV = TD.Villages[VillageID];
-			var Cinb = CV.InBuilding;
-			int delay = 0;
-			if(Cinb[0] != null)
-				delay = Math.Max(delay, Convert.ToInt32(Cinb[0].FinishTime.Subtract(DateTime.Now).TotalSeconds));
-			//if(Cinb[1] != null)
-			//	delay = Math.Max(delay, Convert.ToInt32(Cinb[1].FinishTime.Subtract(DateTime.Now).TotalSeconds));
-			if(Q.NextExec != DateTime.MinValue)
-				delay = Math.Max(delay, Convert.ToInt32(Q.NextExec.Subtract(DateTime.Now).TotalSeconds));
-			return delay;
+			get { return AIType.ToString(); }
 		}
-		static double[] resrate = new double[4] { 10, 10, 9, 7 };
-		private void doAI(int VillageID, int QueueID)
+
+		public string Status
 		{
-			var CV = TD.Villages[VillageID];
-			var Q = CV.Queue[QueueID];
-			var Param = Q.Gid;
+			get
+			{
+				if(Gid == 0)
+					return "";
+				else
+					return UpCall.GetGidLang(Gid);
+			}
+		}
+
+		public void Import(string s)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string Export()
+		{
+			throw new NotImplementedException();
+		}
+
+		public int CountDown
+		{
+			get
+			{
+				var CV = UpCall.TD.Villages[VillageID];
+				var Cinb = CV.InBuilding;
+				int delay = 0;
+				if(Cinb[0] != null && Cinb[0].FinishTime != DateTime.MinValue)
+					delay = Math.Max(delay, Convert.ToInt32(Cinb[0].FinishTime.Subtract(DateTime.Now).TotalSeconds));
+				//if(Cinb[1] != null)
+				//	delay = Math.Max(delay, Convert.ToInt32(Cinb[1].FinishTime.Subtract(DateTime.Now).TotalSeconds));
+				if(NextExec != DateTime.MinValue)
+					delay = Math.Max(delay, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
+				return delay;
+			}
+		}
+
+		public void Action()
+		{
+			var CV = UpCall.TD.Villages[VillageID];
+			var Q = this;
 
 			if(Q.NextExec >= DateTime.Now)
 				return;
@@ -47,7 +73,7 @@ namespace libTravian
 
 			int bid = -1, gid = 0;
 			double extrarate = CV.Resource[0].Capacity / CV.Resource[3].Capacity;
-			if(Param == 0)
+			if(AIType == TAIType.Resource)
 			{
 				// by current warehouse amount
 
@@ -57,7 +83,7 @@ namespace libTravian
 				//int[] prior = currv.res.CurrAmount;
 				int min = 1;
 				for(i = 0; i < 4; i++)
-					if(CV.Resource[min].CurrAmount / resrate[min] > CV.Resource[i].CurrAmount * (i == 3 ? extrarate : 1) / resrate[i])
+					if(CV.Resource[min].CurrAmount / Travian.resrate[min] > CV.Resource[i].CurrAmount * (i == 3 ? extrarate : 1) / Travian.resrate[i])
 						min = i;
 				for(i = 1; i <= 18; i++)
 					if(CV.Buildings[i].Gid == min + 1)
@@ -94,24 +120,24 @@ namespace libTravian
 					}
 				}
 				for(i = 0; i < 4; i++)
-					if(CV.Resource[min].CurrAmount / resrate[min] > CV.Resource[i].CurrAmount / resrate[i] && buildpriority[i + 1] != 0)
+					if(CV.Resource[min].CurrAmount / Travian.resrate[min] > CV.Resource[i].CurrAmount / Travian.resrate[i] && buildpriority[i + 1] != 0)
 						min = i;
 				gid = min + 1;
 				bid = buildpriority[gid];
 
 				if(minlevel == 10 && CV.Queue.Contains(Q))
 				{
-					CV.Queue.Remove(Q);
-					CV.SaveQueue(userdb);
-					StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = QueueID });
+					MarkDeleted = true;
+					UpCall.Dirty = true;
+					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 					return;
 				}
 			}
 			// balance on warehouse and resource field:
 			int[] rate2;
-			if(TD.Villages.Count > 20)
+			if(UpCall.TD.Villages.Count > 20)
 				rate2 = new int[3] { 7, 8, 1000 };
-			else if(TD.Villages.Count > 5)
+			else if(UpCall.TD.Villages.Count > 5)
 				rate2 = new int[3] { 3, 4, 3000 };
 			else
 				rate2 = new int[3] { 2, 3, 3000 };
@@ -146,7 +172,7 @@ namespace libTravian
 						bid = tbid;
 					}
 				}
-				else if(!NoMB) // check main building
+				else if(!Travian.NoMB) // check main building
 				{
 					tgid = 15;
 					tbid = findDorf2Building(CV.Buildings, tgid);
@@ -158,13 +184,18 @@ namespace libTravian
 					// if nothing match, build the resource field
 				}
 			}
-			var BQ = new TQueue()
+			var BQ = new BuildingQueue()
 			{
 				Bid = bid,
 				Gid = gid,
-				QueueType = TQueueType.Building
+				UpCall = UpCall,
+				VillageID = VillageID
 			};
-			Q.Status = GetGidLang(gid);
+			Gid = gid;
+			if(BQ.CountDown <= 0)
+				BQ.Action();
+			//Q.Status = UpCall.GetGidLang(gid);
+			/*
 			int timecost;
 			if(CV.Buildings.ContainsKey(bid))
 				timecost = CV.TimeCost(Buildings.Cost(gid, CV.Buildings[bid].Level + 1));
@@ -173,8 +204,25 @@ namespace libTravian
 			if(timecost > 0)
 				Q.NextExec = DateTime.Now.AddSeconds(Math.Min(timecost, rand.Next(500, 1000)));
 			else
-				doBuild(VillageID, BQ);
+				;//doBuild(VillageID, BQ);
+			 */
 		}
+
+		#endregion
+
+		[Json]
+		public DateTime NextExec { get; set; }
+
+		private Random rand = new Random();
+
+		[Json]
+		public TAIType AIType { get; set; }
+
+		public enum TAIType
+		{
+			Resource = 0, Level = 1
+		}
+
 		public int findDorf2Building(SortedDictionary<int, TBuilding> b, int gid)
 		{
 			int k;
@@ -196,5 +244,6 @@ namespace libTravian
 			return -1;
 		}
 
+		private int Gid = 0;
 	}
 }

@@ -165,3 +165,8 @@ cmicancel=&Cancel
 // Queue import/export dialogs
 ExportTaskQueue=Export Task Queue
 ImportTaskQueue=Import Task Queue
+
+// troop
+troopinfo=Troop info
+troopamount=Troop amount
+troopamount=Troop type

@@ -165,3 +165,8 @@ cmicancel=&C. 取消
 // Queue import/export dialogs
 ExportTaskQueue=导出任务队列
 ImportTaskQueue=导入任务队列
+
+// troop
+troopinfo=军队信息
+troopamount=军队数量
+troopamount=军队类型

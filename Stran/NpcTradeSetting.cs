@@ -11,7 +11,7 @@ namespace Stran
 {
 	public partial class NpcTradeSetting : Form
 	{
-		public NpcTradeOption Return { get; private set; }
+		public NpcTradeQueue Return { get; private set; }
 		public TVillage Village { private get; set; }
 		public MUI mui { private get; set; }
 
@@ -53,12 +53,13 @@ namespace Stran
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
-			NpcTradeOption option = new NpcTradeOption()
+			var option = new NpcTradeQueue()
 			{
 				Threshold = this.GetResources(this.nudThreshold),
 				Distribution = this.GetResources(this.nudDistribution),
 				MinTradeRatio = Convert.ToInt32(this.nudMinTradeRatio.Value),
-				MaxCount = Convert.ToInt32(this.nudMaxCount.Value)
+				MaxCount = Convert.ToInt32(this.nudMaxCount.Value),
+				VillageID = Village.ID
 			};
 
 			if (option.IsValid)

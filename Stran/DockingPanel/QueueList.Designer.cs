@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			this.listViewQueue = new System.Windows.Forms.ListView();
-			this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
@@ -40,7 +39,6 @@
 			// 
 			this.listViewQueue.AllowColumnReorder = true;
 			this.listViewQueue.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader5,
             this.columnHeader8,
             this.columnHeader9,
             this.columnHeader6,
@@ -57,17 +55,11 @@
 			this.listViewQueue.UseCompatibleStateImageBehavior = false;
 			this.listViewQueue.View = System.Windows.Forms.View.Details;
 			// 
-			// columnHeader5
-			// 
-			this.columnHeader5.Tag = "bid";
-			this.columnHeader5.Text = "坑号";
-			this.columnHeader5.Width = 50;
-			// 
 			// columnHeader8
 			// 
 			this.columnHeader8.Tag = "qtype";
 			this.columnHeader8.Text = "类别";
-			this.columnHeader8.Width = 70;
+			this.columnHeader8.Width = 100;
 			// 
 			// columnHeader9
 			// 
@@ -79,13 +71,13 @@
 			// 
 			this.columnHeader6.Tag = "status";
 			this.columnHeader6.Text = "状态";
-			this.columnHeader6.Width = 189;
+			this.columnHeader6.Width = 120;
 			// 
 			// columnHeader7
 			// 
 			this.columnHeader7.Tag = "qdelay";
 			this.columnHeader7.Text = "延迟";
-			this.columnHeader7.Width = 81;
+			this.columnHeader7.Width = 80;
 			// 
 			// QueueList
 			// 
@@ -109,7 +101,6 @@
 		#endregion
 
 		public System.Windows.Forms.ListView listViewQueue;
-		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private System.Windows.Forms.ColumnHeader columnHeader8;
 		private System.Windows.Forms.ColumnHeader columnHeader9;
 		private System.Windows.Forms.ColumnHeader columnHeader6;
