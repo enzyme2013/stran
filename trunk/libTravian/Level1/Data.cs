@@ -15,11 +15,13 @@
  */
 using System;
 using System.Collections.Generic;
+using LitJson;
 
 namespace libTravian
 {
 	public class TResAmount
 	{
+		[Json]
 		public int[] Resources;
 
 		public TResAmount() 

@@ -1,6 +1,6 @@
 ﻿namespace Stran
 {
-	partial class TransferTiming
+	partial class ActionTiming
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -50,7 +50,7 @@
 			this.radioImmediate.Size = new System.Drawing.Size(128, 18);
 			this.radioImmediate.TabIndex = 0;
 			this.radioImmediate.TabStop = true;
-			this.radioImmediate.Tag = "ImmediateTransfer";
+			this.radioImmediate.Tag = "ImmediateAction";
 			this.radioImmediate.Text = "ImmediateTransfer";
 			this.radioImmediate.UseVisualStyleBackColor = true;
 			this.radioImmediate.CheckedChanged += new System.EventHandler(this.radioDelayed_CheckedChanged);
@@ -62,7 +62,7 @@
 			this.radioDelayed.Name = "radioDelayed";
 			this.radioDelayed.Size = new System.Drawing.Size(113, 18);
 			this.radioDelayed.TabIndex = 1;
-			this.radioDelayed.Tag = "DelayedTransfer";
+			this.radioDelayed.Tag = "DelayedAction";
 			this.radioDelayed.Text = "DelayedTransfer";
 			this.radioDelayed.UseVisualStyleBackColor = true;
 			this.radioDelayed.CheckedChanged += new System.EventHandler(this.radioDelayed_CheckedChanged);
@@ -70,7 +70,7 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(168, 205);
+			this.buttonCancel.Location = new System.Drawing.Point(164, 205);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 34);
 			this.buttonCancel.TabIndex = 7;
@@ -81,7 +81,7 @@
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(55, 205);
+			this.buttonOK.Location = new System.Drawing.Point(51, 205);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(80, 34);
 			this.buttonOK.TabIndex = 6;
@@ -96,15 +96,17 @@
 			this.lableInterval.Name = "lableInterval";
 			this.lableInterval.Size = new System.Drawing.Size(93, 14);
 			this.lableInterval.TabIndex = 21;
-			this.lableInterval.Tag = "TransferInterval";
+			this.lableInterval.Tag = "ActionInterval";
 			this.lableInterval.Text = "TransferInterval";
 			// 
 			// dateTimeTransferAt
 			// 
-			this.dateTimeTransferAt.CustomFormat = "ddd MM/dd/yyyy  hh:mm";
+			this.dateTimeTransferAt.CustomFormat = "yyyy-MM-dd  HH:mm:ss";
 			this.dateTimeTransferAt.Enabled = false;
 			this.dateTimeTransferAt.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.dateTimeTransferAt.Location = new System.Drawing.Point(55, 71);
+			this.dateTimeTransferAt.MaxDate = new System.DateTime(2050, 12, 31, 0, 0, 0, 0);
+			this.dateTimeTransferAt.MinDate = new System.DateTime(2008, 1, 1, 0, 0, 0, 0);
 			this.dateTimeTransferAt.Name = "dateTimeTransferAt";
 			this.dateTimeTransferAt.ShowUpDown = true;
 			this.dateTimeTransferAt.Size = new System.Drawing.Size(193, 22);
@@ -114,7 +116,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(132, 162);
+			this.label1.Location = new System.Drawing.Point(127, 162);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(49, 14);
 			this.label1.TabIndex = 28;
@@ -124,7 +126,7 @@
 			// numericUpDown1
 			// 
 			this.numericUpDown1.Increment = new decimal(new int[] {
-            30,
+            10,
             0,
             0,
             0});
@@ -146,28 +148,27 @@
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(96, 14);
 			this.label2.TabIndex = 30;
-			this.label2.Tag = "TransferArriveAt";
+			this.label2.Tag = "ActionArriveAt";
 			this.label2.Text = "TransferArriveAt";
 			// 
 			// labelDetail
 			// 
 			this.labelDetail.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.labelDetail.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelDetail.Location = new System.Drawing.Point(55, 121);
 			this.labelDetail.Name = "labelDetail";
 			this.labelDetail.ReadOnly = true;
-			this.labelDetail.Size = new System.Drawing.Size(215, 12);
+			this.labelDetail.Size = new System.Drawing.Size(193, 15);
 			this.labelDetail.TabIndex = 31;
 			this.labelDetail.TabStop = false;
-			this.labelDetail.Text = "06:27:05 Sunday Jun 15 2008";
+			this.labelDetail.Text = "2008-11-12 14:01:42";
 			// 
-			// TransferTiming
+			// ActionTiming
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(291, 270);
+			this.ClientSize = new System.Drawing.Size(294, 270);
 			this.Controls.Add(this.labelDetail);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.numericUpDown1);
@@ -182,11 +183,11 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TransferTiming";
+			this.Name = "ActionTiming";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Tag = "TransferTiming";
+			this.Tag = "ActionTiming";
 			this.Text = "TransferTiming";
 			this.Load += new System.EventHandler(this.TransferTiming_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

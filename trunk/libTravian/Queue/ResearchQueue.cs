@@ -100,7 +100,7 @@ namespace libTravian
 					timecost = CV.TimeCost(Buildings.ResearchCost[(UpCall.TD.Tribe - 1) * 10 + Aid]);
 					x = CV.InBuilding[5];
 				}
-				if(x == null || x.FinishTime.AddSeconds(15) < DateTime.Now)
+				if(x != null && x.FinishTime.AddSeconds(15) > DateTime.Now)
 					timecost = Math.Max(timecost, Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 15);
 				return timecost;
 			}

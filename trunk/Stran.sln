@@ -5,12 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libTravian", "libTravian\li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stran", "Stran\Stran.csproj", "{A361E172-DB43-4782-A032-878EE055F5A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A361E172-DB43-4782-A032-878EE055F5A0} = {A361E172-DB43-4782-A032-878EE055F5A0}
-		{935028A9-A233-4FFE-8FC6-37C34847A0F8} = {935028A9-A233-4FFE-8FC6-37C34847A0F8}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FF7AC6D-CB98-4B17-A6E9-1F37ACC9367F}"
@@ -18,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		Stravian.vsmdi = Stravian.vsmdi
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestLibTravian", "UnitTestLibTravian\UnitTestLibTravian.csproj", "{D8BC9C7B-6204-45E6-B47B-C121326A3B59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "json", "json\json.csproj", "{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}"
 EndProject
@@ -41,18 +33,10 @@ Global
 		{A361E172-DB43-4782-A032-878EE055F5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A361E172-DB43-4782-A032-878EE055F5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A361E172-DB43-4782-A032-878EE055F5A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54F7EE9A-5DFA-45BD-9E26-7B6488C71726}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C75532C4-765B-418E-B09B-46D36B2ABDB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8BC9C7B-6204-45E6-B47B-C121326A3B59}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Release|Any CPU.ActiveCfg = Release|Any CPU

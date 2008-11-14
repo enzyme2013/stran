@@ -17,6 +17,7 @@ namespace Stran
 		public ResourceLimit()
 		{
 			InitializeComponent();
+			Return = null;
 		}
 
 		private void ResourceLimit_Load(object sender, EventArgs e)

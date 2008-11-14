@@ -55,11 +55,11 @@ action=Actions
 // context menu village
 refresh=&Refresh this village
 cmbup=&Add to queue
-cmpupmulti=Add m&ultiple times
-cmpup2=Add &2 times
-cmpup5=Add &5 times
-cmpup9=Add &9 times
-cmpupto=Add to specified &level...
+cmpupmulti=Upgrade m&ultiple times
+cmpup2=Upgrade &2 times
+cmpup5=Upgrade &5 times
+cmpup9=Upgrade &9 times
+cmpupto=Upgrade to specified &level...
 cmpdestroy=&Destroy
 cmbnew=&New building
 cmbai=&Enable AI module
@@ -113,9 +113,9 @@ queue=Queue
 mtype=Type
 role=Role
 newtransfer=New &Transfer
-npctrade=&NPC Trade
+npctrade=N&PC Trade
 merchantcnt=Merchants:
-transfercnt=Repeats(0:inf):
+transfercnt=Repeats(0=inf):
 cmbaic=Based on &current amount
 cmbail=Based on resource field &level
 transfer=Transfer
@@ -134,11 +134,11 @@ TargetResource=Target
 
 // Transfer timing form
 Timing=Timing
-TransferTiming=Transfer timing
-ImmediateTransfer=Start transfer immediately
-DelayedTransfer=Start transfer at:
-TransferArriveAt=Estimated arrival time:
-TransferInterval=Minimum interval:
+ActionTiming=Action timing
+ImmediateAction=Start action immediately
+DelayedAction=Start action at:
+ActionArriveAt=Estimated arrival time:
+ActionInterval=Minimum interval:
 Minutes=Minutes
 
 // resource limit form
@@ -151,7 +151,7 @@ NpcTradeSetting=NPC Trade
 NpcTradeThreshold=Start trading after exceeding the following thresholds:
 NpcTradeDistribution=Resource allocation ratio:
 NpcTradeMinRatio=Min. trade ratio:
-NpcTradeMaxCount=Repeats: (0:inf)
+NpcTradeMaxCount=Repeats(0=inf):
 
 cmbparty=Enable &Party module
 cmbparty500=&500 Small celebrations
@@ -169,4 +169,15 @@ ImportTaskQueue=Import Task Queue
 // troop
 troopinfo=Troop info
 troopamount=Troop amount
-troopamount=Troop type
+trooptype=Troop type
+
+// quick panel
+QPParty=Enable &Party module
+QPAILevel=Enable &level based AI module
+QPUpTop=&Upgrade to top level
+QPRefreshRes=&R. Refresh resources/market info
+
+nolimit=No limit
+
+CMBEnableCoin=Enable &Coin function <FIXME>
+enabled= (Enabled)

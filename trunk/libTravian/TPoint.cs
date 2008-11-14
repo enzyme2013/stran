@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using LitJson;
 
 namespace libTravian
 {
@@ -61,6 +62,7 @@ namespace libTravian
 				this.y = value;
 			}
 		}
+		[Json]
 		public int Z
 		{
 			get

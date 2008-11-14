@@ -59,9 +59,12 @@ namespace libTravian
 			{
 				var CV = UpCall.TD.Villages[VillageID];
 				var x = CV.InBuilding[2];
-				if(x == null || x.FinishTime.AddSeconds(30) < DateTime.Now) 
-					return 0;
-				return Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 30;
+				int timecost = 0;
+				if(NextExec >= DateTime.Now)
+					timecost = Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds) + 30;
+				if(x != null && x.FinishTime.AddSeconds(30) > DateTime.Now) 
+					timecost = Math.Max(timecost, Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 30);
+				return timecost;
 			}
 		}
 
@@ -123,6 +126,10 @@ namespace libTravian
 					return UpCall.TD.Villages[VillageID].Buildings[Bid].Level;
 				return 0;
 			}
+		}
+
+		public DestroyQueue()
+		{
 		}
 	}
 }

@@ -85,6 +85,7 @@ namespace libTravian
 		{
 			isBuildingInitialized = 1;
 			UpCall.FetchVillageBuilding(ID);
+			// TODO: Fixme
 			InitializeTroop();
 		}
 		public void InitializeUpgrade()
@@ -235,28 +236,51 @@ namespace libTravian
 		/// Export task queue to a text file
 		/// </summary>
 		/// <param name="filename">Text file name</param>
-		[Obsolete]
+		//[Obsolete]
 		public void SaveQueue(string filename)
 		{
-			using(StreamWriter sw = new StreamWriter(filename))
+			try
 			{
-				sw.Write(this.EncodeQueue().Replace("|", "\r\n").Replace("<_!!!_>", "|"));
+				var json = JsonMapper.ToJson(new Dictionary<int, List<IQueue>>{{ 0, Queue }});
+				File.WriteAllText(filename, json);
 			}
+			catch { }
 		}
 
 		/// <summary>
 		/// Import task queue from a text file
 		/// </summary>
 		/// <param name="filename">Text file name</param>
-		[Obsolete]
+		//[Obsolete]
 		public void RestoreQueue(string filename)
 		{
-			using(StreamReader sr = new StreamReader(filename))
+			try
 			{
-				string encodedQueue = sr.ReadToEnd();
-				encodedQueue = encodedQueue.Replace("|", "<_!!!_>").Replace("\r\n", "|");
-				this.DecodeQueue(encodedQueue);
+				var Qs = JsonMapper.ToObject<Dictionary<int, List<IQueue>>>(File.ReadAllText(filename));
+				foreach(var q in Qs[0])
+				{
+					q.UpCall = UpCall;
+					q.VillageID = ID;
+					if(q is BuildingQueue)
+					{
+						var Q = q as BuildingQueue;
+						if(Buildings.ContainsKey(Q.Bid))
+						{
+							if(Buildings[Q.Bid].Gid != Q.Gid)
+								Q.MarkDeleted = true;
+						}
+						else
+							Buildings[Q.Bid] = new TBuilding { Gid = Q.Gid, Level = 0 };
+					}
+				}
+				for(int i = Qs[0].Count - 1; i >= 0; i--)
+					if(Qs[0][i].MarkDeleted)
+						Qs[0].RemoveAt(i);
+				UpCall.Dirty = true;
+				
+				Queue.AddRange(Qs[0]);
 			}
+			catch { }
 		}
 		/*
 		public void SaveResourceLimits(LocalDB db)
@@ -862,5 +886,11 @@ namespace libTravian
 	public enum TTroopType
 	{
 		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, MySelf
+	}
+
+	public class DummyQueueContainer
+	{
+		[Json]
+		public List<IQueue> Data;
 	}
 }

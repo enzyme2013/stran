@@ -68,7 +68,7 @@ namespace libTravian
 			return string.Format("{0}&{1}&{2}&{3}", Bid, Gid, TargetLevel, Paused ? 1 : 0);
 		}
 
-		public bool MarkDeleted { get; private set; }
+		public bool MarkDeleted { get; set; }
 
 		[Json]
 		public int VillageID { get; set; }
@@ -109,14 +109,14 @@ namespace libTravian
 			if(Bid == -1)
 			{
 				Q.MarkDeleted = true;
-				UpCall.DebugLog("Delete Queue [" + Q.ToString() + "] because it's impossible to build it.", DebugLevel.W);
+				UpCall.DebugLog("Delete Queue [" + Q.Title + "] because it's impossible to build it.", DebugLevel.W);
 				return;
 			}
 			if(Bid != 0)
 			{
-				UpCall.DebugLog("Queue [" + Q.ToString() + "] needs Bid=" + Bid.ToString() + " to be extended.", DebugLevel.I);
+				UpCall.DebugLog("Queue [" + Q.Title + "] needs Bid=" + Bid.ToString() + " to be extended.", DebugLevel.I);
 				Q = new BuildingQueue() { UpCall = UpCall, Bid = Bid, Gid = CV.Buildings[Bid].Gid };
-				UpCall.DebugLog("Create Queue [" + Q.ToString() + "] because it needs to be extended.", DebugLevel.I);
+				UpCall.DebugLog("Create Queue [" + Q.Title + "] because it needs to be extended.", DebugLevel.I);
 			}
 
 			int bid = Q.Bid;
@@ -160,7 +160,7 @@ namespace libTravian
 				}
 				else if(result.Contains("<p class=\"c\">"))
 				{
-					UpCall.DebugLog("Unexpected status! Report it on the forum! " + Q.ToString(), DebugLevel.W);
+					UpCall.DebugLog("Unexpected status! Report it on the forum! " + Q.Title, DebugLevel.W);
 					Q.MarkDeleted = true;
 					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 					return;
@@ -172,14 +172,14 @@ namespace libTravian
 					//Q.Delay = rand.Next(500, 1000);
 					// Delay shouldn't happen.
 					Q.NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
-					UpCall.DebugLog("Data not refreshed? Add delay for " + Q.ToString(), DebugLevel.I);
+					UpCall.DebugLog("Data not refreshed? Add delay for " + Q.Title, DebugLevel.I);
 					return;
 				}
 				else
 				{
 					UpCall.PageQuery(VillageID, "dorf1.php");
 					UpCall.PageQuery(VillageID, "dorf2.php");
-					UpCall.DebugLog("Unknown status! And cause a queue been deleted! " + Q.ToString(), DebugLevel.W);
+					UpCall.DebugLog("Unknown status! And cause a queue been deleted! " + Q.Title, DebugLevel.W);
 					Q.MarkDeleted = true;
 					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 					return;
@@ -194,7 +194,7 @@ namespace libTravian
 					timecost = Math.Max(timecost, Convert.ToInt32(DateTime.Now.Subtract(CV.InBuilding[UpCall.TD.isRomans && bid > 18 ? 1 : 0].FinishTime).TotalSeconds));
 				if(timecost > 0)
 				{
-					UpCall.DebugLog("Need to build but resource not enough so add into queue: " + Q.ToString(), DebugLevel.I);
+					UpCall.DebugLog("Need to build but resource not enough so add into queue: " + Q.Title, DebugLevel.I);
 					CV.Queue.Insert(0, new BuildingQueue()
 					{
 						UpCall = UpCall,
@@ -233,9 +233,9 @@ namespace libTravian
 			UpCall.BuildCount();
 			//CV.Buildings[bid].Level++;
 			if(Q.Bid == bid)
-				UpCall.DebugLog("Build " + Q.ToString(), DebugLevel.I);
+				UpCall.DebugLog("Build " + Q.Title, DebugLevel.I);
 			else
-				UpCall.DebugLog("Build BID=" + bid.ToString(), DebugLevel.I);
+				UpCall.DebugLog("Build (other) " + Q.Title, DebugLevel.I);
 			if(Q.Bid == bid)
 			{
 				if(Q.TargetLevel == 0 || Q.TargetLevel <= CV.Buildings[bid].Level)

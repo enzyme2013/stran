@@ -39,8 +39,10 @@ namespace libTravian
 		{
 			get
 			{
+				if(MaxCount != 0 && Count >= MaxCount)
+					RemoveQueuedTask();
 				string count = this.Count.ToString() + "/";
-				count += this.MaxCount == 0 ? "Inf" : this.MaxCount.ToString();
+				count += this.MaxCount == 0 ? "∞" : this.MaxCount.ToString();
 				CalculateResourceAmount(UpCall.TD, VillageID);
 				return count + DistributionShortName[(int)this.Distribution] + this.ResourceAmount.ToString();
 			}
@@ -195,9 +197,9 @@ namespace libTravian
 			if(timeCost >= 0)
 			{
 				var CV = UpCall.TD.Villages[VillageID];
-				MinimumDelay = Math.Max(MinimumInterval, timeCost * 2 + 20);
+				MinimumDelay = Math.Max(MinimumInterval, timeCost * 2 + 30);
 				Count++;
-				if(MaxCount != 0 || Count > MaxCount)
+				if(MaxCount != 0 && Count >= MaxCount)
 					RemoveQueuedTask();
 			}
 		}
@@ -209,7 +211,9 @@ namespace libTravian
 			this.resumeTime = DateTime.MinValue;
 			this.ResourceAmount = new TResAmount(0, 0, 0, 0);
 		}
-		
+
+		int retrycount = 0;
+
 		/// <summary>
 		/// Dispatch a transportation of a given amount of resource from one village to a given destiantion
 		/// </summary>
@@ -240,12 +244,29 @@ namespace libTravian
 			*/
 
 			//if (Amount.TotalAmount > MCarry * MCount)
+			if(result.Contains("Popup(2,5)") && Amount.TotalAmount > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
+			{
+				resumeTime = DateTime.Now.AddSeconds(rand.Next(200 + retrycount * 20, 300 + retrycount * 30));
+				UpCall.DebugLog("0:00:0?, Will retry...", DebugLevel.I);
+				return -2;
+			}
 			if(Amount.TotalAmount > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
 			{
-				UpCall.DebugLog(string.Format("Transfer cannot go on: MCarry({0}) * MCount({1}) < Amount({2})", CV.Market.SingleCarry, CV.Market.ActiveMerchant, Amount.TotalAmount), DebugLevel.W);
-				return -2; // Beyond transfer ability
+				retrycount++;
+				if(retrycount > 5)
+				{
+					UpCall.DebugLog(string.Format("Transfer cannot go on: MCarry({0}) * MCount({1}) < Amount({2})", CV.Market.SingleCarry, CV.Market.ActiveMerchant, Amount.TotalAmount), DebugLevel.W);
+					return -2; // Beyond transfer ability
+				}
+				else
+				{
+					UpCall.DebugLog("Error on 'ActiveMerchant'! Will retry...", DebugLevel.I);
+					resumeTime = DateTime.Now.AddSeconds(rand.Next(500 + retrycount * 20, 800 + retrycount * 30));
+					CV.Market.ActiveMerchant = Math.Min(Amount.TotalAmount / CV.Market.SingleCarry + 1, CV.Market.MaxMerchant);
+					return -2;
+				}
 			}
-
+			retrycount = 0;
 			for(int i = 0; i < 4; i++)
 			{
 				PostData["r" + (i + 1).ToString()] = Amount.Resources[i].ToString();
@@ -651,9 +672,10 @@ namespace libTravian
 			this.ResourceAmount.Resources[luckyOne] += total - this.ResourceAmount.TotalAmount;
 		}
 
+		private Random rand = new Random();
 
 		#region IQueue 成员
-		public string IO { get { return Export(); } set { Import(value); } }
+		//public string IO { get { return Export(); } set { Import(value); } }
 		#endregion
 	}
 	/// <summary>

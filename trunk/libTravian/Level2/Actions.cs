@@ -106,7 +106,7 @@ namespace libTravian
 								else if(CV.isDestroyInitialized == 1)
 									continue;
 								break;
-							case "ADRQueue":
+							case "ResearchQueue":
 								if(CV.isUpgradeInitialized == 0)
 								{
 									CV.InitializeUpgrade();
@@ -117,9 +117,9 @@ namespace libTravian
 								break;
 							case "PartyQueue":
 								break;
-							case "TransferOption":
+							case "TransferQueue":
 								break;
-							case "NpcTradeOption":
+							case "NpcTradeQueue":
 								break;
 							case "RaidOption":
 								break;

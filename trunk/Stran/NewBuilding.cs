@@ -24,6 +24,7 @@ namespace Stran
 	{
 		public int OutBid { get; set; }
 		public int OutGid { get; set; }
+		public bool OutTop { get; set; }
 		DisplayLang dl;
 		public MUI mui { get; set; }
 
@@ -50,6 +51,7 @@ namespace Stran
 			else
 				button1.Enabled = false;
 		}
+		/*
 		public static int B2I(TBuilding b)
 		{
 			if(b != null)
@@ -57,11 +59,12 @@ namespace Stran
 			else
 				return 0;
 		}
-
+		 */
 		private void button1_Click(object sender, EventArgs e)
 		{
 			OutGid = Convert.ToInt32(comboBox1.SelectedItem.ToString().Split('.')[0]);
 			OutBid = (int)comboBox2.SelectedItem;
+			OutTop = checkBox1.Checked;
 		}
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

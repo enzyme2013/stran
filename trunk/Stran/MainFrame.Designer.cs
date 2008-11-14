@@ -38,9 +38,11 @@
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
 			this.panel2 = new System.Windows.Forms.Panel();
-			this.contextMenuEvent = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.checkBoxVerbose = new System.Windows.Forms.CheckBox();
+			this.contextMenuEvent = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.contextMenuBuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMBUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +69,8 @@
 			this.CMBParty2000 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMBRaid = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMBEnableCoin = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuResearch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMRResearch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -111,13 +115,10 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.checkBoxVerbose = new System.Windows.Forms.CheckBox();
-			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
-			this.CMBEnableCoin = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.contextMenuBuilding.SuspendLayout();
 			this.contextMenuResearch.SuspendLayout();
 			this.contextMenuQueue.SuspendLayout();
@@ -125,7 +126,6 @@
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuMarket.SuspendLayout();
 			this.contextMenuInbuilding.SuspendLayout();
-			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl2
@@ -171,12 +171,6 @@
 			this.panel2.Size = new System.Drawing.Size(1, 580);
 			this.panel2.TabIndex = 21;
 			// 
-			// contextMenuEvent
-			// 
-			this.contextMenuEvent.Name = "contextMenuEvent";
-			this.contextMenuEvent.ShowImageMargin = false;
-			this.contextMenuEvent.Size = new System.Drawing.Size(36, 4);
-			// 
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.textBox1);
@@ -200,6 +194,33 @@
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox1.Size = new System.Drawing.Size(920, 550);
 			this.textBox1.TabIndex = 0;
+			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.checkBoxVerbose);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel1.Location = new System.Drawing.Point(3, 3);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(920, 30);
+			this.panel1.TabIndex = 1;
+			// 
+			// checkBoxVerbose
+			// 
+			this.checkBoxVerbose.AutoSize = true;
+			this.checkBoxVerbose.Checked = true;
+			this.checkBoxVerbose.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBoxVerbose.Location = new System.Drawing.Point(3, 6);
+			this.checkBoxVerbose.Name = "checkBoxVerbose";
+			this.checkBoxVerbose.Size = new System.Drawing.Size(72, 18);
+			this.checkBoxVerbose.TabIndex = 0;
+			this.checkBoxVerbose.Text = "Verbose";
+			this.checkBoxVerbose.UseVisualStyleBackColor = true;
+			// 
+			// contextMenuEvent
+			// 
+			this.contextMenuEvent.Name = "contextMenuEvent";
+			this.contextMenuEvent.ShowImageMargin = false;
+			this.contextMenuEvent.Size = new System.Drawing.Size(36, 4);
 			// 
 			// contextMenuBuilding
 			// 
@@ -392,7 +413,7 @@
 			// CMBParty500
 			// 
 			this.CMBParty500.Name = "CMBParty500";
-			this.CMBParty500.Size = new System.Drawing.Size(152, 22);
+			this.CMBParty500.Size = new System.Drawing.Size(123, 22);
 			this.CMBParty500.Tag = "cmbparty500";
 			this.CMBParty500.Text = "5. 小派对";
 			this.CMBParty500.Click += new System.EventHandler(this.CMBParty500_Click);
@@ -400,7 +421,7 @@
 			// CMBParty2000
 			// 
 			this.CMBParty2000.Name = "CMBParty2000";
-			this.CMBParty2000.Size = new System.Drawing.Size(152, 22);
+			this.CMBParty2000.Size = new System.Drawing.Size(123, 22);
 			this.CMBParty2000.Tag = "cmbparty2000";
 			this.CMBParty2000.Text = "2. 大派对";
 			this.CMBParty2000.Click += new System.EventHandler(this.CMBParty2000_Click);
@@ -416,6 +437,21 @@
 			this.CMBRaid.Size = new System.Drawing.Size(181, 22);
 			this.CMBRaid.Text = "出兵";
 			this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
+			// 
+			// toolStripSeparator15
+			// 
+			this.toolStripSeparator15.Name = "toolStripSeparator15";
+			this.toolStripSeparator15.Size = new System.Drawing.Size(178, 6);
+			// 
+			// CMBEnableCoin
+			// 
+			this.CMBEnableCoin.CheckOnClick = true;
+			this.CMBEnableCoin.ForeColor = System.Drawing.Color.DarkBlue;
+			this.CMBEnableCoin.Name = "CMBEnableCoin";
+			this.CMBEnableCoin.Size = new System.Drawing.Size(181, 22);
+			this.CMBEnableCoin.Tag = "CMBEnableCoin";
+			this.CMBEnableCoin.Text = "启用金币功能";
+			this.CMBEnableCoin.CheckedChanged += new System.EventHandler(this.CMBEnableCoin_CheckedChanged);
 			// 
 			// contextMenuResearch
 			// 
@@ -802,41 +838,6 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.checkBoxVerbose);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel1.Location = new System.Drawing.Point(3, 3);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(920, 30);
-			this.panel1.TabIndex = 1;
-			// 
-			// checkBoxVerbose
-			// 
-			this.checkBoxVerbose.AutoSize = true;
-			this.checkBoxVerbose.Checked = true;
-			this.checkBoxVerbose.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBoxVerbose.Location = new System.Drawing.Point(3, 6);
-			this.checkBoxVerbose.Name = "checkBoxVerbose";
-			this.checkBoxVerbose.Size = new System.Drawing.Size(72, 18);
-			this.checkBoxVerbose.TabIndex = 0;
-			this.checkBoxVerbose.Text = "Verbose";
-			this.checkBoxVerbose.UseVisualStyleBackColor = true;
-			// 
-			// toolStripSeparator15
-			// 
-			this.toolStripSeparator15.Name = "toolStripSeparator15";
-			this.toolStripSeparator15.Size = new System.Drawing.Size(178, 6);
-			// 
-			// CMBEnableCoin
-			// 
-			this.CMBEnableCoin.CheckOnClick = true;
-			this.CMBEnableCoin.ForeColor = System.Drawing.Color.DarkBlue;
-			this.CMBEnableCoin.Name = "CMBEnableCoin";
-			this.CMBEnableCoin.Size = new System.Drawing.Size(181, 22);
-			this.CMBEnableCoin.Text = "启用金币功能";
-			this.CMBEnableCoin.CheckedChanged += new System.EventHandler(this.CMBEnableCoin_CheckedChanged);
-			// 
 			// MainFrame
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -852,6 +853,8 @@
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.contextMenuBuilding.ResumeLayout(false);
 			this.contextMenuResearch.ResumeLayout(false);
 			this.contextMenuQueue.ResumeLayout(false);
@@ -860,8 +863,6 @@
 			this.statusStrip1.PerformLayout();
 			this.contextMenuMarket.ResumeLayout(false);
 			this.contextMenuInbuilding.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

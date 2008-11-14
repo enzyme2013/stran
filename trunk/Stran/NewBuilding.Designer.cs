@@ -35,6 +35,7 @@ namespace Stran
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -80,7 +81,7 @@ namespace Stran
 			// button1
 			// 
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button1.Location = new System.Drawing.Point(52, 110);
+			this.button1.Location = new System.Drawing.Point(52, 140);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(80, 32);
 			this.button1.TabIndex = 4;
@@ -92,7 +93,7 @@ namespace Stran
 			// button2
 			// 
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(162, 110);
+			this.button2.Location = new System.Drawing.Point(162, 140);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(80, 32);
 			this.button2.TabIndex = 5;
@@ -104,12 +105,23 @@ namespace Stran
 			// 
 			this.pictureBox1.Image = global::Stran.Properties.Resources.villagebg_export;
 			this.pictureBox1.InitialImage = null;
-			this.pictureBox1.Location = new System.Drawing.Point(7, 148);
+			this.pictureBox1.Location = new System.Drawing.Point(7, 178);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(280, 230);
 			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.pictureBox1.TabIndex = 6;
 			this.pictureBox1.TabStop = false;
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Location = new System.Drawing.Point(73, 96);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(86, 18);
+			this.checkBox1.TabIndex = 7;
+			this.checkBox1.Tag = "QPUpTop";
+			this.checkBox1.Text = "checkBox1";
+			this.checkBox1.UseVisualStyleBackColor = true;
 			// 
 			// NewBuilding
 			// 
@@ -117,7 +129,8 @@ namespace Stran
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button2;
-			this.ClientSize = new System.Drawing.Size(294, 390);
+			this.ClientSize = new System.Drawing.Size(294, 420);
+			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -151,5 +164,6 @@ namespace Stran
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.CheckBox checkBox1;
 	}
 }
