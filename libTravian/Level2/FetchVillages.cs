@@ -52,9 +52,10 @@ namespace libTravian
 				//TD.Villages[VillageID].RestoreResourceLimits(userdb);
 				TD.Villages[VillageID].isBuildingInitialized = 2;
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Buildings, VillageID = VillageID });
-				string key = "v" + VillageID.ToString() + "Queue";
+				//string key = "v" + VillageID.ToString() + "Queue";
 				//if(TD.Villages[VillageID].Queue.Count == 0 && userdb.ContainsKey(key) && userdb[key] != "")
 				//	StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Queue, VillageID = VillageID, Param = -1 });
+				TD.Dirty = true;
 			}
 		}
 
@@ -69,6 +70,7 @@ namespace libTravian
 				PageQuery(VillageID, "build.php?gid=22");
 				TD.Villages[VillageID].isUpgradeInitialized = 2;
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Research, VillageID = VillageID });
+				TD.Dirty = true;
 			}
 		}
 		private void doFetchVDestroy(object o)
@@ -79,6 +81,15 @@ namespace libTravian
 				TD.Villages[VillageID].isDestroyInitialized = 1;
 				PageQuery(VillageID, "build.php?gid=15");
 				TD.Villages[VillageID].isDestroyInitialized = 2;
+				TD.Dirty = true;
+			}
+		}
+		private void doFetchVMarket(object o)
+		{
+			lock(Level2Lock)
+			{
+				int VillageID = (int)o;
+				PageQuery(VillageID, "build.php?gid=17");
 			}
 		}
 		private void doFetchVTroop(object o)
@@ -89,6 +100,7 @@ namespace libTravian
 				TD.Villages[VillageID].isTroopInitialized = 1;
 				PageQuery(VillageID, "build.php?gid=16");
 				TD.Villages[VillageID].isTroopInitialized = 2;
+				TD.Dirty = true;
 			}
 		}
 	}

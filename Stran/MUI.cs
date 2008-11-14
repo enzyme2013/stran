@@ -43,7 +43,7 @@ namespace Stran
 			string[] s = File.ReadAllLines(lang_file, Encoding.UTF8);
 			foreach(var s1 in s)
 			{
-				var pairs = s1.Split('=');
+				var pairs = s1.Split(new char[] { '=' }, 2);
 				if(pairs.Length != 2)
 					continue;
 				try

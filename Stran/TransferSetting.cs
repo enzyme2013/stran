@@ -199,9 +199,9 @@ namespace Stran
 
 		private void buttonTiming_Click(object sender, EventArgs e)
 		{
-			TransferTiming tt = new TransferTiming
+			ActionTiming tt = new ActionTiming
 			{
-				TransferAt = this.transferAt,
+				ActionAt = this.transferAt,
 				MinimumInterval = this.minimumInterval,
 				mui = this.mui
 			};
@@ -210,12 +210,12 @@ namespace Stran
 			if (option != null && !option.TargetPos.IsEmpty)
 			{
 				int speed = this.TravianData.MarketSpeed == 0 ? 24 : this.TravianData.MarketSpeed;
-				tt.TransferTime = (int) (this.CV.Coord * option.TargetPos * 3600 / speed);
+				tt.ActionTime = (int) (this.CV.Coord * option.TargetPos * 3600 / speed);
 			}
 
 			if (tt.ShowDialog() == DialogResult.OK)
 			{
-				this.transferAt = tt.TransferAt;
+				this.transferAt = tt.ActionAt;
 				this.minimumInterval = tt.MinimumInterval;
 			}
 		}
@@ -294,7 +294,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				this.CV.Market.LowerLimit = limit.Return;
-				//TODO: this.CV.SaveResourceLimits(this.UserDB);
+				UpCall.Dirty = true;
 			}
 		}
 
@@ -316,7 +316,7 @@ namespace Stran
 			if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
 			{
 				this.TV.Market.UpperLimit = limit.Return;
-				//TODO: this.TV.SaveResourceLimits(this.UserDB);
+				UpCall.Dirty = true;
 			}
 		}
 	}

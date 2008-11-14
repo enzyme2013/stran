@@ -50,13 +50,17 @@ namespace libTravian
 			get
 			{
 				var CV = UpCall.TD.Villages[VillageID];
-				int timecost = CV.TimeCost(Buildings.PartyCos[(int)PartyType]);
+				int timecost = CV.TimeCost(Buildings.PartyCos[(int)PartyType - 1]);
+				if(NextExec != DateTime.MinValue && NextExec > DateTime.Now)
+					timecost = Math.Max(timecost, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
 				if(CV.InBuilding[6] != null)
 					return Math.Max(timecost, Convert.ToInt32(CV.InBuilding[6].FinishTime.Subtract(DateTime.Now).TotalSeconds) + 30);
 				else
 					return timecost;
 			}
 		}
+
+		int retrycount = 0;
 
 		public void Action()
 		{
@@ -66,20 +70,36 @@ namespace libTravian
 			if(CV.InBuilding[6] == null || CV.InBuilding[6].FinishTime < DateTime.Now)
 			{
 				// error occurred!
-				UpCall.DebugLog("Error on party! Delete the queue!", DebugLevel.W);
-				MarkDeleted = true;
+				retrycount++;
+				if(retrycount > 10)
+				{
+					UpCall.DebugLog("Error on party for several times! Delete the queue!", DebugLevel.W);
+					MarkDeleted = true;
+				}
+				else
+				{
+					UpCall.DebugLog("Error on party! Will retry...", DebugLevel.I);
+					NextExec = DateTime.Now.AddSeconds(rand.Next(500 + retrycount * 20, 800 + retrycount * 30));
+				}
 				UpCall.Dirty = true;
 			}
 			else
+			{
 				UpCall.BuildCount();
+				retrycount = 0;
+			}
 		}
 
 		#endregion
 
 		private DateTime LastExec = DateTime.MinValue;
 
+		private DateTime NextExec = DateTime.MinValue;
+
 		[Json]
 		public TPartyType PartyType { get; set; }
+
+		private Random rand = new Random();
 
 		public enum TPartyType
 		{

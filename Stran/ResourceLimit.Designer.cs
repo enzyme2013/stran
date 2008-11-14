@@ -36,6 +36,7 @@
 			this.nudLimit2 = new System.Windows.Forms.NumericUpDown();
 			this.nudLimit3 = new System.Windows.Forms.NumericUpDown();
 			this.nudLimit4 = new System.Windows.Forms.NumericUpDown();
+			this.button1 = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.nudLimit1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudLimit2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudLimit3)).BeginInit();
@@ -63,7 +64,7 @@
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(180, 163);
+			this.btnCancel.Location = new System.Drawing.Point(125, 163);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(80, 32);
 			this.btnCancel.TabIndex = 6;
@@ -74,7 +75,7 @@
 			// btnOK
 			// 
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.Location = new System.Drawing.Point(70, 163);
+			this.btnOK.Location = new System.Drawing.Point(39, 163);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(80, 32);
 			this.btnOK.TabIndex = 5;
@@ -115,6 +116,17 @@
 			this.nudLimit4.TabIndex = 15;
 			this.nudLimit4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// button1
+			// 
+			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.button1.Location = new System.Drawing.Point(211, 163);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(80, 32);
+			this.button1.TabIndex = 16;
+			this.button1.Tag = "nolimit";
+			this.button1.Text = "无限制";
+			this.button1.UseVisualStyleBackColor = true;
+			// 
 			// ResourceLimit
 			// 
 			this.AcceptButton = this.btnOK;
@@ -122,6 +134,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(331, 230);
+			this.Controls.Add(this.button1);
 			this.Controls.Add(this.nudLimit4);
 			this.Controls.Add(this.nudLimit3);
 			this.Controls.Add(this.nudLimit2);
@@ -159,5 +172,6 @@
 		private System.Windows.Forms.NumericUpDown nudLimit2;
 		private System.Windows.Forms.NumericUpDown nudLimit3;
 		private System.Windows.Forms.NumericUpDown nudLimit4;
+		private System.Windows.Forms.Button button1;
 	}
 }

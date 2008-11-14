@@ -95,8 +95,8 @@ ok=确定
 upgradeto=升级至…
 upgrade=升级
 
-ResourceLowerLimit=&L 资源下限
-ResourceUpperLimit=&U 资源上限
+ResourceLowerLimit=&L. 资源下限
+ResourceUpperLimit=&U. 资源上限
 snapshot=&S. 获取当前村庄快照
 snapall=&A. 获取所有村庄快照
 
@@ -113,9 +113,9 @@ queue=队列
 mtype=运输类型
 role=用途
 newtransfer=&T. 新的运输
-npctrade=&N. 自动平仓
+npctrade=&P. 自动平仓
 merchantcnt=商人数:
-transfercnt=次数(0:无限):
+transfercnt=次数(0=无限):
 cmbaic=&C. 根据资源储备
 cmbail=&L. 根据资源田等级
 transfer=运输
@@ -134,11 +134,11 @@ TargetResource=目标资源
 
 // transfer timing form
 Timing=定时
-TransferTiming=定时运输
-ImmediateTransfer=立即开始运输
-DelayedTransfer=于下列时刻开始运输:
-TransferArriveAt=到达时间:
-TransferInterval=多次运输至少间隔:
+ActionTiming=定时运输
+ImmediateAction=立即开始
+DelayedAction=于下列时刻开始事件:
+ActionArriveAt=事件到达时间:
+ActionInterval=多次事件至少间隔:
 Minutes=分钟
 
 // resource limit form
@@ -148,10 +148,10 @@ upperlimit=资源上限: (限制资源输入)
 
 // NPC trade form
 NpcTradeSetting=自动平仓
-NpcTradeThreshold=触发条件: (当资源量大于所有阀值后开始平仓)
+NpcTradeThreshold=触发条件: (当资源量大于所有阈值后开始平仓)
 NpcTradeDistribution=分配比例: (所有资源将按如下比例重新调整)
 NpcTradeMinRatio=最小置换比例:
-NpcTradeMaxCount=次数: (0:无限)
+NpcTradeMaxCount=次数(0=无限):
 
 cmbparty=&P. 启用自动派对模块
 cmbparty500=&500 小派对
@@ -169,4 +169,15 @@ ImportTaskQueue=导入任务队列
 // troop
 troopinfo=军队信息
 troopamount=军队数量
-troopamount=军队类型
+trooptype=军队类型
+
+// quick panel
+QPParty=&P. 自动派对模块
+QPAILevel=&L. 人工智能以资源田等级
+QPUpTop=&U. 升级到最高等级
+QPRefreshRes=&R. 刷新资源/市场情况
+
+nolimit=解除限制
+
+CMBEnableCoin=&C. 允许金币功能
+enabled= (已启用)

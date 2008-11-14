@@ -55,6 +55,12 @@ namespace libTravian
 			t.Name = "FetchVillageDestroy";
 			t.Start(VillageID);
 		}
+		public void FetchVillageMarket(int VillageID)
+		{
+			Thread t = new Thread(new ParameterizedThreadStart(doFetchVMarket));
+			t.Name = "FetchVillageMarket";
+			t.Start(VillageID);
+		}
 		public void FetchVillageTroop(int VillageID)
 		{
 			Thread t = new Thread(new ParameterizedThreadStart(doFetchVTroop));

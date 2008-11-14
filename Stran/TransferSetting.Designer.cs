@@ -240,7 +240,7 @@
 			this.checkBoxNoCrop.AutoSize = true;
 			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 166);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
-			this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
+			this.checkBoxNoCrop.Size = new System.Drawing.Size(86, 18);
 			this.checkBoxNoCrop.TabIndex = 9;
 			this.checkBoxNoCrop.Tag = "nocrop";
 			this.checkBoxNoCrop.Text = "checkBox1";
@@ -251,7 +251,7 @@
 			// 
 			this.numericUpDownTransferCount.Location = new System.Drawing.Point(321, 162);
 			this.numericUpDownTransferCount.Maximum = new decimal(new int[] {
-            10,
+            50,
             0,
             0,
             0});
