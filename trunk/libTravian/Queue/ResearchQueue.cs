@@ -31,6 +31,12 @@ namespace libTravian
 			{
 				string level, status;
 				int timecost;
+				if(!UpCall.TD.Villages.ContainsKey(VillageID))
+				{
+					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.W);
+					MarkDeleted = true;
+					return "UNKNOWN VID";
+				}
 				var CV = UpCall.TD.Villages[VillageID];
 				TInBuilding x;
 
@@ -66,16 +72,6 @@ namespace libTravian
 					status = "Waiting";
 				return level + status;
 			}
-		}
-
-		public void Import(string s)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string Export()
-		{
-			throw new NotImplementedException();
 		}
 
 		public int CountDown
@@ -195,5 +191,22 @@ namespace libTravian
 		[Json]
 		public int TargetLevel { get; set; }
 
+		public int QueueGUID
+		{
+			get
+			{
+				switch(ResearchType)
+				{
+					case TResearchType.UpAttack:
+						return 3;
+					case TResearchType.UpDefence:
+						return 4;
+					case TResearchType.Research:
+						return 5;
+					default: // will not happened
+						return -1;
+				}
+			}
+		}
 	}
 }

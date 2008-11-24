@@ -40,19 +40,6 @@ namespace libTravian
 		string Status { get; }
 
 		/// <summary>
-		/// Decode options from an encoded string
-		/// </summary>
-		/// <param name="s">Encode data</param>
-		/// <returns>Decoded data</returns>
-		void Import(string s);
-
-		/// <summary>
-		/// Encode option in a readable string that doesn't contain ',' or ':'
-		/// </summary>
-		/// <returns>Encoded string</returns>
-		string Export();
-
-		/// <summary>
 		/// Seconds countdown to do the action
 		/// </summary>
 		int CountDown { get; }
@@ -63,10 +50,6 @@ namespace libTravian
 		/// <returns></returns>
 		void Action();
 
-		/// <summary>
-		/// Warp the Import/Export function
-		/// </summary>
-		//[Json]
-		//string IO { get; set; }
+		int QueueGUID { get; }
 	}
 }

@@ -35,16 +35,6 @@ namespace libTravian
 			}
 		}
 
-		public void Import(string s)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string Export()
-		{
-			throw new NotImplementedException();
-		}
-
 		public int CountDown
 		{
 			get
@@ -245,5 +235,6 @@ namespace libTravian
 		}
 
 		private int Gid = 0;
+		public int QueueGUID { get { return 0; } }
 	}
 }
