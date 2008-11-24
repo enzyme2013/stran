@@ -40,56 +40,6 @@ namespace libTravian
 			}
 		}
 
-		public void Import(string s)
-		{
-			string[] data = s.Split(new char[] { '&' });
-
-			int index = 0;
-
-			try
-			{
-				resumeTime = new DateTime(Int64.Parse(data[index++]));
-
-				int[] amount = new int[4];
-				for(int i = 0; i < 4; i++)
-				{
-					amount[i] = Int32.Parse(data[index++]);
-				}
-
-				Threshold = new TResAmount(amount);
-
-				amount = new int[4];
-				for(int i = 0; i < 4; i++)
-				{
-					amount[i] = Int32.Parse(data[index++]);
-				}
-
-				Distribution = new TResAmount(amount);
-
-				Count = Int32.Parse(data[index++]);
-				MaxCount = Int32.Parse(data[index++]);
-				MinTradeRatio = Int32.Parse(data[index++]);
-			}
-			catch
-			{
-				// TODO FIXME: Parse failure happens after we add more options
-				MarkDeleted = true;
-				UpCall.DebugLog("Unable to decode " + s, DebugLevel.E);
-			}
-
-		}
-
-		public string Export()
-		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat("{0}", this.resumeTime.Ticks);
-			sb.AppendFormat("&{0}", this.Threshold.ToString().Replace('|', '&'));
-			sb.AppendFormat("&{0}", this.Distribution.ToString().Replace('|', '&'));
-			sb.AppendFormat("&{0}&{1}&{2}", this.Count, this.MaxCount, this.MinTradeRatio);
-
-			return sb.ToString();
-		}
-
 		public int CountDown
 		{
 			get
@@ -441,9 +391,6 @@ namespace libTravian
 			get { return this.Threshold.TotalAmount > 0 && this.Distribution.TotalAmount > 0; }
 		}
 
-		#region IQueue 成员
-		//public string IO { get { return Export(); } set { Import(value); } }
-		#endregion
+		public int QueueGUID { get { return 8; } }
 	}
-
 }

@@ -28,6 +28,12 @@ namespace libTravian
 			{
 				string level = TargetLevel == 0 ? "" : string.Format("{0} -> {1} ", CurrentLevel, TargetLevel);
 				string status;
+				if(!UpCall.TD.Villages.ContainsKey(VillageID))
+				{
+					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.W);
+					MarkDeleted = true;
+					return "UNKNOWN VID";
+				}
 				var CV = UpCall.TD.Villages[VillageID];
 				int qtype = Bid < 19 && Bid > 0 ? 0 : 1;
 				int timecost;
@@ -44,28 +50,6 @@ namespace libTravian
 					status = "Waiting";
 				return level + status;
 			}
-		}
-
-		public void Import(string s)
-		{
-			try
-			{
-				var param = s.Split('&');
-				Bid = Convert.ToInt32(param[0]);
-				Gid = Convert.ToInt32(param[1]);
-				TargetLevel = Convert.ToInt32(param[2]);
-				Paused = Convert.ToInt32(param[3]) == 1;
-			}
-			catch(Exception)
-			{
-				MarkDeleted = true;
-				UpCall.DebugLog("Unable to decode " + s, DebugLevel.E);
-			}
-		}
-
-		public string Export()
-		{
-			return string.Format("{0}&{1}&{2}&{3}", Bid, Gid, TargetLevel, Paused ? 1 : 0);
 		}
 
 		public bool MarkDeleted { get; set; }
@@ -307,9 +291,6 @@ namespace libTravian
 
 		private Random rand = new Random();
 
-
-		#region IQueue 成员
-		//public string IO { get { return Export(); } set { Import(value); } }
-		#endregion
+		public int QueueGUID { get { return Bid < 19 && Bid > 0 ? 0 : 1; } }
 	}
 }

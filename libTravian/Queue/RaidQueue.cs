@@ -104,5 +104,7 @@ namespace libTravian
 		#region IQueue 成员
 		//public string IO { get { return Export(); } set { Import(value); } }
 		#endregion
+
+		public int QueueGUID { get { return 9; } }
 	}
 }

@@ -171,7 +171,31 @@ namespace libTravian
 							}
 							else if(y.Value.Gid == 25)
 								break;
-				return PCount == 0 ? 0 : -1;
+				if(PCount == 0)
+				{
+					bool NotFound = true;
+					foreach(var x in Buildings.Depends[Gid])
+					{
+						int canUp = 0;
+						foreach(var y in CV.Buildings)
+							if(x.Gid == y.Value.Gid)
+								if(x.Level > y.Value.Level)
+									canUp = y.Key;
+								else
+								{
+									NotFound = false;
+									break;
+								}
+						if(NotFound && canUp != 0)
+							return canUp;
+					}
+					if(NotFound)
+						return -1;
+					else
+						return 0;
+				}
+				else
+					return -1;
 			}
 
 			// Check duplicate

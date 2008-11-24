@@ -48,70 +48,6 @@ namespace libTravian
 			}
 		}
 
-		/// <summary>
-		/// Decode the transfer option from an encoded string
-		/// </summary>
-		/// <param name="s">Encode data</param>
-		/// <returns>Decoded data</returns>
-		public void Import(string s)
-		{
-			string[] data = s.Split('&');
-
-			int index = 0;
-
-			try
-			{
-				TargetVillageID = Int32.Parse(data[index++]);
-				MaxCount = Int32.Parse(data[index++]);
-				resumeTime = new DateTime(Int64.Parse(data[index++]));
-
-				int x = Int32.Parse(data[index++]);
-				int y = Int32.Parse(data[index++]);
-				TargetPos = new TPoint(x, y);
-
-				int[] amount = new int[4];
-				for(int i = 0; i < 4; i++)
-				{
-					amount[i] = Int32.Parse(data[index++]);
-				}
-
-				ResourceAmount = new TResAmount(amount);
-
-
-				Distribution = (ResourceDistributionType)Enum.Parse(typeof(ResourceDistributionType), data[index++]);
-				NoCrop = Boolean.Parse(data[index++]);
-				Count = Int32.Parse(data[index++]);
-				MinimumInterval = Int32.Parse(data[index++]);
-			}
-			catch
-			{
-				// Parse failure happens after we add more options
-				MarkDeleted = true;
-				UpCall.DebugLog("Unable to decode " + s, DebugLevel.E);
-			}
-
-		}
-
-		/// <summary>
-		/// Encode option in a readable string that doesn't contain '|', ',', or ':'
-		/// </summary>
-		/// <returns>Encoded string</returns>
-		public string Export()
-		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.AppendFormat("{0}&{1}&{2}", this.TargetVillageID, this.MaxCount, this.resumeTime.Ticks);
-			sb.AppendFormat("&{0}&{1}", this.TargetPos.X, this.TargetPos.Y);
-			for(int i = 0; i < 4; i++)
-			{
-				sb.AppendFormat("&{0}", this.ResourceAmount.Resources[i]);
-			}
-
-			sb.AppendFormat("&{0}&{1}&{2}", this.Distribution, this.NoCrop, this.Count);
-			sb.AppendFormat("&{0}", this.MinimumInterval);
-			return sb.ToString();
-		}
-
 		public int CountDown
 		{
 			get
@@ -167,7 +103,7 @@ namespace libTravian
 		{
 			if(!IsValid)
 			{
-				UpCall.DebugLog("Invalid transfer task discarded: " + Export(), DebugLevel.W);
+				UpCall.DebugLog("Invalid transfer task discarded: " + Title, DebugLevel.W);
 				this.RemoveQueuedTask();
 				return;
 			}
@@ -358,7 +294,7 @@ namespace libTravian
 		/// <summary>
 		/// When the mechant (occupied by the previous transfer) will return
 		/// </summary>
-		[Json]
+		//[Json]
 		public DateTime resumeTime;
 
 		/// <summary>
@@ -674,9 +610,7 @@ namespace libTravian
 
 		private Random rand = new Random();
 
-		#region IQueue 成员
-		//public string IO { get { return Export(); } set { Import(value); } }
-		#endregion
+		public int QueueGUID { get { return 7; } }
 	}
 	/// <summary>
 	/// Automatic resource balance flavors in resource transportations

@@ -33,6 +33,12 @@ namespace libTravian
 			{
 				string level = string.Format("{0} -> 0 ", CurrentLevel);
 				string status;
+				if(!UpCall.TD.Villages.ContainsKey(VillageID))
+				{
+					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.W);
+					MarkDeleted = true;
+					return "UNKNOWN VID";
+				}
 				var CV = UpCall.TD.Villages[VillageID];
 				var x = CV.InBuilding[2];
 				if(x == null || x.FinishTime.AddSeconds(15) < DateTime.Now)
@@ -41,16 +47,6 @@ namespace libTravian
 					status = "Waiting";
 				return level + status;
 			}
-		}
-
-		public void Import(string s)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string Export()
-		{
-			throw new NotImplementedException();
 		}
 
 		public int CountDown
@@ -131,5 +127,6 @@ namespace libTravian
 		public DestroyQueue()
 		{
 		}
+		public int QueueGUID { get { return 2; } }
 	}
 }
