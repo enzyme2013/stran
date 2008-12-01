@@ -76,7 +76,7 @@ namespace libTravian
 				}
 
 				int timecost = Math.Max(this.MinimumDelay, village.TimeCost(new TResAmount(adjustedResources)));
-				if(this.ExceedTargetCapacity(UpCall.TD, VillageID))
+				if(this.ExceedTargetCapacity(UpCall.TD))
 				{
 					timecost = Math.Max(timecost, 86400);
 				}
@@ -113,13 +113,22 @@ namespace libTravian
 				return;
 			}
 
+			TResAmount toTransfer = new TResAmount(ResourceAmount);
+
 			if(TargetVillageID != 0 &&
 				UpCall.TD.Villages.ContainsKey(TargetVillageID) &&
 				UpCall.TD.Villages[TargetVillageID].isBuildingInitialized == 2)
 			{
 				UpCall.PageQuery(TargetVillageID, "build.php?gid=17");
 				CalculateResourceAmount(UpCall.TD, VillageID);
-				if(ExceedTargetCapacity(UpCall.TD, VillageID))
+				// check if it's a crop transfer, and crop is seriously needed from target village:
+				var temp = NeedCrop(UpCall.TD);
+				if(temp != null)
+				{
+					UpCall.DebugLog("NeedCrop rule on use. Force crop transfer.", DebugLevel.I);
+					toTransfer = temp;
+				}
+				else if(ExceedTargetCapacity(UpCall.TD))
 				{
 					return;
 				}
@@ -129,7 +138,7 @@ namespace libTravian
 				CalculateResourceAmount(UpCall.TD, VillageID);
 			}
 
-			int timeCost = doTransfer(ResourceAmount, TargetPos);
+			int timeCost = doTransfer(toTransfer, TargetPos);
 			if(timeCost >= 0)
 			{
 				var CV = UpCall.TD.Villages[VillageID];
@@ -385,7 +394,7 @@ namespace libTravian
 		/// </summary>
 		/// <param name="travianData">User game info, including target village distance and storage capacity</param>
 		/// <returns>True if the transportation will overflow the target village</returns>
-		public bool ExceedTargetCapacity(Data travianData, int VillageID)
+		public bool ExceedTargetCapacity(Data travianData)
 		{
 			TResAmount targetCapacity = this.GetTargetCapacity(travianData, VillageID);
 			if(targetCapacity == null)
@@ -407,6 +416,50 @@ namespace libTravian
 			}
 
 			return false;
+		}
+
+		private TResAmount NeedCrop(Data travianData)
+		{
+			if(NoCrop)
+				return null;
+			if(Distribution == ResourceDistributionType.Uniform ||
+				Distribution == ResourceDistributionType.BalanceSource ||
+				Distribution == ResourceDistributionType.BalanceSourceTime)
+				return null;
+			if(Distribution == ResourceDistributionType.None &&
+				ResourceAmount.Resources[3] <= 0)
+				return null;
+			if(travianData == null ||
+			!travianData.Villages.ContainsKey(TargetVillageID) ||
+			!travianData.Villages.ContainsKey(VillageID))
+				return null;
+
+			TVillage source = travianData.Villages[VillageID];
+			TVillage destination = travianData.Villages[TargetVillageID];
+			if(destination.isBuildingInitialized != 2)
+				return null;
+
+			if(destination.Resource[3].Produce >= 0)
+				return null;
+
+			int speed = travianData.MarketSpeed == 0 ? 24 : travianData.MarketSpeed;
+			int timecost = Convert.ToInt32(source.Coord * destination.Coord / speed) + 30;
+
+			int cropcap = destination.Resource[3].CurrAmount + timecost * destination.Resource[3].Produce;
+
+			foreach(TMInfo transfer in destination.Market.MarketInfo)
+			{
+				if(transfer.MType == TMType.OtherCome && transfer.FinishTime < DateTime.Now.AddSeconds(timecost))
+				{
+					cropcap += transfer.CarryAmount.Resources[3];
+				}
+			}
+
+			if(cropcap <= 0)
+			{
+				return new TResAmount(0, 0, 0, ResourceAmount.TotalAmount);
+			}
+			return null;
 		}
 
 		/// <summary>

@@ -85,6 +85,10 @@
 			this.ClientSize = new System.Drawing.Size(492, 468);
 			this.CloseButton = false;
 			this.Controls.Add(this.listViewTroop);
+			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
 			this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "TroopInfoList";
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.Document;

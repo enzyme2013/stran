@@ -91,8 +91,7 @@
 			this.ClientSize = new System.Drawing.Size(342, 368);
 			this.CloseButton = false;
 			this.Controls.Add(this.listViewVillage);
-			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft)
-									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
+			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)));
 			this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "VillageList";
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;

@@ -56,13 +56,15 @@
     <Compile Include="Queue\IQueue.cs" />
     <Compile Include="Queue\NpcTradeQueue.cs" />
     <Compile Include="Queue\PartyQueue.cs" />
+    <Compile Include="Queue\ProduceTroopQueue.cs" />
     <Compile Include="Queue\RaidQueue.cs" />
     <Compile Include="Queue\ResearchQueue.cs" />
     <Compile Include="Queue\TransferQueue.cs" />
     <Compile Include="ServerLang.cs" />
     <Compile Include="Structure\Structure.cs" />
+    <Compile Include="Structure\TResAmount.cs" />
     <Compile Include="Structure\TVillage.cs" />
-    <Compile Include="TPoint.cs" />
+    <Compile Include="Structure\TPoint.cs" />
     <Compile Include="Travian.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1024,14 +1024,14 @@ namespace Stran
 						continue;
 					int Bid = Convert.ToInt32(m_buildinglist.listViewBuilding.SelectedItems[i].Text);
 					int Gid = CV.Buildings[Bid].Gid;
-					if(CV.Buildings[Bid].Level >= Buildings._cost[Gid].data.Length - 1)
+					if(CV.Buildings[Bid].Level >= Buildings.BuildingCost[Gid].data.Length - 1)
 						continue;
 					BuildToLevel btl = new BuildToLevel()
 					{
 						BuildingName = tr.GetGidLang(Gid),
 						DisplayName = dl.GetGidLang(Gid),
 						CurrentLevel = CV.Buildings[Bid].Level,
-						TargetLevel = Buildings._cost[Gid].data.Length - 1,
+						TargetLevel = Buildings.BuildingCost[Gid].data.Length - 1,
 						mui = mui
 					};
 					if(btl.ShowDialog() == DialogResult.OK)
@@ -1041,7 +1041,7 @@ namespace Stran
 						var Q = new BuildingQueue()
 						{
 							UpCall = tr,
-							VillageID = CV.ID,
+							VillageID = SelectVillage,
 							Bid = Bid,
 							Gid = CV.Buildings[Bid].Gid,
 							TargetLevel = btl.Return
@@ -1100,7 +1100,7 @@ namespace Stran
 						VillageID = SelectVillage,
 						Bid = nb.OutBid,
 						Gid = nb.OutGid,
-						TargetLevel = nb.OutTop ? Buildings._cost[nb.OutGid].data.Length - 1 : 0
+						TargetLevel = nb.OutTop ? Buildings.BuildingCost[nb.OutGid].data.Length - 1 : 0
 					};
 					CV.Queue.Add(Q);
 					lvi(Q);
@@ -1764,7 +1764,7 @@ namespace Stran
 						continue;
 					int Bid = Convert.ToInt32(m_buildinglist.listViewBuilding.SelectedItems[i].Text);
 					int Gid = CV.Buildings[Bid].Gid;
-					if(CV.Buildings[Bid].Level >= Buildings._cost[Gid].data.Length - 1)
+					if(CV.Buildings[Bid].Level >= Buildings.BuildingCost[Gid].data.Length - 1)
 						continue;
 					var Q = new BuildingQueue()
 					{
@@ -1772,7 +1772,7 @@ namespace Stran
 						VillageID = SelectVillage,
 						Bid = Bid,
 						Gid = CV.Buildings[Bid].Gid,
-						TargetLevel = Buildings._cost[Gid].data.Length - 1
+						TargetLevel = Buildings.BuildingCost[Gid].data.Length - 1
 					};
 					CV.Queue.Add(Q);
 					lvi(Q);
