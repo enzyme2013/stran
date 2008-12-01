@@ -15,169 +15,9 @@
  */
 using System;
 using System.Collections.Generic;
-using LitJson;
 
 namespace libTravian
 {
-	public class TResAmount
-	{
-		[Json]
-		public int[] Resources;
-
-		public TResAmount() 
-			: this(0, 0, 0, 0)	 
-		{
-		}
-
-		public TResAmount (int r1, int r2, int r3, int r4) 
-			: this(new int[4] { r1, r2, r3, r4 })
-		{
-		}
-
-		public TResAmount(int[] r)
-		{
-			this.Resources = r;
-		}
-
-		public TResAmount(TResAmount r)
-		{
-			this.Resources = new int[r.Resources.Length];
-			for (int i = 0; i < this.Resources.Length; i++)
-			{
-				this.Resources[i] = r.Resources[i];
-			}
-		}
-
-		public int TotalAmount
-		{
-			get
-			{
-				int total = 0;
-				for (int i = 0; i < this.Resources.Length; i++)
-				{
-					total += this.Resources[i];
-				}
-
-				return total;
-			}
-		}
-
-		public double[] Proportions
-		{
-			get
-			{
-				double total = this.TotalAmount;
-				double[] proportions = new double[this.Resources.Length];
-				for (int i = 0; i < proportions.Length; i++)
-				{
-					proportions[i] = this.Resources[i] / total;
-				}
-
-				return proportions;
-			}
-		}
-
-		public static TResAmount operator -(TResAmount r1, TResAmount r2)
-		{
-			int []resources = new int[r1.Resources.Length];
-			for (int i = 0; i < resources.Length; i ++)
-			{
-				resources[i] = r1.Resources[i] - r2.Resources[i];
-			}
-
-			return new TResAmount(resources);
-		}
-
-		public static TResAmount operator +(TResAmount r1, TResAmount r2)
-		{
-			int[] resources = new int[r1.Resources.Length];
-			for (int i = 0; i < resources.Length; i++)
-			{
-				resources[i] = r1.Resources[i] + r2.Resources[i];
-			}
-
-			return new TResAmount(resources);
-		}
-
-		public static TResAmount FromString(string s)
-		{
-			string[] values = s.Split('|');
-			int[] resources = new int[values.Length];
-			for (int i = 0; i < resources.Length; i++)
-			{
-				resources[i] = Int32.Parse(values[i]);
-			}
-
-			return new TResAmount(resources);
-		}
-
-		public override string ToString()
-		{
-			string rt = "";
-			foreach (int x in Resources)
-			{
-				if (rt.Length != 0)
-					rt += "|";
-				rt += x.ToString();
-			}
-			return rt;
-		}
-
-		/// <summary>
-		/// Convert all negative amounts to 0
-		/// </summary>
-		public void NoNegative()
-		{
-			for (int i = 0; i < this.Resources.Length; i++)
-			{
-				if (this.Resources[i] < 0)
-				{
-					this.Resources[i] = 0;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Set all resource amounts to 0
-		/// </summary>
-		public void Clear()
-		{
-			for (int i = 0; i < this.Resources.Length; i++)
-			{
-				this.Resources[i] = 0;
-			}
-		}
-
-		/// <summary>
-		/// Comparator for unit tests
-		/// </summary>
-		/// <param name="obj">Another resource amount to compare with</param>
-		/// <returns>True if the two amounts are equal</returns>
-		public override bool Equals(object obj)
-		{
-			TResAmount amount = obj as TResAmount;
-			if (amount == null)
-			{
-				return false;
-			}
-
-			for (int i = 0; i < this.Resources.Length; i++)
-			{
-				if (this.Resources[i] != amount.Resources[i])
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
-
 	public class rinfo_array
 	{
 		TResAmount[] _data;
@@ -229,16 +69,17 @@ namespace libTravian
 
 	public class Buildings
 	{
-		static public rinfo_array[] _cost;
+		static public rinfo_array[] BuildingCost;
 		static public Dictionary<int, Dictionary<int, TResAmount>> UpCost;
 		static public Dictionary<int, TResAmount> ResearchCost;
+		static public Dictionary<int, TResAmount> TroopCost;
 		static public Dictionary<int, TBL[]> Depends;
 		static public Dictionary<int, int[]> PreferPos;
 		static public List<TResAmount> PartyCos;
 		static public void Init()
 		{
-			if (_cost == null)
-				InitCost();
+			if (BuildingCost == null)
+				InitBuildingCost();
 			if (Depends == null)
 				InitDepend();
 			if (PreferPos == null)
@@ -254,49 +95,49 @@ namespace libTravian
 					new TResAmount(29700, 33250, 32000, 6700)
 				};
 		}
-		static private void InitCost()
+		static private void InitBuildingCost()
 		{
-			_cost = new rinfo_array[42];
-			_cost[1] = new rinfo_array(19, 1.67, new TResAmount(40, 100, 50, 60));
-			_cost[2] = new rinfo_array(19, 1.67, new TResAmount(80, 40, 80, 50));
-			_cost[3] = new rinfo_array(19, 1.67, new TResAmount(100, 80, 30, 60));
-			_cost[4] = new rinfo_array(19, 1.67, new TResAmount(70, 90, 70, 20));
-			_cost[5] = new rinfo_array(5, 1.8, new TResAmount(520, 380, 290, 90));
-			_cost[6] = new rinfo_array(5, 1.8, new TResAmount(440, 480, 320, 50));
-			_cost[7] = new rinfo_array(5, 1.8, new TResAmount(200, 450, 510, 120));
-			_cost[8] = new rinfo_array(5, 1.8, new TResAmount(500, 440, 380, 1240));
-			_cost[9] = new rinfo_array(5, 1.8, new TResAmount(1200, 1480, 870, 1600));
-			_cost[10] = new rinfo_array(20, 1.28, new TResAmount(130, 160, 90, 40));
-			_cost[11] = new rinfo_array(20, 1.28, new TResAmount(80, 100, 70, 20));
-			_cost[12] = new rinfo_array(20, 1.28, new TResAmount(170, 200, 380, 130));
-			_cost[13] = new rinfo_array(20, 1.28, new TResAmount(130, 210, 410, 130));
-			_cost[14] = new rinfo_array(20, 1.28, new TResAmount(1750, 2250, 1530, 240));
-			_cost[15] = new rinfo_array(20, 1.28, new TResAmount(70, 40, 60, 20));
-			_cost[16] = new rinfo_array(20, 1.28, new TResAmount(110, 160, 90, 70));
-			_cost[17] = new rinfo_array(20, 1.28, new TResAmount(80, 70, 120, 70));
-			_cost[18] = new rinfo_array(20, 1.28, new TResAmount(180, 130, 150, 80));
-			_cost[19] = new rinfo_array(20, 1.28, new TResAmount(210, 140, 260, 120));
-			_cost[20] = new rinfo_array(20, 1.28, new TResAmount(260, 140, 220, 100));
-			_cost[21] = new rinfo_array(20, 1.28, new TResAmount(460, 510, 600, 320));
-			_cost[22] = new rinfo_array(20, 1.28, new TResAmount(220, 160, 90, 40));
-			_cost[23] = new rinfo_array(10, 1.28, new TResAmount(40, 50, 30, 10));
-			_cost[24] = new rinfo_array(20, 1.28, new TResAmount(1250, 1110, 1260, 600));
-			_cost[25] = new rinfo_array(20, 1.28, new TResAmount(580, 460, 350, 180));
-			_cost[26] = new rinfo_array(20, 1.28, new TResAmount(550, 800, 750, 250));
-			_cost[27] = new rinfo_array(10, 1.28, new TResAmount(2880, 2740, 2580, 990));
-			_cost[28] = new rinfo_array(20, 1.28, new TResAmount(1400, 1330, 1200, 400));
-			_cost[29] = new rinfo_array(20, 1.28, new TResAmount(630, 420, 780, 360));
-			_cost[30] = new rinfo_array(20, 1.28, new TResAmount(780, 420, 660, 300));
-			_cost[31] = new rinfo_array(20, 1.28, new TResAmount(70, 90, 170, 70));
-			_cost[32] = new rinfo_array(20, 1.28, new TResAmount(120, 200, 0, 80));
-			_cost[33] = new rinfo_array(20, 1.28, new TResAmount(160, 100, 80, 60));
-			_cost[34] = new rinfo_array(20, 1.28, new TResAmount(155, 130, 125, 70));
-			_cost[35] = new rinfo_array(20, 1.28, new TResAmount(1200, 1400, 1050, 2200));
-			_cost[36] = new rinfo_array(20, 1.28, new TResAmount(100, 100, 100, 100));
-			_cost[37] = new rinfo_array(20, 1.33, new TResAmount(700, 670, 700, 240));
-			_cost[38] = new rinfo_array(20, 1.28, new TResAmount(650, 800, 450, 200));
-			_cost[39] = new rinfo_array(20, 1.28, new TResAmount(400, 500, 350, 100));
-			_cost[40] = new rinfo_array(100, 1.0275, new TResAmount(66700, 69050, 72200, 13200));
+			BuildingCost = new rinfo_array[42];
+			BuildingCost[1] = new rinfo_array(19, 1.67, new TResAmount(40, 100, 50, 60));
+			BuildingCost[2] = new rinfo_array(19, 1.67, new TResAmount(80, 40, 80, 50));
+			BuildingCost[3] = new rinfo_array(19, 1.67, new TResAmount(100, 80, 30, 60));
+			BuildingCost[4] = new rinfo_array(19, 1.67, new TResAmount(70, 90, 70, 20));
+			BuildingCost[5] = new rinfo_array(5, 1.8, new TResAmount(520, 380, 290, 90));
+			BuildingCost[6] = new rinfo_array(5, 1.8, new TResAmount(440, 480, 320, 50));
+			BuildingCost[7] = new rinfo_array(5, 1.8, new TResAmount(200, 450, 510, 120));
+			BuildingCost[8] = new rinfo_array(5, 1.8, new TResAmount(500, 440, 380, 1240));
+			BuildingCost[9] = new rinfo_array(5, 1.8, new TResAmount(1200, 1480, 870, 1600));
+			BuildingCost[10] = new rinfo_array(20, 1.28, new TResAmount(130, 160, 90, 40));
+			BuildingCost[11] = new rinfo_array(20, 1.28, new TResAmount(80, 100, 70, 20));
+			BuildingCost[12] = new rinfo_array(20, 1.28, new TResAmount(170, 200, 380, 130));
+			BuildingCost[13] = new rinfo_array(20, 1.28, new TResAmount(130, 210, 410, 130));
+			BuildingCost[14] = new rinfo_array(20, 1.28, new TResAmount(1750, 2250, 1530, 240));
+			BuildingCost[15] = new rinfo_array(20, 1.28, new TResAmount(70, 40, 60, 20));
+			BuildingCost[16] = new rinfo_array(20, 1.28, new TResAmount(110, 160, 90, 70));
+			BuildingCost[17] = new rinfo_array(20, 1.28, new TResAmount(80, 70, 120, 70));
+			BuildingCost[18] = new rinfo_array(20, 1.28, new TResAmount(180, 130, 150, 80));
+			BuildingCost[19] = new rinfo_array(20, 1.28, new TResAmount(210, 140, 260, 120));
+			BuildingCost[20] = new rinfo_array(20, 1.28, new TResAmount(260, 140, 220, 100));
+			BuildingCost[21] = new rinfo_array(20, 1.28, new TResAmount(460, 510, 600, 320));
+			BuildingCost[22] = new rinfo_array(20, 1.28, new TResAmount(220, 160, 90, 40));
+			BuildingCost[23] = new rinfo_array(10, 1.28, new TResAmount(40, 50, 30, 10));
+			BuildingCost[24] = new rinfo_array(20, 1.28, new TResAmount(1250, 1110, 1260, 600));
+			BuildingCost[25] = new rinfo_array(20, 1.28, new TResAmount(580, 460, 350, 180));
+			BuildingCost[26] = new rinfo_array(20, 1.28, new TResAmount(550, 800, 750, 250));
+			BuildingCost[27] = new rinfo_array(10, 1.28, new TResAmount(2880, 2740, 2580, 990));
+			BuildingCost[28] = new rinfo_array(20, 1.28, new TResAmount(1400, 1330, 1200, 400));
+			BuildingCost[29] = new rinfo_array(20, 1.28, new TResAmount(630, 420, 780, 360));
+			BuildingCost[30] = new rinfo_array(20, 1.28, new TResAmount(780, 420, 660, 300));
+			BuildingCost[31] = new rinfo_array(20, 1.28, new TResAmount(70, 90, 170, 70));
+			BuildingCost[32] = new rinfo_array(20, 1.28, new TResAmount(120, 200, 0, 80));
+			BuildingCost[33] = new rinfo_array(20, 1.28, new TResAmount(160, 100, 80, 60));
+			BuildingCost[34] = new rinfo_array(20, 1.28, new TResAmount(155, 130, 125, 70));
+			BuildingCost[35] = new rinfo_array(20, 1.28, new TResAmount(1200, 1400, 1050, 2200));
+			BuildingCost[36] = new rinfo_array(20, 1.28, new TResAmount(100, 100, 100, 100));
+			BuildingCost[37] = new rinfo_array(20, 1.33, new TResAmount(700, 670, 700, 240));
+			BuildingCost[38] = new rinfo_array(20, 1.28, new TResAmount(650, 800, 450, 200));
+			BuildingCost[39] = new rinfo_array(20, 1.28, new TResAmount(400, 500, 350, 100));
+			BuildingCost[40] = new rinfo_array(100, 1.0275, new TResAmount(66700, 69050, 72200, 13200));
 		}
 		static private void InitDepend()
 		{
@@ -1047,16 +888,50 @@ namespace libTravian
 			ResearchCost[28] = new TResAmount(5860, 5900, 5240, 700);
 			ResearchCost[29] = new TResAmount(15880, 22900, 25200, 22660);
 		}
+		static private void InitTroopCost()
+		{
+			TroopCost = new Dictionary<int, TResAmount>(30);
+			TroopCost[1] = new TResAmount(120, 100, 180, 40);
+			TroopCost[2] = new TResAmount(100, 130, 160, 70);
+			TroopCost[3] = new TResAmount(150, 160, 210, 80);
+			TroopCost[4] = new TResAmount(140, 160, 20, 40);
+			TroopCost[5] = new TResAmount(550, 440, 320, 100);
+			TroopCost[6] = new TResAmount(550, 640, 800, 180);
+			TroopCost[7] = new TResAmount(900, 360, 500, 70);
+			TroopCost[8] = new TResAmount(950, 1350, 600, 90);
+			TroopCost[9] = new TResAmount(30750, 27200, 45000, 37500);
+			TroopCost[10] = new TResAmount(5800, 5300, 7200, 5500);
+			TroopCost[11] = new TResAmount(95, 75, 40, 40);
+			TroopCost[12] = new TResAmount(145, 70, 85, 40);
+			TroopCost[13] = new TResAmount(130, 120, 170, 70);
+			TroopCost[14] = new TResAmount(160, 100, 50, 50);
+			TroopCost[15] = new TResAmount(370, 270, 290, 75);
+			TroopCost[16] = new TResAmount(450, 515, 480, 80);
+			TroopCost[17] = new TResAmount(1000, 300, 350, 70);
+			TroopCost[18] = new TResAmount(900, 1200, 600, 60);
+			TroopCost[19] = new TResAmount(35500, 26600, 25000, 27200);
+			TroopCost[20] = new TResAmount(7200, 5500, 5800, 6500);
+			TroopCost[21] = new TResAmount(100, 130, 55, 30);
+			TroopCost[22] = new TResAmount(140, 150, 185, 60);
+			TroopCost[23] = new TResAmount(170, 150, 20, 40);
+			TroopCost[24] = new TResAmount(350, 450, 230, 60);
+			TroopCost[25] = new TResAmount(360, 330, 280, 120);
+			TroopCost[26] = new TResAmount(500, 620, 675, 170);
+			TroopCost[27] = new TResAmount(950, 555, 330, 75);
+			TroopCost[28] = new TResAmount(960, 1450, 630, 90);
+			TroopCost[29] = new TResAmount(30750, 45400, 31000, 37500);
+			TroopCost[30] = new TResAmount(5500, 7000, 5300, 4900);	
+		}
 		static public TResAmount Cost(int gid, int level)
 		{
 			try
 			{
 				if (gid < 0)
 					return new TResAmount(0, 0, 0, 0);
-				if (level >= _cost[gid].data.Length)
+				if (level >= BuildingCost[gid].data.Length)
 					return new TResAmount(0, 0, 0, 0);
 				else
-					return _cost[gid].data[level];
+					return BuildingCost[gid].data[level];
 			}
 			catch (Exception)
 			{
@@ -1067,7 +942,7 @@ namespace libTravian
 		}
 		static public bool CheckLevelFull(int gid, int level, bool capital)
 		{
-			return (!capital && gid < 5 && level >= 10) || level >= _cost[gid].length;
+			return (!capital && gid < 5 && level >= 10) || level >= BuildingCost[gid].length;
 		}
 	}
 	public class TBL

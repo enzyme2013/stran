@@ -47,8 +47,7 @@
 			this.listViewInBuilding.Margin = new System.Windows.Forms.Padding(0);
 			this.listViewInBuilding.MultiSelect = false;
 			this.listViewInBuilding.Name = "listViewInBuilding";
-			this.listViewInBuilding.Scrollable = false;
-			this.listViewInBuilding.Size = new System.Drawing.Size(442, 168);
+			this.listViewInBuilding.Size = new System.Drawing.Size(342, 138);
 			this.listViewInBuilding.TabIndex = 19;
 			this.listViewInBuilding.UseCompatibleStateImageBehavior = false;
 			this.listViewInBuilding.View = System.Windows.Forms.View.Details;
@@ -63,16 +62,21 @@
 			// 
 			this.columnHeader17.Tag = "ibitem";
 			this.columnHeader17.Text = "建筑和时间";
-			this.columnHeader17.Width = 250;
+			this.columnHeader17.Width = 200;
 			// 
 			// InBuildingList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(442, 168);
+			this.ClientSize = new System.Drawing.Size(342, 138);
 			this.CloseButton = false;
 			this.Controls.Add(this.listViewInBuilding);
+			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)
+									| WeifenLuo.WinFormsUI.Docking.DockAreas.Document)));
 			this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.MinimumSize = new System.Drawing.Size(300, 170);
 			this.Name = "InBuildingList";
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom;
 			this.TabText = "进行中的任务";
