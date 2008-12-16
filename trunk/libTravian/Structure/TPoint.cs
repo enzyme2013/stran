@@ -71,8 +71,8 @@ namespace libTravian
 			}
 			set
 			{
-				x = value % 801 - 401;
-				y = 400 - value / 801;
+				x = (value - 1) % 801 - 400;
+				y = 400 - (value - 1) / 801;
 			}
 		}
 
