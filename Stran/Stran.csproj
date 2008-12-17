@@ -130,6 +130,12 @@
     <Compile Include="NpcTradeSetting.Designer.cs">
       <DependentUpon>NpcTradeSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProduceTroopSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProduceTroopSetting.Designer.cs">
+      <DependentUpon>ProduceTroopSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Account.resx">
@@ -191,6 +197,9 @@
     <EmbeddedResource Include="NpcTradeSetting.resx">
       <DependentUpon>NpcTradeSetting.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProduceTroopSetting.resx">
+      <DependentUpon>ProduceTroopSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

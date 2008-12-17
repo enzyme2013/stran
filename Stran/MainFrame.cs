@@ -1788,5 +1788,34 @@ namespace Stran
 				return;
 			tr.FetchVillageMarket(SelectVillage);
 		}
+
+		private void CMBProduceTroop_Click(object sender, EventArgs e)
+		{
+			if(!TravianData.Villages.ContainsKey(SelectVillage))
+				return;
+			var CV = TravianData.Villages[SelectVillage];
+			if(CV.isUpgradeInitialized < 2)
+			{
+				MessageBox.Show("请先刷新研发信息");
+				return;
+			}
+			List<TroopInfo> CanProduce = new List<TroopInfo>();
+			foreach(var x in CV.Upgrades)
+				if(x.Value.Researched)
+					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = tr.GetAidLang(TravianData.Tribe, x.Key) });
+			ProduceTroopSetting pts = new ProduceTroopSetting
+			{
+				mui = mui,
+				CanProduce = CanProduce
+			};
+			if(pts.ShowDialog() == DialogResult.OK && pts.Result != null)
+			{
+				// continue
+				pts.Result.VillageID = CV.ID;
+				pts.Result.UpCall = tr;
+				CV.Queue.Add(pts.Result);
+				lvi(pts.Result);
+			}
+		}
 	}
 }

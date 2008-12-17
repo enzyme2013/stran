@@ -51,6 +51,8 @@
 			this.buttonTiming = new System.Windows.Forms.Button();
 			this.buttonSource = new System.Windows.Forms.Button();
 			this.buttonTarget = new System.Windows.Forms.Button();
+			this.radioNormalMeTime = new System.Windows.Forms.RadioButton();
+			this.checkBoxForce = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -62,7 +64,7 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(302, 319);
+			this.buttonCancel.Location = new System.Drawing.Point(302, 356);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(80, 32);
 			this.buttonCancel.TabIndex = 18;
@@ -73,7 +75,7 @@
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(204, 319);
+			this.buttonOK.Location = new System.Drawing.Point(204, 356);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(80, 32);
 			this.buttonOK.TabIndex = 17;
@@ -187,11 +189,11 @@
 			// labelDetail
 			// 
 			this.labelDetail.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelDetail.Location = new System.Drawing.Point(12, 239);
+			this.labelDetail.Location = new System.Drawing.Point(12, 252);
 			this.labelDetail.Multiline = true;
 			this.labelDetail.Name = "labelDetail";
 			this.labelDetail.ReadOnly = true;
-			this.labelDetail.Size = new System.Drawing.Size(370, 74);
+			this.labelDetail.Size = new System.Drawing.Size(370, 98);
 			this.labelDetail.TabIndex = 19;
 			this.labelDetail.TabStop = false;
 			// 
@@ -238,7 +240,7 @@
 			// checkBoxNoCrop
 			// 
 			this.checkBoxNoCrop.AutoSize = true;
-			this.checkBoxNoCrop.Location = new System.Drawing.Point(115, 166);
+			this.checkBoxNoCrop.Location = new System.Drawing.Point(155, 190);
 			this.checkBoxNoCrop.Name = "checkBoxNoCrop";
 			this.checkBoxNoCrop.Size = new System.Drawing.Size(86, 18);
 			this.checkBoxNoCrop.TabIndex = 9;
@@ -289,7 +291,7 @@
 			// 
 			// buttonTiming
 			// 
-			this.buttonTiming.Location = new System.Drawing.Point(301, 192);
+			this.buttonTiming.Location = new System.Drawing.Point(301, 214);
 			this.buttonTiming.Name = "buttonTiming";
 			this.buttonTiming.Size = new System.Drawing.Size(80, 32);
 			this.buttonTiming.TabIndex = 16;
@@ -300,7 +302,7 @@
 			// 
 			// buttonSource
 			// 
-			this.buttonSource.Location = new System.Drawing.Point(115, 192);
+			this.buttonSource.Location = new System.Drawing.Point(115, 214);
 			this.buttonSource.Name = "buttonSource";
 			this.buttonSource.Size = new System.Drawing.Size(80, 32);
 			this.buttonSource.TabIndex = 14;
@@ -311,7 +313,7 @@
 			// 
 			// buttonTarget
 			// 
-			this.buttonTarget.Location = new System.Drawing.Point(208, 192);
+			this.buttonTarget.Location = new System.Drawing.Point(208, 214);
 			this.buttonTarget.Name = "buttonTarget";
 			this.buttonTarget.Size = new System.Drawing.Size(80, 32);
 			this.buttonTarget.TabIndex = 15;
@@ -320,13 +322,38 @@
 			this.buttonTarget.UseVisualStyleBackColor = true;
 			this.buttonTarget.Click += new System.EventHandler(this.buttonTarget_Click);
 			// 
+			// radioNormalMeTime
+			// 
+			this.radioNormalMeTime.AutoSize = true;
+			this.radioNormalMeTime.Location = new System.Drawing.Point(115, 166);
+			this.radioNormalMeTime.Name = "radioNormalMeTime";
+			this.radioNormalMeTime.Size = new System.Drawing.Size(96, 18);
+			this.radioNormalMeTime.TabIndex = 27;
+			this.radioNormalMeTime.TabStop = true;
+			this.radioNormalMeTime.Tag = "autonormalizemetime";
+			this.radioNormalMeTime.Text = "radioButton2";
+			this.radioNormalMeTime.UseVisualStyleBackColor = true;
+			// 
+			// checkBoxForce
+			// 
+			this.checkBoxForce.AutoSize = true;
+			this.checkBoxForce.Location = new System.Drawing.Point(12, 190);
+			this.checkBoxForce.Name = "checkBoxForce";
+			this.checkBoxForce.Size = new System.Drawing.Size(86, 18);
+			this.checkBoxForce.TabIndex = 28;
+			this.checkBoxForce.Tag = "forcetransfer";
+			this.checkBoxForce.Text = "checkBox1";
+			this.checkBoxForce.UseVisualStyleBackColor = true;
+			// 
 			// TransferSetting
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(394, 374);
+			this.ClientSize = new System.Drawing.Size(394, 400);
+			this.Controls.Add(this.checkBoxForce);
+			this.Controls.Add(this.radioNormalMeTime);
 			this.Controls.Add(this.buttonTarget);
 			this.Controls.Add(this.buttonSource);
 			this.Controls.Add(this.buttonTiming);
@@ -397,5 +424,7 @@
 		private System.Windows.Forms.Button buttonTiming;
 		private System.Windows.Forms.Button buttonSource;
 		private System.Windows.Forms.Button buttonTarget;
+		private System.Windows.Forms.RadioButton radioNormalMeTime;
+		private System.Windows.Forms.CheckBox checkBoxForce;
 	}
 }

@@ -115,6 +115,7 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMBProduceTroop = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -242,12 +243,13 @@
             this.toolStripSeparator9,
             this.CMBParty,
             this.toolStripSeparator13,
+            this.CMBProduceTroop,
             this.CMBRaid,
             this.toolStripSeparator15,
             this.CMBEnableCoin});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
 			this.contextMenuBuilding.ShowImageMargin = false;
-			this.contextMenuBuilding.Size = new System.Drawing.Size(182, 354);
+			this.contextMenuBuilding.Size = new System.Drawing.Size(182, 376);
 			this.contextMenuBuilding.Text = "添加到队列";
 			// 
 			// CMBUp
@@ -838,6 +840,14 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
+			// CMBProduceTroop
+			// 
+			this.CMBProduceTroop.Name = "CMBProduceTroop";
+			this.CMBProduceTroop.Size = new System.Drawing.Size(181, 22);
+			this.CMBProduceTroop.Tag = "CMBProduceTroop";
+			this.CMBProduceTroop.Text = "造兵";
+			this.CMBProduceTroop.Click += new System.EventHandler(this.CMBProduceTroop_Click);
+			// 
 			// MainFrame
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -951,6 +961,7 @@
 		private System.Windows.Forms.CheckBox checkBoxVerbose;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
 		private System.Windows.Forms.ToolStripMenuItem CMBEnableCoin;
+		private System.Windows.Forms.ToolStripMenuItem CMBProduceTroop;
 
 
 	}

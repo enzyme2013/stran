@@ -78,17 +78,19 @@ namespace libTravian
 		static public List<TResAmount> PartyCos;
 		static public void Init()
 		{
-			if (BuildingCost == null)
+			if(BuildingCost == null)
 				InitBuildingCost();
-			if (Depends == null)
+			if(Depends == null)
 				InitDepend();
-			if (PreferPos == null)
+			if(PreferPos == null)
 				InitPrefer();
-			if (UpCost == null)
+			if(UpCost == null)
 				InitUpCost();
-			if (ResearchCost == null)
+			if(ResearchCost == null)
 				InitResearchCost();
-			if (PartyCos == null)
+			if(TroopCost == null)
+				InitTroopCost();
+			if(PartyCos == null)
 				PartyCos = new List<TResAmount>()
 				{
 					new TResAmount(6400, 6650, 5940, 1340),
