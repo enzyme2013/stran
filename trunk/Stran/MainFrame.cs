@@ -400,7 +400,7 @@ namespace Stran
 				}
 				else
 				{
-					bool[] status = new bool[10];
+					List<int> status = new List<int>();
 					for(int i = 0; i < CV.Queue.Count; i++)
 					{
 						var x = CV.Queue[i];
@@ -421,7 +421,7 @@ namespace Stran
 						{
 							delayStr = "||";
 						}
-						else if(!status[ntype])
+						else if(!status.Contains(ntype))
 						{
 							int n = x.CountDown;
 							if (n > 0)
@@ -429,7 +429,7 @@ namespace Stran
 								delayStr = this.TimeToString(n);
 							}
 							if(ntype < 7)
-								status[ntype] = true;
+								status.Add(ntype);
 						}
 
 						if (lvi.SubItems[3].Text != delayStr)
