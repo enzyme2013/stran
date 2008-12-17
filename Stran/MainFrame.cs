@@ -413,23 +413,23 @@ namespace Stran
 						{
 							ntype = (x as BuildingQueue).Bid > 19 && TravianData.isRomans ? 1 : 0;
 						}
-						else if(x is TransferQueue)
-							ntype = 7;
+						else
+							ntype = x.QueueGUID;
 
 						string delayStr = String.Empty;
 						if (x.Paused)
 						{
 							delayStr = "||";
 						}
-						else if(x is TransferQueue || !status[ntype])
+						else if(!status[ntype])
 						{
 							int n = x.CountDown;
 							if (n > 0)
 							{
 								delayStr = this.TimeToString(n);
 							}
-
-							status[ntype] = true;
+							if(ntype < 7)
+								status[ntype] = true;
 						}
 
 						if (lvi.SubItems[3].Text != delayStr)
@@ -1802,7 +1802,7 @@ namespace Stran
 			List<TroopInfo> CanProduce = new List<TroopInfo>();
 			foreach(var x in CV.Upgrades)
 				if(x.Value.Researched)
-					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = tr.GetAidLang(TravianData.Tribe, x.Key) });
+					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = dl.GetAidLang(TravianData.Tribe, x.Key) });
 			ProduceTroopSetting pts = new ProduceTroopSetting
 			{
 				mui = mui,

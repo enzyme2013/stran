@@ -53,6 +53,8 @@ namespace Stran
 		{
 			if(numericUpDown1.Value == 0)
 				return;
+			if(listBox1.SelectedItem == null)
+				return;
 			Result = new ProduceTroopQueue
 			{
 				Aid = (listBox1.SelectedItem as TroopInfo).Aid,
