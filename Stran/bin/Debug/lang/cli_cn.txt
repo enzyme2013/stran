@@ -181,3 +181,7 @@ nolimit=解除限制
 
 CMBEnableCoin=&C. 允许金币功能
 enabled= (已启用)
+
+autonormalizemetime=自动平衡我的爆仓时间
+forcetransfer=无视爆仓检查
+CMBProduceTroop=&O. 造兵
