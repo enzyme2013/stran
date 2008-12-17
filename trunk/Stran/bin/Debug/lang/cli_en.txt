@@ -144,7 +144,7 @@ Minutes=Minutes
 // resource limit form
 ResourceLimit=Resource Limits
 lowerlimit=Minimum resource amount to enable outgoing transportation
-upperlimit=Maximum resource amount to enable incoming transporation
+upperlimit=Maximum resource amount to enable incoming transportation
 
 // NPC trade form
 NpcTradeSetting=NPC Trade
@@ -181,3 +181,7 @@ nolimit=No limit
 
 CMBEnableCoin=Enable &Coin function <FIXME>
 enabled= (Enabled)
+
+autonormalizemetime=Nml this village (Time)
+forcetransfer=Skip full check
+CMBProduceTroop=Pr&oduce troops
