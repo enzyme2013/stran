@@ -315,9 +315,9 @@ namespace libTravian
 			get
 			{
 				if(Produce < 0)
-					return new TimeSpan(0, 0, CurrAmount * 3600 / -Produce);
+					return new TimeSpan(0, 0, Convert.ToInt32(Convert.ToInt64(CurrAmount) * 3600 / -Produce));
 				else if(Produce > 0)
-					return new TimeSpan(0, 0, (Capacity - CurrAmount) * 3600 / Produce);
+					return new TimeSpan(0, 0, Convert.ToInt32(Convert.ToInt64(Capacity - CurrAmount) * 3600 / Produce));
 				else
 					return new TimeSpan(1, 0, 0, 0);
 			}

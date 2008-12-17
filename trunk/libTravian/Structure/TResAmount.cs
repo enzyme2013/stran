@@ -162,6 +162,16 @@ namespace libTravian
 		{
 			return base.GetHashCode();
 		}
+
+		public TResAmount Clone()
+		{
+			return (TResAmount)MemberwiseClone();
+		}
+
+		static public TResAmount operator * (TResAmount Res, int Time)
+		{
+			return new TResAmount(Res.Resources[0] * Time, Res.Resources[1] * Time, Res.Resources[2] * Time, Res.Resources[3] * Time);
+		}
 	}
 
 }

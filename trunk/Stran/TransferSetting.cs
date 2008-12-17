@@ -234,6 +234,7 @@ namespace Stran
 			Int32.TryParse(this.txtX.Text, out x);
 			Int32.TryParse(this.txtY.Text, out y);
 			option.TargetPos = new TPoint(x, y);
+			option.ForceGo = checkBoxForce.Checked;
 
 			option.ResourceAmount = new TResAmount(
 				 Convert.ToInt32(this.numericUpDown1.Value),
@@ -245,22 +246,24 @@ namespace Stran
 				return null;
 			}
 
-			if (this.radioNormalTarget.Checked)
+			if(this.radioNormalTarget.Checked)
 			{
 				option.Distribution = ResourceDistributionType.BalanceTarget;
-				if (this.TV == null)
+				if(this.TV == null)
 				{
 					return null;
 				}
 			}
-			else if (radioNormalMe.Checked)
+			else if(radioNormalMe.Checked)
 			{
 				option.Distribution = ResourceDistributionType.BalanceSource;
 			}
-			else if (radioUniform.Checked)
+			else if(radioUniform.Checked)
 			{
 				option.Distribution = ResourceDistributionType.Uniform;
 			}
+			else if(radioNormalMeTime.Checked)
+				option.Distribution = ResourceDistributionType.BalanceSourceTime;
 
 			if (checkBoxNoCrop.Checked)
 			{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using LitJson;
+using System.Diagnostics;
 
 namespace libTravian
 {
@@ -270,7 +271,7 @@ namespace libTravian
 					if(x.Value.isBuildingInitialized == 2)
 						x.Value.Market.MarketInfo.Add(new TMInfo()
 						{
-							CarryAmount = Amount,
+							CarryAmount = Amount.Clone(),
 							Coord = CV.Coord,
 							FinishTime = DateTime.Now.AddSeconds(TimeCost),
 							MType = TMType.OtherCome,
@@ -396,6 +397,8 @@ namespace libTravian
 		/// <returns>True if the transportation will overflow the target village</returns>
 		public bool ExceedTargetCapacity(Data travianData)
 		{
+			if(ForceGo)
+				return false;
 			TResAmount targetCapacity = this.GetTargetCapacity(travianData, VillageID);
 			if(targetCapacity == null)
 			{
@@ -440,7 +443,11 @@ namespace libTravian
 				return null;
 
 			if(destination.Resource[3].Produce >= 0)
+			{
+				if(UpCall != null)
+					UpCall.DebugLog("Target Produce >= 0, no need crop rule.", DebugLevel.I);
 				return null;
+			}
 
 			int speed = travianData.MarketSpeed == 0 ? 24 : travianData.MarketSpeed;
 			int timecost = Convert.ToInt32(source.Coord * destination.Coord / speed) + 30;
@@ -459,6 +466,9 @@ namespace libTravian
 			{
 				return new TResAmount(0, 0, 0, ResourceAmount.TotalAmount);
 			}
+			if(UpCall != null)
+				UpCall.DebugLog("Target village don't need crop, no need crop rule.", DebugLevel.I);
+
 			return null;
 		}
 
@@ -482,37 +492,54 @@ namespace libTravian
 					this.BalanceDestinationResource(travianData, VillageID);
 					break;
 				case ResourceDistributionType.BalanceSourceTime:
-					//BalanceSourceTime(travianData, VillageID);
+					BalanceSourceTime(travianData, VillageID);
 					break;
 
 			}
 		}
 
-		[Obsolete("Not implemented")]
+		[Obsolete("Not implemented well")]
 		private void BalanceSourceTime(Data travianData, int VillageID)
 		{
+			// TODO: FIXME
+			int total = ResourceAmount.TotalAmount;
+			int slots = NoCrop ? 3 : 4;
 			TResAmount targetAmount = new TResAmount(0, 0, 0, 0);
 			if(travianData != null &&
 				travianData.Villages.ContainsKey(VillageID) &&
 				travianData.Villages[VillageID].isBuildingInitialized == 2)
 			{
-				TVillage village = travianData.Villages[VillageID];
-				for(int i = 0; i < targetAmount.Resources.Length; i++)
+				TVillage TV = travianData.Villages[VillageID];
+				int[] fulltime = new int[slots];
+				int totaltime = 0, total2 = 0; ;
+				for(int i = 0; i < fulltime.Length; i++)
 				{
-					/*
-					targetAmount.Resources[i] = village.Resource[i].CurrAmount;
-					if(village.Market.LowerLimit != null)
-					{
-						targetAmount.Resources[i] -= village.Market.LowerLimit.Resources[i];
-					}
-					 */
-					// TODO: FIXME
+					fulltime[i] = Convert.ToInt32(TV.Resource[i].LeftTime.TotalSeconds);
+					//Console.Write("{0}, ", fulltime[i]);
+					totaltime += fulltime[i];
 				}
+				//Console.WriteLine(totaltime);
+				for(int i = 0; i < fulltime.Length - 1; i++)
+				{
+					targetAmount.Resources[i] = Convert.ToInt32(Convert.ToInt64(total) * fulltime[i] / totaltime);
+					//Console.Write("{0}, ", targetAmount.Resources[i]);
+					total2 += targetAmount.Resources[i];
+				}
+				//Console.WriteLine(total2);
+				targetAmount.Resources[fulltime.Length - 1] = total - total2;
+				/*
+				for(int i = 0; i < fulltime.Length - 1; i++)
+					if(TV.Market.LowerLimit != null)
+					{
+						targetAmount.Resources[i] -= TV.Market.LowerLimit.Resources[i];
+					}
 
 				targetAmount.NoNegative();
+				 */
+				//Debug.Assert(total2 >= 0);
 			}
-
-			this.DoBalance(targetAmount);
+			ResourceAmount = targetAmount;
+			//this.DoBalance(targetAmount);
 		}
 
 		private void EvenlyDistibuteResource()
@@ -664,6 +691,9 @@ namespace libTravian
 		private Random rand = new Random();
 
 		public int QueueGUID { get { return 7; } }
+
+		[Json]
+		public bool ForceGo { get; set; }
 	}
 	/// <summary>
 	/// Automatic resource balance flavors in resource transportations

@@ -182,6 +182,7 @@ namespace libTravian
 					CV.Queue.Insert(0, new BuildingQueue()
 					{
 						UpCall = UpCall,
+						VillageID = VillageID,
 						Bid = bid,
 						Gid = gid
 					});
