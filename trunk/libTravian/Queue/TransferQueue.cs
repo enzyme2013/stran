@@ -511,22 +511,43 @@ namespace libTravian
 			{
 				TVillage TV = travianData.Villages[VillageID];
 				int[] fulltime = new int[slots];
-				int totaltime = 0, total2 = 0; ;
+				int maxtime = 0, total2 = 0, totalproduce = 0, total3 = 0;
+
 				for(int i = 0; i < fulltime.Length; i++)
 				{
 					fulltime[i] = Convert.ToInt32(TV.Resource[i].LeftTime.TotalSeconds);
 					//Console.Write("{0}, ", fulltime[i]);
-					totaltime += fulltime[i];
+					maxtime = Math.Max(maxtime, fulltime[i]);
 				}
 				//Console.WriteLine(totaltime);
-				for(int i = 0; i < fulltime.Length - 1; i++)
+				for(int i = 0; i < fulltime.Length; i++)
 				{
-					targetAmount.Resources[i] = Convert.ToInt32(Convert.ToInt64(total) * fulltime[i] / totaltime);
+					targetAmount.Resources[i] = Convert.ToInt32(Convert.ToInt64(TV.Resource[i].Produce) * (maxtime - fulltime[i]) / 3600);
 					//Console.Write("{0}, ", targetAmount.Resources[i]);
 					total2 += targetAmount.Resources[i];
+					totalproduce += TV.Resource[i].Produce;
 				}
-				//Console.WriteLine(total2);
-				targetAmount.Resources[fulltime.Length - 1] = total - total2;
+				if(total2 > total)
+				{
+					for(int i = 0; i < fulltime.Length; i++)
+					{
+						targetAmount.Resources[i] = Convert.ToInt32(targetAmount.Resources[i] * Convert.ToDouble(total) / total2);
+						total3 += targetAmount.Resources[i];
+					}
+				}
+				else
+				{
+
+					double seconds = Convert.ToDouble(total - total2) / totalproduce;
+					//Console.WriteLine(total2);
+					for(int i = 0; i < fulltime.Length; i++)
+					{
+						targetAmount.Resources[i] += Convert.ToInt32(TV.Resource[i].Produce * seconds);
+						total3 += targetAmount.Resources[i];
+					}
+				}
+				targetAmount.Resources[slots - 1] += total - total3;
+				targetAmount.NoNegative();
 				/*
 				for(int i = 0; i < fulltime.Length - 1; i++)
 					if(TV.Market.LowerLimit != null)
@@ -534,7 +555,6 @@ namespace libTravian
 						targetAmount.Resources[i] -= TV.Market.LowerLimit.Resources[i];
 					}
 
-				targetAmount.NoNegative();
 				 */
 				//Debug.Assert(total2 >= 0);
 			}
