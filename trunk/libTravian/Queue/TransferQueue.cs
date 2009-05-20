@@ -420,9 +420,10 @@ namespace libTravian
 
 			return false;
 		}
-
+		[Obsolete("Don't use this before fixing")]
 		private TResAmount NeedCrop(Data travianData)
 		{
+			return null;
 			if(NoCrop)
 				return null;
 			if(Distribution == ResourceDistributionType.Uniform ||

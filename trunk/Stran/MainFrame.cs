@@ -1187,6 +1187,8 @@ namespace Stran
 		}
 		private void CMBRaid_Click(object sender, EventArgs e)
 		{
+			MessageBox.Show("NOT IMPLEMENTED");
+			return;
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
 

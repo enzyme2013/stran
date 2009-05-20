@@ -11,7 +11,7 @@
  * 
  * The Initial Developer of the Original Code is [MeteorRain <msg7086@gmail.com>].
  * Copyright (C) MeteorRain 2007, 2008. All Rights Reserved.
- * Contributor(s): [MeteorRain].
+ * Contributor(s): [MeteorRain], [jones125].
  */
 using System;
 using System.Collections.Generic;
@@ -32,13 +32,13 @@ namespace libTravian
 		{
 			string Username = TD.Username;
 			string Password = TD.Password;
-			if(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
 				return false;
 			try
 			{
 				//WriteInfo("Logging in as '" + Username + "', may take a few seconds...");
 				string data = wc.DownloadString("/");
-				if(!data.Contains("Travian"))
+				if (!data.Contains("Travian"))
 				{
 					DebugLog("Cannot visit travian website!", DebugLevel.F);
 					return false;
@@ -46,7 +46,7 @@ namespace libTravian
 				string userkey, passkey, alkey;
 				Match m;
 				m = Regex.Match(data, "type=\"text\" name=\"(\\S+?)\"");
-				if(m.Success)
+				if (m.Success)
 					userkey = m.Groups[1].Value;
 				else
 				{
@@ -54,16 +54,16 @@ namespace libTravian
 					return false;
 				}
 				m = Regex.Match(data, "type=\"password\" name=\"(\\S+?)\"");
-				if(m.Success)
+				if (m.Success)
 					passkey = m.Groups[1].Value;
 				else
 				{
 					DebugLog("Parse passkey error!", DebugLevel.F);
 					return false;
 				}
-				m = Regex.Match(data, "><input type=\"hidden\" name=\"(\\S+?)\" value");
-				if(m.Success)
-					alkey = m.Groups[1].Value;
+				MatchCollection ms = Regex.Matches(data, "<input type=\"hidden\" name=\"(\\S+?)\" value");
+				if (ms.Count > 0)
+					alkey = ms[ms.Count - 1].Groups[1].Value;
 				else
 				{
 					DebugLog("Parse alkey error!", DebugLevel.F);
@@ -80,7 +80,7 @@ namespace libTravian
 
 				string result = this.pageQuerier.PageQuery(0, "dorf1.php?ok", PostData, false, true);
 
-				if(result.Contains("login"))
+				if (result.Contains("login"))
 				{
 					DebugLog("Username or Password error!", DebugLevel.F);
 					//MessageBox.Show("Login failed.");
@@ -88,12 +88,12 @@ namespace libTravian
 				}
 
 				m = Regex.Match(result, "spieler.php\\?uid=(\\d*)");
-				if(m.Success)
+				if (m.Success)
 					TD.UserID = Convert.ToInt32(m.Groups[1].Value);
 
 				return true;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				DebugLog(e);
 				return false;

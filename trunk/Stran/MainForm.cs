@@ -37,7 +37,7 @@ namespace Stran
 		static int Pagecount = 0, Buildcount = 0;
 		static object writelock = new object();
 		// svn propset svn:keywords "Rev" MainForm.cs
-		string svnid = "$Rev$";
+		//string svnid = "$Rev$";
 		static public string VERSION;
 		private MUI mui { get; set; }
 
@@ -50,8 +50,8 @@ namespace Stran
 			Assembly myAsm = Assembly.Load("Stran");
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
-			int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}-{2}(SVN:{3})", v.Major, v.Minor, v.Build, rev);
+			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [GoldenPhoenix]", v.Major, v.Minor, v.Build);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);

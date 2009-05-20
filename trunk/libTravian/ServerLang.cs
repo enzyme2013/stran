@@ -63,7 +63,7 @@ namespace libTravian
 		}
 		public void SetAidLang(int Aid, string Value)
 		{
-			if(GidLang.ContainsKey(Aid) && GidLang[Aid] == Value)
+			if(AidLang.ContainsKey(Aid) && AidLang[Aid] == Value)
 				return;
 			AidLang[Aid] = Value;
 			Dirty = true;

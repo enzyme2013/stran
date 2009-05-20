@@ -68,6 +68,7 @@
 			this.CMBParty500 = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMBParty2000 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMBProduceTroop = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMBRaid = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMBEnableCoin = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,7 +116,7 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.CMBProduceTroop = new System.Windows.Forms.ToolStripMenuItem();
+			this.httpServer1 = new CleverComponents.InetSuite.HttpServer();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -144,10 +145,10 @@
 			// 
 			this.tabPage2.Controls.Add(this.dockPanel1);
 			this.tabPage2.Controls.Add(this.panel2);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Location = new System.Drawing.Point(4, 23);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(926, 586);
+			this.tabPage2.Size = new System.Drawing.Size(926, 585);
 			this.tabPage2.TabIndex = 0;
 			this.tabPage2.Tag = "villagebuilding";
 			this.tabPage2.Text = "村庄建设";
@@ -160,7 +161,7 @@
 			this.dockPanel1.DocumentStyle = WeifenLuo.WinFormsUI.Docking.DocumentStyle.DockingWindow;
 			this.dockPanel1.Location = new System.Drawing.Point(3, 3);
 			this.dockPanel1.Name = "dockPanel1";
-			this.dockPanel1.Size = new System.Drawing.Size(919, 580);
+			this.dockPanel1.Size = new System.Drawing.Size(919, 579);
 			this.dockPanel1.TabIndex = 22;
 			this.dockPanel1.Resize += new System.EventHandler(this.dockPanel1_Resize);
 			// 
@@ -169,17 +170,17 @@
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
 			this.panel2.Location = new System.Drawing.Point(922, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(1, 580);
+			this.panel2.Size = new System.Drawing.Size(1, 579);
 			this.panel2.TabIndex = 21;
 			// 
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.textBox1);
 			this.tabPage1.Controls.Add(this.panel1);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Location = new System.Drawing.Point(4, 23);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(926, 586);
+			this.tabPage1.Size = new System.Drawing.Size(926, 585);
 			this.tabPage1.TabIndex = 2;
 			this.tabPage1.Tag = "log";
 			this.tabPage1.Text = "日志";
@@ -193,7 +194,7 @@
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(920, 550);
+			this.textBox1.Size = new System.Drawing.Size(920, 549);
 			this.textBox1.TabIndex = 0;
 			// 
 			// panel1
@@ -212,7 +213,7 @@
 			this.checkBoxVerbose.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxVerbose.Location = new System.Drawing.Point(3, 6);
 			this.checkBoxVerbose.Name = "checkBoxVerbose";
-			this.checkBoxVerbose.Size = new System.Drawing.Size(72, 18);
+			this.checkBoxVerbose.Size = new System.Drawing.Size(71, 18);
 			this.checkBoxVerbose.TabIndex = 0;
 			this.checkBoxVerbose.Text = "Verbose";
 			this.checkBoxVerbose.UseVisualStyleBackColor = true;
@@ -249,13 +250,13 @@
             this.CMBEnableCoin});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
 			this.contextMenuBuilding.ShowImageMargin = false;
-			this.contextMenuBuilding.Size = new System.Drawing.Size(182, 376);
+			this.contextMenuBuilding.Size = new System.Drawing.Size(183, 376);
 			this.contextMenuBuilding.Text = "添加到队列";
 			// 
 			// CMBUp
 			// 
 			this.CMBUp.Name = "CMBUp";
-			this.CMBUp.Size = new System.Drawing.Size(181, 22);
+			this.CMBUp.Size = new System.Drawing.Size(182, 22);
 			this.CMBUp.Tag = "cmbup";
 			this.CMBUp.Text = "&A. 升级建筑 - 添加到队列";
 			this.CMBUp.Click += new System.EventHandler(this.CMBUp_Click);
@@ -267,14 +268,14 @@
             this.CMBUp5,
             this.CMBUp9});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 22);
 			this.toolStripMenuItem1.Tag = "cmpupmulti";
 			this.toolStripMenuItem1.Text = "&U. 升级建筑 - 多次";
 			// 
 			// CMBUp2
 			// 
 			this.CMBUp2.Name = "CMBUp2";
-			this.CMBUp2.Size = new System.Drawing.Size(135, 22);
+			this.CMBUp2.Size = new System.Drawing.Size(134, 22);
 			this.CMBUp2.Tag = "cmpup2";
 			this.CMBUp2.Text = "&2. 添加 2 次";
 			this.CMBUp2.Click += new System.EventHandler(this.CMBUp2_Click);
@@ -282,7 +283,7 @@
 			// CMBUp5
 			// 
 			this.CMBUp5.Name = "CMBUp5";
-			this.CMBUp5.Size = new System.Drawing.Size(135, 22);
+			this.CMBUp5.Size = new System.Drawing.Size(134, 22);
 			this.CMBUp5.Tag = "cmpup5";
 			this.CMBUp5.Text = "&5. 添加 5 次";
 			this.CMBUp5.Click += new System.EventHandler(this.CMBUp5_Click);
@@ -290,7 +291,7 @@
 			// CMBUp9
 			// 
 			this.CMBUp9.Name = "CMBUp9";
-			this.CMBUp9.Size = new System.Drawing.Size(135, 22);
+			this.CMBUp9.Size = new System.Drawing.Size(134, 22);
 			this.CMBUp9.Tag = "cmpup9";
 			this.CMBUp9.Text = "&9. 添加 9 次";
 			this.CMBUp9.Click += new System.EventHandler(this.CMBUp9_Click);
@@ -298,7 +299,7 @@
 			// CMBUpTo
 			// 
 			this.CMBUpTo.Name = "CMBUpTo";
-			this.CMBUpTo.Size = new System.Drawing.Size(181, 22);
+			this.CMBUpTo.Size = new System.Drawing.Size(182, 22);
 			this.CMBUpTo.Tag = "cmpupto";
 			this.CMBUpTo.Text = "&L. 升级建筑到指定等级...";
 			this.CMBUpTo.Click += new System.EventHandler(this.CMBUpTo_Click);
@@ -306,12 +307,12 @@
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMBDestroy
 			// 
 			this.CMBDestroy.Name = "CMBDestroy";
-			this.CMBDestroy.Size = new System.Drawing.Size(181, 22);
+			this.CMBDestroy.Size = new System.Drawing.Size(182, 22);
 			this.CMBDestroy.Tag = "cmpdestroy";
 			this.CMBDestroy.Text = "&D. 拆除建筑";
 			this.CMBDestroy.Click += new System.EventHandler(this.CMBDestroy_Click);
@@ -319,7 +320,7 @@
 			// CMBNew
 			// 
 			this.CMBNew.Name = "CMBNew";
-			this.CMBNew.Size = new System.Drawing.Size(181, 22);
+			this.CMBNew.Size = new System.Drawing.Size(182, 22);
 			this.CMBNew.Tag = "cmbnew";
 			this.CMBNew.Text = "&N. 新建建筑";
 			this.CMBNew.Click += new System.EventHandler(this.CMBNew_Click);
@@ -327,7 +328,7 @@
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMBAI
 			// 
@@ -335,7 +336,7 @@
             this.CMBAI_C,
             this.CMBAI_L});
 			this.CMBAI.Name = "CMBAI";
-			this.CMBAI.Size = new System.Drawing.Size(181, 22);
+			this.CMBAI.Size = new System.Drawing.Size(182, 22);
 			this.CMBAI.Tag = "cmbai";
 			this.CMBAI.Text = "&E. 启用人工智能模块";
 			// 
@@ -358,12 +359,12 @@
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMBRefresh
 			// 
 			this.CMBRefresh.Name = "CMBRefresh";
-			this.CMBRefresh.Size = new System.Drawing.Size(181, 22);
+			this.CMBRefresh.Size = new System.Drawing.Size(182, 22);
 			this.CMBRefresh.Tag = "refreshbuilding";
 			this.CMBRefresh.Text = "刷新建筑列表";
 			this.CMBRefresh.Click += new System.EventHandler(this.CMBRefresh_Click);
@@ -371,7 +372,7 @@
 			// CMBRefreshDestroy
 			// 
 			this.CMBRefreshDestroy.Name = "CMBRefreshDestroy";
-			this.CMBRefreshDestroy.Size = new System.Drawing.Size(181, 22);
+			this.CMBRefreshDestroy.Size = new System.Drawing.Size(182, 22);
 			this.CMBRefreshDestroy.Tag = "refreshdestroy";
 			this.CMBRefreshDestroy.Text = "刷新拆除项目";
 			this.CMBRefreshDestroy.Click += new System.EventHandler(this.CMBRefreshDestroy_Click);
@@ -379,12 +380,12 @@
 			// toolStripSeparator12
 			// 
 			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			this.toolStripSeparator12.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator12.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMMNew2
 			// 
 			this.CMMNew2.Name = "CMMNew2";
-			this.CMMNew2.Size = new System.Drawing.Size(181, 22);
+			this.CMMNew2.Size = new System.Drawing.Size(182, 22);
 			this.CMMNew2.Tag = "newtransfer";
 			this.CMMNew2.Text = "新运输";
 			this.CMMNew2.Click += new System.EventHandler(this.CMMNew_Click);
@@ -392,7 +393,7 @@
 			// CMMNpcTrade2
 			// 
 			this.CMMNpcTrade2.Name = "CMMNpcTrade2";
-			this.CMMNpcTrade2.Size = new System.Drawing.Size(181, 22);
+			this.CMMNpcTrade2.Size = new System.Drawing.Size(182, 22);
 			this.CMMNpcTrade2.Tag = "npctrade";
 			this.CMMNpcTrade2.Text = "自动平仓";
 			this.CMMNpcTrade2.Click += new System.EventHandler(this.CMMNpcTrade_Click);
@@ -400,7 +401,7 @@
 			// toolStripSeparator9
 			// 
 			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator9.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMBParty
 			// 
@@ -408,14 +409,14 @@
             this.CMBParty500,
             this.CMBParty2000});
 			this.CMBParty.Name = "CMBParty";
-			this.CMBParty.Size = new System.Drawing.Size(181, 22);
+			this.CMBParty.Size = new System.Drawing.Size(182, 22);
 			this.CMBParty.Tag = "cmbparty";
 			this.CMBParty.Text = "启用自动派对模块";
 			// 
 			// CMBParty500
 			// 
 			this.CMBParty500.Name = "CMBParty500";
-			this.CMBParty500.Size = new System.Drawing.Size(123, 22);
+			this.CMBParty500.Size = new System.Drawing.Size(122, 22);
 			this.CMBParty500.Tag = "cmbparty500";
 			this.CMBParty500.Text = "5. 小派对";
 			this.CMBParty500.Click += new System.EventHandler(this.CMBParty500_Click);
@@ -423,7 +424,7 @@
 			// CMBParty2000
 			// 
 			this.CMBParty2000.Name = "CMBParty2000";
-			this.CMBParty2000.Size = new System.Drawing.Size(123, 22);
+			this.CMBParty2000.Size = new System.Drawing.Size(122, 22);
 			this.CMBParty2000.Tag = "cmbparty2000";
 			this.CMBParty2000.Text = "2. 大派对";
 			this.CMBParty2000.Click += new System.EventHandler(this.CMBParty2000_Click);
@@ -431,26 +432,34 @@
 			// toolStripSeparator13
 			// 
 			this.toolStripSeparator13.Name = "toolStripSeparator13";
-			this.toolStripSeparator13.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator13.Size = new System.Drawing.Size(179, 6);
+			// 
+			// CMBProduceTroop
+			// 
+			this.CMBProduceTroop.Name = "CMBProduceTroop";
+			this.CMBProduceTroop.Size = new System.Drawing.Size(182, 22);
+			this.CMBProduceTroop.Tag = "CMBProduceTroop";
+			this.CMBProduceTroop.Text = "造兵";
+			this.CMBProduceTroop.Click += new System.EventHandler(this.CMBProduceTroop_Click);
 			// 
 			// CMBRaid
 			// 
 			this.CMBRaid.Name = "CMBRaid";
-			this.CMBRaid.Size = new System.Drawing.Size(181, 22);
+			this.CMBRaid.Size = new System.Drawing.Size(182, 22);
 			this.CMBRaid.Text = "出兵";
 			this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
 			// 
 			// toolStripSeparator15
 			// 
 			this.toolStripSeparator15.Name = "toolStripSeparator15";
-			this.toolStripSeparator15.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator15.Size = new System.Drawing.Size(179, 6);
 			// 
 			// CMBEnableCoin
 			// 
 			this.CMBEnableCoin.CheckOnClick = true;
 			this.CMBEnableCoin.ForeColor = System.Drawing.Color.DarkBlue;
 			this.CMBEnableCoin.Name = "CMBEnableCoin";
-			this.CMBEnableCoin.Size = new System.Drawing.Size(181, 22);
+			this.CMBEnableCoin.Size = new System.Drawing.Size(182, 22);
 			this.CMBEnableCoin.Tag = "CMBEnableCoin";
 			this.CMBEnableCoin.Text = "启用金币功能";
 			this.CMBEnableCoin.CheckedChanged += new System.EventHandler(this.CMBEnableCoin_CheckedChanged);
@@ -469,14 +478,14 @@
             this.CMRRefresh});
 			this.contextMenuResearch.Name = "contextMenuResearch";
 			this.contextMenuResearch.ShowImageMargin = false;
-			this.contextMenuResearch.Size = new System.Drawing.Size(125, 154);
+			this.contextMenuResearch.Size = new System.Drawing.Size(130, 154);
 			this.contextMenuResearch.Tag = "mresearch";
 			this.contextMenuResearch.Opening += new System.ComponentModel.CancelEventHandler(this.CMR_Opening);
 			// 
 			// CMRResearch
 			// 
 			this.CMRResearch.Name = "CMRResearch";
-			this.CMRResearch.Size = new System.Drawing.Size(124, 22);
+			this.CMRResearch.Size = new System.Drawing.Size(129, 22);
 			this.CMRResearch.Tag = "mresearch";
 			this.CMRResearch.Text = "research";
 			this.CMRResearch.Click += new System.EventHandler(this.CMRResearch_Click);
@@ -484,12 +493,12 @@
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(121, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(126, 6);
 			// 
 			// CMRUpgradeAtk
 			// 
 			this.CMRUpgradeAtk.Name = "CMRUpgradeAtk";
-			this.CMRUpgradeAtk.Size = new System.Drawing.Size(124, 22);
+			this.CMRUpgradeAtk.Size = new System.Drawing.Size(129, 22);
 			this.CMRUpgradeAtk.Tag = "upgradeatk";
 			this.CMRUpgradeAtk.Text = "upgradeatk";
 			this.CMRUpgradeAtk.Click += new System.EventHandler(this.CMRUpgradeAtk_Click);
@@ -497,7 +506,7 @@
 			// CMRUpgradeAtkTo
 			// 
 			this.CMRUpgradeAtkTo.Name = "CMRUpgradeAtkTo";
-			this.CMRUpgradeAtkTo.Size = new System.Drawing.Size(124, 22);
+			this.CMRUpgradeAtkTo.Size = new System.Drawing.Size(129, 22);
 			this.CMRUpgradeAtkTo.Tag = "upgradeatkto";
 			this.CMRUpgradeAtkTo.Text = "upgradeatkto";
 			this.CMRUpgradeAtkTo.Click += new System.EventHandler(this.CMRUpgradeAtkTo_Click);
@@ -505,12 +514,12 @@
 			// toolStripSeparator7
 			// 
 			this.toolStripSeparator7.Name = "toolStripSeparator7";
-			this.toolStripSeparator7.Size = new System.Drawing.Size(121, 6);
+			this.toolStripSeparator7.Size = new System.Drawing.Size(126, 6);
 			// 
 			// CMRUpgradeDef
 			// 
 			this.CMRUpgradeDef.Name = "CMRUpgradeDef";
-			this.CMRUpgradeDef.Size = new System.Drawing.Size(124, 22);
+			this.CMRUpgradeDef.Size = new System.Drawing.Size(129, 22);
 			this.CMRUpgradeDef.Tag = "upgradedef";
 			this.CMRUpgradeDef.Text = "upgradedef";
 			this.CMRUpgradeDef.Click += new System.EventHandler(this.CMRUpgradeDef_Click);
@@ -518,7 +527,7 @@
 			// CMRUpgradeDefTo
 			// 
 			this.CMRUpgradeDefTo.Name = "CMRUpgradeDefTo";
-			this.CMRUpgradeDefTo.Size = new System.Drawing.Size(124, 22);
+			this.CMRUpgradeDefTo.Size = new System.Drawing.Size(129, 22);
 			this.CMRUpgradeDefTo.Tag = "upgradedefto";
 			this.CMRUpgradeDefTo.Text = "upgradedefto";
 			this.CMRUpgradeDefTo.Click += new System.EventHandler(this.CMRUpgradeDefTo_Click);
@@ -526,12 +535,12 @@
 			// toolStripSeparator10
 			// 
 			this.toolStripSeparator10.Name = "toolStripSeparator10";
-			this.toolStripSeparator10.Size = new System.Drawing.Size(121, 6);
+			this.toolStripSeparator10.Size = new System.Drawing.Size(126, 6);
 			// 
 			// CMRRefresh
 			// 
 			this.CMRRefresh.Name = "CMRRefresh";
-			this.CMRRefresh.Size = new System.Drawing.Size(124, 22);
+			this.CMRRefresh.Size = new System.Drawing.Size(129, 22);
 			this.CMRRefresh.Tag = "refreshupgrade";
 			this.CMRRefresh.Text = "refreshupgrade";
 			this.CMRRefresh.Click += new System.EventHandler(this.CMRRefresh_Click);
@@ -553,12 +562,12 @@
 			this.contextMenuQueue.Name = "contextMenuStrip3";
 			this.contextMenuQueue.ShowCheckMargin = true;
 			this.contextMenuQueue.ShowImageMargin = false;
-			this.contextMenuQueue.Size = new System.Drawing.Size(196, 198);
+			this.contextMenuQueue.Size = new System.Drawing.Size(195, 198);
 			// 
 			// CMQDel
 			// 
 			this.CMQDel.Name = "CMQDel";
-			this.CMQDel.Size = new System.Drawing.Size(195, 22);
+			this.CMQDel.Size = new System.Drawing.Size(194, 22);
 			this.CMQDel.Tag = "cmqdel";
 			this.CMQDel.Text = "&D. 删除";
 			this.CMQDel.Click += new System.EventHandler(this.CMQDel_Click);
@@ -566,7 +575,7 @@
 			// CMQClear
 			// 
 			this.CMQClear.Name = "CMQClear";
-			this.CMQClear.Size = new System.Drawing.Size(195, 22);
+			this.CMQClear.Size = new System.Drawing.Size(194, 22);
 			this.CMQClear.Tag = "cmqclear";
 			this.CMQClear.Text = "&C. 清空";
 			this.CMQClear.Click += new System.EventHandler(this.CMQClear_Click);
@@ -574,13 +583,13 @@
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(192, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(191, 6);
 			// 
 			// CMQUp
 			// 
 			this.CMQUp.Name = "CMQUp";
 			this.CMQUp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
-			this.CMQUp.Size = new System.Drawing.Size(195, 22);
+			this.CMQUp.Size = new System.Drawing.Size(194, 22);
 			this.CMQUp.Tag = "cmqup";
 			this.CMQUp.Text = "&U. 上移";
 			this.CMQUp.Click += new System.EventHandler(this.CMQUp_Click);
@@ -589,7 +598,7 @@
 			// 
 			this.CMQDown.Name = "CMQDown";
 			this.CMQDown.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
-			this.CMQDown.Size = new System.Drawing.Size(195, 22);
+			this.CMQDown.Size = new System.Drawing.Size(194, 22);
 			this.CMQDown.Tag = "cmqdown";
 			this.CMQDown.Text = "&D. 下移";
 			this.CMQDown.Click += new System.EventHandler(this.CMQDown_Click);
@@ -597,12 +606,12 @@
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(192, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(191, 6);
 			// 
 			// CMQPause
 			// 
 			this.CMQPause.Name = "CMQPause";
-			this.CMQPause.Size = new System.Drawing.Size(195, 22);
+			this.CMQPause.Size = new System.Drawing.Size(194, 22);
 			this.CMQPause.Tag = "cmqpause";
 			this.CMQPause.Text = "&P. 暂停";
 			this.CMQPause.Click += new System.EventHandler(this.CMQPause_Click);
@@ -612,7 +621,7 @@
 			this.CMQTimer.Checked = true;
 			this.CMQTimer.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.CMQTimer.Name = "CMQTimer";
-			this.CMQTimer.Size = new System.Drawing.Size(195, 22);
+			this.CMQTimer.Size = new System.Drawing.Size(194, 22);
 			this.CMQTimer.Tag = "cmqtimer";
 			this.CMQTimer.Text = "&E. 延迟倒计时正在工作";
 			this.CMQTimer.Click += new System.EventHandler(this.CMQTimer_Click);
@@ -620,12 +629,12 @@
 			// toolStripSeparator14
 			// 
 			this.toolStripSeparator14.Name = "toolStripSeparator14";
-			this.toolStripSeparator14.Size = new System.Drawing.Size(192, 6);
+			this.toolStripSeparator14.Size = new System.Drawing.Size(191, 6);
 			// 
 			// CMQExport
 			// 
 			this.CMQExport.Name = "CMQExport";
-			this.CMQExport.Size = new System.Drawing.Size(195, 22);
+			this.CMQExport.Size = new System.Drawing.Size(194, 22);
 			this.CMQExport.Tag = "cmqexport";
 			this.CMQExport.Text = "&X. 导出";
 			this.CMQExport.Click += new System.EventHandler(this.CMQExport_Click);
@@ -633,7 +642,7 @@
 			// CMQImport
 			// 
 			this.CMQImport.Name = "CMQImport";
-			this.CMQImport.Size = new System.Drawing.Size(195, 22);
+			this.CMQImport.Size = new System.Drawing.Size(194, 22);
 			this.CMQImport.Tag = "cmqimport";
 			this.CMQImport.Text = "&I. 导入";
 			this.CMQImport.Click += new System.EventHandler(this.CMQImport_Click);
@@ -650,13 +659,13 @@
             this.CMVSnapAll});
 			this.contextMenuVillage.Name = "contextMenuStrip1";
 			this.contextMenuVillage.ShowImageMargin = false;
-			this.contextMenuVillage.Size = new System.Drawing.Size(142, 126);
+			this.contextMenuVillage.Size = new System.Drawing.Size(155, 126);
 			this.contextMenuVillage.Opening += new System.ComponentModel.CancelEventHandler(this.CMV_Opening);
 			// 
 			// CMVRefresh
 			// 
 			this.CMVRefresh.Name = "CMVRefresh";
-			this.CMVRefresh.Size = new System.Drawing.Size(141, 22);
+			this.CMVRefresh.Size = new System.Drawing.Size(154, 22);
 			this.CMVRefresh.Tag = "refresh";
 			this.CMVRefresh.Text = "刷新";
 			this.CMVRefresh.Click += new System.EventHandler(this.CMVRefresh_Click);
@@ -664,12 +673,12 @@
 			// toolStripSeparator8
 			// 
 			this.toolStripSeparator8.Name = "toolStripSeparator8";
-			this.toolStripSeparator8.Size = new System.Drawing.Size(138, 6);
+			this.toolStripSeparator8.Size = new System.Drawing.Size(151, 6);
 			// 
 			// CMVLowerLimit
 			// 
 			this.CMVLowerLimit.Name = "CMVLowerLimit";
-			this.CMVLowerLimit.Size = new System.Drawing.Size(141, 22);
+			this.CMVLowerLimit.Size = new System.Drawing.Size(154, 22);
 			this.CMVLowerLimit.Tag = "ResourceLowerLimit";
 			this.CMVLowerLimit.Text = "Minimum Resource";
 			this.CMVLowerLimit.Click += new System.EventHandler(this.CMVLowerLimit_Click);
@@ -677,7 +686,7 @@
 			// CMVUpperLimit
 			// 
 			this.CMVUpperLimit.Name = "CMVUpperLimit";
-			this.CMVUpperLimit.Size = new System.Drawing.Size(141, 22);
+			this.CMVUpperLimit.Size = new System.Drawing.Size(154, 22);
 			this.CMVUpperLimit.Tag = "ResourceUpperLimit";
 			this.CMVUpperLimit.Text = "Maximum Resource";
 			this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
@@ -685,12 +694,12 @@
 			// toolStripSeparator11
 			// 
 			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(138, 6);
+			this.toolStripSeparator11.Size = new System.Drawing.Size(151, 6);
 			// 
 			// CMVSnapshot
 			// 
 			this.CMVSnapshot.Name = "CMVSnapshot";
-			this.CMVSnapshot.Size = new System.Drawing.Size(141, 22);
+			this.CMVSnapshot.Size = new System.Drawing.Size(154, 22);
 			this.CMVSnapshot.Tag = "snapshot";
 			this.CMVSnapshot.Text = "snapshot";
 			this.CMVSnapshot.Click += new System.EventHandler(this.CMVSnapshot_Click);
@@ -698,7 +707,7 @@
 			// CMVSnapAll
 			// 
 			this.CMVSnapAll.Name = "CMVSnapAll";
-			this.CMVSnapAll.Size = new System.Drawing.Size(141, 22);
+			this.CMVSnapAll.Size = new System.Drawing.Size(154, 22);
 			this.CMVSnapAll.Tag = "snapall";
 			this.CMVSnapAll.Text = "snapall";
 			this.CMVSnapAll.Click += new System.EventHandler(this.CMVSnapAll_Click);
@@ -840,13 +849,10 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// CMBProduceTroop
+			// httpServer1
 			// 
-			this.CMBProduceTroop.Name = "CMBProduceTroop";
-			this.CMBProduceTroop.Size = new System.Drawing.Size(181, 22);
-			this.CMBProduceTroop.Tag = "CMBProduceTroop";
-			this.CMBProduceTroop.Text = "造兵";
-			this.CMBProduceTroop.Click += new System.EventHandler(this.CMBProduceTroop_Click);
+			this.httpServer1.Port = 80;
+			this.httpServer1.ServerName = "Clever Internet Suite HTTP service";
 			// 
 			// MainFrame
 			// 
@@ -962,6 +968,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
 		private System.Windows.Forms.ToolStripMenuItem CMBEnableCoin;
 		private System.Windows.Forms.ToolStripMenuItem CMBProduceTroop;
+		private CleverComponents.InetSuite.HttpServer httpServer1;
 
 
 	}
