@@ -232,6 +232,14 @@ namespace libTravian
 			UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Buildings, VillageID = VillageID });
 		}
 
+		#endregion
+
+		public BuildingQueue()
+		{
+			Bid = Gid = TargetLevel = 0;
+			Paused = false;
+		}
+
 		private int findBuilding(int VillageID, int Gid)
 		{
 			int tlvl = 20, tid = 0;
@@ -249,14 +257,6 @@ namespace libTravian
 				//	if(b[k] != null && b[k].name == svrlang.Building[gid])
 				return tid;
 			return -1;
-		}
-
-		#endregion
-
-		public BuildingQueue()
-		{
-			Bid = Gid = TargetLevel = 0;
-			Paused = false;
 		}
 
 		/// <summary>

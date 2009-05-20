@@ -116,7 +116,7 @@
 			this.CMMNpcTrade = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuInbuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.CMICancel = new System.Windows.Forms.ToolStripMenuItem();
-			this.httpServer1 = new CleverComponents.InetSuite.HttpServer();
+			this.CMBNewCap = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -250,7 +250,7 @@
             this.CMBEnableCoin});
 			this.contextMenuBuilding.Name = "contextMenuStrip2";
 			this.contextMenuBuilding.ShowImageMargin = false;
-			this.contextMenuBuilding.Size = new System.Drawing.Size(183, 376);
+			this.contextMenuBuilding.Size = new System.Drawing.Size(183, 354);
 			this.contextMenuBuilding.Text = "添加到队列";
 			// 
 			// CMBUp
@@ -651,6 +651,7 @@
 			// 
 			this.contextMenuVillage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CMVRefresh,
+            this.CMBNewCap,
             this.toolStripSeparator8,
             this.CMVLowerLimit,
             this.CMVUpperLimit,
@@ -659,7 +660,7 @@
             this.CMVSnapAll});
 			this.contextMenuVillage.Name = "contextMenuStrip1";
 			this.contextMenuVillage.ShowImageMargin = false;
-			this.contextMenuVillage.Size = new System.Drawing.Size(155, 126);
+			this.contextMenuVillage.Size = new System.Drawing.Size(155, 170);
 			this.contextMenuVillage.Opening += new System.ComponentModel.CancelEventHandler(this.CMV_Opening);
 			// 
 			// CMVRefresh
@@ -849,10 +850,12 @@
 			this.CMICancel.Text = "取消";
 			this.CMICancel.Click += new System.EventHandler(this.CMICancel_Click);
 			// 
-			// httpServer1
+			// CMBNewCap
 			// 
-			this.httpServer1.Port = 80;
-			this.httpServer1.ServerName = "Clever Internet Suite HTTP service";
+			this.CMBNewCap.Name = "CMBNewCap";
+			this.CMBNewCap.Size = new System.Drawing.Size(154, 22);
+			this.CMBNewCap.Text = "&X. 设为新主村";
+			this.CMBNewCap.Click += new System.EventHandler(this.CMBNewCap_Click);
 			// 
 			// MainFrame
 			// 
@@ -968,7 +971,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
 		private System.Windows.Forms.ToolStripMenuItem CMBEnableCoin;
 		private System.Windows.Forms.ToolStripMenuItem CMBProduceTroop;
-		private CleverComponents.InetSuite.HttpServer httpServer1;
+		private System.Windows.Forms.ToolStripMenuItem CMBNewCap;
 
 
 	}

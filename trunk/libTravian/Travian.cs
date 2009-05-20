@@ -125,12 +125,13 @@ namespace libTravian
 		/// <param name="VillageID"></param>
 		/// <param name="Q"></param>
 		/// <returns>0 -> Directly buildable. positive -> pre-build gid. negative -> impossible.</returns>
+		[Obsolete]
 		public int testPossibleNow(int VillageID, TQueue Q)
 		{
 			var CV = TD.Villages[VillageID];
 			if(CV.Buildings.ContainsKey(Q.Bid) && CV.Buildings[Q.Bid].Gid == Q.Gid && CV.Buildings[Q.Bid].Level != 0)
 				return Buildings.CheckLevelFull(Q.Gid, CV.Buildings[Q.Bid].Level, CV.isCapital) ? -1 : 0;
-			return testPossibleNewNow(TD.Villages, CV, Q.Gid, Q.Bid);
+			return testPossibleNewNow(TD.Tribe, TD.Villages, CV, Q.Gid, Q.Bid);
 		}
 
 		public int testPossibleNow(int VillageID, BuildingQueue Q)
@@ -138,16 +139,32 @@ namespace libTravian
 			var CV = TD.Villages[VillageID];
 			if(CV.Buildings.ContainsKey(Q.Bid) && CV.Buildings[Q.Bid].Gid == Q.Gid && CV.Buildings[Q.Bid].Level != 0)
 				return Buildings.CheckLevelFull(Q.Gid, CV.Buildings[Q.Bid].Level, CV.isCapital) ? -1 : 0;
-			return testPossibleNewNow(TD.Villages, CV, Q.Gid, Q.Bid);
+			return testPossibleNewNow(TD.Tribe, TD.Villages, CV, Q.Gid, Q.Bid);
 		}
 
-		static public int testPossibleNewNow(Dictionary<int, TVillage> Villages, TVillage CV, int Gid, int Bid)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Tribe"></param>
+		/// <param name="Villages"></param>
+		/// <param name="CV"></param>
+		/// <param name="Gid"></param>
+		/// <param name="Bid"></param>
+		/// <returns>0:directly, -1:impossible, >0:pre-upgrade gid</returns>
+		static public int testPossibleNewNow(int Tribe, Dictionary<int, TVillage> Villages, TVillage CV, int Gid, int Bid)
 		{
 			List<int> CapitalNo = new List<int> { 27, 29, 30 };
 			List<int> NotCapitalNo = new List<int> { 34 };
-			List<int> Repeatable = new List<int> { 10, 11, 23, 38, 39 };
+			List<int> Repeatable = new List<int> { 10, 11, 23, 38, 39, 36 };
 			//TQueue Q = CV.Queue[QueueID];
 			// Extend
+
+			if (Gid == 36 && Tribe != 3)
+				return -1;
+			if (Gid == 35 && Tribe != 2)
+				return -1;
+			if (Gid == 41 && Tribe != 1)
+				return -1;
 
 			if(Gid < 5)
 				return 0;

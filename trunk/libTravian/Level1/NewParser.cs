@@ -255,7 +255,7 @@ namespace libTravian
 				if (gid != -1)
 					tinb = new TInBuilding()
 					{
-						CancelURL = "dorf1.php" + m[i].Groups[1].Value,
+						CancelURL = "dorf1.php" + m[i].Groups[1].Value.Replace("&amp;", "&"),
 						Gid = gid,
 						Level = Convert.ToInt32(m[i].Groups[3].Value),
 						FinishTime = DateTime.Now.Add(TimeSpanParse(m[i].Groups[4].Value))
@@ -346,9 +346,9 @@ namespace libTravian
 						TD.Dirty = true;
 					}
 				}
-				m = Regex.Match(data, @"build\.php\?gid=15&del=\d+");
+				m = Regex.Match(data, @"build\.php\?gid=15&amp;del=\d+");
 				if (m.Success)
-					CV.InBuilding[2].CancelURL = m.Groups[0].Value;
+					CV.InBuilding[2].CancelURL = m.Groups[0].Value.Replace("&amp;", "&");
 			}
 			CV.isDestroyInitialized = 2;
 		}
@@ -447,7 +447,8 @@ namespace libTravian
 
 		private DateTime NewParseInDoing(string data, out int aid)
 		{
-			var m2 = Regex.Match(data, "<img\\sclass=\"unit\\s\\w+([0-9]+)\".*?\\r?\\n.*?\\r?\\n.*?</td>.*?\\r?\\n.*?timer1>([0-9:]+)<");
+			//var m2 = Regex.Match(data, "<img\\sclass=\"unit\\s\\w+([0-9]+)\".*?\\r?\\n.*?\\r?\\n.*?</td>.*?\\r?\\n.*?timer1>([0-9:]+)<");
+			var m2 = Regex.Match(data, "(?:in_process.*?|%)\"><img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				aid = Convert.ToInt32(m2.Groups[1].Value);
@@ -503,7 +504,7 @@ namespace libTravian
 			else
 			{
 				foreach (var ngid in AllowGid)
-					if (data.Contains("<h1><b>" + GetGidLang(ngid)))
+					if (data.Contains("<h1>" + GetGidLang(ngid)))
 					{
 						gid = ngid;
 						break;
@@ -514,7 +515,7 @@ namespace libTravian
 
 			var CV = TD.Villages[VillageID];
 
-			var m1 = Regex.Match(data, @"(\d+)</b>");
+			var m1 = Regex.Match(data, @"(\d+)</h1>");
 			if (!m1.Success)
 				return;
 			if (gid == 22)

@@ -949,6 +949,18 @@ namespace Stran
 			MsgBox mb = new MsgBox() { message = sb.ToString() };
 			mb.ShowDialog();
 		}
+		private void CMBNewCap_Click(object sender, EventArgs e)
+		{
+			if (!TravianData.Villages.ContainsKey(SelectVillage))
+				return;
+			var dr = MessageBox.Show("这将在本程序中设置此村庄为主村。不影响游戏中的主村设定。\r\n\r\n确定设置主村吗？", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+			if (dr == DialogResult.OK)
+			{
+				foreach (var v in TravianData.Villages)
+					v.Value.isCapital = false;
+				TravianData.Villages[SelectVillage].isCapital = true;
+			}
+		}
 		#endregion
 
 		#region CMB
@@ -1819,5 +1831,6 @@ namespace Stran
 				lvi(pts.Result);
 			}
 		}
+
 	}
 }
