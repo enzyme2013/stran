@@ -31,7 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CleverComponents.InetSuite, Version=7.0.50.0, Culture=neutral, PublicKeyToken=b57d496ac1ba83f6" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />

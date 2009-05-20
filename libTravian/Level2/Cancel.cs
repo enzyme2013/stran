@@ -43,6 +43,7 @@ namespace libTravian
 				if(CV.InBuilding[Key] == null || !CV.InBuilding[Key].Cancellable)
 					return;
 				PageQuery(VillageID, CV.InBuilding[Key].CancelURL);
+				CV.InBuilding[Key] = null;
 			}
 		}
 	}

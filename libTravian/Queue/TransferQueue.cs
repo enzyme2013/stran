@@ -43,9 +43,10 @@ namespace libTravian
 				if(MaxCount != 0 && Count >= MaxCount)
 					RemoveQueuedTask();
 				string count = this.Count.ToString() + "/";
+				string mask = (this.NoCrop ? "NC " : "") + (this.ForceGo ? "FG " : "");
 				count += this.MaxCount == 0 ? "∞" : this.MaxCount.ToString();
 				CalculateResourceAmount(UpCall.TD, VillageID);
-				return count + DistributionShortName[(int)this.Distribution] + this.ResourceAmount.ToString();
+				return mask + count + DistributionShortName[(int)this.Distribution] + this.ResourceAmount.ToString();
 			}
 		}
 

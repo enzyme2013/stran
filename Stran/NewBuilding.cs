@@ -36,7 +36,7 @@ namespace Stran
 			{
 				if(i >= 31 && i <= 33 || i == 16)
 					continue;
-				int possible = Travian.testPossibleNewNow(TD.Villages, TD.Villages[VillageID], i, 0);
+				int possible = Travian.testPossibleNewNow(TD.Tribe, TD.Villages, TD.Villages[VillageID], i, 0);
 				if(possible > 0)
 					comboBox1.Items.Add(i + ". " + dl.GetGidLang(i));
 				else if(possible == 0)
