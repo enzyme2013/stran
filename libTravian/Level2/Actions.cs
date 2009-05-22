@@ -89,6 +89,8 @@ namespace libTravian
 							continue;
 						else if(task.QueueGUID < 7)
 							status.Add(task.QueueGUID);
+						if (task.QueueGUID <= 1 && !TD.isRomans)
+							status.Add(1 - task.QueueGUID);
 						switch(task.GetType().Name)
 						{
 							case "BuildingQueue":

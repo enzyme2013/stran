@@ -36,7 +36,7 @@ namespace libTravian
 			{
 				string count = this.Count.ToString() + "/";
 				count += this.MaxCount == 0 ? "∞" : this.MaxCount.ToString();
-				if(LastExec == DateTime.MinValue)
+				if(LastExec != DateTime.MinValue)
 					return string.Format("{2}, Last: {0}, Next: After {1}", LastExec.ToShortTimeString(), NextExec.ToShortTimeString(), count);
 				else
 					return "";

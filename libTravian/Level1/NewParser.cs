@@ -346,9 +346,9 @@ namespace libTravian
 						TD.Dirty = true;
 					}
 				}
-				m = Regex.Match(data, @"build\.php\?gid=15&amp;del=\d+");
+				m = Regex.Match(data, @"build\.php\?gid=15&del=\d+");
 				if (m.Success)
-					CV.InBuilding[2].CancelURL = m.Groups[0].Value.Replace("&amp;", "&");
+					CV.InBuilding[2].CancelURL = m.Groups[0].Value;
 			}
 			CV.isDestroyInitialized = 2;
 		}
@@ -357,9 +357,19 @@ namespace libTravian
 			new int[]{4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{3,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{1,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
+
 			new int[]{1,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{1,4,1,3,1,2,3,4,4,3,3,4,4,1,4,2,1,2},
-			new int[]{4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4}
+			new int[]{4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4},
+
+			new int[]{1,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
+			new int[]{3,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
+			new int[]{3,4,4,1,1,2,3,4,4,3,3,4,4,1,4,2,1,2},
+
+			new int[]{3,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
+			new int[]{3,1,1,3,1,4,4,3,3,2,2,3,1,4,4,2,4,4},
+			new int[]{1,4,1,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
+
 		};
 
 		private void NewParseDorf1Building(int VillageID, string data)
