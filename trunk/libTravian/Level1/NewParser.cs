@@ -228,8 +228,8 @@ namespace libTravian
 		private void NewParseInbuilding(int VillageID, string data)
 		{
 			var CV = TD.Villages[VillageID];
-			if (!data.Contains("<div class=\"f10 b"))
-				return;
+      //if (!data.Contains("<div class=\"f10 b"))
+      //  return;
 
 			MatchCollection m;
 			m = Regex.Matches(data, "<a\\shref=\"([^\"]*?)\"><img\\ssrc=\"[^\"]*?img/x.gif\"[^>]*?></a></td>.*?\r?\n?<td>([^<]*)\\s\\(\\S+\\s(\\d*)\\)</td>.*?\r?\n?<td><span\\sid=[\"]?timer\\d*[\"]?>(\\d+:\\d+:\\d+)</span>");
@@ -239,8 +239,13 @@ namespace libTravian
 			 * [3]: build.level
 			 * [4]: build.lefttime
 			 */
-			CV.InBuilding[0] = null;
-			CV.InBuilding[1] = null;
+      Match m1 = Regex.Match(data, @"class="".*rf(\d+).level(\d+)""");
+      Match m2 = Regex.Match(data, @"class=""building\sd(\d+)\sg(\d+)[b]?""");
+      if (m1.Success || m2.Success)
+      {
+        CV.InBuilding[0] = null;
+        CV.InBuilding[1] = null;
+      }
 			for (int i = 0; i < m.Count; i++)
 			{
 				TInBuilding tinb;
@@ -346,9 +351,9 @@ namespace libTravian
 						TD.Dirty = true;
 					}
 				}
-				m = Regex.Match(data, @"build\.php\?gid=15&del=\d+");
+				m = Regex.Match(data, @"build\.php\?gid=15&amp;del=\d+");
 				if (m.Success)
-					CV.InBuilding[2].CancelURL = m.Groups[0].Value;
+					CV.InBuilding[2].CancelURL = m.Groups[0].Value.Replace("&amp;", "&");
 			}
 			CV.isDestroyInitialized = 2;
 		}
@@ -357,19 +362,9 @@ namespace libTravian
 			new int[]{4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{3,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{1,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
-
 			new int[]{1,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
 			new int[]{1,4,1,3,1,2,3,4,4,3,3,4,4,1,4,2,1,2},
-			new int[]{4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4},
-
-			new int[]{1,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
-			new int[]{3,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
-			new int[]{3,4,4,1,1,2,3,4,4,3,3,4,4,1,4,2,1,2},
-
-			new int[]{3,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
-			new int[]{3,1,1,3,1,4,4,3,3,2,2,3,1,4,4,2,4,4},
-			new int[]{1,4,1,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2},
-
+			new int[]{4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4}
 		};
 
 		private void NewParseDorf1Building(int VillageID, string data)
