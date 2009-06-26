@@ -161,6 +161,12 @@ namespace libTravian
 				status = status + "^";
 			}
 
+            foreach (var res in Resource)
+            {
+                if (res != null && res.isFull)
+                    status += "F";
+            }
+
 			return status;
 		}
 
@@ -333,7 +339,13 @@ namespace libTravian
 		{
 			return TypeViewer.ToString(this);
 		}
-
+        public bool isFull
+        {
+            get
+            {
+                return CurrAmount == Capacity;
+            }
+        }
 	}
 
 	/// <summary>

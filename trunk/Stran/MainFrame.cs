@@ -182,6 +182,7 @@ namespace Stran
 						lvi.SubItems.Add(qcount);
 						lvi.SubItems.Add(x.Value.Name);
 						lvi.SubItems.Add(x.Value.Coord.ToString());
+                        lvi.SubItems.Add("");
 						if(e.VillageID == x.Key)
 							i = m_villagelist.listViewVillage.Items.Count - 1;
 					}
@@ -732,6 +733,16 @@ namespace Stran
 						qcount += " -";
 					if (x.SubItems[1].Text != qcount)
 						x.SubItems[1].Text = qcount;
+                    if (TravianData.Villages[index].isBuildingInitialized == 2)
+                    {
+                        string resstat = "";
+                        foreach (var res in TravianData.Villages[index].Resource)
+                            if (res.isFull)
+                                resstat += "F";
+                            else
+                                resstat += res.CurrAmount * 10 / res.Capacity;
+                        x.SubItems[4].Text = resstat;
+                    }
 				}
 			}
 		}
