@@ -86,7 +86,12 @@ namespace libTravian
 
 		public static double operator *(TPoint left, TPoint right)
 		{
-			return Math.Sqrt((left.X - right.X) * (left.X - right.X) + (left.Y - right.Y) * (left.Y - right.Y));
+			int w = Math.Abs(left.X - right.X);
+			if (w > 400) w = 801 - w;
+			int h = Math.Abs(left.Y - right.Y);
+			if (h > 400) h = 801 - h;
+
+			return Math.Sqrt(w * w + h * h);
 		}
 
 		public static bool operator ==(TPoint left, TPoint right)
