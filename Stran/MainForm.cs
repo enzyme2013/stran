@@ -16,15 +16,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using libTravian;
-using System.Reflection;
-using System.IO;
-using System.Threading;
-using System.Resources;
 using Stran.Properties;
 
 namespace Stran
@@ -51,7 +47,7 @@ namespace Stran
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
 			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}.{2} [GoldenPhoenix]", v.Major, v.Minor, v.Build);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [GoldenCOMX]", v.Major, v.Minor, v.Build);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
