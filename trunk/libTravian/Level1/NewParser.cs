@@ -614,7 +614,7 @@ namespace libTravian
 
 			int MCarry = Convert.ToInt32(m.Groups[1].Value);
 
-			m = Regex.Match(data, "(\\d+)/(\\d+)<br>");
+			m = Regex.Match(data, "(\\d+)/(\\d+)</td>");
 			if (!m.Success)
 			{
 				return;
@@ -624,15 +624,15 @@ namespace libTravian
 			int MLevel = Convert.ToInt32(m.Groups[2].Value);
 
 			// Market: 0 as other, 1 as my
-			string t1 = "<p class=\"b\">";
+			string t1 = "<h4>";
 			string[] sp = data.Split(new string[] { t1 }, StringSplitOptions.None);
 			if (sp.Length == 3)
 			{
 				// Write out langfile
 				if (Market[0] == null)
-					Market[0] = sp[1].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
+					Market[0] = sp[1].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 				if (Market[1] == null)
-					Market[1] = sp[2].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
+					Market[1] = sp[2].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 			}
 
 			CV.Market.ActiveMerchant = MCount;
@@ -642,10 +642,10 @@ namespace libTravian
 			for (int i = 1; i < sp.Length; i++)
 			{
 				TMType MType;
-				if (sp[i].Contains("c f10") && Market[1] == null)
-					Market[1] = sp[i].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
+				if (sp[i].Contains("21%") && Market[1] == null)
+					Market[1] = sp[i].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 				var mc = Regex.Matches(sp[i],
-					"<span class=\"c0\">(.*?)</span>.*?karte.php\\?d=(\\d+)&c=[^>]*\"><span class=\"c0\">([^<]+)</span>.*?<span id=timer\\d+>([0-9:]{6,})</span>.*?<span class=\"([c ]*?)f10\">(?:<img .*?>(\\d+)[^<]*){4,4}",
+                    "spieler.php\\?uid=\\d+\">(.*?)</a>.*?karte.php\\?d=(\\d+)&c=[^>]*\">([^<]+)</a>.*?<span id=timer\\d+>([0-9:]{5,})</span>.*?(<span class=\"none\">|)(?:<img .*?>(\\d+)[^<]*){4,4}",
 					 RegexOptions.Singleline);
 				/// @@1 Username
 				/// @@2 Target Pos
@@ -665,7 +665,7 @@ namespace libTravian
 						am[1] == JustTransferredData.Resources[1] &&
 						am[2] == JustTransferredData.Resources[2] &&
 						am[3] == JustTransferredData.Resources[3])
-						Market[1] = sp[1].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
+						Market[1] = sp[1].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 
 					if (sp.Length == 3)
 						MType = i == 1 ? TMType.OtherCome : TMType.MyOut;
@@ -676,7 +676,7 @@ namespace libTravian
 					else if (MCount == MLevel || !m1.Groups[1].Value.Equals(TD.Username, StringComparison.OrdinalIgnoreCase))
 					{
 						if (Market[0] == null)
-							Market[0] = sp[1].Split(new string[] { "</p>" }, StringSplitOptions.None)[0];
+							Market[0] = sp[1].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 						MType = TMType.OtherCome;
 					}
 					else
@@ -857,7 +857,7 @@ namespace libTravian
 			var items = data.Split(new string[] { "<table class=" }, StringSplitOptions.None);
 			foreach (var item in items)
 			{
-				var m = Regex.Match(item, "<th\\sclass=\"village\"><a\\shref=\".*?\"><span\\sclass=\"c0\">(.*?)</span></a></th>.*<span\\sclass=\"c0\">(.*?)</span>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?\\r?\\n.*?\\r?\\n.*?<span\\sid=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
+                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"10\"><a\\shref=\".*?\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
 				//var m = Regex.Match(item, "<td width=\"\\d+%\"><a href=\".*?\"><span class=\"c0\">(.*?)</span></a></td>.*<td colspan=.*?>(.*?)</td>.*?img/un/u/(\\d+)\\.gif.*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img class=\"res|<span id=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
 				/*
 				 * @@1 from vname
