@@ -185,3 +185,4 @@ enabled= (Enabled)
 autonormalizemetime=Nml this village (Time)
 forcetransfer=Skip full check
 CMBProduceTroop=Pr&oduce troops
+vres=Res

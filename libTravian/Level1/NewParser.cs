@@ -386,7 +386,7 @@ namespace libTravian
 			Match m = Regex.Match(data, @"<div\sid=""f(\d+)"">");
 			if (!m.Success)
 			{
-				m = Regex.Match(data, "class=\"f(\\d+)\">");
+				m = Regex.Match(data, "id=\"village_map\" class=\"f(\\d+)\">");
 				if (!m.Success)
 					return;
 			}
@@ -471,7 +471,8 @@ namespace libTravian
 		private DateTime NewParseInDoing(string data, out int aid)
 		{
 			//var m2 = Regex.Match(data, "<img\\sclass=\"unit\\s\\w+([0-9]+)\".*?\\r?\\n.*?\\r?\\n.*?</td>.*?\\r?\\n.*?timer1>([0-9:]+)<");
-			var m2 = Regex.Match(data, "(?:in_process.*?|%)\"><img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
+			//var m2 = Regex.Match(data, "(?:in_process.*?|%)\"><img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
+			var m2 = Regex.Match(data, "under_progress.*?<tbody>[^<]*?<tr>.*?<img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				aid = Convert.ToInt32(m2.Groups[1].Value);
@@ -485,7 +486,8 @@ namespace libTravian
 		}
 		private DateTime NewParseInDoing(string data, out string text)
 		{
-			var m2 = Regex.Match(data, "class=\"s7\">(.*?)</td>.*?\r?\n.*?\r?\n?.*?timer1>([0-9:]+)<");
+			//var m2 = Regex.Match(data, "class=\"s7\">(.*?)</td>.*?\r?\n.*?\r?\n?.*?timer1>([0-9:]+)<");
+			var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td>(.*?)</td>.*?timer1>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				text = m2.Groups[1].Value;

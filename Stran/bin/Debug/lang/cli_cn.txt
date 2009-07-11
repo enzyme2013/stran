@@ -185,3 +185,4 @@ enabled= (已启用)
 autonormalizemetime=自动平衡我的爆仓时间
 forcetransfer=无视爆仓检查
 CMBProduceTroop=&O. 造兵
+vres=资源
