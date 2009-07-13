@@ -134,7 +134,7 @@ namespace libTravian
 			BuildingCost[32] = new rinfo_array(20, 1.28, new TResAmount(120, 200, 0, 80));
 			BuildingCost[33] = new rinfo_array(20, 1.28, new TResAmount(160, 100, 80, 60));
 			BuildingCost[34] = new rinfo_array(20, 1.28, new TResAmount(155, 130, 125, 70));
-			BuildingCost[35] = new rinfo_array(20, 1.28, new TResAmount(1460, 930, 1250, 1740));
+			BuildingCost[35] = new rinfo_array(10, 1.28, new TResAmount(1460, 930, 1250, 1740));
 			BuildingCost[36] = new rinfo_array(20, 1.28, new TResAmount(100, 100, 100, 100));
 			BuildingCost[37] = new rinfo_array(20, 1.33, new TResAmount(700, 670, 700, 240));
 			BuildingCost[38] = new rinfo_array(20, 1.28, new TResAmount(650, 800, 450, 200));
@@ -150,10 +150,13 @@ namespace libTravian
 			Depends.Add(7, new TBL[] { new TBL(3, 10), new TBL(15, 5) });
 			Depends.Add(8, new TBL[] { new TBL(4, 5) });
 			Depends.Add(9, new TBL[] { new TBL(4, 10), new TBL(15, 5), new TBL(8, 5) });
+			Depends.Add(10, new TBL[] { new TBL(15, 1) });
+			Depends.Add(11, new TBL[] { new TBL(15, 1) });
 			Depends.Add(12, new TBL[] { new TBL(22, 3) });
 			Depends.Add(13, new TBL[] { new TBL(22, 1) });
 			Depends.Add(14, new TBL[] { new TBL(16, 15) });
 			Depends.Add(17, new TBL[] { new TBL(10, 1), new TBL(11, 1), new TBL(15, 3) });
+			Depends.Add(18, new TBL[] { new TBL(15, 1) });
 			Depends.Add(19, new TBL[] { new TBL(16, 1) });
 			Depends.Add(20, new TBL[] { new TBL(12, 3), new TBL(22, 5) });
 			Depends.Add(21, new TBL[] { new TBL(22, 10), new TBL(15, 5) });
@@ -161,13 +164,17 @@ namespace libTravian
 			Depends.Add(24, new TBL[] { new TBL(22, 10), new TBL(15, 10) });
 			Depends.Add(25, new TBL[] { new TBL(15, 5) });
 			Depends.Add(26, new TBL[] { new TBL(18, 1) });
+			Depends.Add(27, new TBL[] { new TBL(15, 10) });
 			Depends.Add(28, new TBL[] { new TBL(17, 20), new TBL(20, 10) });
 			Depends.Add(29, new TBL[] { new TBL(19, 20) });
 			Depends.Add(30, new TBL[] { new TBL(20, 20) });
 			Depends.Add(34, new TBL[] { new TBL(15, 5), new TBL(26, 3) });
+			Depends.Add(35, new TBL[] { new TBL(11, 20), new TBL(16, 10) });
+			Depends.Add(36, new TBL[] { new TBL(16, 1) });
 			Depends.Add(37, new TBL[] { new TBL(15, 3), new TBL(16, 1) });
 			Depends.Add(38, new TBL[] { new TBL(15, 10), new TBL(40, 0) });
 			Depends.Add(39, new TBL[] { new TBL(15, 10), new TBL(40, 0) });
+			Depends.Add(41, new TBL[] { new TBL(20, 20), new TBL(16, 10) });
 		}
 		static private void InitPrefer()
 		{
@@ -894,7 +901,7 @@ namespace libTravian
 		static private void InitTroopCost()
 		{
 			TroopCost = new Dictionary<int, TResAmount>(30);
-			TroopCost[1] = new TResAmount(120, 100, 180, 40);
+			TroopCost[1] = new TResAmount(120, 100, 150, 30);
 			TroopCost[2] = new TResAmount(100, 130, 160, 70);
 			TroopCost[3] = new TResAmount(150, 160, 210, 80);
 			TroopCost[4] = new TResAmount(140, 160, 20, 40);
