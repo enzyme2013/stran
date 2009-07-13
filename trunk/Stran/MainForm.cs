@@ -133,6 +133,12 @@ namespace Stran
 				Top = (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2;
 
 			}
+            if (Options.ContainsKey("autorun"))  //自动登录
+            {
+                for (int i = 0; i < accounts.Count; i++)
+                    newtab(accounts[i]);
+            }
+
 		}
 		private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
 		{
