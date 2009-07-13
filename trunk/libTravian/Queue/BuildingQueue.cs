@@ -127,31 +127,31 @@ namespace libTravian
 				 * 
 				 */
 
-				if(gid != 10 && UpCall.GidLang.ContainsKey(10) && Regex.Match(result, "<span class=\"c\">[^<]*?" + UpCall.GetGidLang(10) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
+				if(gid != 10 && UpCall.GidLang.ContainsKey(10) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(10) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 				{
 					gid = 10;
 					bid = findBuilding(VillageID, gid);
 				}
-				else if(gid != 11 && UpCall.GidLang.ContainsKey(11) && Regex.Match(result, "<span class=\"c\">[^<]*?" + UpCall.GetGidLang(11) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
+                else if (gid != 11 && UpCall.GidLang.ContainsKey(11) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(11) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 				{
 					gid = 11;
 					bid = findBuilding(VillageID, gid);
 				}
-				else if(gid != 4 && UpCall.GidLang.ContainsKey(4) && Regex.Match(result, "<span class=\"c\">[^<]*?" + UpCall.GetGidLang(4) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
+                else if (gid != 4 && UpCall.GidLang.ContainsKey(4) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(4) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 				{
 					gid = 4;
 					bid = findBuilding(VillageID, gid);
 				}
-				else if(result.Contains("<p class=\"c\">"))
+                else if (result.Contains("<p class=\"(c|none)\">"))
 				{
 					UpCall.DebugLog("Unexpected status! Report it on the forum! " + Q.Title, DebugLevel.W);
 					Q.MarkDeleted = true;
 					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 					return;
 				}
-				else if(UpCall.GidLang.ContainsKey(gid) && Regex.Match(result, "<span class=\"c\">[^<]*?" + UpCall.GetGidLang(gid) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
+                else if (UpCall.GidLang.ContainsKey(gid) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(gid) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 					return;
-				else if(result.Contains("<span class=\"c\">"))
+                else if (result.Contains("<span class=\"(c|none)\">"))
 				{
 					//Q.Delay = rand.Next(500, 1000);
 					// Delay shouldn't happen.

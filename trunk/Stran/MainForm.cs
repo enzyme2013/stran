@@ -318,6 +318,7 @@ namespace Stran
 			for(int i = listView1.SelectedIndices.Count - 1; i >= 0; i--)
 				accounts.RemoveAt(listView1.SelectedIndices[i]);
 			listView1_Refresh();
+            saveAccountInfo();
 		}
 
 		#endregion

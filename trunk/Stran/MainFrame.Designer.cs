@@ -854,6 +854,7 @@
 			// 
 			this.CMBNewCap.Name = "CMBNewCap";
 			this.CMBNewCap.Size = new System.Drawing.Size(154, 22);
+            this.CMBNewCap.Tag = "newcap";
 			this.CMBNewCap.Text = "&X. 设为新主村";
 			this.CMBNewCap.Click += new System.EventHandler(this.CMBNewCap_Click);
 			// 

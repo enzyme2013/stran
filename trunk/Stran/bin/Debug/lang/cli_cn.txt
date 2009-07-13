@@ -186,3 +186,4 @@ autonormalizemetime=自动平衡我的爆仓时间
 forcetransfer=无视爆仓检查
 CMBProduceTroop=&O. 造兵
 vres=资源
+newcap=&X. 设为新主村

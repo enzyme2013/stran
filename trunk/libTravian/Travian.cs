@@ -154,8 +154,8 @@ namespace libTravian
 		static public int testPossibleNewNow(int Tribe, Dictionary<int, TVillage> Villages, TVillage CV, int Gid, int Bid)
 		{
 			List<int> CapitalNo = new List<int> { 27, 29, 30 };
-			List<int> NotCapitalNo = new List<int> { 34 };
-			List<int> Repeatable = new List<int> { 10, 11, 23, 38, 39, 36 };
+			List<int> NotCapitalNo = new List<int> { 34, 35 };
+			List<int> Repeatable = new List<int> { 10, 11, 23, 36, 38, 39 };
 			//TQueue Q = CV.Queue[QueueID];
 			// Extend
 

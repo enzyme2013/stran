@@ -167,7 +167,7 @@ namespace libTravian
 			int sum = Int32.Parse(match.Groups["summe"].Value);
 
 			// Parse id
-			match = Regex.Match(result, "\\<input type=\"hidden\" name=\"id\" value=\"(?<id>\\d+)\"\\>");
+			match = Regex.Match(result, "<input type=\"hidden\" name=\"id\" value=\"(?<id>\\d+)\">");
 			if (!match.Success)
 			{
 				return NpcTradeResult.Failure;
@@ -176,7 +176,7 @@ namespace libTravian
 			string id = match.Groups["id"].Value;
 
 			// Parse m1[] and m2[]
-			MatchCollection matches = Regex.Matches(result, "\\<input type=\"hidden\" name=\"m1\\[\\]\" value=(?<m1>\\d+)\\>");
+			MatchCollection matches = Regex.Matches(result, "<input type=\"hidden\" name=\"m1\\[\\]\" value=\"(?<m1>\\d+)\">");
 			if (matches.Count != 4)
 			{
 				return NpcTradeResult.Failure;
@@ -230,7 +230,7 @@ namespace libTravian
 				return NpcTradeResult.Failure;
 			}
 
-			match = Regex.Match(result, "\\<b\\>3\\</b\\>[^\\<\\>]*\\</p\\>\\<script language=\"JavaScript\">var summe=");
+			match = Regex.Match(result, "<b>3</b>[^<]*?</p><script language=\"JavaScript\">var summe=");
 			if (!match.Success)
 			{
 				return NpcTradeResult.Failure;
