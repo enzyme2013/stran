@@ -308,7 +308,7 @@ namespace libTravian
 			var CV = TD.Villages[VillageID];
 
 			Match m;
-			m = Regex.Match(data, @"</a></td><td>([^<]*)\s\(\S+\s(\d*)\)</td><td><span\sid=timer\d*>(\d+:\d+:\d+)</span>");
+            m = Regex.Match(data, @"demolish.*?<td>\s*([^<]*)\s\(\S+\s(\d+)\).*?timer\d*>(\d+:\d+:\d+)</span>", RegexOptions.Singleline);
 			CV.InBuilding[2] = null;
 			if (m.Success)
 			{
@@ -351,9 +351,9 @@ namespace libTravian
 						TD.Dirty = true;
 					}
 				}
-				m = Regex.Match(data, @"build\.php\?gid=15&amp;del=\d+");
+				m = Regex.Match(data, @"build\.php\?gid=15&.*?del=\d+");
 				if (m.Success)
-					CV.InBuilding[2].CancelURL = m.Groups[0].Value.Replace("&amp;", "&");
+                    CV.InBuilding[2].CancelURL = m.Groups[0].Value.Replace("&amp;", "&");
 			}
 			CV.isDestroyInitialized = 2;
 		}
@@ -463,7 +463,7 @@ namespace libTravian
 
 		private void NewParseALanguage(int VillageID, string data)
 		{
-			var mc = Regex.Matches(data, "Popup\\((\\d*),1\\);\">([^<]*)</a>");
+			var mc = Regex.Matches(data, "Popup\\((\\d*),1\\);\">([^\\s]*)</a>");
 			foreach (Match m in mc)
 				SetAidLang(Convert.ToInt32(m.Groups[1].Value), m.Groups[2].Value);
 		}
