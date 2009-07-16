@@ -35,6 +35,7 @@
 			this.buttonTiming = new System.Windows.Forms.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.numericUpDownTransferCount = new System.Windows.Forms.NumericUpDown();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransferCount)).BeginInit();
 			this.SuspendLayout();
@@ -128,6 +129,17 @@
             0,
             0});
 			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Location = new System.Drawing.Point(141, 156);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(97, 18);
+			this.checkBox1.TabIndex = 31;
+			this.checkBox1.Text = "ShowAllArmy";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+			// 
 			// ProduceTroopSetting
 			// 
 			this.AcceptButton = this.buttonOK;
@@ -135,6 +147,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(294, 270);
+			this.Controls.Add(this.checkBox1);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.numericUpDownTransferCount);
 			this.Controls.Add(this.buttonTiming);
@@ -152,6 +165,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransferCount)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -164,5 +178,6 @@
 		private System.Windows.Forms.Button buttonTiming;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.NumericUpDown numericUpDownTransferCount;
+		private System.Windows.Forms.CheckBox checkBox1;
 	}
 }

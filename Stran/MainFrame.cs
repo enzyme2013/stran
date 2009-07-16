@@ -1826,8 +1826,9 @@ namespace Stran
 			}
 			List<TroopInfo> CanProduce = new List<TroopInfo>();
 			foreach(var x in CV.Upgrades)
-				if(x.Value.Researched)
-					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = dl.GetAidLang(TravianData.Tribe, x.Key) });
+				//if(x.Value.Researched)
+				if(x.Key < 9)
+					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = dl.GetAidLang(TravianData.Tribe, x.Key), Researched = x.Value.Researched });
 			ProduceTroopSetting pts = new ProduceTroopSetting
 			{
 				mui = mui,

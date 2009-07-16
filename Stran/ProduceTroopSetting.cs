@@ -44,9 +44,11 @@ namespace Stran
 		private void ProduceTroopSetting_Load(object sender, EventArgs e)
 		{
 			mui.RefreshLanguage(this);
+			listBox1.Items.Clear();
 			if(CanProduce != null)
 				foreach(var p in CanProduce)
-					listBox1.Items.Add(p);
+					if(p.Researched | checkBox1.Checked)
+						listBox1.Items.Add(p);
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
@@ -64,12 +66,18 @@ namespace Stran
 				NextExec = actionAt
 			};
 		}
+
+		private void checkBox1_CheckedChanged(object sender, EventArgs e)
+		{
+			ProduceTroopSetting_Load(sender, e);
+		}
 	}
 
 	public class TroopInfo
 	{
 		public int Aid { get; set; }
 		public string Name { get; set; }
+		public bool Researched { get; set; }
 		public override string ToString()
 		{
 			return string.Format("{0} - {1}", Aid, Name);
