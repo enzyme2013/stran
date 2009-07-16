@@ -47,7 +47,7 @@ namespace Stran
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
 			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}.{2} [GoldenFox]", v.Major, v.Minor, v.Build);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [Nikola Tesla]", v.Major, v.Minor, v.Build);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
@@ -133,11 +133,21 @@ namespace Stran
 				Top = (Screen.PrimaryScreen.WorkingArea.Height - Height) / 2;
 
 			}
-            if (Options.ContainsKey("autorun"))  //自动登录
-            {
-                for (int i = 0; i < accounts.Count; i++)
-                    newtab(accounts[i]);
-            }
+			if (Options.ContainsKey("autorun"))  //自动登录
+			{
+				char opt = Options["autorun"].Trim()[0];
+				switch (opt)
+				{
+					case 'y':
+					case 'Y':
+					case 't':
+					case 'T':
+					case '1':
+						for (int i = 0; i < accounts.Count; i++)
+							newtab(accounts[i]);
+						break;
+				}
+			}
 
 		}
 		private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
