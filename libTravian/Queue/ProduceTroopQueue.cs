@@ -20,8 +20,8 @@ namespace libTravian
 		[Json]
 		public int Aid { get; set; }
 
-        [Json]
-        public int GRt { get; set; }
+		[Json]
+		public bool GRt { get; set; }
 
 		[Json]
 		public int Amount { get; set; }
@@ -31,16 +31,9 @@ namespace libTravian
 		public string Title
 		{
 			get
-            {
-                if(GRt == 1)
-                {
-                    return string.Format("{0} {1} GR", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid));
-                }
-                else
-                {
-                    return string.Format("{0} {1}", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid));
-                }
-            }
+			{
+				return string.Format("{0} {1} {2}", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid), GRt ? "GR" : "");
+			}
 		}
 
 		public string Status
@@ -63,16 +56,9 @@ namespace libTravian
 			{
 				var CV = UpCall.TD.Villages[VillageID];
 				int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
-                int timecost;
-                if (GRt == 1)
-                {
-                    timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount * 3);
-                }
-                else
-                {
-                    timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount);
-                }
-				if(NextExec != DateTime.MinValue && NextExec > DateTime.Now)
+				int timecost;
+				timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount * (GRt ? 3 : 1));
+				if (NextExec != DateTime.MinValue && NextExec > DateTime.Now)
 					timecost = Math.Max(timecost, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
 				return timecost;
 			}
@@ -80,26 +66,20 @@ namespace libTravian
 
 		public void Action()
 		{
-			if(CountDown > 0)
+			if (CountDown > 0)
 				return;
 			int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
-            int Gid;
-            if(GRt == 1)
-            {
-                Gid = AIDMapg[key];
-            }
-            else
-            {
-                Gid = AIDMap[key];
-             }
-            if (GRt == 1 && (Gid == 7 || Gid == 8) || Gid == 0)
+			int Gid;
+			Gid = GRt ? AIDMapg[key] : AIDMap[key];
+
+			if (GRt && (Gid == 7 || Gid == 8) || Gid == 0)
 			{
 				UpCall.DebugLog("Not appropriate kind of troop to produce, deleted.", DebugLevel.W);
 				MarkDeleted = true;
 				return;
 			}
 			string data = UpCall.PageQuery(VillageID, "build.php?gid=" + Gid);
-			if(!data.Contains(string.Format("name=\"t{0}\"", Aid)))
+			if (!data.Contains(string.Format("name=\"t{0}\"", Aid)))
 			{
 				UpCall.DebugLog("Cannot produce this kind of troop before research it.", DebugLevel.W);
 				MarkDeleted = true;
@@ -122,7 +102,7 @@ namespace libTravian
 			string p_a, p_id, p_z;
 			Match m;
 			m = Regex.Match(data, "type=\"hidden\" name=\"id\" value=\"(\\d+?)\"");
-			if(m.Success)
+			if (m.Success)
 				p_id = m.Groups[1].Value;
 			else
 			{
@@ -131,7 +111,7 @@ namespace libTravian
 				return;
 			}
 			m = Regex.Match(data, "type=\"hidden\" name=\"z\" value=\"(\\d+?)\"");
-			if(m.Success)
+			if (m.Success)
 				p_z = m.Groups[1].Value;
 			else
 			{
@@ -140,7 +120,7 @@ namespace libTravian
 				return;
 			}
 			m = Regex.Match(data, "type=\"hidden\" name=\"a\" value=\"(\\d+?)\"");
-			if(m.Success)
+			if (m.Success)
 				p_a = m.Groups[1].Value;
 			else
 			{
@@ -160,7 +140,7 @@ namespace libTravian
 			LastExec = DateTime.Now;
 			NextExec = LastExec.AddSeconds(MinimumInterval);
 			Count++;
-			if(MaxCount != 0 && Count >= MaxCount)
+			if (MaxCount != 0 && Count >= MaxCount)
 				MarkDeleted = true;
 		}
 

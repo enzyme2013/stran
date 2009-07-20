@@ -54,35 +54,20 @@ namespace Stran
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			if(numericUpDown1.Value == 0)
+			if (numericUpDown1.Value == 0)
 				return;
-			if(listBox1.SelectedItem == null)
+			if (listBox1.SelectedItem == null)
 				return;
-            if (this.checkBox2.Checked == true)
-            {
-                Result = new ProduceTroopQueue
-                {
-                    Aid = (listBox1.SelectedItem as TroopInfo).Aid,
-                    Amount = Convert.ToInt32(numericUpDown1.Value),
-                    MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
-                    MinimumInterval = minimumInterval,
-                    NextExec = actionAt,
-                    GRt = 1
-                };
-            }
-            else
-            {
-                Result = new ProduceTroopQueue
-                {
-                    Aid = (listBox1.SelectedItem as TroopInfo).Aid,
-                    Amount = Convert.ToInt32(numericUpDown1.Value),
-                    MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
-                    MinimumInterval = minimumInterval,
-                    NextExec = actionAt,
-                    GRt = 0
-                };
-            }
-		}
+			Result = new ProduceTroopQueue
+			{
+				Aid = (listBox1.SelectedItem as TroopInfo).Aid,
+				Amount = Convert.ToInt32(numericUpDown1.Value),
+				MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
+				MinimumInterval = minimumInterval,
+				NextExec = actionAt,
+				GRt = checkBox2.Checked
+			};
+		}									 
 
 		private void checkBox1_CheckedChanged(object sender, EventArgs e)
 		{
