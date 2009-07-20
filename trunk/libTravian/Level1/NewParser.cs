@@ -232,7 +232,7 @@ namespace libTravian
       //  return;
 
 			MatchCollection m;
-			m = Regex.Matches(data, "<a\\shref=\"([^\"]*?)\"><img\\ssrc=\"[^\"]*?img/x.gif\"[^>]*?></a></td>.*?\r?\n?<td>([^<]*)\\s\\(\\S+\\s(\\d*)\\)</td>.*?\r?\n?<td><span\\sid=[\"]?timer\\d*[\"]?>(\\d+:\\d+:\\d+)</span>");
+			m = Regex.Matches(data, "<a\\shref=\"([^\"]*?)\"><img\\ssrc=\"[^\"]*?img/x.gif\"[^>]*?></a></td>.*?\r?\n?<td>([^<]*)\\s\\(\\S+\\s(\\d*)\\)</td>.*?\r?\n?<td><span\\sid=\"?timer\\d+\"?>(\\d+:\\d+:\\d+)</span>");
 			/*
 			 * [1]: cancel url
 			 * [2]: build.name
@@ -308,7 +308,7 @@ namespace libTravian
 			var CV = TD.Villages[VillageID];
 
 			Match m;
-            m = Regex.Match(data, @"demolish.*?<td>\s*([^<]*)\s\(\S+\s(\d+)\).*?timer\d*>(\d+:\d+:\d+)</span>", RegexOptions.Singleline);
+            m = Regex.Match(data, @"demolish.*?<td>\s*([^<]*)\s\(\S+\s(\d+)\).*?timer\d+.*?>(\d+:\d+:\d+)</span>", RegexOptions.Singleline);
 			CV.InBuilding[2] = null;
 			if (m.Success)
 			{
@@ -463,7 +463,7 @@ namespace libTravian
 
 		private void NewParseALanguage(int VillageID, string data)
 		{
-			var mc = Regex.Matches(data, "Popup\\((\\d*),1\\);\">([^\\s]*)</a>");
+			var mc = Regex.Matches(data, "Popup\\((\\d*),1\\);\">\\s?([^<]*)</a>");
 			foreach (Match m in mc)
 				SetAidLang(Convert.ToInt32(m.Groups[1].Value), m.Groups[2].Value);
 		}
@@ -472,7 +472,7 @@ namespace libTravian
 		{
 			//var m2 = Regex.Match(data, "<img\\sclass=\"unit\\s\\w+([0-9]+)\".*?\\r?\\n.*?\\r?\\n.*?</td>.*?\\r?\\n.*?timer1>([0-9:]+)<");
 			//var m2 = Regex.Match(data, "(?:in_process.*?|%)\"><img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
-			var m2 = Regex.Match(data, "under_progress.*?<tbody>[^<]*?<tr>.*?<img class=\"unit u\\d?(\\d)\".*?timer1>([0-9:]+)<", RegexOptions.Singleline);
+			var m2 = Regex.Match(data, "under_progress.*?<tbody>[^<]*?<tr>.*?<img class=\"unit u\\d?(\\d)\".*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				aid = Convert.ToInt32(m2.Groups[1].Value);
@@ -487,7 +487,7 @@ namespace libTravian
 		private DateTime NewParseInDoing(string data, out string text)
 		{
 			//var m2 = Regex.Match(data, "class=\"s7\">(.*?)</td>.*?\r?\n.*?\r?\n?.*?timer1>([0-9:]+)<");
-			var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td>(.*?)</td>.*?timer1>([0-9:]+)<", RegexOptions.Singleline);
+			var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td>(.*?)</td>.*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				text = m2.Groups[1].Value;
@@ -647,7 +647,7 @@ namespace libTravian
 				if (sp[i].Contains("21%") && Market[1] == null)
 					Market[1] = sp[i].Split(new string[] { "</h4>" }, StringSplitOptions.None)[0];
 				var mc = Regex.Matches(sp[i],
-                    "spieler.php\\?uid=\\d+\">(.*?)</a>.*?karte.php\\?d=(\\d+)&c=[^>]*\">([^<]+)</a>.*?<span id=timer\\d+>([0-9:]{5,})</span>.*?(<span class=\"none\">|)(?:<img .*?>(\\d+)[^<]*){4,4}",
+                    "spieler.php\\?uid=\\d+\">(.*?)</a>.*?karte.php\\?d=(\\d+)&c=[^>]*\">([^<]+)</a>.*?<span id=\"?timer\\d+\"?>([0-9:]{5,})</span>.*?(<span class=\"none\">|)(?:<img .*?>(\\d+)[^<]*){4,4}",
 					 RegexOptions.Singleline);
 				/// @@1 Username
 				/// @@2 Target Pos
@@ -859,7 +859,7 @@ namespace libTravian
 			var items = data.Split(new string[] { "<table class=" }, StringSplitOptions.None);
 			foreach (var item in items)
 			{
-                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"10\"><a\\shref=\".*?\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
+                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"10\"><a\\shref=\".*?\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=\"?timer\\d+\"?>(.*?)</span>)", RegexOptions.Singleline);
 				//var m = Regex.Match(item, "<td width=\"\\d+%\"><a href=\".*?\"><span class=\"c0\">(.*?)</span></a></td>.*<td colspan=.*?>(.*?)</td>.*?img/un/u/(\\d+)\\.gif.*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img class=\"res|<span id=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
 				/*
 				 * @@1 from vname

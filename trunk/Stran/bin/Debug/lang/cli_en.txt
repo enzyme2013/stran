@@ -187,3 +187,5 @@ forcetransfer=Skip full check
 CMBProduceTroop=Pr&oduce troops
 vres=Res
 newcap=Set as New capital
+showallarmy=Show &All Army
+Great=Great barracks&&Great stable
