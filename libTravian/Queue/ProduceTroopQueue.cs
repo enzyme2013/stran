@@ -20,6 +20,9 @@ namespace libTravian
 		[Json]
 		public int Aid { get; set; }
 
+        [Json]
+        public int GRt { get; set; }
+
 		[Json]
 		public int Amount { get; set; }
 
@@ -27,7 +30,17 @@ namespace libTravian
 
 		public string Title
 		{
-			get { return string.Format("{0} {1}", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid)); }
+			get
+            {
+                if(GRt == 1)
+                {
+                    return string.Format("{0} {1} GR", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid));
+                }
+                else
+                {
+                    return string.Format("{0} {1}", Amount, UpCall.GetAidLang(UpCall.TD.Tribe, Aid));
+                }
+            }
 		}
 
 		public string Status
@@ -50,7 +63,15 @@ namespace libTravian
 			{
 				var CV = UpCall.TD.Villages[VillageID];
 				int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
-				int timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount);
+                int timecost;
+                if (GRt == 1)
+                {
+                    timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount * 3);
+                }
+                else
+                {
+                    timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount);
+                }
 				if(NextExec != DateTime.MinValue && NextExec > DateTime.Now)
 					timecost = Math.Max(timecost, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
 				return timecost;
@@ -62,8 +83,16 @@ namespace libTravian
 			if(CountDown > 0)
 				return;
 			int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
-			int Gid = AIDMap[key];
-			if(Gid == 0)
+            int Gid;
+            if(GRt == 1)
+            {
+                Gid = AIDMapg[key];
+            }
+            else
+            {
+                Gid = AIDMap[key];
+             }
+            if (GRt == 1 && (Gid == 7 || Gid == 8) || Gid == 0)
 			{
 				UpCall.DebugLog("Not appropriate kind of troop to produce, deleted.", DebugLevel.W);
 				MarkDeleted = true;
@@ -146,6 +175,11 @@ namespace libTravian
 		19, 19, 19, 20, 20, 20, 21, 21, 0, 0,
 		19, 19, 19, 19, 20, 20, 21, 21, 0, 0,
 		19, 19, 20, 20, 20, 20, 21, 21, 0, 0};
+
+        private static readonly int[] AIDMapg = new int[] { 0, 
+		29, 29, 29, 30, 30, 30, 21, 21, 0, 0,
+		29, 29, 29, 29, 30, 30, 21, 21, 0, 0,
+		29, 29, 30, 30, 30, 30, 21, 21, 0, 0};
 
 		public DateTime LastExec = DateTime.MinValue;
 

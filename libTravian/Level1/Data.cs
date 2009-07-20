@@ -126,7 +126,7 @@ namespace libTravian
 			BuildingCost[24] = new rinfo_array(20, 1.28, new TResAmount(1250, 1110, 1260, 600));
 			BuildingCost[25] = new rinfo_array(20, 1.28, new TResAmount(580, 460, 350, 180));
 			BuildingCost[26] = new rinfo_array(20, 1.28, new TResAmount(550, 800, 750, 250));
-			BuildingCost[27] = new rinfo_array(10, 1.28, new TResAmount(2880, 2740, 2580, 990));
+			BuildingCost[27] = new rinfo_array(20, 1.28, new TResAmount(2880, 2740, 2580, 990));
 			BuildingCost[28] = new rinfo_array(20, 1.28, new TResAmount(1400, 1330, 1200, 400));
 			BuildingCost[29] = new rinfo_array(20, 1.28, new TResAmount(630, 420, 780, 360));
 			BuildingCost[30] = new rinfo_array(20, 1.28, new TResAmount(780, 420, 660, 300));

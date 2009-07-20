@@ -49,6 +49,7 @@ namespace Stran
 				foreach(var p in CanProduce)
 					if(p.Researched | checkBox1.Checked)
 						listBox1.Items.Add(p);
+                    
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
@@ -57,14 +58,30 @@ namespace Stran
 				return;
 			if(listBox1.SelectedItem == null)
 				return;
-			Result = new ProduceTroopQueue
-			{
-				Aid = (listBox1.SelectedItem as TroopInfo).Aid,
-				Amount = Convert.ToInt32(numericUpDown1.Value),
-				MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
-				MinimumInterval = minimumInterval,
-				NextExec = actionAt
-			};
+            if (this.checkBox2.Checked == true)
+            {
+                Result = new ProduceTroopQueue
+                {
+                    Aid = (listBox1.SelectedItem as TroopInfo).Aid,
+                    Amount = Convert.ToInt32(numericUpDown1.Value),
+                    MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
+                    MinimumInterval = minimumInterval,
+                    NextExec = actionAt,
+                    GRt = 1
+                };
+            }
+            else
+            {
+                Result = new ProduceTroopQueue
+                {
+                    Aid = (listBox1.SelectedItem as TroopInfo).Aid,
+                    Amount = Convert.ToInt32(numericUpDown1.Value),
+                    MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
+                    MinimumInterval = minimumInterval,
+                    NextExec = actionAt,
+                    GRt = 0
+                };
+            }
 		}
 
 		private void checkBox1_CheckedChanged(object sender, EventArgs e)

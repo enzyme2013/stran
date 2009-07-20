@@ -187,3 +187,5 @@ forcetransfer=取消爆倉限制
 CMBProduceTroop=建造軍隊(&O)
 vres=資源
 newcap=模擬為主村(&X)
+showallarmy=顯示所有軍種(&A)
+Great=大兵營及大馬廄(&G)

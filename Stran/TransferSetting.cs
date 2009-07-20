@@ -17,6 +17,7 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 using libTravian;
+using System.IO;
 
 namespace Stran
 {
@@ -52,6 +53,18 @@ namespace Stran
 					comboBoxTargetVillage.Items.Add(v.Key + " " + v.Value.Coord + " " + v.Value.Name);
 				else
 					comboBoxTargetVillage.SelectedIndex = comboBoxTargetVillage.Items.Count - 1;
+
+            if (File.Exists("Transfer"))
+            {
+                FileStream fs = new FileStream("Transfer", FileMode.Open, FileAccess.Read);
+                StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                while (!sr.EndOfStream)
+                {
+                    string[] opt = sr.ReadLine().Split('|');
+                    comboBoxTargetVillage2.Items.Add(opt[0] + "|" + opt[1] + " " + opt[2]);
+                }
+                sr.Close();
+            }
 
 			numericUpDown1.Increment =
 				numericUpDown2.Increment =
@@ -322,5 +335,31 @@ namespace Stran
 				UpCall.Dirty = true;
 			}
 		}
+
+        private void comboBoxTargetVillage2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.comboBoxTargetVillage.SelectedIndex = 0;
+            if (comboBoxTargetVillage2.SelectedIndex == 0)
+            {
+                this.txtX.Enabled = this.txtY.Enabled = true;
+            }
+            else
+            {
+                this.txtX.Enabled = this.txtY.Enabled = false;
+                string selfVillageID = (comboBoxTargetVillage2.SelectedItem as string).Split(' ')[0];
+                string Xc = selfVillageID.Split('|')[0];
+                string Yc = selfVillageID.Split('|')[1];
+                this.txtX.Text = Xc;
+                this.txtY.Text = Yc;
+                this.radioNormalTarget.Enabled = false;
+                this.buttonTarget.Enabled = false;
+                if (this.radioNormalTarget.Checked)
+                {
+                    this.radioNormalMe.Checked = true;
+                }
+            }
+
+            numericUpDownMechantCount_ValueChanged(sender, e);
+        }
 	}
 }
