@@ -100,10 +100,10 @@ namespace libTravian
 		static private void InitBuildingCost()
 		{
 			BuildingCost = new rinfo_array[42];
-			BuildingCost[1] = new rinfo_array(19, 1.67, new TResAmount(40, 100, 50, 60));
-			BuildingCost[2] = new rinfo_array(19, 1.67, new TResAmount(80, 40, 80, 50));
-			BuildingCost[3] = new rinfo_array(19, 1.67, new TResAmount(100, 80, 30, 60));
-			BuildingCost[4] = new rinfo_array(19, 1.67, new TResAmount(70, 90, 70, 20));
+			BuildingCost[1] = new rinfo_array(21, 1.67, new TResAmount(40, 100, 50, 60));
+			BuildingCost[2] = new rinfo_array(21, 1.67, new TResAmount(80, 40, 80, 50));
+			BuildingCost[3] = new rinfo_array(21, 1.67, new TResAmount(100, 80, 30, 60));
+			BuildingCost[4] = new rinfo_array(21, 1.67, new TResAmount(70, 90, 70, 20));
 			BuildingCost[5] = new rinfo_array(5, 1.8, new TResAmount(520, 380, 290, 90));
 			BuildingCost[6] = new rinfo_array(5, 1.8, new TResAmount(440, 480, 320, 50));
 			BuildingCost[7] = new rinfo_array(5, 1.8, new TResAmount(200, 450, 510, 120));

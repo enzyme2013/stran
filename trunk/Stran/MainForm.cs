@@ -47,7 +47,7 @@ namespace Stran
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
 			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}.{2} [Nikola Tesla]", v.Major, v.Minor, v.Build);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [2009-7-21 是 Stran 两周年纪念日哟]", v.Major, v.Minor, v.Build);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
@@ -393,6 +393,16 @@ namespace Stran
 				Tribe = Convert.ToInt32(accountdata[3]);
 			if(accountdata.Length > 4)
 				Language = accountdata[4];
+		}
+		string invalidchar = "\\/:*?\"<>|";
+		public string GetKey()
+		{
+			string str = string.Format("{0}@{1}", Username, Server);
+			foreach (var x in invalidchar)
+			{
+				str = str.Replace(x, '-');
+			}
+			return str;
 		}
 	}
 }

@@ -54,17 +54,20 @@ namespace Stran
 				else
 					comboBoxTargetVillage.SelectedIndex = comboBoxTargetVillage.Items.Count - 1;
 
-            if (File.Exists("Transfer"))
-            {
-                FileStream fs = new FileStream("Transfer", FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                while (!sr.EndOfStream)
-                {
-                    string[] opt = sr.ReadLine().Split('|');
-                    comboBoxTargetVillage2.Items.Add(opt[0] + "|" + opt[1] + " " + opt[2]);
-                }
-                sr.Close();
-            }
+			if (File.Exists("Transfer"))
+			{
+				var ts = File.ReadAllLines("Transfer");
+				foreach (var t in ts)
+				{
+					string[] opt = t.Split(new char[] { '|' }, 3);
+					if (opt.Length < 3)
+						continue;
+					int x = 0, y = 0;
+					if(int.TryParse(opt[0], out x) && int.TryParse(opt[1], out y))
+						if(Math.Abs(x) <= 400 && Math.Abs(y) <= 400)
+							comboBoxTargetVillage2.Items.Add(opt[0] + "|" + opt[1] + " " + opt[2]);
+				}
+			}
 
 			numericUpDown1.Increment =
 				numericUpDown2.Increment =
@@ -96,6 +99,8 @@ namespace Stran
 			}
 			else
 			{
+				this.comboBoxTargetVillage2.SelectedIndex = 0;
+				comboBoxTargetVillage2_SelectedIndexChanged(this, e);
 				this.txtX.Enabled = this.txtY.Enabled = false;
 				this.targetVillageID = Convert.ToInt32((comboBoxTargetVillage.SelectedItem as string).Split(' ')[0]);
 				if (TravianData.Villages.ContainsKey(this.targetVillageID))
@@ -336,30 +341,31 @@ namespace Stran
 			}
 		}
 
-        private void comboBoxTargetVillage2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.comboBoxTargetVillage.SelectedIndex = 0;
-            if (comboBoxTargetVillage2.SelectedIndex == 0)
-            {
-                this.txtX.Enabled = this.txtY.Enabled = true;
-            }
-            else
-            {
-                this.txtX.Enabled = this.txtY.Enabled = false;
-                string selfVillageID = (comboBoxTargetVillage2.SelectedItem as string).Split(' ')[0];
-                string Xc = selfVillageID.Split('|')[0];
-                string Yc = selfVillageID.Split('|')[1];
-                this.txtX.Text = Xc;
-                this.txtY.Text = Yc;
-                this.radioNormalTarget.Enabled = false;
-                this.buttonTarget.Enabled = false;
-                if (this.radioNormalTarget.Checked)
-                {
-                    this.radioNormalMe.Checked = true;
-                }
-            }
+		private void comboBoxTargetVillage2_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (comboBoxTargetVillage2.SelectedIndex == 0)
+			{
+				this.txtX.Enabled = this.txtY.Enabled = true;
+			}
+			else
+			{
+				this.comboBoxTargetVillage.SelectedIndex = 0;
+				comboBoxTargetVillage_SelectedIndexChanged(this, e);
+				this.txtX.Enabled = this.txtY.Enabled = false;
+				string selfVillageID = (comboBoxTargetVillage2.SelectedItem as string).Split(' ')[0];
+				string Xc = selfVillageID.Split('|')[0];
+				string Yc = selfVillageID.Split('|')[1];
+				this.txtX.Text = Xc;
+				this.txtY.Text = Yc;
+				this.radioNormalTarget.Enabled = false;
+				this.buttonTarget.Enabled = false;
+				if (this.radioNormalTarget.Checked)
+				{
+					this.radioNormalMe.Checked = true;
+				}
+			}
 
-            numericUpDownMechantCount_ValueChanged(sender, e);
-        }
+			numericUpDownMechantCount_ValueChanged(sender, e);
+		}
 	}
 }

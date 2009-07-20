@@ -15,7 +15,7 @@
 		{
 			if(dockPanel1.Contents.Count != 0)
 			{
-				string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
+				string fn = "style\\" + LoginInfo.GetKey() + "!style.xml";
 				dockPanel1.SaveAsXml(fn);
 			}
 			if(disposing && (components != null))

@@ -81,7 +81,7 @@ namespace Stran
 		{
 			if(tr != null)
 				tr = null;
-			TravianData = DB.Instance.RestoreData(DB.Instance.GetKey(LoginInfo.Username, LoginInfo.Server));
+			TravianData = DB.Instance.RestoreData(LoginInfo.GetKey());
 			if(TravianData == null)
 				TravianData = new Data();
 			TravianData.Username = LoginInfo.Username;
@@ -777,11 +777,7 @@ namespace Stran
 
 		string GetStyleFilename()
 		{
-			string fn = "style\\" + LoginInfo.Username + "@" + LoginInfo.Server + "!style.xml";
-			foreach(char ch in Path.GetInvalidPathChars())
-			{
-				fn = fn.Replace(ch, '_');
-			}
+			string fn = "style\\" + LoginInfo.GetKey() + "!style.xml";
 			return fn;
 		}
 

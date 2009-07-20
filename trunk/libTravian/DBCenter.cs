@@ -30,12 +30,13 @@ namespace libTravian
 		{
 		}
 
+		string invalidchar = "\\/:*?\"<>|";
 		public string GetKey(string Username, string Server)
 		{
 			string str = string.Format("{0}@{1}", Username, Server);
-			foreach(var x in Path.GetInvalidPathChars())
+			foreach (var x in invalidchar)
 			{
-				str.Replace(x, '-');
+				str = str.Replace(x, '-');
 			}
 			return str;
 		}
