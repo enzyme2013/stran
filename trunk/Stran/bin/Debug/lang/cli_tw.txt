@@ -53,7 +53,7 @@ upgrading=正在升級
 trigger=啟動條件
 action=動作
 // context menu village
-refresh=取得即時村莊資訊(&R)
+refresh=立即更新村莊資訊(&R)
 cmbup=升級建築 - 一次(&A)
 cmpupmulti=升級建築 - 多次(&U)
 cmpup2=升級 2 次(&2)
@@ -160,6 +160,7 @@ cmbparty2000=大型派對(&2)
 refreshbuilding=讀取建築資訊(&F)
 refreshdestroy=讀取拆除資訊(&H)
 refreshupgrade=讀取研發資訊(&F)
+refreshtroop=讀取軍隊資訊(&T)
 cmicancel=取消(&C)
 
 // Queue import/export dialogs
@@ -185,7 +186,8 @@ enabled=(已啟用)
 autonormalizemetime=平衡爆倉時間
 forcetransfer=取消爆倉限制
 CMBProduceTroop=建造軍隊(&O)
+CMBRaid=派遣軍隊(&S)
 vres=資源
 newcap=模擬為主村(&X)
 showallarmy=顯示所有軍種(&A)
-Great=大兵營及大馬廄(&G)
+Great=大兵營或大馬廄(&G)
