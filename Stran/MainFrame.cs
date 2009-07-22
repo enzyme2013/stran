@@ -1817,7 +1817,8 @@ namespace Stran
 			var CV = TravianData.Villages[SelectVillage];
 			if(CV.isUpgradeInitialized < 2)
 			{
-				MessageBox.Show("请先刷新研发信息");
+                CV.InitializeUpgrade();
+                MessageBox.Show("程序正在读取研发信息，请重新操作一次");
 				return;
 			}
 			List<TroopInfo> CanProduce = new List<TroopInfo>();
@@ -1839,6 +1840,13 @@ namespace Stran
 				lvi(pts.Result);
 			}
 		}
+
+        private void CMTRefresh_Click(object sender, EventArgs e)
+        {
+            if (!TravianData.Villages.ContainsKey(SelectVillage))
+                return;
+            TravianData.Villages[SelectVillage].InitializeTroop();
+        }
 
 	}
 }

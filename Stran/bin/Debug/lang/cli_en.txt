@@ -160,6 +160,7 @@ cmbparty2000=&2000 Great celebrations
 refreshbuilding=Re&fresh building list
 refreshdestroy=Refres&h destroy item
 refreshupgrade=Re&fresh research list
+refreshtroop=Refresh &troop list
 cmicancel=&Cancel
 
 // Queue import/export dialogs
@@ -185,6 +186,7 @@ enabled= (Enabled)
 autonormalizemetime=Nml this village (Time)
 forcetransfer=Skip full check
 CMBProduceTroop=Pr&oduce troops
+CMBRaid=&Send troops
 vres=Res
 newcap=Set as New capital
 showallarmy=Show &All Army

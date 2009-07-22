@@ -20,7 +20,8 @@ namespace Stran.DockingPanel
 
 		private void TroopInfoList_Load(object sender, EventArgs e)
 		{
-			UpCall.mui.RefreshLanguage(this);
+            listViewTroop.ContextMenuStrip = UpCall.contextMenuTroop;
+            UpCall.mui.RefreshLanguage(this);
 			TabText = Text;
 		}
 	}

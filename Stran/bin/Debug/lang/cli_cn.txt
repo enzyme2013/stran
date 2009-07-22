@@ -160,6 +160,7 @@ cmbparty2000=&2000 大派对
 refreshbuilding=&F. 刷新建筑列表
 refreshdestroy=&H. 刷新拆除项目
 refreshupgrade=&F. 刷新研发项目
+refreshtroop=&T. 刷新军队项目
 cmicancel=&C. 取消
 
 // Queue import/export dialogs
@@ -185,7 +186,8 @@ enabled= (已启用)
 autonormalizemetime=自动平衡我的爆仓时间
 forcetransfer=无视爆仓检查
 CMBProduceTroop=&O. 造兵
+CMBRaid=&S. 出兵
 vres=资源
 newcap=&X. 设为新主村
 showallarmy=&A. 显示所有军种
-Great=&G. 大兵营及大马厩
+Great=&G. 大兵营或大马厩
