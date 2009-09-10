@@ -487,7 +487,7 @@ namespace libTravian
 		private DateTime NewParseInDoing(string data, out string text)
 		{
 			//var m2 = Regex.Match(data, "class=\"s7\">(.*?)</td>.*?\r?\n.*?\r?\n?.*?timer1>([0-9:]+)<");
-			var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td>(.*?)</td>.*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
+			var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td[^<]*?>(.*?)</td>.*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
 			if (m2.Success)
 			{
 				text = m2.Groups[1].Value;
@@ -871,7 +871,8 @@ namespace libTravian
 				 */
 				if (!m.Success)
 					continue;
-				int[] tro = new int[m.Groups[4].Captures.Count];
+//				int[] tro = new int[m.Groups[4].Captures.Count];
+                int[] tro = new int[11];
 				for (int i = 0; i < m.Groups[4].Captures.Count; i++)
 					if (m.Groups[4].Captures[i].Value == "?")
 						tro[i] = -1;
