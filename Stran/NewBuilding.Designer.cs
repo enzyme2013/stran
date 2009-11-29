@@ -54,7 +54,7 @@ namespace Stran
 			this.label1.Location = new System.Drawing.Point(12, 30);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(91, 14);
-			this.label1.TabIndex = 1;
+            this.label1.TabIndex = 5;
 			this.label1.Tag = "building";
 			this.label1.Text = "建筑";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -64,7 +64,7 @@ namespace Stran
 			this.label2.Location = new System.Drawing.Point(12, 62);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(91, 14);
-			this.label2.TabIndex = 2;
+            this.label2.TabIndex = 6;
 			this.label2.Tag = "position";
 			this.label2.Text = "位置";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -76,7 +76,7 @@ namespace Stran
 			this.comboBox2.Location = new System.Drawing.Point(123, 59);
 			this.comboBox2.Name = "comboBox2";
 			this.comboBox2.Size = new System.Drawing.Size(133, 22);
-			this.comboBox2.TabIndex = 3;
+            this.comboBox2.TabIndex = 1;
 			// 
 			// button1
 			// 
@@ -84,7 +84,7 @@ namespace Stran
 			this.button1.Location = new System.Drawing.Point(52, 140);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(80, 32);
-			this.button1.TabIndex = 4;
+            this.button1.TabIndex = 3;
 			this.button1.Tag = "ok";
 			this.button1.Text = "确定";
 			this.button1.UseVisualStyleBackColor = true;
@@ -96,7 +96,7 @@ namespace Stran
 			this.button2.Location = new System.Drawing.Point(162, 140);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(80, 32);
-			this.button2.TabIndex = 5;
+            this.button2.TabIndex = 4;
 			this.button2.Tag = "cancel";
 			this.button2.Text = "取消";
 			this.button2.UseVisualStyleBackColor = true;
@@ -117,8 +117,8 @@ namespace Stran
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Location = new System.Drawing.Point(73, 96);
 			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(86, 18);
-			this.checkBox1.TabIndex = 7;
+            this.checkBox1.Size = new System.Drawing.Size(85, 18);
+            this.checkBox1.TabIndex = 2;
 			this.checkBox1.Tag = "QPUpTop";
 			this.checkBox1.Text = "checkBox1";
 			this.checkBox1.UseVisualStyleBackColor = true;

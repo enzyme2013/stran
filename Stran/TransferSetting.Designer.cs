@@ -68,7 +68,7 @@
             this.buttonCancel.Location = new System.Drawing.Point(302, 356);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(80, 32);
-            this.buttonCancel.TabIndex = 18;
+            this.buttonCancel.TabIndex = 21;
             this.buttonCancel.Tag = "cancel";
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -79,7 +79,7 @@
             this.buttonOK.Location = new System.Drawing.Point(204, 356);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(80, 32);
-            this.buttonOK.TabIndex = 17;
+            this.buttonOK.TabIndex = 20;
             this.buttonOK.Tag = "ok";
             this.buttonOK.Text = "确定";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -90,7 +90,7 @@
             this.numericUpDown1.Location = new System.Drawing.Point(12, 70);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(70, 22);
-            this.numericUpDown1.TabIndex = 10;
+            this.numericUpDown1.TabIndex = 5;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
             this.numericUpDown1.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -100,7 +100,7 @@
             this.numericUpDown2.Location = new System.Drawing.Point(12, 98);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(70, 22);
-            this.numericUpDown2.TabIndex = 11;
+            this.numericUpDown2.TabIndex = 6;
             this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
             this.numericUpDown2.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -110,7 +110,7 @@
             this.numericUpDown3.Location = new System.Drawing.Point(12, 126);
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(70, 22);
-            this.numericUpDown3.TabIndex = 12;
+            this.numericUpDown3.TabIndex = 7;
             this.numericUpDown3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
             this.numericUpDown3.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -120,7 +120,7 @@
             this.numericUpDown4.Location = new System.Drawing.Point(12, 154);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(70, 22);
-            this.numericUpDown4.TabIndex = 13;
+            this.numericUpDown4.TabIndex = 8;
             this.numericUpDown4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown1234_ValueChanged);
             this.numericUpDown4.Enter += new System.EventHandler(this.numericUpDown1234_Enter);
@@ -172,7 +172,7 @@
             this.label1.Location = new System.Drawing.Point(227, 134);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 22);
-            this.label1.TabIndex = 16;
+            this.label1.TabIndex = 24;
             this.label1.Tag = "merchantcnt";
             this.label1.Text = "merchantcnt";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -183,7 +183,7 @@
             this.label2.Location = new System.Drawing.Point(246, 78);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 14);
-            this.label2.TabIndex = 17;
+            this.label2.TabIndex = 23;
             this.label2.Tag = "coord";
             this.label2.Text = "label2";
             // 
@@ -205,7 +205,7 @@
             this.radioNormalTarget.Location = new System.Drawing.Point(115, 70);
             this.radioNormalTarget.Name = "radioNormalTarget";
             this.radioNormalTarget.Size = new System.Drawing.Size(96, 18);
-            this.radioNormalTarget.TabIndex = 5;
+            this.radioNormalTarget.TabIndex = 9;
             this.radioNormalTarget.TabStop = true;
             this.radioNormalTarget.Tag = "autonormalizetarget";
             this.radioNormalTarget.Text = "radioButton1";
@@ -218,7 +218,7 @@
             this.radioNormalMe.Location = new System.Drawing.Point(115, 94);
             this.radioNormalMe.Name = "radioNormalMe";
             this.radioNormalMe.Size = new System.Drawing.Size(96, 18);
-            this.radioNormalMe.TabIndex = 6;
+            this.radioNormalMe.TabIndex = 10;
             this.radioNormalMe.TabStop = true;
             this.radioNormalMe.Tag = "autonormalizeme";
             this.radioNormalMe.Text = "radioButton1";
@@ -231,7 +231,7 @@
             this.radioNoNormal.Location = new System.Drawing.Point(115, 142);
             this.radioNoNormal.Name = "radioNoNormal";
             this.radioNoNormal.Size = new System.Drawing.Size(96, 18);
-            this.radioNoNormal.TabIndex = 8;
+            this.radioNoNormal.TabIndex = 12;
             this.radioNoNormal.TabStop = true;
             this.radioNoNormal.Tag = "noautonormalize";
             this.radioNoNormal.Text = "radioButton2";
@@ -244,7 +244,7 @@
             this.checkBoxNoCrop.Location = new System.Drawing.Point(155, 190);
             this.checkBoxNoCrop.Name = "checkBoxNoCrop";
             this.checkBoxNoCrop.Size = new System.Drawing.Size(85, 18);
-            this.checkBoxNoCrop.TabIndex = 9;
+            this.checkBoxNoCrop.TabIndex = 15;
             this.checkBoxNoCrop.Tag = "nocrop";
             this.checkBoxNoCrop.Text = "checkBox1";
             this.checkBoxNoCrop.UseVisualStyleBackColor = true;
@@ -273,7 +273,7 @@
             this.label3.Location = new System.Drawing.Point(230, 162);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 22);
-            this.label3.TabIndex = 26;
+            this.label3.TabIndex = 25;
             this.label3.Tag = "transfercnt";
             this.label3.Text = "transfercnt";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -284,7 +284,7 @@
             this.radioUniform.Location = new System.Drawing.Point(115, 118);
             this.radioUniform.Name = "radioUniform";
             this.radioUniform.Size = new System.Drawing.Size(126, 18);
-            this.radioUniform.TabIndex = 7;
+            this.radioUniform.TabIndex = 11;
             this.radioUniform.TabStop = true;
             this.radioUniform.Tag = "uniformdistribution";
             this.radioUniform.Text = "uniformdistribution";
@@ -295,7 +295,7 @@
             this.buttonTiming.Location = new System.Drawing.Point(301, 214);
             this.buttonTiming.Name = "buttonTiming";
             this.buttonTiming.Size = new System.Drawing.Size(80, 32);
-            this.buttonTiming.TabIndex = 16;
+            this.buttonTiming.TabIndex = 18;
             this.buttonTiming.Tag = "Timing";
             this.buttonTiming.Text = "定时";
             this.buttonTiming.UseVisualStyleBackColor = true;
@@ -306,7 +306,7 @@
             this.buttonSource.Location = new System.Drawing.Point(115, 214);
             this.buttonSource.Name = "buttonSource";
             this.buttonSource.Size = new System.Drawing.Size(80, 32);
-            this.buttonSource.TabIndex = 14;
+            this.buttonSource.TabIndex = 16;
             this.buttonSource.Tag = "MyResource";
             this.buttonSource.Text = "我的资源";
             this.buttonSource.UseVisualStyleBackColor = true;
@@ -317,7 +317,7 @@
             this.buttonTarget.Location = new System.Drawing.Point(208, 214);
             this.buttonTarget.Name = "buttonTarget";
             this.buttonTarget.Size = new System.Drawing.Size(80, 32);
-            this.buttonTarget.TabIndex = 15;
+            this.buttonTarget.TabIndex = 17;
             this.buttonTarget.Tag = "TargetResource";
             this.buttonTarget.Text = "目标资源";
             this.buttonTarget.UseVisualStyleBackColor = true;
@@ -329,7 +329,7 @@
             this.radioNormalMeTime.Location = new System.Drawing.Point(115, 166);
             this.radioNormalMeTime.Name = "radioNormalMeTime";
             this.radioNormalMeTime.Size = new System.Drawing.Size(96, 18);
-            this.radioNormalMeTime.TabIndex = 27;
+            this.radioNormalMeTime.TabIndex = 13;
             this.radioNormalMeTime.TabStop = true;
             this.radioNormalMeTime.Tag = "autonormalizemetime";
             this.radioNormalMeTime.Text = "radioButton2";
@@ -341,7 +341,7 @@
             this.checkBoxForce.Location = new System.Drawing.Point(12, 190);
             this.checkBoxForce.Name = "checkBoxForce";
             this.checkBoxForce.Size = new System.Drawing.Size(85, 18);
-            this.checkBoxForce.TabIndex = 28;
+            this.checkBoxForce.TabIndex = 14;
             this.checkBoxForce.Tag = "forcetransfer";
             this.checkBoxForce.Text = "checkBox1";
             this.checkBoxForce.UseVisualStyleBackColor = true;
@@ -357,7 +357,7 @@
             this.comboBoxTargetVillage2.MaxDropDownItems = 12;
             this.comboBoxTargetVillage2.Name = "comboBoxTargetVillage2";
             this.comboBoxTargetVillage2.Size = new System.Drawing.Size(370, 21);
-            this.comboBoxTargetVillage2.TabIndex = 29;
+            this.comboBoxTargetVillage2.TabIndex = 22;
             this.comboBoxTargetVillage2.SelectedIndexChanged += new System.EventHandler(this.comboBoxTargetVillage2_SelectedIndexChanged);
             // 
             // TransferSetting

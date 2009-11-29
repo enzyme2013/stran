@@ -872,7 +872,7 @@
             this.CMTRaid,
             this.toolStripSeparator16,
             this.CMTRefresh});
-            this.contextMenuTroop.Name = "contextMenuResearch";
+            this.contextMenuTroop.Name = "contextMenuTroop";
             this.contextMenuTroop.ShowImageMargin = false;
             this.contextMenuTroop.Size = new System.Drawing.Size(140, 98);
             this.contextMenuTroop.Tag = "mtroop";
@@ -881,7 +881,7 @@
             // 
             this.CMTProduceTroop.Name = "CMTProduceTroop";
             this.CMTProduceTroop.Size = new System.Drawing.Size(139, 22);
-            this.CMTProduceTroop.Tag = "CMBProduceTroop";
+            this.CMTProduceTroop.Tag = "CMTProduceTroop";
             this.CMTProduceTroop.Text = "produce troops";
             this.CMTProduceTroop.Click += new System.EventHandler(this.CMBProduceTroop_Click);
             // 
@@ -889,7 +889,7 @@
             // 
             this.CMTRaid.Name = "CMTRaid";
             this.CMTRaid.Size = new System.Drawing.Size(139, 22);
-            this.CMTRaid.Tag = "CMBRaid";
+            this.CMTRaid.Tag = "CMTRaid";
             this.CMTRaid.Text = "send troops";
             this.CMTRaid.Click += new System.EventHandler(this.CMBRaid_Click);
             // 

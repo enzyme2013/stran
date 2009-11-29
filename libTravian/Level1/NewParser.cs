@@ -540,7 +540,7 @@ namespace libTravian
 
 			var CV = TD.Villages[VillageID];
 
-			var m1 = Regex.Match(data, @"(\d+)</h1>");
+			var m1 = Regex.Match(data.Replace("</span>",""), @"(\d+)</h1>");
 			if (!m1.Success)
 				return;
 			if (gid == 22)
@@ -711,8 +711,7 @@ namespace libTravian
 		/// <returns>True if we've got a page for building corresponding to gid</returns>
 		private bool IsParsingBuildingPage(int gid, string data)
 		{
-			Match m = Regex.Match(data, @"<h1>([^<]+)\s\w+\s\d+</h1>");
-			if (m.Success && m.Groups[1].Value.Contains(GidLang[gid]))
+			if (data.Contains("<h1>" + GetGidLang(gid)))
 			{
 				return true;
 			}
@@ -722,138 +721,8 @@ namespace libTravian
 
 		private void ParseTroops(int VillageID, string data)
 		{
-			/*
-			 * <table cellspacing="1" cellpadding="2" class="tbg">
-			
-			 * <tr class="cbg1">
-			 * <td width="21%">
-			 * <a href="karte.php?d=320810&c=1f"><span class="c0">0-9</span></a></td>
-			 * <td colspan="10" class="b">从[1]风蓝返回</td>
-			 * </tr>
-			 * <tr class="unit">
-			 * <td>&nbsp;</td>
-			 * <td><img src="img/un/u/21.gif" title="方阵兵"></td>
-			 * <td><img src="img/un/u/22.gif" title="剑士"></td>
-			 * <td><img src="img/un/u/23.gif" title="探路者"></td>
-			 * <td><img src="img/un/u/24.gif" title="雷法师"></td>
-			 * <td><img src="img/un/u/25.gif" title="德鲁伊骑兵"></td>
-			 * <td><img src="img/un/u/26.gif" title="海顿圣骑士"></td>
-			 * <td><img src="img/un/u/27.gif" title="冲撞车"></td>
-			 * <td><img src="img/un/u/28.gif" title="投石器"></td>
-			 * <td><img src="img/un/u/29.gif" title="首领"></td>
-			 * <td><img src="img/un/u/30.gif" title="拓荒者"></td>
-			 * </tr>
-			 * <tr>
-			 * <td>军队</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td>559</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td>138</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * </tr>
-			 * </tr>
-			 * <tr class="cbg1"><td>目的地</td>
-			 * <td colspan="10">
-<table width="100%" cellspacing="0" cellpadding="0" class="f10">
-<tr align="center">
-<td width="50%">&nbsp; 需要 <span id=timer1>0:08:53</span> 小时</td>
-<td width="50%">于 22:27:06</span><span> 点</td>
-</tr></table>
-			 * </td>
-			 * </table>
-			 */
-
-			/*
-			 * <table cellspacing="1" cellpadding="2" class="tbg">
-			
-			 * <tr class="cbg1">
-			 * <td width="21%"><a href="karte.php?d=111909&c=09"><span class="c0">C1M9相坂さよ</span></a></td>
-			 * <td colspan="11" class="b">自己的军队</td>
-			 * </tr>
-			 * <tr class="unit">
-			 * <td>&nbsp;</td>
-			 * <td><img src="img/un/u/21.gif" title="方阵兵"></td>
-			 * <td><img src="img/un/u/22.gif" title="剑士"></td>
-			 * <td><img src="img/un/u/23.gif" title="探路者"></td>
-			 * <td><img src="img/un/u/24.gif" title="雷法师"></td>
-			 * <td><img src="img/un/u/25.gif" title="德鲁伊骑兵"></td>
-			 * <td><img src="img/un/u/26.gif" title="海顿圣骑士"></td>
-			 * <td><img src="img/un/u/27.gif" title="冲撞车"></td>
-			 * <td><img src="img/un/u/28.gif" title="投石器"></td>
-			 * <td><img src="img/un/u/29.gif" title="首领"></td>
-			 * <td><img src="img/un/u/30.gif" title="拓荒者"></td>
-			 * <td><img src="img/un/u/hero.gif" title="英雄"></td>
-			 * </tr>
-			 * <tr>
-			 * <td>军队</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td>24738</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td>3586</td>
-			 * <td class="c">0</td>
-			 * <td class="c">0</td>
-			 * <td>1</td>
-			 * </tr><tr class="cbg1"><td>粮食消耗</td>
-			 * <td class="s7" colspan="11">70998<img class="res" src="img/un/r/4.gif">每小时</td></table>
-			 * 
-			 * 0 0 0 24751 0 0 0 3591 0 0
-			 *
-			data = @"<table cellspacing=""1"" cellpadding=""2"" class=""tbg"">
-
-<tr class=""cbg1"">
-<td width=""21%""><a href=""karte.php?d=320810&c=1f""><span class=""c0"">0-9</span></a></td>
-<td colspan=""10"" class=""b"">从[1]风蓝返回</td>
-</tr>
-
-<tr class=""unit"">
-<td>&nbsp;</td><td><img src=""img/un/u/21.gif"" title=""方阵兵""></td><td><img src=""img/un/u/22.gif"" title=""剑士""></td><td><img src=""img/un/u/23.gif"" title=""探路者""></td><td><img src=""img/un/u/24.gif"" title=""雷法师""></td><td><img src=""img/un/u/25.gif"" title=""德鲁伊骑兵""></td><td><img src=""img/un/u/26.gif"" title=""海顿圣骑士""></td><td><img src=""img/un/u/27.gif"" title=""冲撞车""></td><td><img src=""img/un/u/28.gif"" title=""投石器""></td><td><img src=""img/un/u/29.gif"" title=""首领""></td><td><img src=""img/un/u/30.gif"" title=""拓荒者""></td></tr><tr><td>军队</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>559</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>138</td><td class=""c"">0</td><td class=""c"">0</td></tr></tr><tr class=""cbg1""><td>目的地</td><td colspan=""10"">
-<table width=""100%"" cellspacing=""0"" cellpadding=""0"" class=""f10"">
-<tr align=""center"">
-<td width=""50%"">&nbsp; 需要 <span id=timer1>0:08:53</span> 小时</td>
-<td width=""50%"">于 22:27:06</span><span> 点</td>
-</tr></table></td></table>"; // TODO: 初始化为适当的值
-
-			/*
-			data = @"<p><b>村庄里的军队</b></p><p>
-<table cellspacing=""1"" cellpadding=""2"" class=""tbg"">
-
-<tr class=""cbg1"">
-<td width=""21%""><a href=""karte.php?d=320810&c=1f""><span class=""c0"">0-9</span></a></td>
-<td colspan=""10"" class=""b"">自己的军队</td>
-</tr>
-
-<tr class=""unit"">
-<td>&nbsp;</td><td><img src=""img/un/u/21.gif"" title=""方阵兵""></td><td><img src=""img/un/u/22.gif"" title=""剑士""></td><td><img src=""img/un/u/23.gif"" title=""探路者""></td><td><img src=""img/un/u/24.gif"" title=""雷法师""></td><td><img src=""img/un/u/25.gif"" title=""德鲁伊骑兵""></td><td><img src=""img/un/u/26.gif"" title=""海顿圣骑士""></td><td><img src=""img/un/u/27.gif"" title=""冲撞车""></td><td><img src=""img/un/u/28.gif"" title=""投石器""></td><td><img src=""img/un/u/29.gif"" title=""首领""></td><td><img src=""img/un/u/30.gif"" title=""拓荒者""></td></tr><tr><td>军队</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>571</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>138</td><td class=""c"">0</td><td class=""c"">0</td></tr>
-<tr class=""cbg1""><td>粮食消耗</td><td class=""s7"" colspan=""10"">1970<img class=""res"" src=""img/un/r/4.gif"">每小时</td></table></p><p class=""c"">集结点建造完成";
-			*/
-			if (!IsParsingBuildingPage(16, data))
+			if (!IsParsingBuildingPage(16, data) && !data.Contains("<h1>Rally point"))
 				return;
-			/*
-			data = @"""1"" cellpadding=""2"" class=""tbg"">
-
-<tr class=""cbg1"">
-<td width=""21%""><a href=""karte.php?d=111909&c=09""><span class=""c0"">C1M9相坂さよ</span></a></td>
-<td colspan=""11"" class=""b"">从0_0返回</td>
-</tr>
-
-<tr class=""unit"">
-<td>&nbsp;</td><td><img src=""img/un/u/21.gif"" title=""方阵兵""></td><td><img src=""img/un/u/22.gif"" title=""剑士""></td><td><img src=""img/un/u/23.gif"" title=""探路者""></td><td><img src=""img/un/u/24.gif"" title=""雷法师""></td><td><img src=""img/un/u/25.gif"" title=""德鲁伊骑兵""></td><td><img src=""img/un/u/26.gif"" title=""海顿圣骑士""></td><td><img src=""img/un/u/27.gif"" title=""冲撞车""></td><td><img src=""img/un/u/28.gif"" title=""投石器""></td><td><img src=""img/un/u/29.gif"" title=""首领""></td><td><img src=""img/un/u/30.gif"" title=""拓荒者""></td><td><img src=""img/un/u/hero.gif"" title=""英雄""></td></tr><tr><td>军队</td><td class=""c"">0</td><td>9836</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td class=""c"">0</td><td>118</td><td class=""c"">0</td><td class=""c"">0</td><td>1</td></tr></tr><tr class=""cbg1""><td>目的地</td><td colspan=""11"">
-<table width=""100%"" cellspacing=""0"" cellpadding=""0"" class=""f10"">
-<tr align=""center"">
-<td width=""50%"">&nbsp; 需要 <span id=timer1>18:18:46</span> 小时</td>
-<td width=""50%"">于 19:02:08</span><span> 点</td>
-</tr></table></td></table><p><b>村庄里的军队</b></p><p>
-";
-			//*/
 			var CV = TD.Villages[VillageID];
 			CV.Troop.Troops.Clear();
 			var items = data.Split(new string[] { "<table class=" }, StringSplitOptions.None);
@@ -888,7 +757,6 @@ namespace libTravian
 				-     O       -      //BeSupportedWay
 				-     -       O      MySelf
 				 */
-				// <a href="karte.php?d=251174&c=33"><span class="c0">对世博家园06区--铁泥木进行攻击</span></a>
 				bool hasLink = m.Groups[2].Value.Contains("<a href");
 				bool hasTime = m.Groups[6].Success;
 				bool hasCount = tro[0] != -1;

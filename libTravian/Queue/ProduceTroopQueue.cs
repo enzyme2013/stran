@@ -72,7 +72,7 @@ namespace libTravian
 			int Gid;
 			Gid = GRt ? AIDMapg[key] : AIDMap[key];
 
-			if (GRt && (Gid == 7 || Gid == 8) || Gid == 0)
+			if (GRt && (Aid == 7 || Aid == 8) || Gid == 0)
 			{
 				UpCall.DebugLog("Not appropriate kind of troop to produce, deleted.", DebugLevel.W);
 				MarkDeleted = true;
