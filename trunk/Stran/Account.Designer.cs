@@ -59,7 +59,7 @@ namespace Stran
 			this.label4.Location = new System.Drawing.Point(24, 96);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(93, 14);
-			this.label4.TabIndex = 7;
+            this.label4.TabIndex = 9;
 			this.label4.Tag = "password";
 			this.label4.Text = "密码";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -69,7 +69,7 @@ namespace Stran
 			this.label5.Location = new System.Drawing.Point(24, 61);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(93, 14);
-			this.label5.TabIndex = 6;
+            this.label5.TabIndex = 8;
 			this.label5.Tag = "username";
 			this.label5.Text = "用户名";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -79,7 +79,7 @@ namespace Stran
 			this.label6.Location = new System.Drawing.Point(24, 26);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(93, 14);
-			this.label6.TabIndex = 5;
+            this.label6.TabIndex = 7;
 			this.label6.Tag = "server";
 			this.label6.Text = "服务器";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -125,7 +125,7 @@ namespace Stran
 			this.label1.Location = new System.Drawing.Point(24, 131);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(93, 14);
-			this.label1.TabIndex = 9;
+            this.label1.TabIndex = 10;
 			this.label1.Tag = "tribe";
 			this.label1.Text = "种族";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -143,7 +143,7 @@ namespace Stran
 			this.label2.Location = new System.Drawing.Point(24, 167);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(93, 14);
-			this.label2.TabIndex = 12;
+            this.label2.TabIndex = 11;
 			this.label2.Tag = "displang";
 			this.label2.Text = "显示语言";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;

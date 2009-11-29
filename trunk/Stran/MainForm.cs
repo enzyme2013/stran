@@ -47,7 +47,7 @@ namespace Stran
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
 			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}.{2} [2009-7-21 是 Stran 两周年纪念日哟]", v.Major, v.Minor, v.Build);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [2009-11-11 独立更新 Stran 版本]", v.Major, v.Minor, v.Build);
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);

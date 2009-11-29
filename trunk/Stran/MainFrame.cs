@@ -615,6 +615,7 @@ namespace Stran
 					lvi.SubItems[3].Text = x.Value.DefenceLevel.ToString() + " " + lvi.SubItems[3].Text;
 				#endregion
 			}
+            m_researchstatus.listViewUpgrade.Items.Remove(m_researchstatus.listViewUpgrade.Items[9]);
 		}
 		private void DisplayMarket()
 		{

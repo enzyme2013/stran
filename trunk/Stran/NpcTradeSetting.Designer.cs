@@ -150,7 +150,7 @@
 			this.lblThreshold.Location = new System.Drawing.Point(14, 38);
 			this.lblThreshold.Name = "lblThreshold";
 			this.lblThreshold.Size = new System.Drawing.Size(114, 14);
-			this.lblThreshold.TabIndex = 26;
+            this.lblThreshold.TabIndex = 12;
 			this.lblThreshold.Tag = "NpcTradeThreshold";
 			this.lblThreshold.Text = "NpcTradeThreshold";
 			// 
@@ -160,7 +160,7 @@
 			this.lblDistribution.Location = new System.Drawing.Point(15, 94);
 			this.lblDistribution.Name = "lblDistribution";
 			this.lblDistribution.Size = new System.Drawing.Size(121, 14);
-			this.lblDistribution.TabIndex = 27;
+            this.lblDistribution.TabIndex = 13;
 			this.lblDistribution.Tag = "NpcTradeDistribution";
 			this.lblDistribution.Text = "NpcTradeDistribution";
 			// 
@@ -188,7 +188,7 @@
 			this.lblMinExchangeRatio.Location = new System.Drawing.Point(15, 150);
 			this.lblMinExchangeRatio.Name = "lblMinExchangeRatio";
 			this.lblMinExchangeRatio.Size = new System.Drawing.Size(105, 14);
-			this.lblMinExchangeRatio.TabIndex = 29;
+            this.lblMinExchangeRatio.TabIndex = 14;
 			this.lblMinExchangeRatio.Tag = "NpcTradeMinRatio";
 			this.lblMinExchangeRatio.Text = "NpcTradeMinRatio";
 			// 
@@ -198,7 +198,7 @@
 			this.label1.Location = new System.Drawing.Point(66, 173);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(19, 14);
-			this.label1.TabIndex = 30;
+            this.label1.TabIndex = 16;
 			this.label1.Text = "%";
 			// 
 			// nudMaxCount
@@ -225,7 +225,7 @@
 			this.lblMaxCount.Location = new System.Drawing.Point(167, 150);
 			this.lblMaxCount.Name = "lblMaxCount";
 			this.lblMaxCount.Size = new System.Drawing.Size(114, 14);
-			this.lblMaxCount.TabIndex = 32;
+            this.lblMaxCount.TabIndex = 15;
 			this.lblMaxCount.Tag = "NpcTradeMaxCount";
 			this.lblMaxCount.Text = "NpcTradeMaxCount";
 			// 

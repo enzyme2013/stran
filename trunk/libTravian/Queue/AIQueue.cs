@@ -115,12 +115,28 @@ namespace libTravian
 				gid = min + 1;
 				bid = buildpriority[gid];
 
-				if(minlevel == 10 && CV.Queue.Contains(Q))
+				if(minlevel == 10)
 				{
-					MarkDeleted = true;
-					UpCall.Dirty = true;
-					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
-					return;
+                    bool croop = false;
+                    for (i = 1; i <= 18; i++)
+                    {
+                        if (!CV.Buildings.ContainsKey(i))
+                            continue;
+                        var tlevel = CV.Buildings[i].Level;
+                        if (tlevel < 10 && croop == false)
+                        {
+                            gid = CV.Buildings[i].Gid;
+                            bid = i;
+                            croop = true;
+                        }
+                    }
+                    if (croop == false && CV.Queue.Contains(Q))
+                    {
+                        MarkDeleted = true;
+                        UpCall.Dirty = true;
+                        UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+                        return;
+                    }
 				}
 			}
 			// balance on warehouse and resource field:

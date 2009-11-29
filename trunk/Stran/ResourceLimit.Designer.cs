@@ -67,7 +67,7 @@
 			this.btnCancel.Location = new System.Drawing.Point(125, 163);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(80, 32);
-			this.btnCancel.TabIndex = 6;
+            this.btnCancel.TabIndex = 5;
 			this.btnCancel.Tag = "cancel";
 			this.btnCancel.Text = "取消";
 			this.btnCancel.UseVisualStyleBackColor = true;
@@ -78,7 +78,7 @@
 			this.btnOK.Location = new System.Drawing.Point(39, 163);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(80, 32);
-			this.btnOK.TabIndex = 5;
+            this.btnOK.TabIndex = 4;
 			this.btnOK.Tag = "ok";
 			this.btnOK.Text = "确定";
 			this.btnOK.UseVisualStyleBackColor = true;
@@ -89,7 +89,7 @@
 			this.nudLimit1.Location = new System.Drawing.Point(16, 112);
 			this.nudLimit1.Name = "nudLimit1";
 			this.nudLimit1.Size = new System.Drawing.Size(70, 22);
-			this.nudLimit1.TabIndex = 12;
+            this.nudLimit1.TabIndex = 0;
 			this.nudLimit1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// nudLimit2
@@ -97,7 +97,7 @@
 			this.nudLimit2.Location = new System.Drawing.Point(92, 112);
 			this.nudLimit2.Name = "nudLimit2";
 			this.nudLimit2.Size = new System.Drawing.Size(70, 22);
-			this.nudLimit2.TabIndex = 13;
+            this.nudLimit2.TabIndex = 1;
 			this.nudLimit2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// nudLimit3
@@ -105,7 +105,7 @@
 			this.nudLimit3.Location = new System.Drawing.Point(168, 112);
 			this.nudLimit3.Name = "nudLimit3";
 			this.nudLimit3.Size = new System.Drawing.Size(70, 22);
-			this.nudLimit3.TabIndex = 14;
+            this.nudLimit3.TabIndex = 2;
 			this.nudLimit3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// nudLimit4
@@ -113,7 +113,7 @@
 			this.nudLimit4.Location = new System.Drawing.Point(244, 112);
 			this.nudLimit4.Name = "nudLimit4";
 			this.nudLimit4.Size = new System.Drawing.Size(70, 22);
-			this.nudLimit4.TabIndex = 15;
+            this.nudLimit4.TabIndex = 3;
 			this.nudLimit4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// button1
@@ -122,7 +122,7 @@
 			this.button1.Location = new System.Drawing.Point(211, 163);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(80, 32);
-			this.button1.TabIndex = 16;
+            this.button1.TabIndex = 6;
 			this.button1.Tag = "nolimit";
 			this.button1.Text = "无限制";
 			this.button1.UseVisualStyleBackColor = true;

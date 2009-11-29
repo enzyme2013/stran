@@ -167,7 +167,7 @@ namespace libTravian
 			int sum = Int32.Parse(match.Groups["summe"].Value);
 
 			// Parse id
-			match = Regex.Match(result, "<input type=\"hidden\" name=\"id\" value=\"(?<id>\\d+)\">");
+			match = Regex.Match(result, "<input type=\"hidden\" name=\"id\" value=\"(?<id>\\d+)\"");
 			if (!match.Success)
 			{
 				return NpcTradeResult.Failure;
@@ -175,8 +175,17 @@ namespace libTravian
 
 			string id = match.Groups["id"].Value;
 
+            // Parse c
+            match = Regex.Match(result, "<input type=\"hidden\" name=\"c\" value=\"(?<c>[^>]*?)\"");
+            if (!match.Success)
+            {
+                return NpcTradeResult.Failure;
+            }
+
+            string c = match.Groups["c"].Value;
+
 			// Parse m1[] and m2[]
-			MatchCollection matches = Regex.Matches(result, "<input type=\"hidden\" name=\"m1\\[\\]\" value=\"(?<m1>\\d+)\">");
+			MatchCollection matches = Regex.Matches(result, "<input type=\"hidden\" name=\"m1\\[\\]\" value=\"(?<m1>\\d+)\"");
 			if (matches.Count != 4)
 			{
 				return NpcTradeResult.Failure;
@@ -209,6 +218,7 @@ namespace libTravian
 			postData["id"] = id;
 			postData["t"] = "3";
 			postData["a"] = "6";
+            postData["c"] = c;
 
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < m2.Resources.Length; i++)
