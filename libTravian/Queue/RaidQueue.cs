@@ -1,110 +1,402 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using LitJson;
 
 namespace libTravian
 {
-	public class RaidOption : IQueue
-	{
-		#region IQueue 成员
+    #region Enums
+    public enum RaidType
+    {
+        Reinforce = 2,
+        AttackNormal = 3,
+        AttackRaid = 4
+    }
 
-		public Travian UpCall { get; set; }
+    public enum SpyOption
+    {
+        Resource = 1,
+        Defense = 2
+    }
+    #endregion
 
-		public string Title
-		{
-			get
-			{
-				return Targets[TargetID].ToString();
-			}
-		}
+    /// <summary>
+    /// Attacking, scouting and reinforcement
+    /// </summary>
+    public class RaidQueue : IQueue
+    {
+        #region Fields
+        /// <summary>
+        /// When the troops will return
+        /// </summary>
+        [Json]
+        public DateTime resumeTime = DateTime.MinValue;
+        #endregion
 
-		public string Status
-		{
-			get
-			{
-				if(Troops == null)
-					return "N/A";
-				var s = string.Format("({0}/{1})", TargetID + 1, Targets.Count);
-				if(UpCall != null)
-				{
-					for(int i = 0; i < Troops.Length; i++)
-						if(Troops[i] > 0)
-							s += string.Format(" {0}-{1}", Troops[i], UpCall.GetAidLang(UpCall.TD.Tribe, i));
-				}
-				return s;
-			}
-		}
+        #region Properties
+        #region IQueue Members
+        public Travian UpCall { get; set; }
 
-		public void Import(string s)
-		{
-			throw new NotImplementedException();
-		}
+        public bool MarkDeleted { get; set; }
 
-		public string Export()
-		{
-			throw new NotImplementedException();
-		}
+        [Json]
+        public bool Paused { get; set; }
 
-		public bool MarkDeleted
-		{
-			get { throw new NotImplementedException(); }
-		}
+        [Json]
+        public int VillageID { get; set; }
 
-		public int CountDown
-		{
-			get { throw new NotImplementedException(); }
-		}
+        public int QueueGUID 
+        { 
+            get { return 9; } 
+        }
 
-		public void Action()
-		{
-			throw new NotImplementedException();
-		}
+        public string Title
+        {
+            get
+            {
+                TTInfo troopInfo = new TTInfo()
+                {
+                    Tribe = this.Tribe,
+                    Troops = this.Troops
+                };
 
-		[Json]
-		public bool Paused
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+                return String.Format("{0} {1}", troopInfo.FriendlyName, this.RaidType);
+            }
+        }
 
-		[Json]
-		public int VillageID
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+        public string Status
+        {
+            get
+            {
+                if (this.MaxCount == 1)
+                {
+                    return string.Format(
+                        "{0}/{1} {2}",
+                        this.TargetID + 1,
+                        this.Targets.Count,
+                        this.Targets[this.TargetID]);
+                }
+                else
+                {
+                    return string.Format(
+                        "{0}:{1}/{2}:{3} {4}",
+                        this.Count + 1,
+                        this.TargetID + 1,
+                        this.MaxCount == 0 ? "∞": this.MaxCount.ToString(),
+                        this.Targets.Count,
+                        this.Targets[this.TargetID]);
+                }
+            }
+        }
 
-		#endregion
+        public int CountDown
+        {
+            get
+            {              
+                if (!UpCall.TD.Villages.ContainsKey(this.VillageID))
+                {
+                    MarkDeleted = true;
+                    return 86400;
+                }
 
+                TVillage village = UpCall.TD.Villages[this.VillageID];
+                if (village.isTroopInitialized != 2)
+                {
+                    return 86400;
+                }
 
-		public IList<TPoint> Targets { get; set; }
-		public int TargetID { get; set; }
-		public int[] Troops { get; set; }
-		public void NextTarget()
-		{
-			if(TargetID == Targets.Count - 1)
-				TargetID = 0;
-			else
-				TargetID++;
-		}
+                this.Observe2To7Rule();
+                double delay = this.MinimumDelay;
+                if (!village.Troop.HasEnoughTroops(this.Troops))
+                {
+                    DateTime refreshTime = village.Troop.RefreshTime;
+                    delay = Math.Max(delay, (refreshTime - DateTime.Now).TotalSeconds + 5);
+                }
 
-		#region IQueue 成员
-		//public string IO { get { return Export(); } set { Import(value); } }
-		#endregion
+                return (int)Math.Min(delay, 86400);
+            }
+        }
+        #endregion
 
-		public int QueueGUID { get { return 9; } }
-	}
+        [Json]
+        public int Tribe { get; set; }
+
+        [Json]
+        public int[] Troops { get; set; }
+
+        [Json]
+        public List<TPoint> Targets { get; set; }
+
+        [Json]
+        public RaidType RaidType { get; set; }
+
+        [Json]
+        public SpyOption SpyOption { get; set; }
+
+        [Json]
+        public int MaxCount { get; set; }
+
+        [Json]
+        public int Count { get; set; }
+
+        [Json]
+        public int TargetID { get; set; }
+
+        public bool IsValid
+        {
+            get
+            {
+                if (this.Troops == null)
+                {
+                    return false;
+                }
+
+                int totalTroops = 0;
+                foreach (int troop in this.Troops)
+                {
+                    totalTroops += troop;
+                }
+
+                if (totalTroops < 1)
+                {
+                    return false;
+                }
+
+                if (this.Targets == null || this.Targets.Count < 1)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        private int MinimumDelay
+        {
+            get
+            {
+                int value = 0;
+                if (this.resumeTime > DateTime.Now)
+                {
+                    value = (int)Math.Min(86400, (this.resumeTime - DateTime.Now).TotalSeconds);
+                }
+
+                return value;
+            }
+            set
+            {
+                DateTime newResumeTime = DateTime.Now.AddSeconds(value);
+                if (newResumeTime > this.resumeTime)
+                {
+                    this.resumeTime = newResumeTime;
+                }
+            }
+        }
+        #endregion
+
+        #region Methods
+        #region IQueue Members
+        public void Action()
+        {
+            if (this.DoRaid())
+            {
+                this.NextTarget();
+            }
+
+            this.MinimumDelay = this.RandomDelay(60, 180);
+        }
+        #endregion
+
+        private bool DoRaid()
+        {
+            if (this.MinimumDelay > 0)
+            {
+                return false;
+            }
+
+            string sendTroopsUrl = String.Format("a2b.php?z={0}", this.Targets[this.TargetID].Z);
+            string sendTroopForm = UpCall.PageQuery(this.VillageID, sendTroopsUrl);
+            if (sendTroopForm == null)
+            {
+                return false;
+            }
+
+            if (!sendTroopForm.Contains("<form method=\"POST\" name=\"snd\" action=\"a2b.php\">"))
+            {
+                return false;
+            }
+
+            Dictionary<string, string> postData = RaidQueue.GetHiddenInputValues(sendTroopForm);
+            postData.Add("c", ((int)this.RaidType).ToString());
+            postData.Add("x", this.Targets[this.TargetID].X.ToString());
+            postData.Add("y", this.Targets[this.TargetID].Y.ToString());
+            int[] maxTroops = RaidQueue.GetMaxTroops(sendTroopForm);
+            for (int i = 0; i < this.Troops.Length; i++)
+            {
+                if (this.Troops[i] > maxTroops[i])
+                {
+                    return false;
+                }
+
+                string troopKey = String.Format("t{0}", i + 1);
+                string troopNumber = this.Troops[i] == 0 ? "" : this.Troops[i].ToString();
+                postData.Add(troopKey, troopNumber);
+            }
+
+            string confirmUrl = "a2b.php";
+            string confirmForm = UpCall.PageQuery(this.VillageID, confirmUrl, postData);
+            if (confirmForm == null)
+            {
+                return false;
+            }
+
+            if (confirmForm.Contains("<p class=\"error\">"))
+            {
+                string error = String.Format(
+                    "Skipping village {0} due to error",
+                    this.Targets[this.TargetID]);
+                this.UpCall.DebugLog(error, DebugLevel.W);
+                return true;
+            }
+
+            if (!confirmForm.Contains("<form method=\"post\" action=\"a2b.php\">"))
+            {
+                return false;
+            }
+
+            TimeSpan timeCost = RaidQueue.GetOneWayTimeCost(confirmForm);
+            if (timeCost == TimeSpan.MinValue)
+            {
+                return false;
+            }
+
+            postData = RaidQueue.GetHiddenInputValues(confirmForm);
+            if (RaidQueue.HasRadioInput("spy", confirmForm))
+            {
+                postData.Add("spy", ((int)this.SpyOption).ToString());
+            }
+
+            string result = this.UpCall.PageQuery(this.VillageID, confirmUrl, postData);
+            if (result == null)
+            {
+                return false;
+            }
+
+            this.MinimumDelay = (int)timeCost.TotalSeconds * 2 + this.RandomDelay(30, 180);
+
+            TTInfo troopInfo = new TTInfo()
+            {
+                Tribe = this.UpCall.TD.Tribe,
+                Troops = this.Troops
+            };
+            string message = String.Format(
+                "{0} {1} ({2}) => {3} {4}",
+                this.RaidType,
+                this.UpCall.TD.Villages[this.VillageID].Coord,
+                this.VillageID,
+                this.Targets[this.TargetID],
+                troopInfo.FriendlyName);
+
+            this.UpCall.DebugLog(message, DebugLevel.I);
+            return true;
+        }
+
+        public static bool NoRaid2To7 { get; set; }
+        private void Observe2To7Rule()
+        {
+            if (NoRaid2To7)
+            {
+                int hour = DateTime.Now.Hour;
+                if (hour >= 2 && hour < 7)
+                {
+                    DateTime seven = DateTime.Today.AddHours(7);
+                    this.MinimumDelay = (int)(seven - DateTime.Now).TotalSeconds;
+                }
+            }
+        }
+
+        static Random random = new Random();
+        private int RandomDelay(int min, int max)
+        {
+            return RaidQueue.random.Next(min, max);
+        }
+
+        /// <summary>
+        /// Move TargetID to the next village
+        /// </summary>
+        /// <returns>True if there are more villages to attack</returns>
+        private void NextTarget()
+        {
+            this.UpCall.TD.Dirty = true;
+            if (++this.TargetID >= this.Targets.Count)
+            {
+                this.TargetID = 0;
+                if (++this.Count >= this.MaxCount && this.MaxCount != 0)
+                {
+                    this.MarkDeleted = true;
+                    this.UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = this.VillageID });
+                }
+            }
+        }
+
+        private static Regex hiddenInputPattern = new Regex(@"<input type=""hidden"" name=""(\w+)"" value=""(.+)"" />");
+        private static Dictionary<string,string> GetHiddenInputValues(string data)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            MatchCollection matches = hiddenInputPattern.Matches(data);
+            foreach (Match match in matches)
+            {
+                values.Add(match.Groups[1].Value, match.Groups[2].Value);
+            }
+
+            return values;
+        }
+
+        private static Regex maxTroopPattern = new Regex(@"document.snd.t(\d+).value=(\d+);");
+        private static int[] GetMaxTroops(string sendTroopForm)
+        {
+            int[] maxTroops = new int[11];
+            MatchCollection matches = maxTroopPattern.Matches(sendTroopForm);
+            foreach (Match match in matches)
+            {
+                int troopIndex = Convert.ToInt32(match.Groups[1].Value);
+                int maxTroop = Convert.ToInt32(match.Groups[2].Value);
+                maxTroops[troopIndex - 1] = maxTroop;
+            }
+
+            return maxTroops;
+        }
+
+        private static Regex timeCostPattern = new Regex(@"<div class=""in"">\D*(\d+):(\d+):(\d+)\D*</div>");
+        private static TimeSpan GetOneWayTimeCost(string confirmForm)
+        {
+            Match match = timeCostPattern.Match(confirmForm);
+            if (match.Success)
+            {
+                int hours = Convert.ToInt32(match.Groups[1].Value);
+                int minutes = Convert.ToInt32(match.Groups[2].Value);
+                int seconds = Convert.ToInt32(match.Groups[3].Value);
+                return new TimeSpan(hours, minutes, seconds);
+            }
+
+            return TimeSpan.MinValue;
+        }
+
+        private static Regex radioInputPattern = new Regex(@"<input class=""radio"" type=""radio"" name=""(\w+)"" value=""(\d+)"" (checked)? />");
+        private static bool HasRadioInput(string name, string data)
+        {
+            MatchCollection matches = radioInputPattern.Matches(data);
+            foreach (Match match in matches)
+            {
+                if (match.Groups[1].Value == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        #endregion
+    }
 }

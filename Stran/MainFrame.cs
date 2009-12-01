@@ -615,7 +615,11 @@ namespace Stran
 					lvi.SubItems[3].Text = x.Value.DefenceLevel.ToString() + " " + lvi.SubItems[3].Text;
 				#endregion
 			}
-            m_researchstatus.listViewUpgrade.Items.Remove(m_researchstatus.listViewUpgrade.Items[9]);
+
+            if (this.m_researchstatus.listViewUpgrade.Items.Count > 9)
+            {
+                this.m_researchstatus.listViewUpgrade.Items.RemoveAt(9);
+            }
 		}
 		private void DisplayMarket()
 		{
@@ -1205,56 +1209,43 @@ namespace Stran
 			CV.Queue.Add(Q);
 			lvi(Q);
 		}
-		private void CMBRaid_Click(object sender, EventArgs e)
-		{
-			MessageBox.Show("NOT IMPLEMENTED");
-			return;
-			if(!TravianData.Villages.ContainsKey(SelectVillage))
-				return;
+        private void CMBRaid_Click(object sender, EventArgs e)
+        {
+            if (!TravianData.Villages.ContainsKey(SelectVillage))
+                return;
 
-			TVillage CV = TravianData.Villages[SelectVillage];
-			if(CV.isTroopInitialized == 2)
-			{
-				TTInfo Troop = null;
-				foreach(var T in CV.Troop.Troops)
-					if(T.TroopType == TTroopType.MySelf)
-					{
-						Troop = T;
-						break;
-					}
-				if(Troop == null)
-					return;
-				RaidOptForm rof = new RaidOptForm()
-				{
-					mui = this.mui,
-					Troops = Troop.Troops,
-					dl = this.dl,
-					Tribe = Troop.Tribe
-				};
+            TVillage CV = TravianData.Villages[SelectVillage];
+            if (CV.isTroopInitialized != 2)
+            {
+                CV.InitializeTroop();
+                return;
+            }
 
-				if(rof.ShowDialog() == DialogResult.OK && rof.Return != null)
-				{
-					/*
-					TQueue Q = new TQueue()
-					{
-						QueueType = TQueueType.Transfer,
-						ExtraOptions = ts.Return.ToString(),
-						Status = ts.Return.Status
-					};
-					CV.Queue.Add(Q);
-					CV.SaveQueue(tr.userdb);
+            RaidQueue task = new RaidQueue()
+            {
+                UpCall = this.tr,
+                Tribe = TravianData.Tribe,
+                VillageID = this.SelectVillage,
+                RaidType = RaidType.AttackRaid,
+                SpyOption = SpyOption.Defense,
+            };
 
-					ListViewItem lvi = m_queuelist.listViewQueue.Items.Add("*");
-					lvi.SubItems.Add(typelist[(int)TQueueType.Transfer]);
-					lvi.SubItems.Add(ts.Return.GetTitle(TravianData));
-					lvi.SubItems.Add(Q.Status);
-					lvi.SubItems.Add("");
-					 */
-				}
-			}
-			else
-				CV.InitializeTroop();
-		}
+            RaidOptForm rof = new RaidOptForm()
+            {
+                mui = this.mui,
+                dl = this.dl,
+                TroopsAtHome = CV.Troop.GetTroopsAtHome(),
+                Return = task,
+            };
+
+            if (rof.ShowDialog() == DialogResult.OK && 
+                rof.Return != null && rof.Return.IsValid)
+            {
+                CV.Queue.Add(rof.Return);
+                lvi(rof.Return);
+            }
+        }
+
 		private void CMBEnableCoin_CheckedChanged(object sender, EventArgs e)
 		{
 			CMMNpcTrade.Enabled = CMMNpcTrade2.Enabled = CMBEnableCoin.Checked;

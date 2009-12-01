@@ -191,3 +191,5 @@ vres=资源
 newcap=&X. 设为新主村
 showallarmy=&A. 显示所有军种
 Great=&G. 大兵营或大马厩
+
+SendTroops=出兵

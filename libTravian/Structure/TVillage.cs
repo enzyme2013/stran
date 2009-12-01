@@ -743,27 +743,83 @@ namespace libTravian
 		[Json]
 		public List<TTInfo> Troops { get; set; }
 		public bool ShouldRefresh { get; set; }
-		public void tick(TVillage CV)
-		{
-			for(int i = Troops.Count - 1; i >= 0; i--)
-			{
-				var T = Troops[i];
-				if(T.FinishTime == DateTime.MinValue)
-					continue;
-				if(T.FinishTime < DateTime.Now)
-				{
-					ShouldRefresh = true;
-					break;
-					// could be written better in the future
-				}
-			}
-		}
+        public void tick(TVillage CV)
+        {
+            if (this.RefreshTime < DateTime.Now)
+            {
+                ShouldRefresh = true;
+                // could be written better in the future
+            }
+        }
+
+        /// <summary>
+        /// When will we refresh the troop info
+        /// </summary>
+        public DateTime RefreshTime
+        {
+            get
+            {
+                DateTime refreshTime = DateTime.MaxValue;
+                foreach (TTInfo troop in this.Troops)
+                {
+                    if (troop.FinishTime == DateTime.MinValue)
+                    {
+                        continue;
+                    }
+
+                    if (troop.FinishTime < refreshTime)
+                    {
+                        refreshTime = troop.FinishTime;
+                    }
+                }
+
+                return refreshTime;
+            }
+        }
+
 		public TTroop()
 		{
 			TournamentLevel = 0;
 			Troops = new List<TTInfo>();
 		}
-	}
+
+        public TTInfo GetTroopsAtHome()
+        {
+            foreach (TTInfo troop in this.Troops)
+            {
+                if (troop.TroopType == TTroopType.MySelf && troop.VillageName == "Own troops")
+                {
+                    return troop;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Test if there are enough troops in villiage to launch an attack
+        /// </summary>
+        /// <param name="troopsRequested">Requested troops for the attack</param>
+        /// <returns>True if there are enough troops in the village</returns>
+        public bool HasEnoughTroops(int[] troopsRequested)
+        {
+            TTInfo troop = this.GetTroopsAtHome();
+            if (troop != null)
+            {
+                for (int i = 0; i < troopsRequested.Length; i++)
+                {
+                    if (troopsRequested[i] > troop.Troops[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+    }
 
 	public class TTInfo
 	{
@@ -793,8 +849,16 @@ namespace libTravian
 				StringBuilder sb = new StringBuilder();
 				for(int i = 0; i < Troops.Length; i++)
 				{
-					if(Troops[i] != 0)
-						sb.AppendFormat("{0} {1}, ", DisplayLang.Instance.GetAidLang(Tribe, i + 1), Troops[i]);
+                    if (Troops[i] != 0)
+                    {
+                        string troopName = String.Format("T{0}", i + 1);
+                        if (DisplayLang.Instance != null)
+                        {
+                            troopName = DisplayLang.Instance.GetAidLang(Tribe, i + 1);
+                        }
+
+                        sb.AppendFormat("{0} {1}, ", troopName, Troops[i]);
+                    }
 				}
 				if(sb.Length > 2)
 					sb.Remove(sb.Length - 2, 2);
