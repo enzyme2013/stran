@@ -149,6 +149,10 @@ namespace Stran
 				}
 			}
 
+            if (!Options.ContainsKey("NoRaid2to7"))
+            {
+                RaidQueue.NoRaid2To7 = true;
+            }
 		}
 		private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
 		{

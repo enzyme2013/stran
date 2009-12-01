@@ -303,7 +303,7 @@ namespace libTravian
 
 		private void NewParseInDestroying(int VillageID, string data)
 		{
-			if (!this.IsParsingBuildingPage(15, data))  // test if it can destroy
+			if (this.GetBuildingLevel(15, data) == 0)  // test if it can destroy
 				return;
 			var CV = TD.Villages[VillageID];
 
@@ -516,33 +516,23 @@ namespace libTravian
 		}
 		private void NewParseUpgrade(int VillageID, string data)
 		{
-			var m01 = Regex.Match(data, "gid=(\\d+)");
 			List<int> AllowGid = new List<int>() { 12, 13, 22 };
-			int gid = -1;
-			if (m01.Success)
-			{
-				// check gid match:
-				gid = Convert.ToInt32(m01.Groups[1].Value);
-				if (!AllowGid.Contains(gid))
-					return;
-			}
-			else
-			{
-				foreach (var ngid in AllowGid)
-					if (data.Contains("<h1>" + GetGidLang(ngid)))
-					{
-						gid = ngid;
-						break;
-					}
-				if (gid == -1)
-					return;
-			}
+			int level = 0, gid = -1;
+			foreach (var ngid in AllowGid)
+            {
+                level = this.GetBuildingLevel(ngid, data);
+				if (level > 0)
+				{
+					gid = ngid;
+					break;
+				}
+            }
+
+			if (gid == -1)
+				return;
 
 			var CV = TD.Villages[VillageID];
 
-			var m1 = Regex.Match(data.Replace("</span>",""), @"(\d+)</h1>");
-			if (!m1.Success)
-				return;
 			if (gid == 22)
 			{
 				var mc = Regex.Matches(data, "Popup\\(\\d?(\\d),1", RegexOptions.Singleline);
@@ -562,9 +552,9 @@ namespace libTravian
 			else
 			{
 				if (gid == 12)
-					CV.BlacksmithLevel = Convert.ToInt32(m1.Groups[1].Value);
+					CV.BlacksmithLevel = level;
 				else
-					CV.ArmouryLevel = Convert.ToInt32(m1.Groups[1].Value);
+					CV.ArmouryLevel = level;
 				var mc = Regex.Matches(data, "Popup\\(\\d?(\\d),1\\).*?\\(.*? (\\d+)\\)", RegexOptions.Singleline);
 				foreach (Match m in mc)
 				{
@@ -600,7 +590,7 @@ namespace libTravian
 
 		private void NewParseMarket(int VillageID, string data)
 		{
-			if (!this.IsParsingBuildingPage(17, data))
+			if (this.GetBuildingLevel(17, data) == 0)
 				return;
 			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];
@@ -703,25 +693,38 @@ namespace libTravian
 			//TODO:DB.Instance.SetString(TD.Server, "market1", Market[1]);
 		}
 
-		/// <summary>
-		/// Test if we've enter the page of a specific build (i.e. build.php?gid=xxx)
-		/// </summary>
-		/// <param name="gid">Building type id</param>
-		/// <param name="data">Page content</param>
-		/// <returns>True if we've got a page for building corresponding to gid</returns>
-		private bool IsParsingBuildingPage(int gid, string data)
+        /// <summary>
+        /// Parse the level of a matching building
+        /// </summary>
+        /// <param name="gid">Building type id</param>
+        /// <param name="pageContent">HTML page returned by the server</param>
+        /// <returns>Current building level or 0 if the current page isn't for the specific building</returns>
+        private int GetBuildingLevel(int gid, string pageContent)
 		{
-			if (data.Contains("<h1>" + GetGidLang(gid)))
+            if (!GidLang.ContainsKey(gid))
+            {
+                return 0;
+            }
+
+			Match titleMatch = Regex.Match(pageContent, @"<h1>(.+)</h1>");
+			if (!titleMatch.Success)
 			{
-				return true;
+				return 0;
 			}
 
-			return false;
+            string buildingTitle = titleMatch.Groups[1].Value;
+            Match levelMatch = Regex.Match(buildingTitle, GidLang[gid] + @".+(\d+)");
+            if (!levelMatch.Success)
+            {
+                return 0;
+            }
+
+            return Convert.ToInt32(levelMatch.Groups[1].Value);
 		}
 
 		private void ParseTroops(int VillageID, string data)
 		{
-			if (!IsParsingBuildingPage(16, data) && !data.Contains("<h1>Rally point"))
+			if (GetBuildingLevel(16, data) == 0)
 				return;
 			var CV = TD.Villages[VillageID];
 			CV.Troop.Troops.Clear();

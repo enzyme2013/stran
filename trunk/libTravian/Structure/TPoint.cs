@@ -27,6 +27,7 @@ namespace libTravian
 		public static readonly TPoint Empty;
 		private int x;
 		private int y;
+
 		public TPoint(int x, int y)
 		{
 			this.x = x;
@@ -128,7 +129,29 @@ namespace libTravian
 		{
 			return (this.X.ToString(CultureInfo.CurrentCulture) + "|" + this.Y.ToString(CultureInfo.CurrentCulture));
 		}
-	}
+
+        public static TPoint FromString(string line)
+        {
+            string []values = line.Split('|');
+            if (values.Length < 2)
+            {
+                return TPoint.Empty;
+            }
+
+            int x, y;
+            if (!Int32.TryParse(values[0].Trim(), out x))
+            {
+                return TPoint.Empty;
+            }
+
+            if (!Int32.TryParse(values[1].Trim(), out y))
+            {
+                return TPoint.Empty;
+            }
+
+            return new TPoint(x, y);
+        }
+    }
 
 
 }
