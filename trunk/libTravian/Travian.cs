@@ -181,7 +181,7 @@ namespace libTravian
 				foreach(var x in Villages)
 					if(x.Value.isBuildingInitialized == 2)
 						foreach(var y in x.Value.Buildings)
-							if(y.Value.Gid == 26)
+							if(y.Value.Gid == 26 && y.Value.Level > 0)
 							{
 								PCount++;
 								break;
