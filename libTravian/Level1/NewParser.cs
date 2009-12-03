@@ -555,7 +555,7 @@ namespace libTravian
 					CV.BlacksmithLevel = level;
 				else
 					CV.ArmouryLevel = level;
-				var mc = Regex.Matches(data, "Popup\\(\\d?(\\d),1\\).*?\\(.*? (\\d+)\\)", RegexOptions.Singleline);
+				var mc = Regex.Matches(data, "Popup\\(\\d?(\\d),1\\).*?\\([^<]*?(\\d+).*?\\)", RegexOptions.Singleline);
 				foreach (Match m in mc)
 				{
 					/// @@1 TroopID
@@ -590,7 +590,7 @@ namespace libTravian
 
 		private void NewParseMarket(int VillageID, string data)
 		{
-			if (this.GetBuildingLevel(17, data) == 0)
+			if (this.GetBuildingLevel(17, data) == 0  && !data.Contains("<h1>Rally point"))
 				return;
 			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];
@@ -724,7 +724,7 @@ namespace libTravian
 
 		private void ParseTroops(int VillageID, string data)
 		{
-			if (GetBuildingLevel(16, data) == 0)
+			if (GetBuildingLevel(16, data) == 0  && !data.Contains("<h1>Rally point"))
 				return;
 			var CV = TD.Villages[VillageID];
 			CV.Troop.Troops.Clear();
@@ -743,7 +743,6 @@ namespace libTravian
 				 */
 				if (!m.Success)
 					continue;
-//				int[] tro = new int[m.Groups[4].Captures.Count];
                 int[] tro = new int[11];
 				for (int i = 0; i < m.Groups[4].Captures.Count; i++)
 					if (m.Groups[4].Captures[i].Value == "?")
