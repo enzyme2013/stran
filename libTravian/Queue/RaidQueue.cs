@@ -203,6 +203,10 @@ namespace libTravian
             {
                 this.NextTarget();
             }
+            else
+            {
+                this.UpCall.FetchVillageTroop(this.VillageID);
+            }
 
             this.MinimumDelay = this.RandomDelay(60, 180);
         }

@@ -54,34 +54,52 @@ namespace libTravian
 
 		public void Action()
 		{
-			var CV = UpCall.TD.Villages[VillageID];
-			var Q = this;
+			TVillage CV = this.UpCall.TD.Villages[VillageID];
 
-			if(Q.NextExec >= DateTime.Now)
+			if(this.NextExec >= DateTime.Now)
 				return;
-			Q.NextExec = DateTime.Now.AddSeconds(50);
+
+			this.NextExec = DateTime.Now.AddSeconds(50);
 
 			int bid = -1, gid = 0;
-			double extrarate = CV.Resource[0].Capacity / CV.Resource[3].Capacity;
+			double extrarate = (double)CV.Resource[0].Capacity / CV.Resource[3].Capacity;
+
 			if(AIType == TAIType.Resource)
 			{
 				// by current warehouse amount
-
 				int i;
 				if(CV.isBuildingInitialized != 2)
 					return;
-				//int[] prior = currv.res.CurrAmount;
-				int min = 1;
-				for(i = 0; i < 4; i++)
-					if(CV.Resource[min].CurrAmount / Travian.resrate[min] > CV.Resource[i].CurrAmount * (i == 3 ? extrarate : 1) / Travian.resrate[i])
-						min = i;
-				for(i = 1; i <= 18; i++)
-					if(CV.Buildings[i].Gid == min + 1)
-						if(bid == -1)
-							bid = i;
-						else if(CV.Buildings[i].Level < CV.Buildings[bid].Level)
-							bid = i;
-				gid = min + 1;
+                double min_ratio = double.MaxValue;
+				for(i = 0; i < 3; i++)
+                {
+                    double ratio = CV.Resource[i].CurrAmount / Travian.resrate[i];
+                    if (ratio < min_ratio)
+                    {
+                        gid = i + 1;
+                        min_ratio = ratio;
+                    }
+                }
+
+                // Crop
+                if (CV.Resource[3].Produce < 2 ||
+                    CV.Resource[3].CurrAmount * extrarate / Travian.resrate[3] < min_ratio)
+                {
+                    gid = 4;
+                }
+
+                int min_level = Int32.MaxValue;
+                for (i = 1; i <= 18; i++)
+                {
+                    if (CV.Buildings[i].Gid == gid)
+                    {
+                        if (CV.Buildings[i].Level < min_level)
+                        {
+                            bid = i;
+                            min_level = CV.Buildings[i].Level;
+                        }
+                    }
+                }
 			}
 			else
 			{
@@ -130,7 +148,7 @@ namespace libTravian
                             croop = true;
                         }
                     }
-                    if (croop == false && CV.Queue.Contains(Q))
+                    if (croop == false && CV.Queue.Contains(this))
                     {
                         MarkDeleted = true;
                         UpCall.Dirty = true;
@@ -152,13 +170,20 @@ namespace libTravian
 			int tgid, tbid;
 
 			// romans double-way build
-			var Cinb = CV.InBuilding;
+			TInBuilding[] Cinb = CV.InBuilding;
+            int[] costs = Buildings.Cost(gid, CV.Buildings[bid].Level + 1).Resources;
 			if(Cinb[1] == null || Convert.ToInt32(Cinb[1].FinishTime.Subtract(DateTime.Now).TotalSeconds) <= 0)
 			{
-				if(CV.Resource[0].Capacity < Buildings.Cost(gid, CV.Buildings[bid].Level + 1).Resources[0] * 3 ||
-					CV.Resource[1].Capacity < Buildings.Cost(gid, CV.Buildings[bid].Level + 1).Resources[1] * 3 ||
-					CV.Resource[2].Capacity < Buildings.Cost(gid, CV.Buildings[bid].Level + 1).Resources[2] * 3
-					)
+                int max_cost = 0;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (costs[i] > max_cost)
+                    {
+                        max_cost = costs[i];
+                    }
+                }
+
+				if(CV.Resource[0].Capacity < max_cost * rate2[0])
 				{
 					tgid = 10;
 					tbid = findDorf2Building(CV.Buildings, tgid);
@@ -168,7 +193,7 @@ namespace libTravian
 						bid = tbid;
 					}
 				}
-				else if(CV.Resource[3].Capacity < Buildings.Cost(gid, CV.Buildings[bid].Level + 1).Resources[3] * 4)
+				else if(CV.Resource[3].Capacity < costs[3] * rate2[1])
 				{
 					tgid = 11;
 					tbid = findDorf2Building(CV.Buildings, tgid);
@@ -182,7 +207,7 @@ namespace libTravian
 				{
 					tgid = 15;
 					tbid = findDorf2Building(CV.Buildings, tgid);
-					if(tbid != -1 && CV.Buildings[tbid].Level < 20 && CV.Buildings[tbid].Level * 1000 < CV.Resource[0].Capacity)
+					if(tbid != -1 && CV.Buildings[tbid].Level < 20 && CV.Buildings[tbid].Level * rate2[2] < CV.Resource[0].Capacity)
 					{
 						gid = tgid;
 						bid = tbid;
