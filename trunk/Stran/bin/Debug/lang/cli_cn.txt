@@ -190,6 +190,9 @@ CMBRaid=&S. 出兵
 vres=资源
 newcap=&X. 设为新主村
 showallarmy=&A. 显示所有军种
-Great=&G. 大兵营或大马厩
-
+Great=&G. 大兵营或大马厩或皇宫
+TResourceLimit=军队建造资源限制
+TResLimit=&T. 造军限制
+Rename=&R. 重新命名村庄
+Settlers=&S. 开拓者
 SendTroops=出兵

@@ -13,10 +13,14 @@ namespace Stran
 	{
 		private DateTime actionAt = DateTime.MinValue;
 		private int minimumInterval = 0;
-		public List<TroopInfo> CanProduce { get; set; }
+        private TVillage CV = null;
+        
+        public List<TroopInfo> CanProduce { get; set; }
 		public MUI mui { get; set; }
 
-		public ProduceTroopQueue Result;
+        public Data TravianData { get; set; }
+        public int RUVillageID { get; set; }
+        public ProduceTroopQueue Result;
 
 		public ProduceTroopSetting()
 		{
@@ -43,29 +47,47 @@ namespace Stran
 
 		private void ProduceTroopSetting_Load(object sender, EventArgs e)
 		{
-			mui.RefreshLanguage(this);
-			listBox1.Items.Clear();
-			if(CanProduce != null)
-				foreach(var p in CanProduce)
-					if(p.Researched | checkBox1.Checked)
-						listBox1.Items.Add(p);
-                    
+            mui.RefreshLanguage(this);
+            if (TravianData == null)
+                return;
+            CV = TravianData.Villages[RUVillageID];
+            listBox1.Items.Clear();
+            if (checkBox3.Checked)
+            {
+                numericUpDown1.Value = 1;
+                numericUpDownTransferCount.Value = 0;
+                numericUpDown1.Enabled = false;
+                numericUpDownTransferCount.Enabled = false;
+                checkBox1.Enabled = false;
+                listBox1.Enabled = false;
+            }
+            else
+            {
+                numericUpDown1.Value = 0;
+                numericUpDownTransferCount.Value = 1;
+                numericUpDown1.Enabled = numericUpDownTransferCount.Enabled = checkBox1.Enabled = listBox1.Enabled = true;
+                if (CanProduce != null)
+                    foreach (var p in CanProduce)
+                        if (p.Researched | checkBox1.Checked)
+                            listBox1.Items.Add(p);
+            }
 		}
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			if (numericUpDown1.Value == 0)
 				return;
-			if (listBox1.SelectedItem == null)
+            if (listBox1.SelectedItem == null && checkBox3.Checked == false)
 				return;
-			Result = new ProduceTroopQueue
+			bool St = checkBox3.Checked;
+            Result = new ProduceTroopQueue
 			{
-				Aid = (listBox1.SelectedItem as TroopInfo).Aid,
-				Amount = Convert.ToInt32(numericUpDown1.Value),
+				Aid = St ? 10 : (listBox1.SelectedItem as TroopInfo).Aid,
+                GRt = checkBox2.Checked && (checkBox3.Checked = false),
+                Amount = Convert.ToInt32(numericUpDown1.Value),
 				MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
 				MinimumInterval = minimumInterval,
 				NextExec = actionAt,
-				GRt = checkBox2.Checked
 			};
 		}									 
 
@@ -73,6 +95,28 @@ namespace Stran
 		{
 			ProduceTroopSetting_Load(sender, e);
 		}
+
+        private void buttonlimit_Click(object sender, EventArgs e)
+        {
+            ResourceLimit limit = new ResourceLimit()
+            {
+                Village = this.CV,
+                Description = this.mui._("TResourceLimit"),
+                Limit = this.CV.Troop.ResLimit == null ? new TResAmount(0, 0, 0, 0) : this.CV.Troop.ResLimit,
+                mui = this.mui
+            };
+
+            if (limit.ShowDialog() == DialogResult.OK && limit.Return != null)
+            {
+                this.CV.Troop.ResLimit = limit.Return;
+                TravianData.Dirty = true;
+            }
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            ProduceTroopSetting_Load(sender, e);
+        }
 	}
 
 	public class TroopInfo
