@@ -68,6 +68,7 @@ namespace Stran
 
                 this.rdbRaidTypes[this.Return.RaidType - RaidType.Reinforce].Select();
                 this.rdbSpyOptions[this.Return.SpyOption - SpyOption.Resource].Select();
+                this.nudCount.Value = this.Return.MaxCount;
 
                 if (this.Return.Targets != null)
                 {
@@ -144,26 +145,24 @@ namespace Stran
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-            if (this.Return == null)
-            {
-                this.Return = new RaidQueue();
-            }
-
-            this.Return.Troops = new int[11];
+            RaidQueue task = new RaidQueue();
+            task.Troops = new int[11];
             for (int i = 0; i < 11; i++)
             {
-                Int32.TryParse(this.txtTroops[i].Text, out this.Return.Troops[i]);
+                Int32.TryParse(this.txtTroops[i].Text, out task.Troops[i]);
             }
 
-            this.Return.Targets = new List<TPoint>();
+            task.Targets = new List<TPoint>();
             foreach (object village in this.lstTargets.Items)
             {
-                this.Return.Targets.Add((TPoint)village);
+                task.Targets.Add((TPoint)village);
             }
 
-            this.Return.RaidType = RaidType.Reinforce + this.SelectedRadioButtonIndex(this.rdbRaidTypes);
-            this.Return.SpyOption = SpyOption.Resource + this.SelectedRadioButtonIndex(this.rdbSpyOptions);
-            this.Return.MaxCount = Convert.ToInt32(this.nudCount.Value);
+            task.RaidType = RaidType.Reinforce + this.SelectedRadioButtonIndex(this.rdbRaidTypes);
+            task.SpyOption = SpyOption.Resource + this.SelectedRadioButtonIndex(this.rdbSpyOptions);
+            task.MaxCount = Convert.ToInt32(this.nudCount.Value);
+
+            this.Return = task;
         }
 
         private int SelectedRadioButtonIndex(RadioButton[] radioButtons)

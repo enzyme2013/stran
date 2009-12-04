@@ -124,6 +124,7 @@
             this.CMTRaid = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.CMTRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.CMQEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -557,6 +558,7 @@
             // contextMenuQueue
             // 
             this.contextMenuQueue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CMQEdit,
             this.CMQDel,
             this.CMQClear,
             this.toolStripSeparator1,
@@ -571,7 +573,7 @@
             this.contextMenuQueue.Name = "contextMenuStrip3";
             this.contextMenuQueue.ShowCheckMargin = true;
             this.contextMenuQueue.ShowImageMargin = false;
-            this.contextMenuQueue.Size = new System.Drawing.Size(229, 214);
+            this.contextMenuQueue.Size = new System.Drawing.Size(229, 260);
             // 
             // CMQDel
             // 
@@ -600,7 +602,7 @@
             this.CMQUp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
             this.CMQUp.Size = new System.Drawing.Size(228, 24);
             this.CMQUp.Tag = "cmqup";
-            this.CMQUp.Text = "&U. 上移";
+            this.CMQUp.Text = "上移";
             this.CMQUp.Click += new System.EventHandler(this.CMQUp_Click);
             // 
             // CMQDown
@@ -609,7 +611,7 @@
             this.CMQDown.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
             this.CMQDown.Size = new System.Drawing.Size(228, 24);
             this.CMQDown.Tag = "cmqdown";
-            this.CMQDown.Text = "&D. 下移";
+            this.CMQDown.Text = "下移";
             this.CMQDown.Click += new System.EventHandler(this.CMQDown_Click);
             // 
             // toolStripSeparator5
@@ -632,7 +634,7 @@
             this.CMQTimer.Name = "CMQTimer";
             this.CMQTimer.Size = new System.Drawing.Size(228, 24);
             this.CMQTimer.Tag = "cmqtimer";
-            this.CMQTimer.Text = "&E. 延迟倒计时正在工作";
+            this.CMQTimer.Text = "&T. 延迟倒计时正在工作";
             this.CMQTimer.Click += new System.EventHandler(this.CMQTimer_Click);
             // 
             // toolStripSeparator14
@@ -894,7 +896,7 @@
             this.CMTRefresh});
             this.contextMenuTroop.Name = "contextMenuTroop";
             this.contextMenuTroop.ShowImageMargin = false;
-            this.contextMenuTroop.Size = new System.Drawing.Size(156, 104);
+            this.contextMenuTroop.Size = new System.Drawing.Size(156, 82);
             this.contextMenuTroop.Tag = "mtroop";
             // 
             // CMTProduceTroop
@@ -925,6 +927,13 @@
             this.CMTRefresh.Tag = "refreshtroop";
             this.CMTRefresh.Text = "refresh troops";
             this.CMTRefresh.Click += new System.EventHandler(this.CMTRefresh_Click);
+            // 
+            // CMQEdit
+            // 
+            this.CMQEdit.Name = "CMQEdit";
+            this.CMQEdit.Size = new System.Drawing.Size(228, 24);
+            this.CMQEdit.Text = "&E.  编辑";
+            this.CMQEdit.Click += new System.EventHandler(this.CMQEdit_Click);
             // 
             // MainFrame
             // 
@@ -1047,9 +1056,8 @@
         private System.Windows.Forms.ToolStripMenuItem CMTRaid;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         private System.Windows.Forms.ToolStripMenuItem CMTRefresh;
+        private System.Windows.Forms.ToolStripMenuItem CMQEdit;
         private System.Windows.Forms.ToolStripMenuItem CMVTlimit;
         private System.Windows.Forms.ToolStripMenuItem CMVRename;
-
-
 	}
 }

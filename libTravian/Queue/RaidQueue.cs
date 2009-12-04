@@ -199,6 +199,11 @@ namespace libTravian
         #region IQueue Members
         public void Action()
         {
+            if (this.MarkDeleted)
+            {
+                return;
+            }
+
             if (this.DoRaid())
             {
                 this.NextTarget();
@@ -211,6 +216,22 @@ namespace libTravian
             this.MinimumDelay = this.RandomDelay(60, 180);
         }
         #endregion
+
+        public void CopySettings(RaidQueue settings)
+        {
+            this.UpCall.TD.Dirty = true;
+
+            this.Troops = settings.Troops;
+            this.Targets = settings.Targets;
+            this.RaidType = settings.RaidType;
+            this.SpyOption = settings.SpyOption;
+            this.MaxCount = settings.MaxCount;
+
+            if (this.TargetID >= this.Targets.Count)
+            {
+                this.NextTarget();
+            }
+        }
 
         private bool DoRaid()
         {

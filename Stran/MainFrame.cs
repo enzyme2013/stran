@@ -1211,13 +1211,9 @@ namespace Stran
 		}
         private void CMBRaid_Click(object sender, EventArgs e)
         {
-            if (!TravianData.Villages.ContainsKey(SelectVillage))
-                return;
-
-            TVillage CV = TravianData.Villages[SelectVillage];
-            if (CV.isTroopInitialized != 2)
+            TVillage village = this.GetSelectedVillage();
+            if (village == null)
             {
-                CV.InitializeTroop();
                 return;
             }
 
@@ -1227,22 +1223,14 @@ namespace Stran
                 Tribe = TravianData.Tribe,
                 VillageID = this.SelectVillage,
                 RaidType = RaidType.AttackRaid,
-                SpyOption = SpyOption.Defense,
+                SpyOption = SpyOption.Resource,
+                MaxCount = 1,
             };
 
-            RaidOptForm rof = new RaidOptForm()
+            if (this.EditRaidQueue(village, task))
             {
-                mui = this.mui,
-                dl = this.dl,
-                TroopsAtHome = CV.Troop.GetTroopsAtHome(),
-                Return = task,
-            };
-
-            if (rof.ShowDialog() == DialogResult.OK && 
-                rof.Return != null && rof.Return.IsValid)
-            {
-                CV.Queue.Add(rof.Return);
-                lvi(rof.Return);
+                village.Queue.Add(task);
+                this.lvi(task);
             }
         }
 
@@ -1256,7 +1244,85 @@ namespace Stran
 		#endregion
 
 		#region CMQ
-		private void CMQDel_Click(object sender, EventArgs e)
+        private void CMQEdit_Click(object sender, EventArgs e)
+        {
+            TVillage village = this.GetSelectedVillage();
+            if (village == null)
+            {
+                return;
+            }
+
+            lock (QueueLock)
+            {
+                IQueue task = this.GetSelectedTask(village);
+                if (task is RaidQueue)
+                {
+                    this.EditRaidQueue(village, (RaidQueue)task);
+                }
+            }
+        }
+
+        private bool EditRaidQueue(TVillage village, RaidQueue task)
+        {
+            if (village.isTroopInitialized != 2)
+            {
+                village.InitializeTroop();
+                return false;
+            }
+
+            RaidOptForm rof = new RaidOptForm()
+            {
+                mui = this.mui,
+                dl = this.dl,
+                TroopsAtHome = village.Troop.GetTroopsAtHome(),
+                Return = task,
+            };
+
+            if (rof.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+
+            if (rof.Return == null || !rof.Return.IsValid)
+            {
+                return false;
+            }
+
+            task.CopySettings(rof.Return);
+            return true;
+        }
+
+        private IQueue GetSelectedTask(TVillage village)
+        {
+            if (this.m_queuelist.listViewQueue.SelectedIndices.Count == 0)
+            {
+                return null;
+            }
+
+            int index = this.m_queuelist.listViewQueue.SelectedIndices[0];
+            if (index >= village.Queue.Count)
+            {
+                return null;
+            }
+
+            return village.Queue[index];
+        }
+
+        private TVillage GetSelectedVillage()
+        {
+            if (this.TravianData.Villages.ContainsKey(this.SelectVillage))
+            {
+                TVillage village = this.TravianData.Villages[this.SelectVillage];
+                if (village.isBuildingInitialized == 2)
+                {
+                    return village;
+                }
+            }
+
+            return null;
+        }
+                
+        private void CMQDel_Click(object sender, EventArgs e)
 		{
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
@@ -1841,7 +1907,6 @@ namespace Stran
                 return;
             TravianData.Villages[SelectVillage].InitializeTroop();
         }
-
         private void CMVTlimit_Click(object sender, EventArgs e)
         {
             if (!TravianData.Villages.ContainsKey(SelectVillage))
