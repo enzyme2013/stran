@@ -1869,5 +1869,24 @@ namespace Stran
                 TravianData.Dirty = true;
             }
         }
+
+        private void CMVRename_Click(object sender, EventArgs e)
+        {
+            if (!TravianData.Villages.ContainsKey(SelectVillage))
+                return;
+            var CV = TravianData.Villages[SelectVillage];
+            Rename newname = new Rename()
+            {
+                ReVillageID = CV.ID,
+                oldVillagename = CV.Name.ToString(),
+                mui = mui,
+                UpCall = tr
+            };
+
+            if (newname.ShowDialog() == DialogResult.OK)
+            {
+                return;
+            }
+        }
 	}
 }

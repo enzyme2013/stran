@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
+# SharpDevelop 3.1.1.5052
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libTravian", "libTravian\libTravian.csproj", "{935028A9-A233-4FFE-8FC6-37C34847A0F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stran", "Stran\Stran.csproj", "{A361E172-DB43-4782-A032-878EE055F5A0}"
@@ -8,8 +9,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsUI", "WinFormsUI\WinFormsUI.csproj", "{C75532C4-765B-418E-B09B-46D36B2ABDB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "json", "json\json.csproj", "{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{1EA02067-427C-4774-9D9F-EC5424854481}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1B182268-35F9-4A7F-857A-6EF33D5A1F3A}"
 	ProjectSection(SolutionItems) = preProject
@@ -42,10 +41,6 @@ Global
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5C0EADF-AC62-4D68-9F2D-98F5C8D5DABF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EA02067-427C-4774-9D9F-EC5424854481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EA02067-427C-4774-9D9F-EC5424854481}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EA02067-427C-4774-9D9F-EC5424854481}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EA02067-427C-4774-9D9F-EC5424854481}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
