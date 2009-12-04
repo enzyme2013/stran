@@ -82,7 +82,7 @@ namespace libTravian
                 }
 
                 // Crop
-                if (CV.Resource[3].Produce < 2 ||
+                if (CV.Resource[3].Produce <= 2 ||
                     CV.Resource[3].CurrAmount * extrarate / Travian.resrate[3] < min_ratio)
                 {
                     gid = 4;

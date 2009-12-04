@@ -64,12 +64,13 @@ cmpdestroy=&D. 拆除建筑
 cmbnew=&N. 新建建筑
 cmbai=&E. 启用人工智能模块
 // context menu queue
+cmqedit=&E. 编辑
 cmqdel=&D. 删除
-cmqclear=C. 清空
-cmqup=&U. 上移
-cmqdown=&D. 下移
+cmqclear=&C. 清空
+cmqup=上移
+cmqdown=下移
 cmqpause=&P. 暂停
-cmqtimer=&E. 延迟倒计时正在工作
+cmqtimer=&T. 延迟倒计时正在工作
 cmqexport=&X. 导出
 cmqimport=&I. 导入
 // message

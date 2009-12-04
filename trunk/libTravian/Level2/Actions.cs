@@ -27,11 +27,8 @@ namespace libTravian
 			try
 			{
 				foreach (var vid in TD.Villages.Keys)
-				//for(int i = 0; i < TD.Villages.Count; i++)
 				{
 					var CV = TD.Villages[vid];
-					//if(CV.isBuildingInitialized == 2 && CV.isMarketInitialized == 0)
-					//	FetchVillageMarket(vid);
 					try
 					{
 						CV.Market.tick(CV, TD.MarketSpeed);
@@ -70,11 +67,9 @@ namespace libTravian
 		{
 			if(!Monitor.TryEnter(Level2Lock))
 				return;
-			//foreach(var CV in TD.Villages)
 			try
 			{
 				foreach(var vid in TD.Villages.Keys)
-				//for(int iii = 0; iii < TD.Villages.Count; iii++)
 				{
 					TVillage CV = TD.Villages[vid];
 					List<int> status = new List<int>();
@@ -126,7 +121,12 @@ namespace libTravian
 								break;
 							case "NpcTradeQueue":
 								break;
-							case "RaidOption":
+							case "RaidQueue":
+                                if (CV.isTroopInitialized == 0)
+                                {
+                                    CV.InitializeTroop();
+                                    continue;
+                                }
 								break;
 						}
 						if(task.CountDown <= 0)
