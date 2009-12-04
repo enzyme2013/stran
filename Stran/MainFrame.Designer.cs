@@ -100,6 +100,7 @@
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVTlimit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.CMVSnapshot = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVSnapAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -662,6 +663,7 @@
             this.toolStripSeparator8,
             this.CMVLowerLimit,
             this.CMVUpperLimit,
+									this.CMVTlimit,
             this.toolStripSeparator11,
             this.CMVSnapshot,
             this.CMVSnapAll});
@@ -707,6 +709,14 @@
             this.CMVUpperLimit.Text = "Maximum Resource";
             this.CMVUpperLimit.Click += new System.EventHandler(this.CMVUpperLimit_Click);
             // 
+			// CMVTlimit
+			// 
+			this.CMVTlimit.Name = "CMVTlimit";
+			this.CMVTlimit.Size = new System.Drawing.Size(171, 22);
+			this.CMVTlimit.Tag = "TResLimit";
+			this.CMVTlimit.Text = "Troop Resource Limit";
+			this.CMVTlimit.Click += new System.EventHandler(this.CMVTlimit_Click);
+			// 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
@@ -1027,6 +1037,7 @@
         private System.Windows.Forms.ToolStripMenuItem CMTRaid;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         private System.Windows.Forms.ToolStripMenuItem CMTRefresh;
+        private System.Windows.Forms.ToolStripMenuItem CMVTlimit;
 
 
 	}

@@ -41,6 +41,8 @@ namespace libTravian
 		public int isDestroyInitialized { get; set; }
 		[Json]
 		public int isTroopInitialized { get; set; }
+        [Json]
+        public int isMarketInitialized { get; set; }
 		public Travian UpCall { get; set; }
 		public TPoint Coord
 		{
@@ -103,6 +105,11 @@ namespace libTravian
 			isTroopInitialized = 1;
 			UpCall.FetchVillageTroop(ID);
 		}
+        public void InitializeMarket()
+        {
+            isMarketInitialized = 1;
+            UpCall.FetchVillageMarket(ID);
+        }
 		public int TimeCost(TResAmount ResCost)
 		{
 			int time = 0;
@@ -160,6 +167,11 @@ namespace libTravian
 			{
 				status = status + "^";
 			}
+
+            if (this.Troop.ResLimit != null)
+            {
+                status = status + "T";
+            }
 
             foreach (var res in Resource)
             {
@@ -740,6 +752,8 @@ namespace libTravian
 	{
 		[Json]
 		public int TournamentLevel { get; set; }
+        [Json]
+        public TResAmount ResLimit { get; set; }
 		[Json]
 		public List<TTInfo> Troops { get; set; }
 		public bool ShouldRefresh { get; set; }

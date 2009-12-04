@@ -57,7 +57,20 @@ namespace libTravian
 				var CV = UpCall.TD.Villages[VillageID];
 				int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
 				int timecost;
-				timecost = CV.TimeCost(Buildings.TroopCost[key] * Amount * (GRt ? 3 : 1));
+                TResAmount TroopRes;
+                TroopRes = Buildings.TroopCost[key] * Amount * (GRt ? 3 : 1);
+
+                int[] adjustedResources = new int[TroopRes.Resources.Length];
+                for (int i = 0; i < adjustedResources.Length; i++)
+                {
+                    adjustedResources[i] = TroopRes.Resources[i];
+                    if (CV.Troop.ResLimit != null && adjustedResources[i] > 0)
+                    {
+                        adjustedResources[i] += CV.Troop.ResLimit.Resources[i];
+                    }
+                }
+
+                timecost = CV.TimeCost(new TResAmount(adjustedResources));
 				if (NextExec != DateTime.MinValue && NextExec > DateTime.Now)
 					timecost = Math.Max(timecost, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
 				return timecost;
@@ -152,14 +165,14 @@ namespace libTravian
 		/// Map AID to GID
 		/// </summary>
 		private static readonly int[] AIDMap = new int[] { 0, 
-		19, 19, 19, 20, 20, 20, 21, 21, 0, 0,
-		19, 19, 19, 19, 20, 20, 21, 21, 0, 0,
-		19, 19, 20, 20, 20, 20, 21, 21, 0, 0};
+		19, 19, 19, 20, 20, 20, 21, 21, 25, 25,
+		19, 19, 19, 19, 20, 20, 21, 21, 25, 25,
+		19, 19, 20, 20, 20, 20, 21, 21, 25, 25};
 
         private static readonly int[] AIDMapg = new int[] { 0, 
-		29, 29, 29, 30, 30, 30, 21, 21, 0, 0,
-		29, 29, 29, 29, 30, 30, 21, 21, 0, 0,
-		29, 29, 30, 30, 30, 30, 21, 21, 0, 0};
+		29, 29, 29, 30, 30, 30, 21, 21, 26, 26,
+		29, 29, 29, 29, 30, 30, 21, 21, 26, 26,
+		29, 29, 30, 30, 30, 30, 21, 21, 26, 26};
 
 		public DateTime LastExec = DateTime.MinValue;
 

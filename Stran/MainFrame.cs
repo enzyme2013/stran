@@ -1816,11 +1816,13 @@ namespace Stran
 			List<TroopInfo> CanProduce = new List<TroopInfo>();
 			foreach(var x in CV.Upgrades)
 				//if(x.Value.Researched)
-				if(x.Key < 9)
+				if(x.Key <= 10)
 					CanProduce.Add(new TroopInfo { Aid = x.Key, Name = dl.GetAidLang(TravianData.Tribe, x.Key), Researched = x.Value.Researched });
 			ProduceTroopSetting pts = new ProduceTroopSetting
 			{
-				mui = mui,
+                RUVillageID = this.SelectVillage,
+                TravianData = this.TravianData,
+                mui = mui,
 				CanProduce = CanProduce
 			};
 			if(pts.ShowDialog() == DialogResult.OK && pts.Result != null)
@@ -1840,5 +1842,32 @@ namespace Stran
             TravianData.Villages[SelectVillage].InitializeTroop();
         }
 
+        private void CMVTlimit_Click(object sender, EventArgs e)
+        {
+            if (!TravianData.Villages.ContainsKey(SelectVillage))
+            {
+                return;
+            }
+
+            TVillage village = this.TravianData.Villages[SelectVillage];
+            if (village.isBuildingInitialized != 2)
+            {
+                return;
+            }
+
+            ResourceLimit limit = new ResourceLimit()
+            {
+                Village = village,
+                Description = mui._("TResourceLimit"),
+                Limit = village.Troop.ResLimit == null ? new TResAmount(0, 0, 0, 0) : village.Troop.ResLimit,
+                mui = this.mui
+            };
+
+            if (limit.ShowDialog() == DialogResult.OK)
+            {
+                village.Troop.ResLimit = limit.Return;
+                TravianData.Dirty = true;
+            }
+        }
 	}
 }
