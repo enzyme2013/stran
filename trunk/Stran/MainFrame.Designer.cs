@@ -97,6 +97,7 @@
             this.contextMenuVillage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CMVRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.CMBNewCap = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
@@ -660,6 +661,7 @@
             this.contextMenuVillage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CMVRefresh,
             this.CMBNewCap,
+									this.CMVRename,
             this.toolStripSeparator8,
             this.CMVLowerLimit,
             this.CMVUpperLimit,
@@ -688,6 +690,14 @@
             this.CMBNewCap.Text = "&X. 设为新主村";
             this.CMBNewCap.Click += new System.EventHandler(this.CMBNewCap_Click);
             // 
+			// CMVRename
+			// 
+			this.CMVRename.Name = "CMVRename";
+			this.CMVRename.Size = new System.Drawing.Size(171, 22);
+			this.CMVRename.Tag = "Rename";
+			this.CMVRename.Text = "Rename Village";
+			this.CMVRename.Click += new System.EventHandler(this.CMVRename_Click);
+			// 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
@@ -1038,6 +1048,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
         private System.Windows.Forms.ToolStripMenuItem CMTRefresh;
         private System.Windows.Forms.ToolStripMenuItem CMVTlimit;
+        private System.Windows.Forms.ToolStripMenuItem CMVRename;
 
 
 	}
