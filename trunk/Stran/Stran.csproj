@@ -299,6 +299,9 @@
     <Content Include="LICENSE - MPL-1.1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Troops.png" />
+    <None Include="Resources\TeutonTroops.png" />
+    <None Include="Resources\TeutonTroops.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\" />
