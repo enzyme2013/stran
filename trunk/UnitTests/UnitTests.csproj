@@ -49,6 +49,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RaidOptionTest.cs" />
+    <Compile Include="TravianTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\json\json.csproj">
