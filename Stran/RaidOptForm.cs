@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using libTravian;
 
@@ -26,6 +27,23 @@ namespace Stran
                 this.grpSchedule.Visible = true;
             }
         }
+
+        private void LoadTroopIcons()
+        {
+            Bitmap troopIcons = Properties.Resources.TroopIcons;
+            for (int i = 0; i < this.lblTroops.Length; i++)
+            {
+                Rectangle rect = new Rectangle(
+                    20 * i,
+                    (this.Return.Tribe - 1) * 20,
+                    18,
+                    16);
+                Bitmap icon = troopIcons.Clone(rect, troopIcons.PixelFormat);
+                icon.MakeTransparent();
+                this.lblTroops[i].Image = icon;
+                this.lblTroops[i].Text = "   ";
+            }
+        }
         #endregion
 
         #region Properties
@@ -43,11 +61,7 @@ namespace Stran
 			SuspendLayout();
             if (this.Return != null)
             {
-                for (int i = 0; i < this.lblTroops.Length; i ++)
-                {
-                    this.lblTroops[i].Text = DisplayLang.Instance.GetAidLang(this.Return.Tribe, i + 1);
-                }
-
+                this.LoadTroopIcons();
                 if (this.Return.Troops != null)
                 {
                     for (int i = 0; i < this.Return.Troops.Length; i++)

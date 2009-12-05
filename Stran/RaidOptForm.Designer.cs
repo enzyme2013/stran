@@ -76,13 +76,13 @@ namespace Stran
             this.lstTargets = new System.Windows.Forms.ListBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.grpTargets = new System.Windows.Forms.GroupBox();
-            this.btnRemove = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.grpSpyOptions = new System.Windows.Forms.GroupBox();
             this.rdbSpyDefense = new System.Windows.Forms.RadioButton();
             this.rdbSpyResource = new System.Windows.Forms.RadioButton();
-            this.lblCount = new System.Windows.Forms.Label();
             this.nudCount = new System.Windows.Forms.NumericUpDown();
+            this.lblCount = new System.Windows.Forms.Label();
             this.grpSchedule = new System.Windows.Forms.GroupBox();
             this.grpTroops.SuspendLayout();
             this.grpRaidType.SuspendLayout();
@@ -95,7 +95,7 @@ namespace Stran
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(12, 265);
+            this.btnOk.Location = new System.Drawing.Point(12, 305);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(80, 30);
             this.btnOk.TabIndex = 20;
@@ -107,7 +107,7 @@ namespace Stran
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(101, 265);
+            this.btnCancel.Location = new System.Drawing.Point(101, 305);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 30);
             this.btnCancel.TabIndex = 21;
@@ -117,7 +117,7 @@ namespace Stran
             // 
             // txtT1
             // 
-            this.txtT1.Location = new System.Drawing.Point(89, 26);
+            this.txtT1.Location = new System.Drawing.Point(35, 26);
             this.txtT1.Name = "txtT1";
             this.txtT1.Size = new System.Drawing.Size(66, 26);
             this.txtT1.TabIndex = 22;
@@ -126,7 +126,7 @@ namespace Stran
             // 
             // txtT2
             // 
-            this.txtT2.Location = new System.Drawing.Point(89, 58);
+            this.txtT2.Location = new System.Drawing.Point(35, 58);
             this.txtT2.Name = "txtT2";
             this.txtT2.Size = new System.Drawing.Size(66, 26);
             this.txtT2.TabIndex = 23;
@@ -135,7 +135,7 @@ namespace Stran
             // 
             // txtT3
             // 
-            this.txtT3.Location = new System.Drawing.Point(89, 90);
+            this.txtT3.Location = new System.Drawing.Point(35, 90);
             this.txtT3.Name = "txtT3";
             this.txtT3.Size = new System.Drawing.Size(66, 26);
             this.txtT3.TabIndex = 24;
@@ -144,7 +144,7 @@ namespace Stran
             // 
             // txtT6
             // 
-            this.txtT6.Location = new System.Drawing.Point(290, 90);
+            this.txtT6.Location = new System.Drawing.Point(205, 90);
             this.txtT6.Name = "txtT6";
             this.txtT6.Size = new System.Drawing.Size(66, 26);
             this.txtT6.TabIndex = 27;
@@ -153,7 +153,7 @@ namespace Stran
             // 
             // txtT5
             // 
-            this.txtT5.Location = new System.Drawing.Point(290, 58);
+            this.txtT5.Location = new System.Drawing.Point(205, 58);
             this.txtT5.Name = "txtT5";
             this.txtT5.Size = new System.Drawing.Size(66, 26);
             this.txtT5.TabIndex = 26;
@@ -162,7 +162,7 @@ namespace Stran
             // 
             // txtT4
             // 
-            this.txtT4.Location = new System.Drawing.Point(290, 26);
+            this.txtT4.Location = new System.Drawing.Point(205, 26);
             this.txtT4.Name = "txtT4";
             this.txtT4.Size = new System.Drawing.Size(66, 26);
             this.txtT4.TabIndex = 25;
@@ -174,60 +174,60 @@ namespace Stran
             this.lblT1.AutoSize = true;
             this.lblT1.Location = new System.Drawing.Point(3, 29);
             this.lblT1.Name = "lblT1";
-            this.lblT1.Size = new System.Drawing.Size(72, 18);
+            this.lblT1.Size = new System.Drawing.Size(26, 18);
             this.lblT1.TabIndex = 28;
-            this.lblT1.Text = "Maceman";
+            this.lblT1.Text = "T1";
             // 
             // lblT2
             // 
             this.lblT2.AutoSize = true;
             this.lblT2.Location = new System.Drawing.Point(3, 61);
             this.lblT2.Name = "lblT2";
-            this.lblT2.Size = new System.Drawing.Size(74, 18);
+            this.lblT2.Size = new System.Drawing.Size(26, 18);
             this.lblT2.TabIndex = 29;
-            this.lblT2.Text = "Spearman";
+            this.lblT2.Text = "T2";
             // 
             // lblT3
             // 
             this.lblT3.AutoSize = true;
             this.lblT3.Location = new System.Drawing.Point(3, 93);
             this.lblT3.Name = "lblT3";
-            this.lblT3.Size = new System.Drawing.Size(62, 18);
+            this.lblT3.Size = new System.Drawing.Size(26, 18);
             this.lblT3.TabIndex = 30;
-            this.lblT3.Text = "Axeman";
+            this.lblT3.Text = "T3";
             // 
             // lblT6
             // 
             this.lblT6.AutoSize = true;
-            this.lblT6.Location = new System.Drawing.Point(212, 93);
+            this.lblT6.Location = new System.Drawing.Point(173, 93);
             this.lblT6.Name = "lblT6";
-            this.lblT6.Size = new System.Drawing.Size(68, 18);
+            this.lblT6.Size = new System.Drawing.Size(26, 18);
             this.lblT6.TabIndex = 33;
-            this.lblT6.Text = "T. Knight";
+            this.lblT6.Text = "T6";
             // 
             // lblT5
             // 
             this.lblT5.AutoSize = true;
-            this.lblT5.Location = new System.Drawing.Point(212, 61);
+            this.lblT5.Location = new System.Drawing.Point(173, 61);
             this.lblT5.Name = "lblT5";
-            this.lblT5.Size = new System.Drawing.Size(52, 18);
+            this.lblT5.Size = new System.Drawing.Size(26, 18);
             this.lblT5.TabIndex = 32;
-            this.lblT5.Text = "Paladin";
+            this.lblT5.Text = "T5";
             // 
             // lblT4
             // 
             this.lblT4.AutoSize = true;
-            this.lblT4.Location = new System.Drawing.Point(212, 29);
+            this.lblT4.Location = new System.Drawing.Point(173, 29);
             this.lblT4.Name = "lblT4";
-            this.lblT4.Size = new System.Drawing.Size(44, 18);
+            this.lblT4.Size = new System.Drawing.Size(26, 18);
             this.lblT4.TabIndex = 31;
-            this.lblT4.Text = "Scout";
+            this.lblT4.Text = "T4";
             // 
             // lblT1Max
             // 
             this.lblT1Max.AutoSize = true;
             this.lblT1Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT1Max.Location = new System.Drawing.Point(161, 29);
+            this.lblT1Max.Location = new System.Drawing.Point(107, 29);
             this.lblT1Max.Name = "lblT1Max";
             this.lblT1Max.Size = new System.Drawing.Size(28, 18);
             this.lblT1Max.TabIndex = 34;
@@ -238,7 +238,7 @@ namespace Stran
             // 
             this.lblT2Max.AutoSize = true;
             this.lblT2Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT2Max.Location = new System.Drawing.Point(161, 58);
+            this.lblT2Max.Location = new System.Drawing.Point(107, 61);
             this.lblT2Max.Name = "lblT2Max";
             this.lblT2Max.Size = new System.Drawing.Size(28, 18);
             this.lblT2Max.TabIndex = 35;
@@ -249,7 +249,7 @@ namespace Stran
             // 
             this.lblT3Max.AutoSize = true;
             this.lblT3Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT3Max.Location = new System.Drawing.Point(161, 90);
+            this.lblT3Max.Location = new System.Drawing.Point(107, 93);
             this.lblT3Max.Name = "lblT3Max";
             this.lblT3Max.Size = new System.Drawing.Size(28, 18);
             this.lblT3Max.TabIndex = 36;
@@ -260,7 +260,7 @@ namespace Stran
             // 
             this.lblT6Max.AutoSize = true;
             this.lblT6Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT6Max.Location = new System.Drawing.Point(362, 90);
+            this.lblT6Max.Location = new System.Drawing.Point(277, 93);
             this.lblT6Max.Name = "lblT6Max";
             this.lblT6Max.Size = new System.Drawing.Size(28, 18);
             this.lblT6Max.TabIndex = 39;
@@ -271,7 +271,7 @@ namespace Stran
             // 
             this.lblT5Max.AutoSize = true;
             this.lblT5Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT5Max.Location = new System.Drawing.Point(362, 58);
+            this.lblT5Max.Location = new System.Drawing.Point(277, 61);
             this.lblT5Max.Name = "lblT5Max";
             this.lblT5Max.Size = new System.Drawing.Size(28, 18);
             this.lblT5Max.TabIndex = 38;
@@ -282,7 +282,7 @@ namespace Stran
             // 
             this.lblT4Max.AutoSize = true;
             this.lblT4Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT4Max.Location = new System.Drawing.Point(362, 29);
+            this.lblT4Max.Location = new System.Drawing.Point(277, 29);
             this.lblT4Max.Name = "lblT4Max";
             this.lblT4Max.Size = new System.Drawing.Size(28, 18);
             this.lblT4Max.TabIndex = 37;
@@ -293,7 +293,7 @@ namespace Stran
             // 
             this.lblT8Max.AutoSize = true;
             this.lblT8Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT8Max.Location = new System.Drawing.Point(563, 58);
+            this.lblT8Max.Location = new System.Drawing.Point(447, 61);
             this.lblT8Max.Name = "lblT8Max";
             this.lblT8Max.Size = new System.Drawing.Size(28, 18);
             this.lblT8Max.TabIndex = 47;
@@ -304,7 +304,7 @@ namespace Stran
             // 
             this.lblT7Max.AutoSize = true;
             this.lblT7Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT7Max.Location = new System.Drawing.Point(563, 29);
+            this.lblT7Max.Location = new System.Drawing.Point(447, 29);
             this.lblT7Max.Name = "lblT7Max";
             this.lblT7Max.Size = new System.Drawing.Size(28, 18);
             this.lblT7Max.TabIndex = 46;
@@ -314,24 +314,24 @@ namespace Stran
             // lblT8
             // 
             this.lblT8.AutoSize = true;
-            this.lblT8.Location = new System.Drawing.Point(413, 61);
+            this.lblT8.Location = new System.Drawing.Point(343, 61);
             this.lblT8.Name = "lblT8";
-            this.lblT8.Size = new System.Drawing.Size(61, 18);
+            this.lblT8.Size = new System.Drawing.Size(26, 18);
             this.lblT8.TabIndex = 44;
-            this.lblT8.Text = "Catapult";
+            this.lblT8.Text = "T8";
             // 
             // lblT7
             // 
             this.lblT7.AutoSize = true;
-            this.lblT7.Location = new System.Drawing.Point(413, 29);
+            this.lblT7.Location = new System.Drawing.Point(343, 29);
             this.lblT7.Name = "lblT7";
-            this.lblT7.Size = new System.Drawing.Size(38, 18);
+            this.lblT7.Size = new System.Drawing.Size(26, 18);
             this.lblT7.TabIndex = 43;
-            this.lblT7.Text = "Ram";
+            this.lblT7.Text = "T7";
             // 
             // txtT8
             // 
-            this.txtT8.Location = new System.Drawing.Point(491, 58);
+            this.txtT8.Location = new System.Drawing.Point(375, 58);
             this.txtT8.Name = "txtT8";
             this.txtT8.Size = new System.Drawing.Size(66, 26);
             this.txtT8.TabIndex = 41;
@@ -340,7 +340,7 @@ namespace Stran
             // 
             // txtT7
             // 
-            this.txtT7.Location = new System.Drawing.Point(491, 26);
+            this.txtT7.Location = new System.Drawing.Point(375, 26);
             this.txtT7.Name = "txtT7";
             this.txtT7.Size = new System.Drawing.Size(66, 26);
             this.txtT7.TabIndex = 40;
@@ -351,7 +351,7 @@ namespace Stran
             // 
             this.lblT11Max.AutoSize = true;
             this.lblT11Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT11Max.Location = new System.Drawing.Point(764, 90);
+            this.lblT11Max.Location = new System.Drawing.Point(617, 93);
             this.lblT11Max.Name = "lblT11Max";
             this.lblT11Max.Size = new System.Drawing.Size(28, 18);
             this.lblT11Max.TabIndex = 56;
@@ -362,7 +362,7 @@ namespace Stran
             // 
             this.lblT10Max.AutoSize = true;
             this.lblT10Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT10Max.Location = new System.Drawing.Point(764, 58);
+            this.lblT10Max.Location = new System.Drawing.Point(617, 61);
             this.lblT10Max.Name = "lblT10Max";
             this.lblT10Max.Size = new System.Drawing.Size(28, 18);
             this.lblT10Max.TabIndex = 55;
@@ -373,7 +373,7 @@ namespace Stran
             // 
             this.lblT9Max.AutoSize = true;
             this.lblT9Max.ForeColor = System.Drawing.Color.Green;
-            this.lblT9Max.Location = new System.Drawing.Point(764, 29);
+            this.lblT9Max.Location = new System.Drawing.Point(617, 29);
             this.lblT9Max.Name = "lblT9Max";
             this.lblT9Max.Size = new System.Drawing.Size(28, 18);
             this.lblT9Max.TabIndex = 54;
@@ -383,33 +383,33 @@ namespace Stran
             // lblT11
             // 
             this.lblT11.AutoSize = true;
-            this.lblT11.Location = new System.Drawing.Point(614, 93);
+            this.lblT11.Location = new System.Drawing.Point(513, 93);
             this.lblT11.Name = "lblT11";
-            this.lblT11.Size = new System.Drawing.Size(39, 18);
+            this.lblT11.Size = new System.Drawing.Size(34, 18);
             this.lblT11.TabIndex = 53;
-            this.lblT11.Text = "Hero";
+            this.lblT11.Text = "T11";
             // 
             // lblT10
             // 
             this.lblT10.AutoSize = true;
-            this.lblT10.Location = new System.Drawing.Point(614, 61);
+            this.lblT10.Location = new System.Drawing.Point(513, 61);
             this.lblT10.Name = "lblT10";
-            this.lblT10.Size = new System.Drawing.Size(49, 18);
+            this.lblT10.Size = new System.Drawing.Size(34, 18);
             this.lblT10.TabIndex = 52;
-            this.lblT10.Text = "Settler";
+            this.lblT10.Text = "T10";
             // 
             // lblT9
             // 
             this.lblT9.AutoSize = true;
-            this.lblT9.Location = new System.Drawing.Point(614, 29);
+            this.lblT9.Location = new System.Drawing.Point(513, 29);
             this.lblT9.Name = "lblT9";
-            this.lblT9.Size = new System.Drawing.Size(61, 18);
+            this.lblT9.Size = new System.Drawing.Size(26, 18);
             this.lblT9.TabIndex = 51;
-            this.lblT9.Text = "Chieftan";
+            this.lblT9.Text = "T9";
             // 
             // txtT11
             // 
-            this.txtT11.Location = new System.Drawing.Point(692, 90);
+            this.txtT11.Location = new System.Drawing.Point(545, 90);
             this.txtT11.Name = "txtT11";
             this.txtT11.Size = new System.Drawing.Size(66, 26);
             this.txtT11.TabIndex = 50;
@@ -418,7 +418,7 @@ namespace Stran
             // 
             // txtT10
             // 
-            this.txtT10.Location = new System.Drawing.Point(692, 58);
+            this.txtT10.Location = new System.Drawing.Point(545, 58);
             this.txtT10.Name = "txtT10";
             this.txtT10.Size = new System.Drawing.Size(66, 26);
             this.txtT10.TabIndex = 49;
@@ -427,7 +427,7 @@ namespace Stran
             // 
             // txtT9
             // 
-            this.txtT9.Location = new System.Drawing.Point(692, 26);
+            this.txtT9.Location = new System.Drawing.Point(545, 26);
             this.txtT9.Name = "txtT9";
             this.txtT9.Size = new System.Drawing.Size(66, 26);
             this.txtT9.TabIndex = 48;
@@ -439,9 +439,9 @@ namespace Stran
             this.rdbTypeReinforce.AutoSize = true;
             this.rdbTypeReinforce.Location = new System.Drawing.Point(12, 22);
             this.rdbTypeReinforce.Name = "rdbTypeReinforce";
-            this.rdbTypeReinforce.Size = new System.Drawing.Size(123, 22);
+            this.rdbTypeReinforce.Size = new System.Drawing.Size(89, 22);
             this.rdbTypeReinforce.TabIndex = 57;
-            this.rdbTypeReinforce.Text = "Reinforcement";
+            this.rdbTypeReinforce.Text = "Reinforce";
             this.rdbTypeReinforce.UseVisualStyleBackColor = true;
             // 
             // rdbAttackNormal
@@ -503,7 +503,7 @@ namespace Stran
             this.grpTroops.Controls.Add(this.txtT1);
             this.grpTroops.Location = new System.Drawing.Point(12, 12);
             this.grpTroops.Name = "grpTroops";
-            this.grpTroops.Size = new System.Drawing.Size(823, 129);
+            this.grpTroops.Size = new System.Drawing.Size(700, 129);
             this.grpTroops.TabIndex = 60;
             this.grpTroops.TabStop = false;
             this.grpTroops.Text = "Troops";
@@ -585,22 +585,12 @@ namespace Stran
             this.grpTargets.Controls.Add(this.txtY);
             this.grpTargets.Controls.Add(this.lblX);
             this.grpTargets.Controls.Add(this.txtX);
-            this.grpTargets.Location = new System.Drawing.Point(467, 147);
+            this.grpTargets.Location = new System.Drawing.Point(344, 147);
             this.grpTargets.Name = "grpTargets";
             this.grpTargets.Size = new System.Drawing.Size(368, 148);
             this.grpTargets.TabIndex = 68;
             this.grpTargets.TabStop = false;
             this.grpTargets.Text = "Villages";
-            // 
-            // btnRemove
-            // 
-            this.btnRemove.Location = new System.Drawing.Point(95, 55);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 23);
-            this.btnRemove.TabIndex = 68;
-            this.btnRemove.Text = "<<";
-            this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // btnLoad
             // 
@@ -612,13 +602,23 @@ namespace Stran
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(95, 55);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(75, 23);
+            this.btnRemove.TabIndex = 68;
+            this.btnRemove.Text = "<<";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
             // grpSpyOptions
             // 
             this.grpSpyOptions.Controls.Add(this.rdbSpyDefense);
             this.grpSpyOptions.Controls.Add(this.rdbSpyResource);
             this.grpSpyOptions.Location = new System.Drawing.Point(173, 147);
             this.grpSpyOptions.Name = "grpSpyOptions";
-            this.grpSpyOptions.Size = new System.Drawing.Size(103, 81);
+            this.grpSpyOptions.Size = new System.Drawing.Size(158, 81);
             this.grpSpyOptions.TabIndex = 69;
             this.grpSpyOptions.TabStop = false;
             this.grpSpyOptions.Text = "Spy Options";
@@ -629,10 +629,10 @@ namespace Stran
             this.rdbSpyDefense.Checked = true;
             this.rdbSpyDefense.Location = new System.Drawing.Point(12, 50);
             this.rdbSpyDefense.Name = "rdbSpyDefense";
-            this.rdbSpyDefense.Size = new System.Drawing.Size(83, 22);
+            this.rdbSpyDefense.Size = new System.Drawing.Size(129, 22);
             this.rdbSpyDefense.TabIndex = 58;
             this.rdbSpyDefense.TabStop = true;
-            this.rdbSpyDefense.Text = "Defense";
+            this.rdbSpyDefense.Text = "Defense,troops";
             this.rdbSpyDefense.UseVisualStyleBackColor = true;
             // 
             // rdbSpyResource
@@ -640,24 +640,14 @@ namespace Stran
             this.rdbSpyResource.AutoSize = true;
             this.rdbSpyResource.Location = new System.Drawing.Point(12, 25);
             this.rdbSpyResource.Name = "rdbSpyResource";
-            this.rdbSpyResource.Size = new System.Drawing.Size(89, 22);
+            this.rdbSpyResource.Size = new System.Drawing.Size(135, 22);
             this.rdbSpyResource.TabIndex = 57;
-            this.rdbSpyResource.Text = "Resource";
+            this.rdbSpyResource.Text = "Resource,troops";
             this.rdbSpyResource.UseVisualStyleBackColor = true;
-            // 
-            // lblCount
-            // 
-            this.lblCount.Location = new System.Drawing.Point(11, 25);
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(104, 22);
-            this.lblCount.TabIndex = 71;
-            this.lblCount.Tag = "transfercnt";
-            this.lblCount.Text = "Repeat";
-            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // nudCount
             // 
-            this.nudCount.Location = new System.Drawing.Point(121, 25);
+            this.nudCount.Location = new System.Drawing.Point(117, 25);
             this.nudCount.Maximum = new decimal(new int[] {
             50,
             0,
@@ -673,17 +663,26 @@ namespace Stran
             0,
             0});
             // 
+            // lblCount
+            // 
+            this.lblCount.Location = new System.Drawing.Point(7, 25);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(104, 22);
+            this.lblCount.TabIndex = 71;
+            this.lblCount.Tag = "transfercnt";
+            this.lblCount.Text = "Repeat";
+            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // grpSchedule
             // 
             this.grpSchedule.Controls.Add(this.lblCount);
             this.grpSchedule.Controls.Add(this.nudCount);
-            this.grpSchedule.Location = new System.Drawing.Point(289, 147);
+            this.grpSchedule.Location = new System.Drawing.Point(173, 234);
             this.grpSchedule.Name = "grpSchedule";
-            this.grpSchedule.Size = new System.Drawing.Size(165, 61);
+            this.grpSchedule.Size = new System.Drawing.Size(158, 61);
             this.grpSchedule.TabIndex = 72;
             this.grpSchedule.TabStop = false;
             this.grpSchedule.Text = "Schedule";
-            this.grpSchedule.Visible = false;
             // 
             // RaidOptForm
             // 
@@ -691,7 +690,7 @@ namespace Stran
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(847, 315);
+            this.ClientSize = new System.Drawing.Size(730, 349);
             this.Controls.Add(this.grpSchedule);
             this.Controls.Add(this.grpSpyOptions);
             this.Controls.Add(this.grpTargets);
@@ -774,8 +773,8 @@ namespace Stran
         private GroupBox grpSpyOptions;
         private RadioButton rdbSpyDefense;
         private RadioButton rdbSpyResource;
-        private Label lblCount;
         private NumericUpDown nudCount;
+        private Label lblCount;
         private GroupBox grpSchedule;
 	}
 }
