@@ -22,6 +22,9 @@ namespace UnitTests
             string pageContent = "<h1>市场 <span class=\"level\">等级 20</span></h1>";
             target.SetGidLang(gid, "市场");
             Assert.AreEqual(20, target.GetBuildingLevel(gid, pageContent));
+
+            target.SetGidLang(gid, "XX");
+            Assert.AreEqual(-1, target.GetBuildingLevel(gid, pageContent));
         }
 
         /// <summary>

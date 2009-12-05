@@ -303,7 +303,7 @@ namespace libTravian
 
 		private void NewParseInDestroying(int VillageID, string data)
 		{
-			if (this.GetBuildingLevel(15, data) == 0)  // test if it can destroy
+			if (this.GetBuildingLevel(15, data) < 0)  // test if it can destroy
 				return;
 			var CV = TD.Villages[VillageID];
 
@@ -521,7 +521,7 @@ namespace libTravian
 			foreach (var ngid in AllowGid)
             {
                 level = this.GetBuildingLevel(ngid, data);
-				if (level > 0)
+				if (level >= 0)
 				{
 					gid = ngid;
 					break;
@@ -590,7 +590,7 @@ namespace libTravian
 
 		private void NewParseMarket(int VillageID, string data)
 		{
-			if (this.GetBuildingLevel(17, data) == 0  && !data.Contains("<h1>Rally point"))
+			if (this.GetBuildingLevel(17, data) < 0  && !data.Contains("<h1>Rally point"))
 				return;
 			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];
@@ -703,20 +703,25 @@ namespace libTravian
 		{
             if (!GidLang.ContainsKey(gid))
             {
-                return 0;
+                return -1;
             }
 
 			Match titleMatch = Regex.Match(pageContent, @"<h1>(.+)</h1>");
 			if (!titleMatch.Success)
 			{
-				return 0;
+				return -1;
 			}
 
             string buildingTitle = titleMatch.Groups[1].Value;
+            if (!buildingTitle.Contains(GidLang[gid]))
+            {
+                return -1;
+            }
+
             Match levelMatch = Regex.Match(buildingTitle, @"(\d+)");
             if (!levelMatch.Success)
             {
-                return 0;
+                return -1;
             }
 
             return Convert.ToInt32(levelMatch.Groups[1].Value);
@@ -724,7 +729,7 @@ namespace libTravian
 
 		private void ParseTroops(int VillageID, string data)
 		{
-			if (GetBuildingLevel(16, data) == 0  && !data.Contains("<h1>Rally point"))
+			if (GetBuildingLevel(16, data) < 0  && !data.Contains("<h1>Rally point"))
 				return;
 			var CV = TD.Villages[VillageID];
 			CV.Troop.Troops.Clear();
