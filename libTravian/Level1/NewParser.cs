@@ -699,7 +699,7 @@ namespace libTravian
         /// <param name="gid">Building type id</param>
         /// <param name="pageContent">HTML page returned by the server</param>
         /// <returns>Current building level or 0 if the current page isn't for the specific building</returns>
-        private int GetBuildingLevel(int gid, string pageContent)
+        public int GetBuildingLevel(int gid, string pageContent)
 		{
             if (!GidLang.ContainsKey(gid))
             {
@@ -713,7 +713,7 @@ namespace libTravian
 			}
 
             string buildingTitle = titleMatch.Groups[1].Value;
-            Match levelMatch = Regex.Match(buildingTitle, GidLang[gid] + @".+(\d+)");
+            Match levelMatch = Regex.Match(buildingTitle, @"(\d+)");
             if (!levelMatch.Success)
             {
                 return 0;
