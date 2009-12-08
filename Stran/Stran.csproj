@@ -45,6 +45,10 @@
     <Compile Include="Account.Designer.cs">
       <DependentUpon>Account.cs</DependentUpon>
     </Compile>
+    <Compile Include="AttackOptForm.cs" />
+    <Compile Include="AttackOptForm.Designer.cs">
+      <DependentUpon>AttackOptForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BuildToLevel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +145,9 @@
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AttackOptForm.resx">
+      <DependentUpon>AttackOptForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BuildToLevel.resx">
       <DependentUpon>BuildToLevel.cs</DependentUpon>

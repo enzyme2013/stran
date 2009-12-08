@@ -801,7 +801,7 @@ namespace libTravian
         {
             foreach (TTInfo troop in this.Troops)
             {
-                if (troop.TroopType == TTroopType.MySelf && troop.VillageName == "Own troops")
+            	if (troop.TroopType == TTroopType.MySelf && (troop.VillageName == "Own troops" || troop.VillageName == "自軍"  || troop.VillageName == "自己的军队"))
                 {
                     return troop;
                 }

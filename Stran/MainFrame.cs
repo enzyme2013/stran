@@ -1211,6 +1211,8 @@ namespace Stran
 		}
         private void CMBRaid_Click(object sender, EventArgs e)
         {
+        	MessageBox.Show("尚未完成此功能");
+			return;
             TVillage village = this.GetSelectedVillage();
             if (village == null)
             {
@@ -1953,5 +1955,46 @@ namespace Stran
                 return;
             }
         }
+		
+		void CMBAttackClick(object sender, EventArgs e)
+		{
+			MessageBox.Show("尚未完成此功能");
+			return;
+			if(!TravianData.Villages.ContainsKey(SelectVillage))
+				return;
+
+			TVillage CV = TravianData.Villages[SelectVillage];
+			if(CV.isTroopInitialized == 2)
+			{
+				TTInfo Troop = null;
+				foreach(var T in CV.Troop.Troops)
+					if(T.TroopType == TTroopType.MySelf)
+					{
+						Troop = T;
+						break;
+					}
+				if(Troop == null)
+					return;
+				AttackOptForm rof = new AttackOptForm()
+				{
+					mui = this.mui,
+					Troops = Troop.Troops,
+					dl = this.dl,
+					Tribe = Troop.Tribe,
+                    VillageID = CV.ID,
+                    UpCall = tr
+				};
+
+				if(rof.ShowDialog() == DialogResult.OK && rof.Return != null)
+				{
+                    rof.Return.VillageID = CV.ID;
+                    rof.Return.UpCall = tr;
+                    CV.Queue.Add(rof.Return);
+                    lvi(rof.Return);
+				}
+			}
+			else
+				CV.InitializeTroop();
+		}
 	}
 }
