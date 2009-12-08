@@ -128,6 +128,13 @@ namespace libTravian
                                     continue;
                                 }
 								break;
+							case "AttackQueue":
+                                if (CV.isTroopInitialized == 0)
+                                {
+                                    CV.InitializeTroop();
+                                    continue;
+                                }
+								break;
 						}
 						if(task.CountDown <= 0)
 							task.Action();

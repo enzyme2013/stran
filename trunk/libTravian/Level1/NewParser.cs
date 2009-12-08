@@ -590,7 +590,7 @@ namespace libTravian
 
 		private void NewParseMarket(int VillageID, string data)
 		{
-			if (this.GetBuildingLevel(17, data) < 0  && !data.Contains("<h1>Rally point"))
+			if (this.GetBuildingLevel(17, data) < 0)
 				return;
 			//DebugLog("Transfer data being parsing", DebugLevel.I);
 			var CV = TD.Villages[VillageID];

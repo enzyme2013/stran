@@ -64,12 +64,13 @@ cmpdestroy=&Destroy
 cmbnew=&New building
 cmbai=&Enable AI module
 // context menu queue
+cmqedit=&Edit
 cmqdel=&Delete
 cmqclear=&Clear
 cmqup=Move &up
 cmqdown=Move &down
 cmqpause=&Pause
-cmqtimer=&Enable countdown timer
+cmqtimer=Enable countdown &timer
 cmqexport=E&Xport
 cmqimport=&Import
 // message
@@ -194,4 +195,8 @@ Great=Great barracks&&Great stable or Palace
 TResourceLimit=Resource LowerLimit of Producing Troop
 TResLimit=&Troop Resource
 Rename=Re&name Village
-Settlers=&Settlers
+Settlers=Settlers
+raidtypelist=Reinforcement,Attack: Normal,Attack: Raid,Scout: resources&troops,Scout: defences&troops,None,Random
+raidtype=Attack Type
+katatarget=Target
+SendTroops=Send Troops

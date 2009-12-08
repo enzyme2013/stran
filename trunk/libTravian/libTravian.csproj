@@ -51,6 +51,7 @@
     <Compile Include="DisplayLang.cs" />
     <Compile Include="Level3\Interface.cs" />
     <Compile Include="Queue\AIQueue.cs" />
+    <Compile Include="Queue\AttackQueue.cs" />
     <Compile Include="Queue\BuildingQueue.cs" />
     <Compile Include="Queue\DestroyQueue.cs" />
     <Compile Include="Queue\IQueue.cs" />
