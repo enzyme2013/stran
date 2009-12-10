@@ -746,6 +746,8 @@ namespace libTravian
 				 * @@5 cropcost
 				 * @@6 time on way
 				 */
+				var r = Regex.Match(item, "(a2b.php\\?d=.*?&c=.*?)\"", RegexOptions.Singleline);
+				string returnlink = r.Groups[1].Value;
 				if (!m.Success)
 					continue;
                 int[] tro = new int[11];
@@ -791,7 +793,7 @@ namespace libTravian
 				}
 				if (trooptype == TTroopType.BeSupportMe)
 				{
-					if ( vvname == vname )
+					if ( vvname == vname && !r.Success)
 						trooptype = TTroopType.MySelf;
 					else if (m.Groups[2].Value.Contains(TD.Username))
 						trooptype = TTroopType.MyOtherSupportMe;
