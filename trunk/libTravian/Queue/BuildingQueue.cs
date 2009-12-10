@@ -214,7 +214,7 @@ namespace libTravian
 			if(m.Success)
 				UpCall.PageQuery(VillageID, m.Groups[0].Value);
 			else
-				UpCall.PageQuery(VillageID, n.Groups[0].Value);
+				UpCall.PageQuery(VillageID, n.Groups[0].Value.Replace("\"", ""));
 			UpCall.BuildCount();
 			//CV.Buildings[bid].Level++;
 			if(Q.Bid == bid)
