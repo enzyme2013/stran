@@ -114,7 +114,7 @@ namespace libTravian
 				return;
 			Match m, n;
 			m = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + gid + "&id=" + bid + "&c=[^\"]*");
-			n = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + bid + "&c=[^\"]*");
+			n = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + bid + "&c=[^\"]*\"");
 			if(!m.Success && !n.Success)
 			{
 				// check reason
@@ -194,7 +194,7 @@ namespace libTravian
 				if(result == null)
 					return;
 				m = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + gid + "&id=" + bid + "&c=[^\"]*");
-				n = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + bid + "&c=[^\"]*");
+				n = Regex.Match(result, "dorf(\\d)\\.php\\?a=" + bid + "&c=[^\"]*\"");
 				if(!m.Success && !n.Success)
 				{
 					UpCall.DebugLog("Unknown error on building " + Q.Title, DebugLevel.E);

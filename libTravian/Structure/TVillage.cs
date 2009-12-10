@@ -894,7 +894,7 @@ namespace libTravian
 	 */
 	public enum TTroopType
 	{
-		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, MySelf
+		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, BeSupportMe, MySelf, MyOtherSupportMeWay, MyOtherSupportMe
 	}
 
 	public class DummyQueueContainer

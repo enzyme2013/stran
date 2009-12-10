@@ -177,7 +177,7 @@ trooptype=軍隊類型
 QPParty=自動派對功能(&P)
 QPAILevel=根據資源田等級自動建設(&L)
 QPUpTop=升至最高等級(&U)
-QPRefreshRes=立即更新資源及市場資訊(&R)
+QPRefreshRes=更新資源及市場(&R)
 
 nolimit=取消限制
 

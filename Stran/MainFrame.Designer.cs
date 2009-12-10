@@ -84,9 +84,9 @@
 			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMRRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuQueue = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.CMQEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMQDel = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMQClear = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMQEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMQUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.CMQDown = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,6 +127,8 @@
 			this.CMTAttack = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
 			this.CMTRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.CMMRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -584,16 +586,8 @@
 			this.contextMenuQueue.Name = "contextMenuStrip3";
 			this.contextMenuQueue.ShowCheckMargin = true;
 			this.contextMenuQueue.ShowImageMargin = false;
-			this.contextMenuQueue.Size = new System.Drawing.Size(198, 242);
+			this.contextMenuQueue.Size = new System.Drawing.Size(198, 220);
 			this.contextMenuQueue.Tag = "";
-			// 
-			// CMQEdit
-			// 
-			this.CMQEdit.Name = "CMQEdit";
-			this.CMQEdit.Size = new System.Drawing.Size(197, 22);
-			this.CMQEdit.Tag = "cmqedit";
-			this.CMQEdit.Text = "&E.  编辑";
-			this.CMQEdit.Click += new System.EventHandler(this.CMQEdit_Click);
 			// 
 			// CMQDel
 			// 
@@ -610,6 +604,14 @@
 			this.CMQClear.Tag = "cmqclear";
 			this.CMQClear.Text = "&C. 清空";
 			this.CMQClear.Click += new System.EventHandler(this.CMQClear_Click);
+			// 
+			// CMQEdit
+			// 
+			this.CMQEdit.Name = "CMQEdit";
+			this.CMQEdit.Size = new System.Drawing.Size(197, 22);
+			this.CMQEdit.Tag = "cmqedit";
+			this.CMQEdit.Text = "&E.  编辑";
+			this.CMQEdit.Click += new System.EventHandler(this.CMQEdit_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -868,7 +870,7 @@
 			// CMMNew
 			// 
 			this.CMMNew.Name = "CMMNew";
-			this.CMMNew.Size = new System.Drawing.Size(99, 22);
+			this.CMMNew.Size = new System.Drawing.Size(130, 22);
 			this.CMMNew.Tag = "newtransfer";
 			this.CMMNew.Text = "新运输";
 			this.CMMNew.Click += new System.EventHandler(this.CMMNew_Click);
@@ -877,15 +879,17 @@
 			// 
 			this.contextMenuMarket.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.CMMNew,
+									this.CMMRefresh,
+									this.toolStripMenuItem2,
 									this.CMMNpcTrade});
 			this.contextMenuMarket.Name = "contextMenuMarket";
 			this.contextMenuMarket.ShowImageMargin = false;
-			this.contextMenuMarket.Size = new System.Drawing.Size(100, 48);
+			this.contextMenuMarket.Size = new System.Drawing.Size(131, 76);
 			// 
 			// CMMNpcTrade
 			// 
 			this.CMMNpcTrade.Name = "CMMNpcTrade";
-			this.CMMNpcTrade.Size = new System.Drawing.Size(99, 22);
+			this.CMMNpcTrade.Size = new System.Drawing.Size(130, 22);
 			this.CMMNpcTrade.Tag = "npctrade";
 			this.CMMNpcTrade.Text = "自动平仓";
 			this.CMMNpcTrade.Click += new System.EventHandler(this.CMMNpcTrade_Click);
@@ -957,6 +961,19 @@
 			this.CMTRefresh.Text = "refresh troops";
 			this.CMTRefresh.Click += new System.EventHandler(this.CMTRefresh_Click);
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(127, 6);
+			// 
+			// CMMRefresh
+			// 
+			this.CMMRefresh.Name = "CMMRefresh";
+			this.CMMRefresh.Size = new System.Drawing.Size(130, 22);
+			this.CMMRefresh.Tag = "QPRefreshRes";
+			this.CMMRefresh.Text = "QPRefreshRes";
+			this.CMMRefresh.Click += new System.EventHandler(this.QPRefreshRes_Click);
+			// 
 			// MainFrame
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -986,6 +1003,8 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem CMMRefresh;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem CMTAttack;
 		private System.Windows.Forms.ToolStripMenuItem CMBAttack;
 
