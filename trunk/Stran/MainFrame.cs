@@ -652,7 +652,7 @@ namespace Stran
 			foreach(var x in CV.Troop.Troops)
 			{
 				var lvi = m_troopinfolist.listViewTroop.Items.Add("-");
-				if(x.TroopType != TTroopType.MySelf && x.TroopType != TTroopType.MySupportOther)
+				if(x.TroopType != TTroopType.MySelf && x.TroopType != TTroopType.MySupportOther && x.TroopType != TTroopType.MyOtherSupportMe && x.TroopType != TTroopType.BeSupportMe)
 					lvi.Text = TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5);
 				lvi.SubItems.Add(x.FriendlyName);
 				lvi.SubItems.Add(x.VillageName);

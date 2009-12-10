@@ -736,8 +736,8 @@ namespace libTravian
 			var items = data.Split(new string[] { "<table class=" }, StringSplitOptions.None);
 			foreach (var item in items)
 			{
-                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"1[01]\"><a\\shref=\".*?\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=\"?timer\\d+\"?>(.*?)</span>)", RegexOptions.Singleline);
-				//var m = Regex.Match(item, "<td width=\"\\d+%\"><a href=\".*?\"><span class=\"c0\">(.*?)</span></a></td>.*<td colspan=.*?>(.*?)</td>.*?img/un/u/(\\d+)\\.gif.*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img class=\"res|<span id=timer\\d+>(.*?)</span>)", RegexOptions.Singleline);
+                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"1[01]\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=\"?timer\\d+\"?>(.*?)</span>)", RegexOptions.Singleline);
+//                var m = Regex.Match(item, "<td\\sclass=\"role\"><a\\shref=\".*?\">(.*?)</a></td><td colspan=\"1[01]\"><a\\shref=\".*?\">(.*?)</a></td>.*?class=\"unit\\s\\w(\\d+)\".*?(?:<td[^>]*>(\\d+|\\?)</td>){10,11}.*?(?:>(\\d+)<img\\sclass=\"r4|.*?<span\\sid=\"?timer\\d+\"?>(.*?)</span>)", RegexOptions.Singleline);
 				/*
 				 * @@1 from vname
 				 * @@2 to vname
@@ -755,30 +755,48 @@ namespace libTravian
 					else
 						tro[i] = Convert.ToInt32(m.Groups[4].Captures[i].Value);
 				/*
-			 link  time  troopcount
-				-     O       O      MyReturnWay
-				O     O       O      MyAttackWay
-				O     O       O      //MySupportWay
-				O     -       O      MySupportOther
-				-     O       -      BeAttackedWay
-				-     O       -      //BeSupportedWay
-				-     -       O      MySelf
+			   uid  time  	mark	troopcount  cropcost	returnlink
+				-     O      R		 	O      	-			-		MyReturnWay
+				-     O      			O      	-			-		MyAttackWay
+				-     O      S			O      	-			-		MySupportWay // MyOtherSupportMeWay
+				-     -      S			O      	O			O		MySupportOther
+				-     O    			    -      	-			-		BeAttackedWay
+				-     O    	 S		    -      	-			-		BeSupportedWay
+				O     -    	 		    O      	O			-		MySelf // MyOtherSupportMe
+				O     -    	 		    O       O       	O		BeSupportMe
 				 */
-				bool hasLink = m.Groups[2].Value.Contains("<a href");
+				bool hasuid = m.Groups[2].Value.Contains("uid");
+				bool hassupport = m.Groups[2].Value.Contains("增援到") || m.Groups[2].Value.Contains("支援") || m.Groups[2].Value.Contains("Reinforcement for");
+				bool hasretrun = m.Groups[2].Value.Contains("回歸") || m.Groups[2].Value.Contains("返回") || m.Groups[2].Value.Contains("Return from");
+				bool hasspy = m.Groups[2].Value.Contains("偵察") || m.Groups[2].Value.Contains("侦察");
 				bool hasTime = m.Groups[6].Success;
 				bool hasCount = tro[0] != -1;
-				TTroopType trooptype = hasLink ?
-					(hasTime ? TTroopType.MyAttackWay : TTroopType.MySupportOther) :
-					(hasTime ?
-					(hasCount ? TTroopType.MyReturnWay : TTroopType.BeAttackedWay) :
-					TTroopType.MySelf);
+				string vvname = CV.Name;
 				string vname;
-				if (trooptype == TTroopType.BeAttackedWay || trooptype == TTroopType.BeSupportedWay)
+				TTroopType trooptype = hasuid ?
+					TTroopType.BeSupportMe :
+					(hasTime ?
+					(hasCount ?
+					(hasretrun ? TTroopType.MyReturnWay : (hassupport ? TTroopType.MySupportWay : TTroopType.MyAttackWay)) :
+					(hassupport ? TTroopType.BeSupportedWay : TTroopType.BeAttackedWay)) :
+					 TTroopType.MySupportOther);
+				if (trooptype == TTroopType.BeAttackedWay || trooptype == TTroopType.BeSupportedWay || trooptype == TTroopType.BeSupportMe)
 					vname = m.Groups[1].Value;
-				else if (hasLink)
-					vname = Regex.Replace(m.Groups[2].Value, "<[^>]+>", "");
 				else
-					vname = m.Groups[2].Value;
+					vname = Regex.Replace(m.Groups[2].Value, "<[^>]+>", "");
+				if (trooptype == TTroopType.MySupportWay && vname.Contains(vvname))
+				{
+					trooptype = TTroopType.MyOtherSupportMeWay;
+					vname = m.Groups[1].Value;
+				}
+				if (trooptype == TTroopType.BeSupportMe)
+				{
+					if ( vvname == vname )
+						trooptype = TTroopType.MySelf;
+					else if (m.Groups[2].Value.Contains(TD.Username))
+						trooptype = TTroopType.MyOtherSupportMe;
+				}
+					
 				DateTime finishTime = DateTime.MinValue;
 				int tribe = Convert.ToInt32(m.Groups[3].Value) / 10 + 1;
 				if (hasTime)

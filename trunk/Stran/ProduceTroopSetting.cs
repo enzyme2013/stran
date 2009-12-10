@@ -83,7 +83,7 @@ namespace Stran
             Result = new ProduceTroopQueue
 			{
 				Aid = St ? 10 : (listBox1.SelectedItem as TroopInfo).Aid,
-                GRt = checkBox2.Checked && (checkBox3.Checked = false),
+                GRt = checkBox2.Checked,
                 Amount = Convert.ToInt32(numericUpDown1.Value),
 				MaxCount = Convert.ToInt32(numericUpDownTransferCount.Value),
 				MinimumInterval = minimumInterval,
