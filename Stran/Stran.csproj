@@ -45,7 +45,9 @@
     <Compile Include="Account.Designer.cs">
       <DependentUpon>Account.cs</DependentUpon>
     </Compile>
-    <Compile Include="AttackOptForm.cs" />
+    <Compile Include="AttackOptForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AttackOptForm.Designer.cs">
       <DependentUpon>AttackOptForm.cs</DependentUpon>
     </Compile>
@@ -307,8 +309,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Troops.png" />
-    <None Include="Resources\TeutonTroops.png" />
-    <None Include="Resources\TeutonTroops.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\" />

@@ -99,6 +99,44 @@ namespace UnitTests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;body class=&quot;v35 ie ie8&quot;&gt;
+        ///&lt;h1&gt;Rally Point &lt;span class=&quot;level&quot;&gt;level 3&lt;/span&gt;&lt;/h1&gt;
+        ///&lt;p class=&quot;build_desc&quot;&gt;The village&apos;s troops meet at the rally point. From here you can send them out to reinforce, raid, or conquer another village.&lt;/p&gt;
+        /// 
+        ///&lt;div id=&quot;textmenu&quot;&gt;
+        ///		&lt;a href=&quot;build.php?id=39&quot;&gt;Overview&lt;/a&gt; |
+        ///		&lt;a href=&quot;a2b.php&quot;&gt;Send troops&lt;/a&gt; |
+        ///		&lt;a href=&quot;warsim.php&quot;&gt;Combat Simulator&lt;/a&gt;&lt;/div&gt;&lt;h4&gt;
+        ///						Incoming troops (7)&lt;/h4&gt;&lt;table class=&quot;troop_details&quot; cellpadding=&quot;1&quot; cellspacing=&quot;1&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RallyPointCrazy {
+            get {
+                return ResourceManager.GetString("RallyPointCrazy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;body class=&quot;v35 gecko gecko3_5_x&quot;&gt;
+        ///&lt;h1&gt;Rally Point &lt;span class=&quot;level&quot;&gt;level 1&lt;/span&gt;&lt;/h1&gt;
+        ///&lt;p class=&quot;build_desc&quot;&gt;The village&apos;s troops meet at the rally point. From here you can send them out to reinforce, raid, or conquer another village.&lt;/p&gt;
+        ///
+        ///&lt;div id=&quot;textmenu&quot;&gt;
+        ///		&lt;a href=&quot;build.php?id=39&quot;&gt;Overview&lt;/a&gt; |
+        ///		&lt;a href=&quot;a2b.php&quot;&gt;Send troops&lt;/a&gt; |
+        ///		&lt;a href=&quot;warsim.php&quot;&gt;Combat Simulator&lt;/a&gt;&lt;/div&gt;&lt;h4&gt;Troops in the village&lt;/h4&gt;&lt;table class=&quot;troop_details&quot; cellpadding=&quot;1&quot; cellspacing=&quot;1&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RallyPointTiny {
+            get {
+                return ResourceManager.GetString("RallyPointTiny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h1&gt;Send troops&lt;/h1&gt;
         ///&lt;form method=&quot;POST&quot; name=&quot;snd&quot; action=&quot;a2b.php&quot;&gt;
         ///	&lt;input type=&quot;hidden&quot; name=&quot;timestamp&quot; value=&quot;1259379679&quot; /&gt;

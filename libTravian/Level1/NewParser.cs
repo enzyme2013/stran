@@ -48,7 +48,7 @@ namespace libTravian
 				NewParseUpgrade(VillageID, data);
 				NewParseTownHall(VillageID, data);
 				NewParseMarket(VillageID, data);
-				ParseTroops(VillageID, data);
+				NewParseTroops(VillageID, data);
 			}
 			catch (Exception ex)
 			{
@@ -726,6 +726,163 @@ namespace libTravian
 
             return Convert.ToInt32(levelMatch.Groups[1].Value);
 		}
+
+        public void NewParseTroops(int villageId, string data)
+        {
+            if (this.GetBuildingLevel(16, data) < 0)
+            {
+                return;
+            }
+
+            string[] troopGroups = data.Split(new string[] { "<h4>" }, StringSplitOptions.None);
+            if (troopGroups.Length < 2)
+            {
+                return;
+            }
+
+            TVillage village = this.TD.Villages[villageId];
+            village.Troop.Troops.Clear();
+
+            bool inVillageTroopsParsed = false;
+            for (int i = 1; i < troopGroups.Length; i ++ )
+            {
+                string[] troopDetails = HtmlUtility.GetElementsWithClass(
+                    troopGroups[i],
+                    "table",
+                    "troop_details");
+                bool postInVillageTroops = inVillageTroopsParsed;
+                foreach (string troopDetail in troopDetails)
+                {
+                    TTInfo troop = this.ParseTroopDetail(troopDetail, postInVillageTroops);
+                    if (troop != null)
+                    {
+                        village.Troop.Troops.Add(troop);
+                        if (troop.TroopType == TTroopType.InVillage)
+                        {
+                            inVillageTroopsParsed = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        private TTInfo ParseTroopDetail(string troopDetail, bool postInVillageTroops)
+        {
+            string header = HtmlUtility.GetElement(troopDetail, "thead");
+            if (header == null)
+            {
+                return null;
+            }
+
+            string[] headerColumns = HtmlUtility.GetElements(header, "td");
+            if (headerColumns.Length != 2)
+            {
+                return null;
+            }
+
+            Match ownerMatch = Regex.Match(headerColumns[0], @"<a href=""(.+?)"">(.+?)</a>");
+            if (!ownerMatch.Success)
+            {
+                return null;
+            }
+
+            string owner = ownerMatch.Groups[2].Value;
+
+            Match nameMatch = Regex.Match(headerColumns[1], @"<a href=""(.+?)"">(.+?)</a>");
+            if (!nameMatch.Success)
+            {
+                return null;
+            }
+
+            string name = nameMatch.Groups[2].Value;
+
+            string unitsBody = HtmlUtility.GetElementWithClass(troopDetail, "tbody", "units");
+            if (unitsBody == null)
+            {
+                return null;
+            }
+
+            string[] unitRows = HtmlUtility.GetElements(unitsBody, "tr");
+            if (unitRows.Length < 2)
+            {
+                return null;
+            }
+
+            Match unitTypeMatch = Regex.Match(unitRows[0], @"class=""unit u(\d+)""");
+            if (!unitTypeMatch.Success)
+            {
+                return null;
+            }
+
+            int unitType = Convert.ToInt32(unitTypeMatch.Groups[1].Value);
+            int tribe = unitType / 10 + 1;
+
+            string[] unitColumns = HtmlUtility.GetElements(unitRows[1], "td");
+            if (unitColumns.Length < 10)
+            {
+                return null;
+            }
+
+            int[] units = new int[11];
+            for (int i = 0; i < unitColumns.Length; i++)
+            {
+                Match match = Regex.Match(unitColumns[i], @"(\d+)");
+                if (match.Success)
+                {
+                    units[i] = Convert.ToInt32(match.Groups[1].Value);
+                }
+                else if (unitColumns[i].Contains("?"))
+                {
+                    units[i] = -1;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            string[] infoBodies = HtmlUtility.GetElementsWithClass(troopDetail, "tbody", "infos");
+            if (infoBodies.Length == 0)
+            {
+                return null;
+            }
+
+            DateTime arrival = DateTime.MinValue;
+            foreach (string infosBody in infoBodies)
+            {
+                string inDiv = HtmlUtility.GetElementWithClass(infosBody, "div", "in");
+                if (inDiv == null)
+                {
+                    inDiv = HtmlUtility.GetElementWithClass(infosBody, "div", "in small");
+                }
+
+                if (inDiv != null)
+                {
+                    Match match = Regex.Match(inDiv, @"\d+:\d+:\d+");
+                    if (match.Success)
+                    {
+                        arrival = DateTime.Now + TimeSpan.Parse(match.Groups[0].Value);
+                        arrival.AddSeconds(20);
+                    }
+                }
+            }
+
+            TTroopType type = postInVillageTroops ? TTroopType.InOtherVillages : TTroopType.InVillage;
+            if (arrival != DateTime.MinValue)
+            {
+                type = postInVillageTroops ? TTroopType.Outgoing : TTroopType.Incoming;
+            }
+
+            return new TTInfo()
+                {
+                    Tribe = tribe,
+                    Owner = owner,
+                    VillageName = name,
+                    Troops = units,
+                    FinishTime = arrival,
+                    TroopType = type,
+                };
+        }
 
 		private void ParseTroops(int VillageID, string data)
 		{
