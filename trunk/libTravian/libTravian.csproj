@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBCenter.cs" />
+    <Compile Include="HtmlUtility.cs" />
     <Compile Include="Level1\Data.cs" />
     <Compile Include="Level1\Debug.cs" />
     <Compile Include="Level1\Login.cs" />

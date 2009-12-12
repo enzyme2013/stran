@@ -652,7 +652,7 @@ namespace Stran
 			foreach(var x in CV.Troop.Troops)
 			{
 				var lvi = m_troopinfolist.listViewTroop.Items.Add("-");
-				if(x.TroopType != TTroopType.MySelf && x.TroopType != TTroopType.MySupportOther && x.TroopType != TTroopType.MyOtherSupportMe && x.TroopType != TTroopType.BeSupportMe)
+				if(x.FinishTime != DateTime.MinValue)
 					lvi.Text = TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5);
 				lvi.SubItems.Add(x.FriendlyName);
 				lvi.SubItems.Add(x.VillageName);
@@ -1211,8 +1211,8 @@ namespace Stran
 		}
         private void CMBRaid_Click(object sender, EventArgs e)
         {
-        	MessageBox.Show("尚未完成此功能");
-			return;
+        	// MessageBox.Show("尚未完成此功能");
+			// return;
             TVillage village = this.GetSelectedVillage();
             if (village == null)
             {
@@ -1276,7 +1276,7 @@ namespace Stran
             {
                 mui = this.mui,
                 dl = this.dl,
-                TroopsAtHome = village.Troop.GetTroopsAtHome(),
+                TroopsAtHome = village.Troop.GetTroopsAtHome(village),
                 Return = task,
             };
 
@@ -1958,21 +1958,15 @@ namespace Stran
 		
 		void CMBAttackClick(object sender, EventArgs e)
 		{
-			MessageBox.Show("尚未完成此功能");
-			return;
+			// MessageBox.Show("尚未完成此功能");
+			// return;
 			if(!TravianData.Villages.ContainsKey(SelectVillage))
 				return;
 
 			TVillage CV = TravianData.Villages[SelectVillage];
 			if(CV.isTroopInitialized == 2)
 			{
-				TTInfo Troop = null;
-				foreach(var T in CV.Troop.Troops)
-					if(T.TroopType == TTroopType.MySelf)
-					{
-						Troop = T;
-						break;
-					}
+				TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
 				if(Troop == null)
 					return;
 				AttackOptForm rof = new AttackOptForm()

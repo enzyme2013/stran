@@ -797,13 +797,16 @@ namespace libTravian
 			Troops = new List<TTInfo>();
 		}
 
-        public TTInfo GetTroopsAtHome()
+        public TTInfo GetTroopsAtHome(TVillage village)
         {
             foreach (TTInfo troop in this.Troops)
             {
-            	if (troop.TroopType == TTroopType.MySelf && (troop.VillageName == "Own troops" || troop.VillageName == "自軍"  || troop.VillageName == "自己的军队"))
+            	if (troop.TroopType == TTroopType.InVillage)
                 {
-                    return troop;
+                    if (troop.Owner == village.Name)
+                    {
+                        return troop;
+                    }
                 }
             }
 
@@ -815,9 +818,9 @@ namespace libTravian
         /// </summary>
         /// <param name="troopsRequested">Requested troops for the attack</param>
         /// <returns>True if there are enough troops in the village</returns>
-        public bool HasEnoughTroops(int[] troopsRequested)
+        public bool HasEnoughTroops(TVillage village, int[] troopsRequested)
         {
-            TTInfo troop = this.GetTroopsAtHome();
+            TTInfo troop = this.GetTroopsAtHome(village);
             if (troop != null)
             {
                 for (int i = 0; i < troopsRequested.Length; i++)
@@ -845,6 +848,8 @@ namespace libTravian
 		public TTroopType TroopType;
 		[Json]
 		public DateTime FinishTime;
+        [Json]
+        public string Owner;
 		[Json]
 		public string VillageName;
 		public override string ToString()
@@ -894,7 +899,13 @@ namespace libTravian
 	 */
 	public enum TTroopType
 	{
-		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, BeSupportMe, MySelf, MyOtherSupportMeWay, MyOtherSupportMe
+        // Obsolete types
+		MyReturnWay, MyAttackWay, MySupportWay, MySupportOther, BeAttackedWay, BeSupportedWay, BeSupportMe, MySelf, MyOtherSupportMeWay, MyOtherSupportMe,
+        // New types
+        Incoming,
+        InVillage,
+        Outgoing,
+        InOtherVillages,
 	}
 
 	public class DummyQueueContainer

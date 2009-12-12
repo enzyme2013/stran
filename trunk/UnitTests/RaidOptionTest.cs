@@ -48,6 +48,7 @@ namespace UnitTests
             this.village = new TVillage();
             this.travianData.Villages[villageID] = village;
 
+            this.village.Name = "Home";
             this.village.isTroopInitialized = 2;
             this.village.Troop = this.troop = new TTroop();
             int[] troopsAtHome = new int[11];
@@ -55,7 +56,8 @@ namespace UnitTests
             TTInfo troopAtHome = new TTInfo
             {
                 Troops = troopsAtHome,
-                TroopType = TTroopType.MySelf,
+                Owner = this.village.Name,
+                TroopType = TTroopType.InVillage,
                 VillageName = "Own troops"
             };
             this.troop.Troops.Add(troopAtHome);

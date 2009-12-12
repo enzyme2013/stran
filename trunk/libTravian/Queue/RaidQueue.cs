@@ -108,7 +108,7 @@ namespace libTravian
 
                 this.Observe2To7Rule();
                 double delay = this.MinimumDelay;
-                if (!village.Troop.HasEnoughTroops(this.Troops))
+                if (!village.Troop.HasEnoughTroops(village, this.Troops))
                 {
                     DateTime refreshTime = village.Troop.RefreshTime;
                     delay = Math.Max(delay, (refreshTime - DateTime.Now).TotalSeconds + 5);
@@ -276,11 +276,13 @@ namespace libTravian
                 return false;
             }
 
-            if (confirmForm.Contains("<p class=\"error\">"))
+            Match errorMatch = Regex.Match(confirmForm, "<p class=\"error\">(.+)</p>");
+            if (errorMatch.Success)
             {
                 string error = String.Format(
-                    "Skipping village {0} due to error",
-                    this.Targets[this.TargetID]);
+                    "Skip village {0}. Error: {1}",
+                    this.Targets[this.TargetID],
+                    errorMatch.Groups[1].Value);
                 this.UpCall.DebugLog(error, DebugLevel.W);
                 return true;
             }
