@@ -200,3 +200,14 @@ raidtypelist=Reinforcement,Attack: Normal,Attack: Raid,Scout: resources&troops,S
 raidtype=Attack Type
 katatarget=Target
 SendTroops=Send Troops
+
+//alarm
+CMBAlarm=&Warning
+mailsender=mail sender
+mailuser=account:
+mailpass=password：
+smtpserver=smtpServer：
+serverport=port：
+recvsettings=Receive Settings
+recvaccounts=receive accounts（seperated by comma）：
+trustfuluser=trustful(no alarm)：

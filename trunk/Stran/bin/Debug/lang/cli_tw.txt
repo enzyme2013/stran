@@ -200,3 +200,14 @@ raidtypelist=增援,攻擊: 正常,攻擊: 搶奪,偵察: 資源&軍隊,偵察: 
 raidtype=攻擊類型
 katatarget=投石機目標
 SendTroops=派遣軍隊
+
+//alarm
+CMBAlarm=警報(&W)
+mailsender=發件人設置
+mailuser=帳戶:
+mailpass=密碼：
+smtpserver=smtp服務器：
+serverport=端口：
+recvsettings=接收設置
+recvaccounts=接收郵件地阯（逗號分隔）：
+trustfuluser=信任帳戶(不會報警)：
