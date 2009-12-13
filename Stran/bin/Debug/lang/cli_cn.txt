@@ -200,3 +200,14 @@ raidtypelist=增援,攻击: 普通,攻击: 抢夺,侦察: 资源&军队,侦察: 
 raidtype=攻击类型
 katatarget=投石机目标
 SendTroops=出兵
+
+//alarm
+CMBAlarm=&W. 报警
+mailsender=邮件服务器设置
+mailuser=发件人：
+mailpass=登录密码：
+smtpserver=服务器：
+serverport=端口：
+recvsettings=接收设置
+recvaccounts=接收地址（逗号分隔）：
+trustfuluser=信任帐号：
