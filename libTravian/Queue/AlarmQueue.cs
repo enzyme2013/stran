@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace libTravian.Queue
+namespace libTravian
 {
     public class AlarmQueue : IQueue
     {
@@ -87,26 +87,28 @@ namespace libTravian.Queue
             if (MinimumDelay > 0)
                 return;
 
-            bool beAttacked = false;
-
             var cv = UpCall.TD.Villages[VillageID];
-            foreach (TTInfo tt in cv.Troop.Troops)
+
+            if (!HasGetAll)
             {
-                if (tt.TroopType == TTroopType.Incoming && !IsTrustful(tt.Owner))
-                {
-                    beAttacked = true;
-                    ++BeAttackCount;
-                    if (LatestIncoming == null || tt.FinishTime < LatestIncoming.FinishTime)
-                        LatestIncoming = tt;
-                }
+                cv.InitializeTroop();
+                InitAttackers();
             }
 
-            if (beAttacked)
+
+            foreach (TTInfo tt in cv.Troop.Troops)
             {
+                AddAtacker(tt);
+            }
+
+            if (BeAttacked)
+            {
+                AnaylizeAttacker();
+
                 if (SendMail())
                 {
                     TotalCount++;
-                    this.MinimumDelay = this.MinimumInterval > 0 ? this.MinimumInterval : 3600 + new Random().Next(30, 300);
+                    this.MinimumDelay = this.MinimumInterval + new Random().Next(60, 300);
                 }
                 else
                 {
@@ -114,13 +116,35 @@ namespace libTravian.Queue
                 }
             }
             else
-                this.MinimumDelay = this.MinimumInterval > 0 ? this.MinimumInterval : 3600 + new Random().Next(30, 300);
+                this.MinimumDelay = this.MinimumInterval + new Random().Next(60, 300);
 
+            HasGetAll = !(this.MinimumDelay > this.MinimumInterval);
         }
 
         public int QueueGUID
         {
             get { return 11; }
+        }
+
+        public bool BeAttacked
+        {
+            get
+            {
+                return Waves > 0;
+            }
+        }
+
+        public int Waves
+        {
+            get
+            {
+                int i = 0;
+                foreach (TAttacker at in attackers.Values)
+                {
+                    i += at.troops.Count;
+                }
+                return i;
+            }
         }
 
         #endregion
@@ -172,12 +196,16 @@ namespace libTravian.Queue
                     UpCall.TD.Username,
                     cv.Name,
                     cv.Coord.ToString(),
-                    BeAttackCount,
+                    Waves,
                     LatestIncoming.FinishTime.ToString(CultureInfo.CurrentCulture),
                     LatestIncoming.Owner);
             }
         }
         #endregion
+
+        bool HasGetAll = false;
+
+        Dictionary<int, TAttacker> attackers = new Dictionary<int, TAttacker>();
 
         [Json]
         public string TrustfulUsers
@@ -207,9 +235,6 @@ namespace libTravian.Queue
             }
         }
 
-        /// <summary>
-        /// Minimum seconds to wait until the mechant resturns
-        /// </summary>
         public int MinimumDelay
         {
             get
@@ -236,12 +261,87 @@ namespace libTravian.Queue
 
         int TotalCount = 0;
         DateTime resumeTime = DateTime.Now;
-
-        int BeAttackCount = 0;
         TTInfo LatestIncoming = null;
         #endregion
 
         #region methods
+        void AnaylizeAttacker()
+        {
+            //not ready
+        }
+
+        void AddAtacker(TTInfo troop)
+        {
+            if (!troop.IsAttack)
+                return;
+
+            if (!attackers.ContainsKey(troop.OwnerVillageZ))
+            {
+                TAttacker att = ParseAttacker(troop);
+                if (att != null)
+                    attackers.Add(troop.OwnerVillageZ, att);
+                else
+                    return;
+            }
+
+            if (IsTrustful(attackers[troop.OwnerVillageZ].Name))
+            {
+                return;
+            }
+
+            attackers[troop.OwnerVillageZ].troops.Add(troop);
+            if (LatestIncoming == null || troop.FinishTime < LatestIncoming.FinishTime)
+                LatestIncoming = troop;
+        }
+
+        TAttacker ParseAttacker(TTInfo troop)
+        {
+            string data = UpCall.PageQuery(VillageID, troop.OwnerVillageUrl, null, true, true);
+            if (string.IsNullOrEmpty(data))
+                return null;
+
+            string name = "", ally = "";
+            int uid = 0;
+
+            string pattern = @"<table.*id=""village_info"".*allianz\.php\?aid=\d+"">(.*)</a>.*spieler\.php\?uid=(\d+)"">(.*)</a>.*</table>";
+            Regex reg = new Regex(pattern);
+            Match m = reg.Match(data);
+            if (m.Success)
+            {
+                ally = m.Groups[1].Value;
+                uid = int.Parse(m.Groups[2].Value);
+                name = m.Groups[3].Value;
+            }
+            else
+                return null;
+
+            TPoint point = new TPoint();
+            point.Z = troop.OwnerVillageZ;
+            TAttacker attacker = new TAttacker
+            {
+                Point = point,
+                Tribe = troop.Tribe,
+                troops = new List<TTInfo>(),
+                VileageName = troop.Owner,
+                Ally = ally,
+                Name = name,
+                Uid = uid,
+            };
+
+            return attacker;
+        }
+
+        void InitAttackers()
+        {
+            foreach (TAttacker ta in attackers.Values)
+            {
+                if (ta.troops != null)
+                    ta.troops.Clear();
+                else
+                    ta.troops = new List<TTInfo>();
+            }
+        }
+
         bool IsTrustful(string user)
         {
             if (string.IsNullOrEmpty(TrustfulUsers))

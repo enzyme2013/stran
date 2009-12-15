@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using libTravian;
-using libTravian.Queue;
 
 namespace Stran
 {
