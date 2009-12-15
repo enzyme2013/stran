@@ -63,6 +63,7 @@ namespace UnitTests
 
             TTInfo troop = troops.Troops[0];
             Assert.AreEqual("Tiny", troop.Owner);
+            Assert.AreEqual(270225, troop.OwnerVillageZ);
             Assert.AreEqual("Own troops", troop.VillageName);
             Assert.AreEqual(8, troop.Troops[0]);
             Assert.AreEqual(TTroopType.InVillage, troop.TroopType);
@@ -71,6 +72,7 @@ namespace UnitTests
 
             troop = troops.Troops[1];
             Assert.AreEqual("Crazy", troop.Owner);
+            Assert.AreEqual(217466, troop.OwnerVillageZ);
             Assert.AreEqual("abc's troops", troop.VillageName);
             Assert.AreEqual(1, troop.Troops[3]);
             Assert.AreEqual(TTroopType.InVillage, troop.TroopType);
@@ -79,6 +81,7 @@ namespace UnitTests
 
             troop = troops.Troops[2];
             Assert.AreEqual("Tiny", troop.Owner);
+            Assert.AreEqual(270225, troop.OwnerVillageZ);
             Assert.AreEqual("Reinforcement for lalala Village", troop.VillageName);
             Assert.AreEqual(1, troop.Troops[10]);
             Assert.AreEqual(TTroopType.Outgoing, troop.TroopType);
