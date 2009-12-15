@@ -787,6 +787,12 @@ namespace libTravian
             }
 
             string owner = ownerMatch.Groups[2].Value;
+            int ownerVillageZ = 0;
+            Match ownerVillageZMatch = Regex.Match(ownerMatch.Groups[1].Value, @"karte.php\?d=(\d+)&c=(\w+)");
+            if (ownerVillageZMatch.Success)
+            {
+                ownerVillageZ = Convert.ToInt32(ownerVillageZMatch.Groups[1].Value);
+            }
 
             Match nameMatch = Regex.Match(headerColumns[1], @"<a href=""(.+?)"">(.+?)</a>");
             if (!nameMatch.Success)
@@ -877,6 +883,7 @@ namespace libTravian
                 {
                     Tribe = tribe,
                     Owner = owner,
+                    OwnerVillageZ = ownerVillageZ,
                     VillageName = name,
                     Troops = units,
                     FinishTime = arrival,

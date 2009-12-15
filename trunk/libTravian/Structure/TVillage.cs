@@ -803,7 +803,7 @@ namespace libTravian
             {
             	if (troop.TroopType == TTroopType.InVillage)
                 {
-                    if (troop.Owner == village.Name)
+                    if (troop.OwnerVillageZ == village.Z)
                     {
                         return troop;
                     }
@@ -850,6 +850,8 @@ namespace libTravian
 		public DateTime FinishTime;
         [Json]
         public string Owner;
+        [Json]
+        public int OwnerVillageZ;
 		[Json]
 		public string VillageName;
 		public override string ToString()
