@@ -1211,8 +1211,8 @@ namespace Stran
         }
         private void CMBRaid_Click(object sender, EventArgs e)
         {
-            // MessageBox.Show("尚未完成此功能");
-            // return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             TVillage village = this.GetSelectedVillage();
             if (village == null)
             {
@@ -1346,6 +1346,10 @@ namespace Stran
                                 var Q = q as BuildingQueue;
                                 if (CV.Buildings.ContainsKey(Q.Bid) && CV.Buildings[Q.Bid].Level == 0)
                                     CV.Buildings.Remove(Q.Bid);
+                            }
+                            if (q is AlarmQueue)
+                            {
+                                CV.GetAllTroop = false;
                             }
                             CV.Queue.RemoveAt(QID);
                             TravianData.Dirty = true;
@@ -1958,8 +1962,8 @@ namespace Stran
 
         void CMBAttackClick(object sender, EventArgs e)
         {
-            // MessageBox.Show("尚未完成此功能");
-            // return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
 
@@ -1993,6 +1997,9 @@ namespace Stran
 
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("尚未完成此功能");
+            return;
+
             var CV = TravianData.Villages[SelectVillage];
             if (CV.isTroopInitialized != 2)
             {
@@ -2010,9 +2017,11 @@ namespace Stran
                 var q = a.Return;
                 q.UpCall = tr;
                 q.VillageID = CV.ID;
-
+                
                 CV.Queue.Add(q);
                 lvi(q);
+
+                CV.GetAllTroop = true;
             }
         }
     }
