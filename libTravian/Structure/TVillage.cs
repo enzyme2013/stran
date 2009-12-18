@@ -115,6 +115,7 @@ namespace libTravian
             isMarketInitialized = 1;
             UpCall.FetchVillageMarket(ID);
         }
+
         public int TimeCost(TResAmount ResCost)
         {
             int time = 0;
@@ -897,18 +898,6 @@ namespace libTravian
                 return sb.ToString();
             }
         }
-
-        public bool IsAttack
-        {
-            get
-            {
-                if (TroopType == TTroopType.Incoming && VillageName.Include("attack"))
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
     }
 
     public class TAttacker
@@ -920,6 +909,7 @@ namespace libTravian
         public TPoint Point { set; get; }
         public string Ally { set; get; }
         public List<TTInfo> troops { set; get; }
+        public int Population { set; get; }
     }
     /*
  link  time  troopcount

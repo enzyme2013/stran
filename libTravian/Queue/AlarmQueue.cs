@@ -103,7 +103,7 @@ namespace libTravian
 
             if (BeAttacked)
             {
-                AnaylizeAttacker();
+                AnalizeAttacker();
 
                 if (SendMail())
                 {
@@ -183,13 +183,13 @@ namespace libTravian
         public string[] To { set; get; }
 
         /// <summary>
-        /// mail body. at most 350 for sms
+        /// sms body. at most 350 for sms
         /// </summary>
-        string Body
+        string SmsBody
         {
             get
             {
-                string format = "{0},{1},{2}({3}) is under attack. totally {4} waves, the latest wave is at {5} from: {6}";
+                string format = "{0},{1},{2}({3}) is under attack. totally {4} waves, the latest wave is at {5} from: {6}(7)";
                 var cv = UpCall.TD.Villages[VillageID];
                 return string.Format(format,
                     UpCall.TD.Server,
@@ -198,10 +198,13 @@ namespace libTravian
                     cv.Coord.ToString(),
                     Waves,
                     LatestIncoming.FinishTime.ToString(CultureInfo.CurrentCulture),
-                    LatestIncoming.Owner);
+                    LatestIncoming.Owner,
+                    (TPoint)LatestIncoming.OwnerVillageZ);
             }
         }
         #endregion
+
+        public DisplayLang dl { set; get; }
 
         bool HasGetAll = false;
 
@@ -265,14 +268,39 @@ namespace libTravian
         #endregion
 
         #region methods
-        void AnaylizeAttacker()
+        void AnalizeAttacker()
         {
             //not ready
         }
 
+        bool IsAttackType(TTInfo troop, string attType)
+        {
+            if (troop.TroopType != TTroopType.Incoming)
+                return false;
+
+            var CV = UpCall.TD.Villages[VillageID];
+            int index = troop.VillageName.IndexOf(CV.Name);
+            if (index > 0 && dl.Tags.ContainsKey(attType))
+            {
+                return troop.VillageName.Remove(index, CV.Name.Length).Contains(dl.Tags[attType]);
+            }
+
+            return false;
+        }
+
+        bool IsRaid(TTInfo troop)
+        {
+            return IsAttackType(troop, "raid");
+        }
+
+        bool IsAttack(TTInfo troop)
+        {
+            return IsAttackType(troop, "attack");
+        }
+
         void AddAtacker(TTInfo troop)
         {
-            if (!troop.IsAttack)
+            if (!IsAttack(troop) && !IsRaid(troop))
                 return;
 
             if (!attackers.ContainsKey(troop.OwnerVillageZ))
@@ -301,9 +329,9 @@ namespace libTravian
                 return null;
 
             string name = "", ally = "";
-            int uid = 0;
+            int uid = 0, popu = 0;
 
-            string pattern = @"<table.*id=""village_info"".*allianz\.php\?aid=\d+"">(.*)</a>.*spieler\.php\?uid=(\d+)"">(.*)</a>.*</table>";
+            string pattern = @"<table.*id=""village_info"".*allianz\.php\?aid=\d+"">(.*)</a>.*spieler\.php\?uid=(\d+)"">(.*)</a>.*<td>(\d+)</td>.*</table>";
             Regex reg = new Regex(pattern);
             Match m = reg.Match(data);
             if (m.Success)
@@ -311,6 +339,7 @@ namespace libTravian
                 ally = m.Groups[1].Value;
                 uid = int.Parse(m.Groups[2].Value);
                 name = m.Groups[3].Value;
+                popu = int.Parse(m.Groups[4].Value);
             }
             else
                 return null;
@@ -326,8 +355,8 @@ namespace libTravian
                 Ally = ally,
                 Name = name,
                 Uid = uid,
+                Population = popu,
             };
-
             return attacker;
         }
 
@@ -336,7 +365,9 @@ namespace libTravian
             foreach (TAttacker ta in attackers.Values)
             {
                 if (ta.troops != null)
+                {
                     ta.troops.Clear();
+                }
                 else
                     ta.troops = new List<TTInfo>();
             }
@@ -357,7 +388,7 @@ namespace libTravian
             msg.From = new MailAddress(From, UpCall.TD.Server, Encoding.UTF8);
             msg.Subject = string.Format("{0}@{1}", UpCall.TD.Server, UpCall.TD.Username);
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
-            msg.Body = this.Body;
+            msg.Body = this.SmsBody;
             msg.BodyEncoding = System.Text.Encoding.UTF8;
             msg.IsBodyHtml = false;
             msg.Priority = MailPriority.High;

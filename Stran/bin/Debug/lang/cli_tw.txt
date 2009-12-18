@@ -200,6 +200,7 @@ raidtypelist=增援,攻擊: 正常,攻擊: 搶奪,偵察: 資源&軍隊,偵察: 
 raidtype=攻擊類型
 katatarget=投石機目標
 SendTroops=派遣軍隊
+Description=簡單描述
 
 //alarm
 CMBAlarm=警報(&W)

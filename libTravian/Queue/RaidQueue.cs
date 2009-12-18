@@ -32,6 +32,7 @@ namespace libTravian
         /// </summary>
         [Json]
         public DateTime resumeTime = DateTime.MinValue;
+
         #endregion
 
         #region Properties
@@ -46,9 +47,9 @@ namespace libTravian
         [Json]
         public int VillageID { get; set; }
 
-        public int QueueGUID 
-        { 
-            get { return 9; } 
+        public int QueueGUID
+        {
+            get { return 9; }
         }
 
         public string Title
@@ -72,20 +73,22 @@ namespace libTravian
                 if (this.MaxCount == 1)
                 {
                     return string.Format(
-                        "{0}/{1} {2}",
+                        "{0}/{1} {2} {3}",
                         this.TargetID + 1,
                         this.Targets.Count,
-                        this.Targets[this.TargetID]);
+                        this.Targets[this.TargetID],
+                        this.Description.IsEmpty() ? "-" : this.Description);
                 }
                 else
                 {
                     return string.Format(
-                        "{0}:{1}/{2}:{3} {4}",
+                        "{0}:{1}/{2}:{3} {4} {5}",
                         this.Count + 1,
                         this.TargetID + 1,
-                        this.MaxCount == 0 ? "∞": this.MaxCount.ToString(),
+                        this.MaxCount == 0 ? "∞" : this.MaxCount.ToString(),
                         this.Targets.Count,
-                        this.Targets[this.TargetID]);
+                        this.Targets[this.TargetID],
+                        this.Description.IsEmpty() ? "-" : this.Description);
                 }
             }
         }
@@ -93,7 +96,7 @@ namespace libTravian
         public int CountDown
         {
             get
-            {              
+            {
                 if (!UpCall.TD.Villages.ContainsKey(this.VillageID))
                 {
                     MarkDeleted = true;
@@ -118,6 +121,12 @@ namespace libTravian
             }
         }
         #endregion
+
+        /// <summary>
+        /// Short Description
+        /// </summary>
+        [Json]
+        public string Description { set; get; }
 
         [Json]
         public int Tribe { get; set; }
@@ -226,6 +235,7 @@ namespace libTravian
             this.RaidType = settings.RaidType;
             this.SpyOption = settings.SpyOption;
             this.MaxCount = settings.MaxCount;
+            this.Description = settings.Description;
 
             if (this.TargetID >= this.Targets.Count)
             {
@@ -368,7 +378,7 @@ namespace libTravian
         }
 
         private static Regex hiddenInputPattern = new Regex(@"<input type=""hidden"" name=""(\w+)"" value=""(.+)"" />");
-        private static Dictionary<string,string> GetHiddenInputValues(string data)
+        private static Dictionary<string, string> GetHiddenInputValues(string data)
         {
             Dictionary<string, string> values = new Dictionary<string, string>();
             MatchCollection matches = hiddenInputPattern.Matches(data);

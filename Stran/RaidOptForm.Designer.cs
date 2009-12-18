@@ -84,18 +84,21 @@ namespace Stran
             this.nudCount = new System.Windows.Forms.NumericUpDown();
             this.lblCount = new System.Windows.Forms.Label();
             this.grpSchedule = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbDesc = new System.Windows.Forms.TextBox();
             this.grpTroops.SuspendLayout();
             this.grpRaidType.SuspendLayout();
             this.grpTargets.SuspendLayout();
             this.grpSpyOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCount)).BeginInit();
             this.grpSchedule.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(12, 305);
+            this.btnOk.Location = new System.Drawing.Point(12, 314);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(80, 30);
             this.btnOk.TabIndex = 20;
@@ -107,7 +110,7 @@ namespace Stran
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(101, 305);
+            this.btnCancel.Location = new System.Drawing.Point(98, 314);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 30);
             this.btnCancel.TabIndex = 21;
@@ -448,7 +451,7 @@ namespace Stran
             // rdbAttackNormal
             // 
             this.rdbAttackNormal.AutoSize = true;
-            this.rdbAttackNormal.Location = new System.Drawing.Point(12, 50);
+            this.rdbAttackNormal.Location = new System.Drawing.Point(12, 46);
             this.rdbAttackNormal.Name = "rdbAttackNormal";
             this.rdbAttackNormal.Size = new System.Drawing.Size(106, 18);
             this.rdbAttackNormal.TabIndex = 58;
@@ -459,7 +462,7 @@ namespace Stran
             // 
             this.rdbAttackRaid.AutoSize = true;
             this.rdbAttackRaid.Checked = true;
-            this.rdbAttackRaid.Location = new System.Drawing.Point(12, 78);
+            this.rdbAttackRaid.Location = new System.Drawing.Point(12, 70);
             this.rdbAttackRaid.Name = "rdbAttackRaid";
             this.rdbAttackRaid.Size = new System.Drawing.Size(91, 18);
             this.rdbAttackRaid.TabIndex = 59;
@@ -516,7 +519,7 @@ namespace Stran
             this.grpRaidType.Controls.Add(this.rdbTypeReinforce);
             this.grpRaidType.Location = new System.Drawing.Point(12, 147);
             this.grpRaidType.Name = "grpRaidType";
-            this.grpRaidType.Size = new System.Drawing.Size(147, 111);
+            this.grpRaidType.Size = new System.Drawing.Size(147, 95);
             this.grpRaidType.TabIndex = 61;
             this.grpRaidType.TabStop = false;
             this.grpRaidType.Text = "Raid Type";
@@ -563,7 +566,7 @@ namespace Stran
             this.lstTargets.Location = new System.Drawing.Point(191, 25);
             this.lstTargets.MultiColumn = true;
             this.lstTargets.Name = "lstTargets";
-            this.lstTargets.Size = new System.Drawing.Size(160, 102);
+            this.lstTargets.Size = new System.Drawing.Size(160, 116);
             this.lstTargets.TabIndex = 66;
             // 
             // btnAdd
@@ -588,7 +591,7 @@ namespace Stran
             this.grpTargets.Controls.Add(this.txtX);
             this.grpTargets.Location = new System.Drawing.Point(344, 147);
             this.grpTargets.Name = "grpTargets";
-            this.grpTargets.Size = new System.Drawing.Size(368, 148);
+            this.grpTargets.Size = new System.Drawing.Size(368, 161);
             this.grpTargets.TabIndex = 68;
             this.grpTargets.TabStop = false;
             this.grpTargets.Text = "Villages";
@@ -678,12 +681,30 @@ namespace Stran
             // 
             this.grpSchedule.Controls.Add(this.lblCount);
             this.grpSchedule.Controls.Add(this.nudCount);
-            this.grpSchedule.Location = new System.Drawing.Point(173, 234);
+            this.grpSchedule.Location = new System.Drawing.Point(173, 247);
             this.grpSchedule.Name = "grpSchedule";
             this.grpSchedule.Size = new System.Drawing.Size(158, 61);
             this.grpSchedule.TabIndex = 72;
             this.grpSchedule.TabStop = false;
             this.grpSchedule.Text = "Schedule";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbDesc);
+            this.groupBox1.Location = new System.Drawing.Point(13, 249);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(146, 59);
+            this.groupBox1.TabIndex = 73;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Tag = "Description";
+            this.groupBox1.Text = "Description";
+            // 
+            // tbDesc
+            // 
+            this.tbDesc.Location = new System.Drawing.Point(11, 23);
+            this.tbDesc.Name = "tbDesc";
+            this.tbDesc.Size = new System.Drawing.Size(129, 22);
+            this.tbDesc.TabIndex = 0;
             // 
             // RaidOptForm
             // 
@@ -691,7 +712,8 @@ namespace Stran
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(730, 349);
+            this.ClientSize = new System.Drawing.Size(730, 356);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpSchedule);
             this.Controls.Add(this.grpSpyOptions);
             this.Controls.Add(this.grpTargets);
@@ -716,6 +738,8 @@ namespace Stran
             this.grpSpyOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCount)).EndInit();
             this.grpSchedule.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -777,5 +801,7 @@ namespace Stran
         private NumericUpDown nudCount;
         private Label lblCount;
         private GroupBox grpSchedule;
+        private GroupBox groupBox1;
+        private TextBox tbDesc;
 	}
 }

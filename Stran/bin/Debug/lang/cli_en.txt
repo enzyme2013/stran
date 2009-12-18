@@ -200,6 +200,7 @@ raidtypelist=Reinforcement,Attack: Normal,Attack: Raid,Scout: resources&troops,S
 raidtype=Attack Type
 katatarget=Target
 SendTroops=Send Troops
+Description=Description
 
 //alarm
 CMBAlarm=&Warning

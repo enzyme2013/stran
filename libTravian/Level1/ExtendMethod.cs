@@ -20,17 +20,9 @@ namespace libTravian
             return sb.ToString();
         }
 
-        public static bool Include(this string data, string value)
+        public static bool IsEmpty(this string str)
         {
-            if (string.IsNullOrEmpty(data) || string.IsNullOrEmpty(value))
-                return false;
-            string[] tags = TagLang.Tags[value].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string tag in tags)
-            {
-                if (data.Contains(tag))
-                    return true;
-            }
-            return false;
+            return string.IsNullOrEmpty(str);
         }
     }
 }
