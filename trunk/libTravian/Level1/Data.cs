@@ -76,6 +76,7 @@ namespace libTravian
         static public Dictionary<int, TResAmount> TroopCost;
         static public Dictionary<int, TBL[]> Depends;
         static public Dictionary<int, int[]> PreferPos;
+        public static Dictionary<int, int[]> BaseSpeed;
         static public List<TResAmount> PartyCos;
         static public void Init()
         {
@@ -91,12 +92,22 @@ namespace libTravian
                 InitResearchCost();
             if (TroopCost == null)
                 InitTroopCost();
+            if (BaseSpeed == null)
+                InitBaseSpeed();
             if (PartyCos == null)
                 PartyCos = new List<TResAmount>()
 				{
 					new TResAmount(6400, 6650, 5940, 1340),
 					new TResAmount(29700, 33250, 32000, 6700)
 				};
+        }
+        static void InitBaseSpeed()
+        {
+            //base speed.key=tribe value=speeds:troops,merchants
+            BaseSpeed = new Dictionary<int, int[]>(3);
+            BaseSpeed[0] = new int[] { 6, 5, 7, 16, 14, 10, 4, 3, 4, 5, 16 };
+            BaseSpeed[0] = new int[] { 7, 7, 6, 9, 10, 9, 4, 3, 4, 5, 12 };
+            BaseSpeed[0] = new int[] { 7, 6, 17, 19, 16, 13, 4, 3, 5, 5, 24 };
         }
         static private void InitBuildingCost()
         {
@@ -963,38 +974,6 @@ namespace libTravian
         {
             this.Gid = Gid;
             this.Level = Level;
-        }
-    }
-
-    public class TagLang
-    {
-        static Dictionary<string, string> htTags = new Dictionary<string, string>();
-        static TagLang()
-        {
-            htTags.Add("ATTACK", "¹¥»÷,attack,¹¥“ô");
-            htTags.Add("RAID", "“ŒŠZ,ÇÀ¶á,raid");
-        }
-
-        private TagLang() { }
-
-        static TagLang _tags = new TagLang();
-        public static TagLang Tags
-        {
-            get
-            {
-                return _tags;
-            }
-        }
-
-        public string this[string key]
-        {
-            get
-            {
-                if (!htTags.ContainsKey(key.ToUpper()))
-                    return ",";
-
-                return htTags[key.ToUpper()];
-            }
         }
     }
 }

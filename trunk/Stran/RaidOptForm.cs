@@ -7,7 +7,7 @@ using libTravian;
 
 namespace Stran
 {
-	public partial class RaidOptForm : Form
+    public partial class RaidOptForm : Form
     {
         #region Fields
         private TextBox[] txtTroops;
@@ -19,8 +19,8 @@ namespace Stran
 
         #region Constructor
         public RaidOptForm()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
             this.CreateControlArrays();
             if (MainForm.Options.ContainsKey("AllowMultipleRaids"))
             {
@@ -48,17 +48,17 @@ namespace Stran
 
         #region Properties
         public MUI mui { get; set; }
-		public DisplayLang dl { get; set; }
-		public NumericUpDown[] Nums = new NumericUpDown[11];
+        public DisplayLang dl { get; set; }
+        public NumericUpDown[] Nums = new NumericUpDown[11];
         public TTInfo TroopsAtHome { get; set; }
-		public RaidQueue Return { get; set; }
+        public RaidQueue Return { get; set; }
         #endregion
 
         #region Methods
         private void RaidOptForm_Load(object sender, EventArgs e)
-		{
-			mui.RefreshLanguage(this);
-			SuspendLayout();
+        {
+            mui.RefreshLanguage(this);
+            SuspendLayout();
             if (this.Return != null)
             {
                 this.LoadTroopIcons();
@@ -83,6 +83,7 @@ namespace Stran
                 this.rdbRaidTypes[this.Return.RaidType - RaidType.Reinforce].Select();
                 this.rdbSpyOptions[this.Return.SpyOption - SpyOption.Resource].Select();
                 this.nudCount.Value = this.Return.MaxCount;
+                this.tbDesc.Text = this.Return.Description;
 
                 if (this.Return.Targets != null)
                 {
@@ -93,8 +94,8 @@ namespace Stran
                 }
             }
 
-			ResumeLayout();
-		}
+            ResumeLayout();
+        }
 
         private void CreateControlArrays()
         {
@@ -157,8 +158,8 @@ namespace Stran
             };
         }
 
-		private void btnOk_Click(object sender, EventArgs e)
-		{
+        private void btnOk_Click(object sender, EventArgs e)
+        {
             RaidQueue task = new RaidQueue();
             task.Troops = new int[11];
             for (int i = 0; i < 11; i++)
@@ -175,6 +176,7 @@ namespace Stran
             task.RaidType = RaidType.Reinforce + this.SelectedRadioButtonIndex(this.rdbRaidTypes);
             task.SpyOption = SpyOption.Resource + this.SelectedRadioButtonIndex(this.rdbSpyOptions);
             task.MaxCount = Convert.ToInt32(this.nudCount.Value);
+            task.Description = tbDesc.Text;
 
             this.Return = task;
         }
