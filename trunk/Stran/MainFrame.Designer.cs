@@ -99,15 +99,19 @@
             this.CMQImport = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuVillage = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CMVRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVRefreshAll = new System.Windows.Forms.ToolStripMenuItem();
             this.CMBNewCap = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.CMVLowerLimit = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVUpperLimit = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVTlimit = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVSaveRES = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVRestoreRES = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.CMVSnapshot = new System.Windows.Forms.ToolStripMenuItem();
             this.CMVSnapAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMVDelV = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -130,6 +134,7 @@
             this.CMTAttack = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.CMTRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.CMTAlarm = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -694,15 +699,19 @@
             // 
             this.contextMenuVillage.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CMVRefresh,
+									this.CMVRefreshAll,
             this.CMBNewCap,
             this.CMVRename,
             this.toolStripSeparator8,
             this.CMVLowerLimit,
             this.CMVUpperLimit,
             this.CMVTlimit,
+									this.CMVSaveRES,
+									this.CMVRestoreRES,
             this.toolStripSeparator11,
             this.CMVSnapshot,
-            this.CMVSnapAll});
+									this.CMVSnapAll,
+									this.CMVDelV});
             this.contextMenuVillage.Name = "contextMenuStrip1";
             this.contextMenuVillage.ShowImageMargin = false;
             this.contextMenuVillage.Size = new System.Drawing.Size(166, 192);
@@ -715,7 +724,15 @@
             this.CMVRefresh.Tag = "refresh";
             this.CMVRefresh.Text = "刷新";
             this.CMVRefresh.Click += new System.EventHandler(this.CMVRefresh_Click);
-            // 
+			// 
+			// CMVRefreshAll
+			// 
+			this.CMVRefreshAll.Name = "CMVRefreshAll";
+			this.CMVRefreshAll.Size = new System.Drawing.Size(171, 22);
+			this.CMVRefreshAll.Tag = "refreshall";
+			this.CMVRefreshAll.Text = "全部刷新";
+			this.CMVRefreshAll.Click += new System.EventHandler(this.CMVRefreshAll_Click);
+			// 
             // CMBNewCap
             // 
             this.CMBNewCap.Name = "CMBNewCap";
@@ -760,7 +777,23 @@
             this.CMVTlimit.Tag = "TResLimit";
             this.CMVTlimit.Text = "Troop Resource Limit";
             this.CMVTlimit.Click += new System.EventHandler(this.CMVTlimit_Click);
-            // 
+			// 
+			// CMVSaveRES
+			// 
+			this.CMVSaveRES.Name = "CMVSaveRES";
+			this.CMVSaveRES.Size = new System.Drawing.Size(171, 22);
+			this.CMVSaveRES.Tag = "saveRES";
+			this.CMVSaveRES.Text = "Save Res Limit";
+			this.CMVSaveRES.Click += new System.EventHandler(this.CMVSaveRESClick);
+			// 
+			// CMVRestoreRES
+			// 
+			this.CMVRestoreRES.Name = "CMVRestoreRES";
+			this.CMVRestoreRES.Size = new System.Drawing.Size(171, 22);
+			this.CMVRestoreRES.Tag = "restoreRES";
+			this.CMVRestoreRES.Text = "Restore Res Limit";
+			this.CMVRestoreRES.Click += new System.EventHandler(this.CMVRestoreRESClick);
+			// 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
@@ -781,7 +814,15 @@
             this.CMVSnapAll.Tag = "snapall";
             this.CMVSnapAll.Text = "snapall";
             this.CMVSnapAll.Click += new System.EventHandler(this.CMVSnapAll_Click);
-            // 
+			// 
+			// CMVDelV
+			// 
+			this.CMVDelV.Name = "CMVDelV";
+			this.CMVDelV.Size = new System.Drawing.Size(171, 22);
+			this.CMVDelV.Tag = "deleteVillage";
+			this.CMVDelV.Text = "Delete Village";
+			this.CMVDelV.Click += new System.EventHandler(this.CMVDelVClick);
+			// 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -940,6 +981,7 @@
             this.CMTProduceTroop,
             this.CMTRaid,
             this.CMTAttack,
+									this.CMTAlarm,
             this.toolStripSeparator16,
             this.CMTRefresh});
             this.contextMenuTroop.Name = "contextMenuTroop";
@@ -984,6 +1026,14 @@
             this.CMTRefresh.Text = "refresh troops";
             this.CMTRefresh.Click += new System.EventHandler(this.CMTRefresh_Click);
             // 
+			// CMTAlarm
+			// 
+			this.CMTAlarm.Name = "CMTAlarm";
+			this.CMTAlarm.Size = new System.Drawing.Size(139, 22);
+			this.CMTAlarm.Tag = "CMBAlarm";
+			this.CMTAlarm.Text = "auto alarm";
+			this.CMTAlarm.Click += new System.EventHandler(this.CMBAlarm_Click);
+			// 
             // MainFrame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1014,9 +1064,15 @@
             this.PerformLayout();
 
 		}
+		private System.Windows.Forms.ToolStripMenuItem CMTAlarm;
+		private System.Windows.Forms.ToolStripMenuItem CMVRefreshAll;
+		private System.Windows.Forms.ToolStripMenuItem CMVDelV;
+		private System.Windows.Forms.ToolStripMenuItem CMVRestoreRES;
+		private System.Windows.Forms.ToolStripMenuItem CMVSaveRES;
 		private System.Windows.Forms.ToolStripMenuItem CMMRefresh;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem CMTAttack;
+		private System.Windows.Forms.ToolStripMenuItem CMBAttack;
 
 		#endregion
 
@@ -1111,7 +1167,6 @@
         private System.Windows.Forms.ToolStripMenuItem CMQEdit;
         private System.Windows.Forms.ToolStripMenuItem CMVTlimit;
         private System.Windows.Forms.ToolStripMenuItem CMVRename;
-        private System.Windows.Forms.ToolStripMenuItem CMBAttack;
         private System.Windows.Forms.ToolStripMenuItem CMBAlarm;
 	}
 }

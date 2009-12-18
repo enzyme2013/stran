@@ -53,7 +53,7 @@ upgrading=正在升級
 trigger=啟動條件
 action=動作
 // context menu village
-refresh=立即更新村莊資訊(&R)
+refresh=更新目前村莊的資訊(&R)
 cmbup=升級建築 - 一次(&A)
 cmpupmulti=升級建築 - 多次(&U)
 cmpup2=升級 2 次(&2)
@@ -99,7 +99,7 @@ upgrade=升級
 ResourceLowerLimit=運輸下限(&L)
 ResourceUpperLimit=運輸上限(&U)
 snapshot=目前村莊的詳細資訊(&S)
-snapall=全部村莊詳細資訊(&A)
+snapall=全部村莊的詳細資訊(&A)
 
 mresearch=研發(&R)
 upgradeatk=升級攻擊(&A)
@@ -201,14 +201,17 @@ raidtype=攻擊類型
 katatarget=投石機目標
 SendTroops=派遣軍隊
 Description=簡單描述
-
+saveRES=匯出資源限制(&E)
+restoreRES=匯入資源限制(&I)
+refreshall=更新全部村莊的資訊(&L)
+deleteVillage=刪除村莊(&D)
 //alarm
-CMBAlarm=警報(&W)
-mailsender=發件人設置
-mailuser=帳戶:
+CMBAlarm=自動警報(&W)
+mailsender=發信設定
+mailuser=帳號:
 mailpass=密碼：
-smtpserver=smtp服務器：
-serverport=端口：
-recvsettings=接收設置
-recvaccounts=接收郵件地阯（逗號分隔）：
-trustfuluser=信任帳戶(不會報警)：
+smtpserver=寄信伺服器：
+serverport=連接埠：
+recvsettings=接收設定
+recvaccounts=接收郵件位址(逗號分隔)：
+trustfuluser=信任帳號(不會報警)：

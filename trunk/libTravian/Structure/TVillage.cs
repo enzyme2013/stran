@@ -20,6 +20,8 @@ namespace libTravian
         [Json]
         public bool isCapital { get; set; }
         [Json]
+		public int Sort { get; set; }
+		[Json]
         public SortedDictionary<int, TBuilding> Buildings { get; set; }
         [Json]
         public Dictionary<int, TRU> Upgrades { get; set; }
@@ -272,7 +274,61 @@ namespace libTravian
             }
             catch { }
         }
-
+		public void SaveQueueRes(string filename)
+		{
+			try
+			{
+				var json = JsonMapper.ToJson(new Dictionary<int, TMarket>{{ 0, Market }});
+				File.WriteAllText(filename, json);
+			}
+			catch { }
+		}
+		public void RestoreQueueRes(string filename)
+		{
+			try
+			{
+				var Qs = JsonMapper.ToObject<Dictionary<int, TMarket>>(File.ReadAllText(filename));
+				var Q = Qs[0] as TMarket;
+				TResAmount capacity = ResourceCapacity;
+				if (Q.UpperLimit == null)
+				{
+					Market.UpperLimit = Q.UpperLimit;
+				}
+				else
+				{
+					int[] ulimits = new int[Q.UpperLimit.Resources.Length];
+					for (int i = 0; i < ulimits.Length; i++)
+					{
+						if (Q.UpperLimit.Resources[i] >= capacity.Resources[i])
+							ulimits[i] = capacity.Resources[i];
+						else
+							ulimits[i] = Q.UpperLimit.Resources[i];
+					}
+					TResAmount newULimit = new TResAmount(ulimits);
+					Market.UpperLimit = newULimit;
+				}
+				if (Q.LowerLimit == null)
+				{
+					Market.LowerLimit = Q.LowerLimit;
+				}
+				else
+				{
+					int[] llimits = new int[Q.LowerLimit.Resources.Length];
+					for (int i = 0; i < llimits.Length; i++)
+					{
+						if (Q.LowerLimit.Resources[i] >= capacity.Resources[i] || Q.LowerLimit.Resources[i] <= 0)
+							llimits[i] = 0;
+						else
+							llimits[i] = Q.LowerLimit.Resources[i];
+					}
+					TResAmount newLLimit = new TResAmount(llimits);
+					if (Q.LowerLimit.TotalAmount <= 0)
+						newLLimit = null;
+					Market.LowerLimit = newLLimit;
+				}
+			}
+			catch { }
+		}
         /// <summary>
         /// Import task queue from a text file
         /// </summary>
@@ -816,11 +872,30 @@ namespace libTravian
                         return troop;
                     }
                 }
+//                if (troop.TroopType == TTroopType.MySelf)
+//                	return troop;
             }
 
             return null;
         }
-
+        
+        public bool GetTroopsIsAttackMe
+        {
+        	get
+        	{
+	        	foreach (TTInfo troop in this.Troops)
+	        	{
+	        		var vname = troop.VillageName;
+	        		bool isattack = vname.StartsWith("攻擊") || vname.EndsWith("攻击") || vname.StartsWith("Attack against");;
+	        		bool israid = vname.StartsWith("搶奪") || vname.EndsWith("抢夺") || vname.StartsWith("Raid against");
+	        		if (troop.TroopType == TTroopType.Incoming && (isattack || israid))
+	        			return true;
+//	        		if (troop.TroopType == TTroopType.BeAttackedWay)
+//	        			return true;
+	        	}
+	        	return false;
+        	}
+        }
         /// <summary>
         /// Test if there are enough troops in villiage to launch an attack
         /// </summary>

@@ -201,7 +201,10 @@ raidtype=攻击类型
 katatarget=投石机目标
 SendTroops=出兵
 Description=简单描述
-
+saveRES=&E. 汇出资源限制
+restoreRES=&I. 汇入资源限制
+refreshall=&L. 全部刷新
+deleteVillage=&D. 删除村庄
 //alarm
 CMBAlarm=&W. 报警
 mailsender=邮件服务器设置

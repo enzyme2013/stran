@@ -30,7 +30,7 @@ namespace Stran
             newVillagename = this.tbnewVillagename.Text;
             // Get if possible Rename
             string mainuser = UpCall.PageQuery(ReVillageID, "spieler.php");
-            Match mu = Regex.Match(mainuser, "<a href=\"spieler.php\\?s=1\">");
+            Match mu = Regex.Match(mainuser, "<a href=\"spieler.php\\?s=1\">", RegexOptions.Singleline);
             if (!mu.Success)
             {
                 UpCall.DebugLog("You are not owner of this accounts.", DebugLevel.W);

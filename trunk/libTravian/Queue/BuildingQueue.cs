@@ -44,7 +44,7 @@ namespace libTravian
 				var x = CV.InBuilding[UpCall.TD.isRomans ? qtype : 0];
 				if(timecost != 0)
 					status = "Lacking of resource";
-				else if(x == null || x.FinishTime.AddSeconds(15) < DateTime.Now)
+				else if((NextExec < DateTime.Now ) && (x == null || x.FinishTime.AddSeconds(15) < DateTime.Now))
 					status = "Starting";
 				else
 					status = "Waiting";
@@ -74,8 +74,10 @@ namespace libTravian
 				var x = CV.InBuilding[UpCall.TD.isRomans ? qtype : 0];
 				if(timecost != 0)
 					return timecost;
-				else if(x == null || x.FinishTime.AddSeconds(15) < DateTime.Now)
+				else if((NextExec < DateTime.Now) && (x == null || x.FinishTime.AddSeconds(15) < DateTime.Now))
 					return 0;
+				else if (NextExec > DateTime.Now)
+					return Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds) + 5;
 				else
 					return Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5;
 			}
@@ -126,7 +128,7 @@ namespace libTravian
 				 * <span class="c">粮食产量不足: 需要先建造一个农场</span>
 				 * 
 				 */
-
+				int RomaNeedCrop = -1;
 				if(gid != 10 && UpCall.GidLang.ContainsKey(10) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(10) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 				{
 					gid = 10;
@@ -139,8 +141,20 @@ namespace libTravian
 				}
                 else if (gid != 4 && UpCall.GidLang.ContainsKey(4) && Regex.Match(result, "<span class=\"(c|none)\">[^<]*?" + UpCall.GetGidLang(4) + "[^<]*?</span>", RegexOptions.IgnoreCase).Success)
 				{
-					gid = 4;
-					bid = findBuilding(VillageID, gid);
+                	if (UpCall.TD.isRomans && CV.InBuilding[0] != null && Q.Bid > 18)
+                	{
+                		if (CV.InBuilding[0].Gid != 4)
+                			RomaNeedCrop = 1;
+                		else if (CV.InBuilding[0].Gid == 4)
+                		{
+                			RomaNeedCrop = 0;
+                			return;
+                		}
+                		UpCall.DebugLog("Roma NEED Crop rule", DebugLevel.W);
+                		Q.NextExec = CV.InBuilding[0].FinishTime.AddSeconds(30);
+                	}
+                	gid = 4;
+                	bid = findBuilding(VillageID, gid);
 				}
                 else if (result.Contains("<p class=\"(c|none)\">"))
 				{
@@ -164,8 +178,9 @@ namespace libTravian
 					UpCall.PageQuery(VillageID, "dorf1.php");
 					UpCall.PageQuery(VillageID, "dorf2.php");
 					UpCall.DebugLog("Unknown status! And cause a queue been deleted! " + Q.Title, DebugLevel.W);
-					Q.MarkDeleted = true;
-					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+					//Q.MarkDeleted = true;
+					//UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+					Q.NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
 					return;
 				}
 				// test if resource enough
@@ -176,7 +191,7 @@ namespace libTravian
 					timecost = CV.TimeCost(Buildings.Cost(gid, 1));
 				if(CV.InBuilding[UpCall.TD.isRomans && bid > 18 ? 1 : 0] != null)
 					timecost = Math.Max(timecost, Convert.ToInt32(DateTime.Now.Subtract(CV.InBuilding[UpCall.TD.isRomans && bid > 18 ? 1 : 0].FinishTime).TotalSeconds));
-				if(timecost > 0)
+				if(timecost > 0 || RomaNeedCrop == 1)
 				{
 					UpCall.DebugLog("Need to build but resource not enough so add into queue: " + Q.Title, DebugLevel.I);
 					CV.Queue.Insert(0, new BuildingQueue()
@@ -205,7 +220,7 @@ namespace libTravian
 			}
 
 			// New building
-			int qtype = Bid < 19 && Bid > 0 ? 0 : 1;
+			int qtype = bid < 19 && bid > 0 ? 0 : 1;
 
 			if(CV.Buildings.ContainsKey(bid))
 				CV.RB[UpCall.TD.isRomans ? qtype : 0] = new TInBuilding() { ABid = bid, Gid = gid, Level = CV.Buildings[bid].Level };
