@@ -3,5 +3,5 @@ aid1=Legionnaire,Praetorian,Imperian,Equites Legati,Equites Imperatoris,Equites 
 aid2=Clubswinger,Spearman,Axeman,Scout,Paladin,Teutonic Knight,Ram,Catapult,Chief,Settler,Hero
 aid3=Phalanx,Swordsman,Pathfinder,Theutates Thunder,Druidrider,Haeduan,Ram,Trebuchet,Chieftain,Settler,Hero
 author=sone
-attack=attack
-raid=raid
+attack=Attack against
+raid=Raid against

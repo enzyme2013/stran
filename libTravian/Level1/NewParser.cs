@@ -94,6 +94,8 @@ namespace libTravian
                 return;
             else
             {
+				Dictionary<int, TVillage> NEWTV = new Dictionary<int, TVillage>();
+				bool newv = false;
                 for (i = 0; i < mc.Count; i++)
                 {
                     Match m = mc[i];
@@ -102,8 +104,9 @@ namespace libTravian
                     {
                         if (TD.Villages[vid].Name != m.Groups[2].Value)
                         {
-                            TD.Dirty = true;
-                            TD.Villages[vid].Name = m.Groups[2].Value;
+							TD.Villages[vid].Name = m.Groups[2].Value;
+							TD.Dirty = true;
+							newv = true;
                         }
                     }
                     else
@@ -111,16 +114,30 @@ namespace libTravian
                         TD.Villages[vid] = new TVillage()
                         {
                             ID = vid,
-                            Name = m.Groups[3].Value,
+							Name = m.Groups[2].Value,
                             X = Convert.ToInt32(m.Groups[3].Value),
                             Y = Convert.ToInt32(m.Groups[4].Value),
-                            UpCall = this
+							UpCall = this,
+							Sort = i
                         };
                         TD.Dirty = true;
+						newv = true;
                     }
+					if (TD.Villages[vid].Sort != i)
+					{
+						TD.Villages[vid].Sort = i;
+						TD.Dirty = true;
                 }
+					NEWTV.Add(vid, TD.Villages[vid]);
+				}
+				if (newv == true || TD.Villages.Count != NEWTV.Count)
+				{
+					TD.Villages.Clear();
+					TD.Villages = NEWTV;
+					TD.Dirty = true;
                 StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
             }
+			}
             return;
         }
 
@@ -676,11 +693,12 @@ namespace libTravian
 
                     if (m1.Groups[5].Value.Length != 0)
                         MType = TMType.MyBack;
+					var vname = m1.Groups[3].Value;
                     //Console.WriteLine("Pos:{0}, VName:{1}, Time:{2}, Type:{3}, Amount:{4}", m1.Groups[1], m1.Groups[2], m1.Groups[3], MType, string.Join("|", am));
                     CV.Market.MarketInfo.Add(new TMInfo()
                     {
                         Coord = Convert.ToInt32(m1.Groups[2].Value),
-                        VillageName = m1.Groups[3].Value,
+						VillageName = vname,
                         MType = MType,
                         CarryAmount = new TResAmount(am),
                         FinishTime = DateTime.Now.Add(TimeSpanParse(m1.Groups[4].Value)).AddSeconds(15)
@@ -729,7 +747,7 @@ namespace libTravian
 
         public void NewParseTroops(int villageId, string data)
         {
-            if (this.GetBuildingLevel(16, data) < 0)
+			if (this.GetBuildingLevel(16, data) < 0 && !data.Contains("<h1>Rally point"))
             {
                 return;
             }
@@ -764,6 +782,8 @@ namespace libTravian
                     }
                 }
             }
+            TD.Dirty = true;
+        	StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
         }
 
         private TTInfo ParseTroopDetail(string troopDetail, bool postInVillageTroops)
@@ -919,10 +939,12 @@ namespace libTravian
                     continue;
                 int[] tro = new int[11];
                 for (int i = 0; i < m.Groups[4].Captures.Count; i++)
+				{
                     if (m.Groups[4].Captures[i].Value == "?")
                         tro[i] = -1;
                     else
                         tro[i] = Convert.ToInt32(m.Groups[4].Captures[i].Value);
+				}
                 /*
                uid  time  	mark	troopcount  cropcost	returnlink
                 -     O      R		 	O      	-			-		MyReturnWay
@@ -935,11 +957,14 @@ namespace libTravian
                 O     -    	 		    O       O       	O		BeSupportMe
                  */
                 bool hasuid = m.Groups[2].Value.Contains("uid");
-                bool hassupport = m.Groups[2].Value.Contains("增援到") || m.Groups[2].Value.Contains("支援") || m.Groups[2].Value.Contains("Reinforcement for");
-                bool hasretrun = m.Groups[2].Value.Contains("回歸") || m.Groups[2].Value.Contains("返回") || m.Groups[2].Value.Contains("Return from");
-                bool hasspy = m.Groups[2].Value.Contains("偵察") || m.Groups[2].Value.Contains("侦察");
+				bool hassupport = m.Groups[2].Value.StartsWith("增援到") || m.Groups[2].Value.EndsWith("支援") || m.Groups[2].Value.StartsWith("Reinforcement for");
+				bool hasretrun = m.Groups[2].Value.EndsWith("回歸") || m.Groups[2].Value.EndsWith("返回") || m.Groups[2].Value.StartsWith("Return from");
+				bool hasspy = m.Groups[2].Value.EndsWith("偵察") || m.Groups[2].Value.EndsWith("侦察") || m.Groups[2].Value.StartsWith("Scouting of");
+				bool hasraid = m.Groups[2].Value.StartsWith("搶奪") || m.Groups[2].Value.EndsWith("抢夺") || m.Groups[2].Value.StartsWith("Raid against");
+				bool hasattack = m.Groups[2].Value.StartsWith("攻擊") || m.Groups[2].Value.EndsWith("攻击") || m.Groups[2].Value.StartsWith("Attack against");
                 bool hasTime = m.Groups[6].Success;
                 bool hasCount = tro[0] != -1;
+				bool hasCrop = m.Groups[5].Success;
                 string vvname = CV.Name;
                 string vname;
                 TTroopType trooptype = hasuid ?
@@ -981,6 +1006,7 @@ namespace libTravian
                 CV.Troop.Troops.Add(ttro);
                 Console.WriteLine(ttro.VillageName);
             }
+            StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
         }
     }
 }

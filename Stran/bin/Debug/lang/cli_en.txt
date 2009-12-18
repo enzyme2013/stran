@@ -201,13 +201,16 @@ raidtype=Attack Type
 katatarget=Target
 SendTroops=Send Troops
 Description=Description
-
+saveRES=&Export Resource Limit
+restoreRES=&Import Resource Limit
+refreshall=Refresh A&ll Villages
+deleteVillage=&Delete Village
 //alarm
 CMBAlarm=&Warning
 mailsender=mail sender
 mailuser=account:
 mailpass=password：
-smtpserver=smtpServer：
+smtpserver=smtp Server：
 serverport=port：
 recvsettings=Receive Settings
 recvaccounts=receive accounts（seperated by comma）：

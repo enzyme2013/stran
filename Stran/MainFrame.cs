@@ -158,8 +158,25 @@ namespace Stran
                 }
                 if (LoginInfo.Tribe == 0 && LoginInfo.Tribe != TravianData.Tribe)
                     LoginInfo.Tribe = TravianData.Tribe;
-
-                //m_villagelist.listViewVillage.Items.Clear();
+				if (m_villagelist.listViewVillage.Items.Count != TravianData.Villages.Count)
+					m_villagelist.listViewVillage.Items.Clear();
+				else
+				{
+					bool newv = false;
+					for (int j = 0; j < m_villagelist.listViewVillage.Items.Count - 1; j++)
+					{
+						int m = Convert.ToInt32(m_villagelist.listViewVillage.Items[j].SubItems[0].Text);
+						int n = TravianData.Villages[m].Sort;
+						if (n != j)
+							newv = true;
+					}
+					if (newv == true)
+						m_villagelist.listViewVillage.Items.Clear();
+				}
+				
+				int index = 0;
+				if (m_villagelist.listViewVillage.SelectedIndices.Count == 1 && m_villagelist.listViewVillage.Items.Count != 0)
+					index = m_villagelist.listViewVillage.SelectedIndices[0];
                 int i = 0;
                 List<int> f = new List<int>();
                 foreach (ListViewItem x in m_villagelist.listViewVillage.Items)
@@ -174,6 +191,10 @@ namespace Stran
                         var xkey = m_villagelist.listViewVillage.Items[f.IndexOf(x.Value.ID)];
                         if (xkey.SubItems[2].Text != x.Value.Name)
                             xkey.SubItems[2].Text = x.Value.Name;
+						xkey.BackColor = SystemColors.Window;
+						if(TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
+							xkey.BackColor = Color.Salmon;
+						m_villagelist.listViewVillage.Items[index].Selected = true;
                     }
                     else
                     {
@@ -183,6 +204,9 @@ namespace Stran
                         lvi.SubItems.Add(x.Value.Name);
                         lvi.SubItems.Add(x.Value.Coord.ToString());
                         lvi.SubItems.Add("");
+                        lvi.BackColor = SystemColors.Window;
+                        if(TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
+							lvi.BackColor = Color.Salmon;
                         if (e.VillageID == x.Key)
                             i = m_villagelist.listViewVillage.Items.Count - 1;
                     }
@@ -1476,7 +1500,6 @@ namespace Stran
         /// </summary>
         private void CMQImport_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("尚未完成的功能！");
             if (!this.TravianData.Villages.ContainsKey(this.SelectVillage))
             {
                 return;
@@ -1506,7 +1529,6 @@ namespace Stran
         /// </summary>
         private void CMQExport_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("尚未完成的功能！");
             if (!this.TravianData.Villages.ContainsKey(this.SelectVillage))
             {
                 return;
@@ -2021,6 +2043,95 @@ namespace Stran
                 lvi(q);
 
                 CV.GetAllTroop = true;
+            }
+        }
+		private void CMVSaveRESClick(object sender, EventArgs e)
+		{
+			if(!this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[this.SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			lock (QueueLock)
+			{
+				SaveFileDialog saveFileDialog = new SaveFileDialog();
+				saveFileDialog.RestoreDirectory = true;
+				saveFileDialog.Filter = "Stran ResLimit queue|*.srq";
+				saveFileDialog.Title = this.mui._("ExportTaskQueue");
+				if(saveFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					village.SaveQueueRes(saveFileDialog.FileName);
+				}
+			}
+		}
+		
+		private void CMVRestoreRESClick(object sender, EventArgs e)
+		{
+			if(!this.TravianData.Villages.ContainsKey(this.SelectVillage))
+			{
+				return;
+			}
+
+			TVillage village = this.TravianData.Villages[this.SelectVillage];
+			if (village.isBuildingInitialized != 2)
+			{
+				return;
+			}
+
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.RestoreDirectory = true;
+			openFileDialog.Filter = "Stran ResLimit queue|*.srq";
+			openFileDialog.Title = this.mui._("ImportTaskQueue");
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				lock (QueueLock)
+				{
+					village.RestoreQueueRes(openFileDialog.FileName);
+					TravianData.Dirty = true;
+				}
+			}
+		}
+		
+		private void CMVDelVClick(object sender, EventArgs e)
+		{
+            MessageBox.Show("尚未完成此功能");
+            return;
+			if(!TravianData.Villages.ContainsKey(SelectVillage) || TravianData.Villages.Count <= 1)
+				return;
+			
+			TVillage CV = TravianData.Villages[SelectVillage];
+			
+			if (MessageBox.Show("这将会将此村庄从资料库中删除", "强制删除村庄", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.OK)
+			{
+				lock (QueueLock)
+				{
+					TravianData.Villages.Remove(SelectVillage);
+					TravianData.Dirty = true;
+					Local_StatusUpdate(sender, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Villages });
+				}
+			}
+		}
+		private void CMVRefreshAll_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("尚未完成此功能");
+            return;
+            var dr = MessageBox.Show("这将会立即刷新全部村庄，请勿过度使用，以免造成锁帐。\r\n\r\n确定继续执行吗？", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dr == DialogResult.OK)
+            {
+            	foreach (var v in TravianData.Villages)
+                {
+                    TravianData.Villages[v.Key].InitializeBuilding();
+//                    TravianData.Villages[v.Key].InitializeDestroy();
+//                    TravianData.Villages[v.Key].InitializeUpgrade();
+                    TravianData.Villages[v.Key].InitializeTroop();
+                    TravianData.Villages[v.Key].InitializeMarket();
+                }
             }
         }
     }

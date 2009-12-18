@@ -124,6 +124,8 @@ namespace libTravian
 				UpCall.PageQuery(TargetVillageID, "build.php?gid=17");
 				CalculateResourceAmount(UpCall.TD, VillageID);
 				// check if it's a crop transfer, and crop is seriously needed from target village:
+				if (UpCall.TD.Villages[TargetVillageID].Resource[3].Produce < 0)
+				{
 				var temp = NeedCrop(UpCall.TD);
 				if(temp != null)
 				{
@@ -133,6 +135,7 @@ namespace libTravian
 				else if(ExceedTargetCapacity(UpCall.TD))
 				{
 					return;
+					}
 				}
 			}
 			else
@@ -452,9 +455,9 @@ namespace libTravian
 			}
 
 			int speed = travianData.MarketSpeed == 0 ? 24 : travianData.MarketSpeed;
-			int timecost = Convert.ToInt32(source.Coord * destination.Coord / speed) + 30;
+			int timecost = Convert.ToInt32(source.Coord * destination.Coord * 3600 / speed) + 30;
 
-			int cropcap = destination.Resource[3].CurrAmount + timecost * destination.Resource[3].Produce;
+			int cropcap = destination.Resource[3].CurrAmount + timecost * destination.Resource[3].Produce / 3600;
 
 			foreach(TMInfo transfer in destination.Market.MarketInfo)
 			{
@@ -494,7 +497,7 @@ namespace libTravian
 					this.BalanceDestinationResource(travianData, VillageID);
 					break;
 				case ResourceDistributionType.BalanceSourceTime:
-					BalanceSourceTime(travianData, VillageID);
+					this.BalanceSourceTime(travianData, VillageID);
 					break;
 
 			}
