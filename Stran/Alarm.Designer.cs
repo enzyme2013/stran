@@ -68,7 +68,7 @@
             // 
             this.tbFrom.Location = new System.Drawing.Point(99, 19);
             this.tbFrom.Name = "tbFrom";
-            this.tbFrom.Size = new System.Drawing.Size(124, 21);
+        	this.tbFrom.Size = new System.Drawing.Size(124, 22);
             this.tbFrom.TabIndex = 1;
             // 
             // label2
@@ -76,7 +76,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(229, 23);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(11, 12);
+        	this.label2.Size = new System.Drawing.Size(15, 12);
             this.label2.TabIndex = 2;
             this.label2.Text = "@";
             // 
@@ -106,7 +106,7 @@
             this.tbPass.Location = new System.Drawing.Point(99, 54);
             this.tbPass.Name = "tbPass";
             this.tbPass.PasswordChar = '*';
-            this.tbPass.Size = new System.Drawing.Size(124, 21);
+        	this.tbPass.Size = new System.Drawing.Size(124, 22);
             this.tbPass.TabIndex = 5;
             // 
             // groupBox1
@@ -134,7 +134,7 @@
             this.tbPort.Location = new System.Drawing.Point(276, 85);
             this.tbPort.Name = "tbPort";
             this.tbPort.ReadOnly = true;
-            this.tbPort.Size = new System.Drawing.Size(49, 21);
+        	this.tbPort.Size = new System.Drawing.Size(49, 22);
             this.tbPort.TabIndex = 9;
             this.tbPort.Text = "587";
             // 
@@ -153,7 +153,7 @@
             this.tbServer.Location = new System.Drawing.Point(99, 85);
             this.tbServer.Name = "tbServer";
             this.tbServer.ReadOnly = true;
-            this.tbServer.Size = new System.Drawing.Size(124, 21);
+        	this.tbServer.Size = new System.Drawing.Size(124, 22);
             this.tbServer.TabIndex = 7;
             this.tbServer.Text = "smtp.gmail.com";
             // 
@@ -198,7 +198,7 @@
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(6, 132);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 21);
+        	this.numericUpDown1.Size = new System.Drawing.Size(120, 22);
             this.numericUpDown1.TabIndex = 67;
             // 
             // label8
@@ -215,7 +215,7 @@
             // 
             this.tbTrust.Location = new System.Drawing.Point(6, 82);
             this.tbTrust.Name = "tbTrust";
-            this.tbTrust.Size = new System.Drawing.Size(346, 21);
+        	this.tbTrust.Size = new System.Drawing.Size(346, 22);
             this.tbTrust.TabIndex = 65;
             // 
             // label7
@@ -242,13 +242,13 @@
             // 
             this.tbRecv.Location = new System.Drawing.Point(6, 39);
             this.tbRecv.Name = "tbRecv";
-            this.tbRecv.Size = new System.Drawing.Size(346, 21);
+        	this.tbRecv.Size = new System.Drawing.Size(346, 22);
             this.tbRecv.TabIndex = 62;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(92, 326);
+        	this.btnCancel.Location = new System.Drawing.Point(229, 336);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 30);
             this.btnCancel.TabIndex = 71;
@@ -260,7 +260,7 @@
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(1, 326);
+        	this.btnOk.Location = new System.Drawing.Point(83, 336);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(80, 30);
             this.btnOk.TabIndex = 70;
@@ -279,6 +279,8 @@
             this.Controls.Add(this.grpTargets);
             this.Controls.Add(this.groupBox1);
             this.Name = "Alarm";
+        	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+        	this.Tag = "CMBAlarm";
             this.Text = "警报邮件";
             this.Load += new System.EventHandler(this.Alarm_Load);
             this.groupBox1.ResumeLayout(false);

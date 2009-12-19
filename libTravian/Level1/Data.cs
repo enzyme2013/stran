@@ -76,7 +76,7 @@ namespace libTravian
         static public Dictionary<int, TResAmount> TroopCost;
         static public Dictionary<int, TBL[]> Depends;
         static public Dictionary<int, int[]> PreferPos;
-        public static Dictionary<int, int[]> BaseSpeed;
+        static public  Dictionary<int, int[]> BaseSpeed;
         static public List<TResAmount> PartyCos;
         static public void Init()
         {
@@ -105,9 +105,9 @@ namespace libTravian
         {
             //base speed.key=tribe value=speeds:troops,merchants
             BaseSpeed = new Dictionary<int, int[]>(3);
-            BaseSpeed[0] = new int[] { 6, 5, 7, 16, 14, 10, 4, 3, 4, 5, 16 };
-            BaseSpeed[0] = new int[] { 7, 7, 6, 9, 10, 9, 4, 3, 4, 5, 12 };
-            BaseSpeed[0] = new int[] { 7, 6, 17, 19, 16, 13, 4, 3, 5, 5, 24 };
+            BaseSpeed[1] = new int[] { 6, 5, 7, 16, 14, 10, 4, 3, 4, 5, 16 };
+            BaseSpeed[2] = new int[] { 7, 7, 6, 9, 10, 9, 4, 3, 4, 5, 12 };
+            BaseSpeed[3] = new int[] { 7, 6, 17, 19, 16, 13, 4, 3, 5, 5, 24 };
         }
         static private void InitBuildingCost()
         {

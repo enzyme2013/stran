@@ -74,7 +74,7 @@ namespace libTravian
             int StdSpeed = 24;
             if (TD.Tribe != 0)
             {
-                StdSpeed = Buildings.BaseSpeed[TD.Tribe - 1][10];
+                StdSpeed = Buildings.BaseSpeed[TD.Tribe][10];
             }
             //if(TD.Tribe == 1)
             //    StdSpeed = 16;

@@ -92,6 +92,32 @@ namespace libTravian
             mc = Regex.Matches(data, "&#x25CF;.*?newdid=(\\d*).*?>([^<]*?)</a>.*?\\((-?\\d*?)<.*?\">(-?\\d*?)\\)", RegexOptions.Singleline);
             if (mc.Count == 0)
                 return;
+            /*
+            {
+	            string viddata = this.pageQuerier.PageQuery(0, "dorf3.php", null, true, true);
+	            if (viddata == null)
+	            	return;
+	            Match m = Regex.Match(viddata, "newdid=(\\d+)\">([^<]*?)</a></td>");
+	            if (!m.Success)
+	            	return;
+	            int vid = Convert.ToInt32(m.Groups[1].Value);
+	            string vname = m.Groups[2].Value;
+	            if (TD.Villages.ContainsKey(vid))
+	            {
+	            	if (TD.Villages[vid].Name != vname)
+	            	{
+	            		TD.Villages[vid].Name = vname;
+	            		TD.Dirty = true;
+	            		StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
+	            	}
+	            }
+	            else
+	            {
+	            	TD.Villages.Clear();
+	            	this.PageQuery(0, "dorf1.php");
+	            }
+            }
+            */
             else
             {
 				Dictionary<int, TVillage> NEWTV = new Dictionary<int, TVillage>();
@@ -184,6 +210,7 @@ namespace libTravian
                     tv.ID = Convert.ToInt32(m.Groups[1].Value);
                     TD.Villages[tv.ID] = tv;
                     Currid = tv.ID;
+                    TD.Dirty = true;
                 }
             }
             else
@@ -206,21 +233,21 @@ namespace libTravian
                     if (m.Groups[2].Value != "")
                         Currid = vid;
                 }
-
-                mc = Regex.Matches(data, "karte.php\\?d=(\\d+)&amp;c=.*?\">([^<]*)</a>.*?(</span>)?</td");
-                int CapZ = 0;
-                foreach (Match m in mc)
-                {
-                    if (m.Groups[3].Value.Length > 0)
-                        CapZ = Convert.ToInt32(m.Groups[1].Value);
-                }
-                foreach (KeyValuePair<int, TVillage> x in TD.Villages)
-                {
-                    if (x.Value.Z == CapZ)
-                        x.Value.isCapital = true;
-                    else
-                        x.Value.isCapital = false;
-                }
+            }
+            
+            mc = Regex.Matches(data, "karte.php\\?d=(\\d+)&amp;c=.*?\">([^<]*)</a>.*?(</span>)?</td");
+            int CapZ = 0;
+            foreach (Match m in mc)
+            {
+                if (m.Groups[3].Value.Length > 0)
+                    CapZ = Convert.ToInt32(m.Groups[1].Value);
+            }
+            foreach (KeyValuePair<int, TVillage> x in TD.Villages)
+            {
+                if (x.Value.Z == CapZ)
+                    x.Value.isCapital = true;
+                else
+                    x.Value.isCapital = false;
             }
             //LastVillageCount = villagecount;
             TD.Dirty = true;
@@ -745,8 +772,13 @@ namespace libTravian
             return Convert.ToInt32(levelMatch.Groups[1].Value);
         }
 
-        public void NewParseTroops(int villageId, string data)
+        public void NewParseTroops(int VillageID, string data)
         {
+        	Match m = Regex.Match(data, "<div class=\"mov\"><span class=\"a[13]\">[^<]*?</span></div>", RegexOptions.Singleline);
+        	if(m.Success)
+        		this.pageQuerier.PageQuery(VillageID, "build.php?gid=16", null, true, false);
+        	else
+        	{
 			if (this.GetBuildingLevel(16, data) < 0 && !data.Contains("<h1>Rally point"))
             {
                 return;
@@ -758,7 +790,7 @@ namespace libTravian
                 return;
             }
 
-            TVillage village = this.TD.Villages[villageId];
+	            TVillage village = this.TD.Villages[VillageID];
             village.Troop.Troops.Clear();
 
             bool inVillageTroopsParsed = false;
@@ -784,6 +816,7 @@ namespace libTravian
             }
             TD.Dirty = true;
         	StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
+        	}
         }
 
         private TTInfo ParseTroopDetail(string troopDetail, bool postInVillageTroops)
