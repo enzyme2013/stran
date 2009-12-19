@@ -987,6 +987,7 @@ namespace Stran
         }
         private void CMBNewCap_Click(object sender, EventArgs e)
         {
+        	/*
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
             var dr = MessageBox.Show("这将在本程序中设置此村庄为主村。不影响游戏中的主村设定。\r\n\r\n确定设置主村吗？", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -996,6 +997,12 @@ namespace Stran
                     v.Value.isCapital = false;
                 TravianData.Villages[SelectVillage].isCapital = true;
             }
+        	*/
+        	var dr = MessageBox.Show("此功能仅能刷新实际主村的位置，无法设定村庄为主村。", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+        	if (dr == DialogResult.OK)
+        	{
+        		tr.PageQuery(0, "dorf1.php");
+        	}
         }
         #endregion
 

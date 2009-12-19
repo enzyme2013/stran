@@ -76,7 +76,7 @@ namespace libTravian
 					return timecost;
 				else if((NextExec < DateTime.Now) && (x == null || x.FinishTime.AddSeconds(15) < DateTime.Now))
 					return 0;
-				else if (NextExec > DateTime.Now)
+				else if (NextExec >= DateTime.Now)
 					return Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds) + 5;
 				else
 					return Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5;

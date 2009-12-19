@@ -90,7 +90,7 @@
         	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
         	this.MaximizeBox = false;
         	this.Name = "Rename";
-        	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+        	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
         	this.Tag = "Rename";
         	this.Text = "Rename";
         	this.Load += new System.EventHandler(this.Rename_Load);
