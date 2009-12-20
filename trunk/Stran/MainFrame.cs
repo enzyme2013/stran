@@ -1242,8 +1242,8 @@ namespace Stran
         }
         private void CMBRaid_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("尚未完成此功能");
-            return;
+            // MessageBox.Show("尚未完成此功能");
+            // return;
             TVillage village = this.GetSelectedVillage();
             if (village == null)
             {
@@ -1308,6 +1308,7 @@ namespace Stran
                 mui = this.mui,
                 dl = this.dl,
                 TroopsAtHome = village.Troop.GetTroopsAtHome(village),
+                Village = village,
                 Return = task,
             };
 
@@ -1991,8 +1992,8 @@ namespace Stran
 
         void CMBAttackClick(object sender, EventArgs e)
         {
-            MessageBox.Show("尚未完成此功能");
-            return;
+            // MessageBox.Show("尚未完成此功能");
+            // return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
 
@@ -2026,8 +2027,8 @@ namespace Stran
 
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("尚未完成此功能");
-            return;
+            // MessageBox.Show("尚未完成此功能");
+            // return;
             var CV = TravianData.Villages[SelectVillage];
             if (CV.isTroopInitialized != 2)
             {

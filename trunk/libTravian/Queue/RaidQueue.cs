@@ -62,7 +62,10 @@ namespace libTravian
                     Troops = this.Troops
                 };
 
-                return String.Format("{0} {1}", troopInfo.FriendlyName, this.RaidType);
+                return String.Format("{0}{1} {2}", 
+                    this.MultipeRaids ? "MR " : "",
+                    troopInfo.FriendlyName, 
+                    this.RaidType);
             }
         }
 
@@ -109,6 +112,11 @@ namespace libTravian
                     return 86400;
                 }
 
+                if (this.MaxSlots != 0 && village.Troop.GetUsedSlots(village) >= this.MaxSlots)
+                {
+                    return 86400;
+                }
+
                 this.Observe2To7Rule();
                 double delay = this.MinimumDelay;
                 if (!village.Troop.HasEnoughTroops(village, this.Troops))
@@ -145,6 +153,12 @@ namespace libTravian
 
         [Json]
         public int MaxCount { get; set; }
+
+        [Json]
+        public int MaxSlots { get; set; }
+
+        [Json]
+        public bool MultipeRaids { get; set; }
 
         [Json]
         public int Count { get; set; }
@@ -213,16 +227,31 @@ namespace libTravian
                 return;
             }
 
-            if (this.DoRaid())
+            DoRaidResult result = this.DoRaid();
+            switch (result)
             {
-                this.NextTarget();
-            }
-            else
-            {
-                this.UpCall.FetchVillageTroop(this.VillageID);
+                case DoRaidResult.Success:
+                    this.NextTarget();
+                    break;
+                case DoRaidResult.Postpone:
+                    this.UpCall.FetchVillageTroop(this.VillageID);
+                    break;
+                case DoRaidResult.SkipVillage:
+                    this.UpCall.FetchVillageTroop(this.VillageID);
+                    this.NextTarget();
+                    break;
+                case DoRaidResult.DeleteVillage:
+                    this.Targets.RemoveAt(this.TargetID);
+                    if (this.Targets.Count == 0)
+                    {
+                        this.Delete();
+                    }
+                    break;
+                default:
+                    throw new Exception(String.Format("Unhandled DoRaidResult {0}", result)); 
             }
 
-            this.MinimumDelay = this.RandomDelay(60, 180);
+            this.MinimumDelay = this.RandomDelay(30, 120);
         }
         #endregion
 
@@ -235,6 +264,8 @@ namespace libTravian
             this.RaidType = settings.RaidType;
             this.SpyOption = settings.SpyOption;
             this.MaxCount = settings.MaxCount;
+            this.MaxSlots = settings.MaxSlots;
+            this.MultipeRaids = settings.MultipeRaids;
             this.Description = settings.Description;
 
             if (this.TargetID >= this.Targets.Count)
@@ -243,23 +274,31 @@ namespace libTravian
             }
         }
 
-        private bool DoRaid()
+        private enum DoRaidResult
+        {
+            Success,
+            Postpone,
+            SkipVillage,
+            DeleteVillage,
+        }
+
+        private DoRaidResult DoRaid()
         {
             if (this.MinimumDelay > 0)
             {
-                return false;
+                return DoRaidResult.Postpone;
             }
 
             string sendTroopsUrl = String.Format("a2b.php?z={0}", this.Targets[this.TargetID].Z);
             string sendTroopForm = UpCall.PageQuery(this.VillageID, sendTroopsUrl);
             if (sendTroopForm == null)
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
             if (!sendTroopForm.Contains("<form method=\"POST\" name=\"snd\" action=\"a2b.php\">"))
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
             Dictionary<string, string> postData = RaidQueue.GetHiddenInputValues(sendTroopForm);
@@ -271,7 +310,7 @@ namespace libTravian
             {
                 if (this.Troops[i] > maxTroops[i])
                 {
-                    return false;
+                    return DoRaidResult.SkipVillage;
                 }
 
                 string troopKey = String.Format("t{0}", i + 1);
@@ -283,29 +322,29 @@ namespace libTravian
             string confirmForm = UpCall.PageQuery(this.VillageID, confirmUrl, postData);
             if (confirmForm == null)
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
             Match errorMatch = Regex.Match(confirmForm, "<p class=\"error\">(.+)</p>");
             if (errorMatch.Success)
             {
                 string error = String.Format(
-                    "Skip village {0}. Error: {1}",
+                    "Delete village {0}. Error: {1}",
                     this.Targets[this.TargetID],
                     errorMatch.Groups[1].Value);
                 this.UpCall.DebugLog(error, DebugLevel.W);
-                return true;
+                return DoRaidResult.DeleteVillage;
             }
 
             if (!confirmForm.Contains("<form method=\"post\" action=\"a2b.php\">"))
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
             TimeSpan timeCost = RaidQueue.GetOneWayTimeCost(confirmForm);
             if (timeCost == TimeSpan.MinValue)
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
             postData = RaidQueue.GetHiddenInputValues(confirmForm);
@@ -317,10 +356,13 @@ namespace libTravian
             string result = this.UpCall.PageQuery(this.VillageID, confirmUrl, postData);
             if (result == null)
             {
-                return false;
+                return DoRaidResult.SkipVillage;
             }
 
-            this.MinimumDelay = (int)timeCost.TotalSeconds * 2 + this.RandomDelay(30, 180);
+            if (!this.MultipeRaids)
+            {
+                this.MinimumDelay = (int)timeCost.TotalSeconds * 2 + this.RandomDelay(30, 180);
+            }
 
             TTInfo troopInfo = new TTInfo()
             {
@@ -336,7 +378,7 @@ namespace libTravian
                 troopInfo.FriendlyName);
 
             this.UpCall.DebugLog(message, DebugLevel.I);
-            return true;
+            return DoRaidResult.Success;
         }
 
         public static bool NoRaid2To7 { get; set; }
@@ -371,10 +413,15 @@ namespace libTravian
                 this.TargetID = 0;
                 if (++this.Count >= this.MaxCount && this.MaxCount != 0)
                 {
-                    this.MarkDeleted = true;
-                    this.UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = this.VillageID });
+                    this.Delete();
                 }
             }
+        }
+
+        private void Delete()
+        {
+            this.MarkDeleted = true;
+            this.UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = this.VillageID });
         }
 
         private static Regex hiddenInputPattern = new Regex(@"<input type=""hidden"" name=""(\w+)"" value=""(.+)"" />");
