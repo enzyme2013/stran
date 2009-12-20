@@ -861,6 +861,20 @@ namespace libTravian
             Troops = new List<TTInfo>();
         }
 
+        public int GetUsedSlots(TVillage village)
+        {
+            int slotsUsed = 0;
+            foreach (TTInfo troop in this.Troops)
+            {
+                if (troop.OwnerVillageZ == village.Z)
+                {
+                    slotsUsed++;
+                }
+            }
+
+            return slotsUsed;
+        }
+
         public TTInfo GetTroopsAtHome(TVillage village)
         {
             foreach (TTInfo troop in this.Troops)

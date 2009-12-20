@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using libTravian;
 
@@ -52,6 +53,7 @@ namespace Stran
         public NumericUpDown[] Nums = new NumericUpDown[11];
         public TTInfo TroopsAtHome { get; set; }
         public RaidQueue Return { get; set; }
+        public TVillage Village { get; set; }
         #endregion
 
         #region Methods
@@ -83,6 +85,8 @@ namespace Stran
                 this.rdbRaidTypes[this.Return.RaidType - RaidType.Reinforce].Select();
                 this.rdbSpyOptions[this.Return.SpyOption - SpyOption.Resource].Select();
                 this.nudCount.Value = this.Return.MaxCount;
+                this.nudMaxSlots.Value = this.Return.MaxSlots;
+                this.ckbMultipleRaids.Checked = this.Return.MultipeRaids;
                 this.tbDesc.Text = this.Return.Description;
 
                 if (this.Return.Targets != null)
@@ -176,6 +180,8 @@ namespace Stran
             task.RaidType = RaidType.Reinforce + this.SelectedRadioButtonIndex(this.rdbRaidTypes);
             task.SpyOption = SpyOption.Resource + this.SelectedRadioButtonIndex(this.rdbSpyOptions);
             task.MaxCount = Convert.ToInt32(this.nudCount.Value);
+            task.MaxSlots = Convert.ToInt32(this.nudMaxSlots.Value);
+            task.MultipeRaids = this.ckbMultipleRaids.Checked;
             task.Description = tbDesc.Text;
 
             this.Return = task;
@@ -208,7 +214,14 @@ namespace Stran
             }
 
             TPoint village = new TPoint(x, y);
-            this.lstTargets.Items.Add(village);
+            if (this.lstTargets.SelectedIndex < 0)
+            {
+                this.lstTargets.Items.Add(village);
+            }
+            else
+            {
+                this.lstTargets.Items.Insert(this.lstTargets.SelectedIndex, village);
+            }
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -217,6 +230,10 @@ namespace Stran
             {
                 return;
             }
+
+            TPoint village = (TPoint)this.lstTargets.SelectedItem;
+            this.txtX.Text = village.X.ToString();
+            this.txtY.Text = village.Y.ToString();
 
             this.lstTargets.Items.RemoveAt(this.lstTargets.SelectedIndex);
         }
@@ -233,36 +250,72 @@ namespace Stran
             }
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
+        private void btnSort_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (this.Village == null)
             {
-                StreamReader reader = new StreamReader(dialog.OpenFile());
-                this.lstTargets.Items.Clear();
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    if (line.StartsWith(";"))
-                    {
-                        continue;
-                    }
+                return;
+            }
 
-                    TPoint village = TPoint.FromString(line);
-                    if (!village.IsEmpty)
+            TPoint origin = this.Village.Coord;
+            int count = this.lstTargets.Items.Count;
+            double[] dist = new double[count];
+            for (int i = 0; i < count; i++)
+            {
+                dist[i] = origin * (TPoint)this.lstTargets.Items[i];
+            }
+
+            for (int i = 0; i < count - 1; i++)
+            {
+                for (int j = i + 1; j < count; j++)
+                {
+                    if (dist[i] > dist[j])
                     {
-                        this.lstTargets.Items.Add(village);
+                        double tempDist = dist[i];
+                        TPoint tempVillage = (TPoint) this.lstTargets.Items[i];
+
+                        dist[i] = dist[j];
+                        this.lstTargets.Items[i] = this.lstTargets.Items[j];
+
+                        dist[j] = tempDist;
+                        this.lstTargets.Items[j] = tempVillage;
                     }
                 }
+            }
+        }
 
-                reader.Close();
+        private void btnCopy_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (TPoint village in this.lstTargets.Items)
+            {
+                sb.AppendLine(village.ToString());
+            }
+
+            if (sb.Length > 0)
+            {
+                Clipboard.SetText(sb.ToString());
+            }
+        }
+
+        private void btnPaste_Click(object sender, EventArgs e)
+        {
+            string clipboardContent = Clipboard.GetText();
+            string[] lines = clipboardContent.Split('\n');
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(";"))
+                {
+                    continue;
+                }
+
+                TPoint village = TPoint.FromString(line);
+                if (!village.IsEmpty)
+                {
+                    this.lstTargets.Items.Add(village);
+                }
             }
         }
         #endregion
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
