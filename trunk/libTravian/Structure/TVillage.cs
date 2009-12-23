@@ -866,9 +866,13 @@ namespace libTravian
             int slotsUsed = 0;
             foreach (TTInfo troop in this.Troops)
             {
-                if (troop.OwnerVillageZ == village.Z)
+                if (troop.TroopType == TTroopType.Incoming ||
+                    troop.TroopType == TTroopType.Outgoing)
                 {
-                    slotsUsed++;
+                    if (troop.OwnerVillageZ == village.Z)
+                    {
+                        slotsUsed++;
+                    }
                 }
             }
 

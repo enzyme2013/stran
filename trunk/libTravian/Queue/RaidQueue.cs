@@ -246,6 +246,11 @@ namespace libTravian
                     {
                         this.Delete();
                     }
+                    else
+                    {
+                        this.TargetID--;
+                        this.NextTarget();
+                    }
                     break;
                 default:
                     throw new Exception(String.Format("Unhandled DoRaidResult {0}", result)); 
