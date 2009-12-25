@@ -85,7 +85,7 @@ namespace libTravian
 			};
 			OnError(this, new LogArgs() { DebugInfo = db });
 		}
-
+		string _LastQueryPageURI = null;
 		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
 		{
 			try
@@ -99,8 +99,10 @@ namespace libTravian
 					wc.Headers[HttpRequestHeader.Cookie] = TD.Cookie;
 					if(TD.Proxy != null)
 						wc.Proxy = TD.Proxy;
+					_LastQueryPageURI = wc.BaseAddress;
 				}
-				wc.Headers[HttpRequestHeader.Referer] = wc.BaseAddress;
+				wc.Headers[HttpRequestHeader.Referer] = _LastQueryPageURI;
+				_LastQueryPageURI = wc.BaseAddress + Uri;
 				wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
 				if(TD.Cookie == null)
 					if(CheckLogin && !Login())
