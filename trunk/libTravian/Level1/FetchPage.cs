@@ -96,12 +96,12 @@ namespace libTravian
 					wc = new WebClient();
 					wc.BaseAddress = string.Format("http://{0}/", TD.Server);
 					wc.Encoding = Encoding.UTF8;
-					wc.Headers[HttpRequestHeader.Referer] = wc.BaseAddress;
-					wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
 					wc.Headers[HttpRequestHeader.Cookie] = TD.Cookie;
 					if(TD.Proxy != null)
 						wc.Proxy = TD.Proxy;
 				}
+				wc.Headers[HttpRequestHeader.Referer] = wc.BaseAddress;
+				wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727; Maxthon 2.0)";
 				if(TD.Cookie == null)
 					if(CheckLogin && !Login())
 						return null;
