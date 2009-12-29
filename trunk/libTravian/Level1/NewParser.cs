@@ -922,7 +922,7 @@ namespace libTravian
                     Match match = Regex.Match(inDiv, @"\d+:\d+:\d+");
                     if (match.Success)
                     {
-                        arrival = DateTime.Now + TimeSpan.Parse(match.Groups[0].Value);
+                        arrival = DateTime.Now + TimeSpanParse(match.Groups[0].Value);
                         arrival.AddSeconds(20);
                     }
                 }
