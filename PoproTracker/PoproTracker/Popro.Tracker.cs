@@ -35,7 +35,7 @@ namespace PoproTracker
 
 		public PoproMod()
 		{
-			DB = new MySqlConnection("server=ftp.xdmhy.net;uid=root;pwd=1;database=bt;charset=utf8;");
+			DB = new MySqlConnection("server=ftp.xdmhy.net;uid=btrw;pwd=btrw;database=bt;charset=utf8;");
 			DB.Open();
 			Tick = new Timer(20000);
 			Tick.Elapsed += new ElapsedEventHandler((sender, e) => LoadRegisteredTorrent());
