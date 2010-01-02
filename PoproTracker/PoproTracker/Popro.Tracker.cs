@@ -37,14 +37,20 @@ namespace PoproTracker
 		{
 			DB = new MySqlConnection("server=ftp.xdmhy.net;uid=btrw;pwd=btrw;database=bt;charset=utf8;");
 			DB.Open();
-			Tick = new Timer(20000);
+			Tick = new Timer(60000);
 			Tick.Elapsed += new ElapsedEventHandler((sender, e) => LoadRegisteredTorrent());
 			Tick.Enabled = true;
 			LoadRegisteredTorrent();
 		}
 
+		public void Shutdown()
+		{
+			LoadRegisteredTorrent();
+		}
+
 		public void LoadRegisteredTorrent()
 		{
+			Debug("DB data exchange...");
 			lock (RegisteredTorrents)
 			{
 				// save to db
@@ -82,6 +88,7 @@ namespace PoproTracker
 				}
 				reader.Close();
 			}
+			Debug("DB data exchange over.");
 		}
 
 		BEDict TrackerRouter(string Action, HttpInput Get, string IP, string info_hash)
@@ -187,7 +194,6 @@ namespace PoproTracker
 					{"peers", (BEList)peers}
 				};
 
-				Console.WriteLine("{0} peers returned.", peers.Count);
 				return response;
 
 				//if(PeerList.ContainsKey(
@@ -207,17 +213,30 @@ namespace PoproTracker
 			//request.
 			try
 			{
+				Debug("Incoming query");
 				var Action = request.UriParts[0];
 				var IP = request.RemoteEndPoint.Address.ToString();
 				var Result = TrackerRouter(Action, request.QueryString, IP, info_hash);
 				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(Result.Dump()));
 			}
+			catch (BEException e)
+			{
+				Debug(e.Message);
+				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(e.Message));
+			}
 			catch (Exception)
 			{
+				Debug("Exception occurred");
 				response.Status = HttpStatusCode.NotFound;
 			}
 			response.Send();
 			return true;
+		}
+
+		public void Debug(string Message)
+		{
+			Console.Write(DateTime.Now.ToString());
+			Console.WriteLine(" :" + Message);
 		}
 	}
 }
