@@ -35,6 +35,7 @@ namespace PoproTracker
 		Dictionary<string, TFileInfo> RegisteredTorrents = new Dictionary<string, TFileInfo>();
 		MySqlConnection DB;
 		Timer Tick;
+		long AnnounceCount = 0, ScrapeCount = 0;
 
 		public PoproMod()
 		{
@@ -122,6 +123,9 @@ namespace PoproTracker
 		{
 			if (Action.StartsWith("announce"))
 			{
+				AnnounceCount++;
+				if (AnnounceCount % 50 == 0)
+					Console.Title = string.Format("Tracker Status: A {0}   S {1}", AnnounceCount, ScrapeCount);
 				var Passkey = Get["passkey"].Value;
 				if (info_hash == null)
 					throw new BEException("No info_hash provided.");
@@ -235,6 +239,9 @@ namespace PoproTracker
 			}
 			else if(Action.StartsWith("scrape"))
 			{
+				ScrapeCount++;
+				if (ScrapeCount % 10 == 0)
+					Console.Title = string.Format("Tracker Status: A {0}   S {1}", AnnounceCount, ScrapeCount);
 				if (info_hash == null)
 					throw new BEException("No info_hash provided.");
 				info_hash = BitConverter.ToString(HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash))).Replace("-", "").ToLower();
