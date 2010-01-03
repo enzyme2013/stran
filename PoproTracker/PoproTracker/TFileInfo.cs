@@ -10,6 +10,6 @@ namespace PoproTracker
 		public int fid;
 		public string hash;
 		public int newcompleted;
-		public int Seeding, Leeching;
+		public int Seeding, Leeching, Completed;
 	}
 }

@@ -10,6 +10,8 @@ using System.Web;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 using System.Timers;
+using Timer = System.Timers.Timer;
+using System.Threading;
 
 namespace PoproTracker
 {
@@ -27,7 +29,8 @@ namespace PoproTracker
 	}
 	public class PoproMod : HttpModule
 	{
-		bool AllowUnregisteredTorrent = false;
+		const string HashPlace = "####################";
+		bool AllowUnregisteredTorrent = true;
 		Dictionary<string, Dictionary<string, PeerInfo>> PeerList = new Dictionary<string, Dictionary<string, PeerInfo>>();
 		Dictionary<string, TFileInfo> RegisteredTorrents = new Dictionary<string, TFileInfo>();
 		MySqlConnection DB;
@@ -35,11 +38,17 @@ namespace PoproTracker
 
 		public PoproMod()
 		{
-			DB = new MySqlConnection("server=ftp.xdmhy.net;uid=btrw;pwd=btrw;database=bt;charset=utf8;");
+			if (!File.Exists("SQL.txt"))
+				throw new IOException("SQL Connection String should be in SQL.txt");
+			var ConnStr = File.ReadAllText("SQL.txt");
+			DB = new MySqlConnection(ConnStr);
 			DB.Open();
 			Tick = new Timer(60000);
 			Tick.Elapsed += new ElapsedEventHandler((sender, e) => LoadRegisteredTorrent());
 			Tick.Enabled = true;
+			var cmd = DB.CreateCommand();
+			cmd.CommandText = "UPDATE fileinfo SET leechers = 0, seeders = 0";
+			cmd.ExecuteNonQuery();
 			LoadRegisteredTorrent();
 		}
 
@@ -51,22 +60,33 @@ namespace PoproTracker
 		public void LoadRegisteredTorrent()
 		{
 			Debug("DB data exchange...");
+			if (Monitor.TryEnter(RegisteredTorrents, 1))
+				Monitor.Exit(RegisteredTorrents);
+			else
+			{
+				Debug("DB data thread locking, exit.");
+				return;
+			}
 			lock (RegisteredTorrents)
 			{
 				// save to db
 				if (RegisteredTorrents.Count > 0)
 				{
 					var scmd = DB.CreateCommand();
-					scmd.CommandText = "UPDATE fileinfo SET completed = completed + @c WHERE fid = @f";
+					scmd.CommandText = "UPDATE fileinfo SET completed = completed + @c, leechers = @l, seeders = @s WHERE fid = @f";
 					scmd.Prepare();
 					scmd.Parameters.Add(new MySqlParameter("@c", MySqlDbType.Int32));
+					scmd.Parameters.Add(new MySqlParameter("@l", MySqlDbType.Int32));
+					scmd.Parameters.Add(new MySqlParameter("@s", MySqlDbType.Int32));
 					scmd.Parameters.Add(new MySqlParameter("@f", MySqlDbType.Int32));
 					foreach (var fi in RegisteredTorrents)
 					{
-						if (fi.Value.fid > 0 && fi.Value.newcompleted > 0)
+						if (fi.Value.fid > 0 && (fi.Value.newcompleted > 0 || fi.Value.Leeching > 0 || fi.Value.Seeding > 0))
 						{
 							scmd.Parameters[0].Value = fi.Value.newcompleted;
-							scmd.Parameters[1].Value = fi.Value.fid;
+							scmd.Parameters[1].Value = fi.Value.Leeching;
+							scmd.Parameters[2].Value = fi.Value.Seeding;
+							scmd.Parameters[3].Value = fi.Value.fid;
 							scmd.ExecuteNonQuery();
 							fi.Value.newcompleted = 0;
 						}
@@ -74,17 +94,24 @@ namespace PoproTracker
 				}
 
 				var cmd = DB.CreateCommand();
-				cmd.CommandText = "SELECT fid, hash FROM fileinfo";
+				cmd.CommandText = "SELECT fid, hash, completed FROM fileinfo";
 				var reader = cmd.ExecuteReader();
 				RegisteredTorrents.Clear();
 				while (reader.Read())
 				{
-					var tfi = new TFileInfo
+					var hash = reader.GetString("hash");
+					if (AllowUnregisteredTorrent && RegisteredTorrents.ContainsKey(hash))
 					{
-						fid = reader.GetInt32("fid"),
-						hash = reader.GetString("hash")
-					};
-					RegisteredTorrents[tfi.hash] = tfi;
+						RegisteredTorrents[hash].fid = reader.GetInt32("fid");
+						RegisteredTorrents[hash].Completed = reader.GetInt32("completed");
+					}
+					else
+						RegisteredTorrents[hash] = new TFileInfo
+						{
+							fid = reader.GetInt32("fid"),
+							hash = hash,
+							Completed = reader.GetInt32("completed")
+						};
 				}
 				reader.Close();
 			}
@@ -93,7 +120,7 @@ namespace PoproTracker
 
 		BEDict TrackerRouter(string Action, HttpInput Get, string IP, string info_hash)
 		{
-			if (Action == "announce")
+			if (Action.StartsWith("announce"))
 			{
 				var Passkey = Get["passkey"].Value;
 				if (info_hash == null)
@@ -104,12 +131,15 @@ namespace PoproTracker
 				var peer_id = Get["peer_id"].Value;
 				if (peer_id == null)
 					throw new BEException("No peer_id provided.");
-				if (!RegisteredTorrents.ContainsKey(info_hash))
+				lock (RegisteredTorrents)
 				{
-					if (AllowUnregisteredTorrent)
-						throw new BEException("Unregistered torrent.");
-					else
-						RegisteredTorrents[info_hash] = new TFileInfo { fid = 0, hash = info_hash };
+					if (!RegisteredTorrents.ContainsKey(info_hash))
+					{
+						if (!AllowUnregisteredTorrent)
+							throw new BEException("Unregistered torrent.");
+						else
+							RegisteredTorrents[info_hash] = new TFileInfo { fid = 0, hash = info_hash };
+					}
 				}
 				var _xfi = RegisteredTorrents[info_hash];
 				lock (PeerList)
@@ -163,6 +193,10 @@ namespace PoproTracker
 								Port = Port
 							};
 						}
+						if (left == 0)
+							_xfi.Seeding++;
+						else
+							_xfi.Leeching++;
 						if (xevent == "completed")
 							_xfi.newcompleted++;
 						if (numwant > 0)
@@ -199,7 +233,44 @@ namespace PoproTracker
 				//if(PeerList.ContainsKey(
 				throw new BEException("Not implemented.");
 			}
-			throw new Exception();
+			else if(Action.StartsWith("scrape"))
+			{
+				if (info_hash == null)
+					throw new BEException("No info_hash provided.");
+				info_hash = BitConverter.ToString(HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash))).Replace("-", "").ToLower();
+				if(info_hash.Length != 40)
+					throw new BEException("Invalid info_hash length.");
+				lock (RegisteredTorrents)
+				{
+					if (!RegisteredTorrents.ContainsKey(info_hash))
+					{
+						if (!AllowUnregisteredTorrent)
+							throw new BEException("Unregistered torrent.");
+						else
+							RegisteredTorrents[info_hash] = new TFileInfo { fid = 0, hash = info_hash };
+					}
+				}
+				var _xfi = RegisteredTorrents[info_hash];
+
+				var hashdata = new Dictionary<BEString, IBE> {
+					{"complete", (BENumber)_xfi.Seeding},
+					{"incomplete", (BENumber)_xfi.Leeching},
+					{"downloaded", (BENumber)_xfi.Completed},
+				};
+				var files = new Dictionary<BEString, IBE> {
+					{HashPlace, (BEDict)hashdata}
+				};
+				var response = new Dictionary<BEString, IBE> {
+					{"files", (BEDict)files}
+				};
+
+				return response;
+
+				//if(PeerList.ContainsKey(
+				throw new BEException("Not implemented.");
+			}
+
+			throw new Exception(Action);
 		}
 
 
@@ -207,36 +278,53 @@ namespace PoproTracker
 		public override bool Process(IHttpRequest request, IHttpResponse response, HttpServer.Sessions.IHttpSession session)
 		{
 			string info_hash = null;
-			var m = Regex.Match(request.UriPath, "info_hash=([^&]+)&");
+			var m = Regex.Match(request.UriPath, "info_hash=([^&]+)");
 			if (m.Success)
 				info_hash = m.Groups[1].Value;
 			//request.
 			try
 			{
-				Debug("Incoming query");
-				var Action = request.UriParts[0];
+				var Action = request.UriParts[0].Trim();
+				if (request.UriParts.Length > 1 && (request.UriParts[1] == "announce" || request.UriParts[1] == "scrape"))
+					Action = request.UriParts[1];
+				if (Action == "" && request.UriPath.Contains("peer_id"))
+					Action = "announce";
 				var IP = request.RemoteEndPoint.Address.ToString();
 				var Result = TrackerRouter(Action, request.QueryString, IP, info_hash);
-				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(Result.Dump()));
+				var body = Result.Dump();
+				if (body.Contains(HashPlace))
+				{
+					var pos = body.IndexOf(HashPlace);
+					byte[] bodybytes = Encoding.UTF8.GetBytes(body);
+					HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash)).CopyTo(bodybytes, pos);
+					response.Body = new MemoryStream(bodybytes);
+				}
+				else
+					response.Body = new MemoryStream(Encoding.UTF8.GetBytes(Result.Dump()));
 			}
 			catch (BEException e)
 			{
 				Debug(e.Message);
-				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(e.Message));
+				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(e.ToString()));
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
-				Debug("Exception occurred");
+				Debug("Exception occurred: " + request.UriPath);
 				response.Status = HttpStatusCode.NotFound;
 			}
 			response.Send();
+			
+			response.Body = null;
 			return true;
 		}
-
+		object o = new object();
 		public void Debug(string Message)
 		{
-			Console.Write(DateTime.Now.ToString());
-			Console.WriteLine(" :" + Message);
+			lock (o)
+			{
+				Console.Write(DateTime.Now.ToString());
+				Console.WriteLine(" :" + Message);
+			}
 		}
 	}
 }

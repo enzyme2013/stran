@@ -15,7 +15,6 @@ namespace PoproLoader
 			Console.ReadLine();
 			pop.EndServer();
 			Console.WriteLine("Stopped");
-			Console.ReadLine();
 		}
 	}
 }
