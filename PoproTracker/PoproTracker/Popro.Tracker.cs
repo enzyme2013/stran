@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using HttpServer;
-using HttpServer.HttpModules;
 using System.Net;
 using System.IO;
 using System.Linq;
@@ -27,7 +25,7 @@ namespace PoproTracker
 			return dict.Dump();
 		}
 	}
-	public class PoproMod : HttpModule
+	public class PoproMod// : HttpModule
 	{
 		const string HashPlace = "####################";
 		bool AllowUnregisteredTorrent = true;
@@ -119,22 +117,22 @@ namespace PoproTracker
 			Debug("DB data exchange over.");
 		}
 
-		BEDict TrackerRouter(string Action, HttpInput Get, string IP, string info_hash)
+		BEDict TrackerRouter(string Action, Dictionary<string, string> Get, string IP, string info_hash)
 		{
 			if (Action.StartsWith("announce"))
 			{
 				AnnounceCount++;
 				if (AnnounceCount % 50 == 0)
 					Console.Title = string.Format("Tracker Status: A {0}   S {1}", AnnounceCount, ScrapeCount);
-				var Passkey = Get["passkey"].Value;
+				var Passkey = Get.ContainsKey("passkey") ? Get["passkey"] : "";
 				if (info_hash == null)
 					throw new BEException("No info_hash provided.");
 				info_hash = BitConverter.ToString(HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash))).Replace("-", "").ToLower();
-				if(info_hash.Length != 40)
+				if (info_hash.Length != 40)
 					throw new BEException("Invalid info_hash length.");
-				var peer_id = Get["peer_id"].Value;
-				if (peer_id == null)
+				if (!Get.ContainsKey("peer_id"))
 					throw new BEException("No peer_id provided.");
+				var peer_id = Get["peer_id"];
 				lock (RegisteredTorrents)
 				{
 					if (!RegisteredTorrents.ContainsKey(info_hash))
@@ -153,17 +151,35 @@ namespace PoproTracker
 				}
 
 				var ThisPeerList = PeerList[info_hash];
-				var xevent = Get["event"].Value;
+				var xevent = Get.ContainsKey("event") ? Get["event"] : "";
 				var peers = new List<IBE>();
 				int numwant, Port;
-				if (!int.TryParse(Get["numwant"].Value, out numwant))
+				try
+				{
+					numwant = Convert.ToInt32(Get["numwant"]);
+				}
+				catch (Exception)
+				{
 					numwant = 50;
-				if (!int.TryParse(Get["port"].Value, out Port))
+				}
+				try
+				{
+					Port = Convert.ToInt32(Get["port"]);
+				}
+				catch (Exception)
+				{
 					Port = 0;
-				var nopeerid = Get["no_peer_id"].Value == "1";
+				}
+				var nopeerid = Get.ContainsKey("no_peer_id") && (Get["no_peer_id"] == "1");
 				long left;
-				if (!long.TryParse(Get["left"].Value, out left))
+				try
+				{
+					left = Convert.ToInt32(Get["left"]);
+				}
+				catch (Exception)
+				{
 					left = 0;
+				}
 				lock (ThisPeerList)
 				{
 					if (xevent == "stopped")
@@ -237,7 +253,7 @@ namespace PoproTracker
 				//if(PeerList.ContainsKey(
 				throw new BEException("Not implemented.");
 			}
-			else if(Action.StartsWith("scrape"))
+			else if (Action.StartsWith("scrape"))
 			{
 				ScrapeCount++;
 				if (ScrapeCount % 10 == 0)
@@ -245,7 +261,7 @@ namespace PoproTracker
 				if (info_hash == null)
 					throw new BEException("No info_hash provided.");
 				info_hash = BitConverter.ToString(HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash))).Replace("-", "").ToLower();
-				if(info_hash.Length != 40)
+				if (info_hash.Length != 40)
 					throw new BEException("Invalid info_hash length.");
 				lock (RegisteredTorrents)
 				{
@@ -280,50 +296,6 @@ namespace PoproTracker
 			throw new Exception(Action);
 		}
 
-
-
-		public override bool Process(IHttpRequest request, IHttpResponse response, HttpServer.Sessions.IHttpSession session)
-		{
-			string info_hash = null;
-			var m = Regex.Match(request.UriPath, "info_hash=([^&]+)");
-			if (m.Success)
-				info_hash = m.Groups[1].Value;
-			//request.
-			try
-			{
-				var Action = request.UriParts[0].Trim();
-				if (request.UriParts.Length > 1 && (request.UriParts[1] == "announce" || request.UriParts[1] == "scrape"))
-					Action = request.UriParts[1];
-				if (Action == "" && request.UriPath.Contains("peer_id"))
-					Action = "announce";
-				var IP = request.RemoteEndPoint.Address.ToString();
-				var Result = TrackerRouter(Action, request.QueryString, IP, info_hash);
-				var body = Result.Dump();
-				if (body.Contains(HashPlace))
-				{
-					var pos = body.IndexOf(HashPlace);
-					byte[] bodybytes = Encoding.UTF8.GetBytes(body);
-					HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash)).CopyTo(bodybytes, pos);
-					response.Body = new MemoryStream(bodybytes);
-				}
-				else
-					response.Body = new MemoryStream(Encoding.UTF8.GetBytes(Result.Dump()));
-			}
-			catch (BEException e)
-			{
-				Debug(e.Message);
-				response.Body = new MemoryStream(Encoding.UTF8.GetBytes(e.ToString()));
-			}
-			catch (Exception e)
-			{
-				Debug("Exception occurred: " + request.UriPath);
-				response.Status = HttpStatusCode.NotFound;
-			}
-			response.Send();
-			
-			response.Body = null;
-			return true;
-		}
 		object o = new object();
 		public void Debug(string Message)
 		{
@@ -333,7 +305,69 @@ namespace PoproTracker
 				Console.WriteLine(" :" + Message);
 			}
 		}
+		public void MangooseProcess(MongooseConnection conn, MongooseRequestInfo ri)
+		{
+			string info_hash = null;
+			if (ri.QueryString != null)
+			{
+				var m = Regex.Match(ri.QueryString, "info_hash=([^&]+)");
+				if (m.Success)
+					info_hash = m.Groups[1].Value;
+			}
+			//request.
+			var UriPath = ri.UriPath;
+			var UriParts = UriPath.Trim('/').Split('/');
+			var Action = UriParts[0].Trim();
+			try
+			{
+				if (UriParts.Length > 1 && (UriParts[1] == "announce" || UriParts[1] == "scrape"))
+					Action = UriParts[1];
+				if (Action == "" && UriPath.Contains("peer_id"))
+					Action = "announce";
+				var IP = (new IPAddress(ri.remote_ip)).ToString();
+				var Result = TrackerRouter(Action, DecodeQueryString(ri.QueryString), IP, info_hash);
+				var body = Result.Dump();
+				if (body.Contains(HashPlace))
+				{
+					var pos = body.IndexOf(HashPlace);
+					byte[] bodybytes = Encoding.UTF8.GetBytes(body);
+					HttpUtility.UrlDecodeToBytes(Encoding.ASCII.GetBytes(info_hash)).CopyTo(bodybytes, pos);
+					conn.Send(bodybytes);
+				}
+				else
+					conn.Send(Encoding.UTF8.GetBytes(Result.Dump()));
+			}
+			catch (BEException e)
+			{
+				Debug(e.Message);
+				conn.Send(Encoding.UTF8.GetBytes(e.ToString()));
+			}
+			catch (Exception e)
+			{
+				Debug("Exception occurred: " + UriPath);
+				Debug(e.Message);
+				Debug(e.StackTrace);
+				conn.Send(HttpStatusCode.NotFound, new byte[] { });
+			}
+		}
+		private Dictionary<string, string> DecodeQueryString(string QueryString)
+		{
+			Dictionary<string, string> rt = new Dictionary<string, string>();
+			if (QueryString == null)
+				return rt;
+			QueryString = QueryString.TrimStart('=');
+			var KeyValues = QueryString.Split('&');
+			foreach (var KV in KeyValues)
+			{
+				var Pair = KV.Split('=');
+				if (Pair.Length == 2)
+					rt[Pair[0]] = Pair[1];
+			}
+			return rt;
+		}
+
 	}
+
 }
 
 /*

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using HttpServer;
 using System.Net;
 using System.IO;
 
@@ -9,39 +8,25 @@ namespace PoproTracker
 {
 	public class Popro
 	{
-		private HttpServer.HttpServer _server;
+		Mongoose web_server;
 		public PoproMod Mod = new PoproMod();
 		public void StartServer()
 		{
-			_server = new HttpServer.HttpServer();
-			_server.Add(Mod);
-			//_server.ExceptionThrown += new ExceptionHandler(_server_ExceptionThrown);
-			try
-			{
-				_server.Start(IPAddress.Any, 8000);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-				Console.WriteLine(e.StackTrace);
-			}
+			web_server = new Mongoose();
+
+			web_server.set_option("ports", "8000");
+			web_server.set_uri_callback("/*", new MongooseCallback(Mod.MangooseProcess));
+
 		}
 
 		void _server_ExceptionThrown(object source, Exception exception)
 		{
 			Console.WriteLine(exception.Message);
 		}
-		private void OnRequest(object source, RequestEventArgs args)
-		{
-			IHttpClientContext context = (IHttpClientContext)source;
-			IHttpRequest request = args.Request;
-			
-		}
 
 		public void EndServer()
 		{
 			Mod.Shutdown();
-			_server.Stop();
 		}
 	}
 }
