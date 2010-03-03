@@ -35,7 +35,7 @@ namespace libTravian
 				string status;
 				if(!UpCall.TD.Villages.ContainsKey(VillageID))
 				{
-					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.W);
+					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.E);
 					MarkDeleted = true;
 					return "UNKNOWN VID";
 				}
@@ -69,6 +69,16 @@ namespace libTravian
 			var CV = UpCall.TD.Villages[VillageID];
 			if(NextExec >= DateTime.Now)
 				return;
+			foreach (var x in CV.Buildings)
+			{
+				if (x.Value.Gid == 15 && CV.Buildings[x.Key].Level < 10)
+				{
+					UpCall.DebugLog("Please upgrade Main Building", DebugLevel.W);
+					MarkDeleted = true;
+					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+					return;
+				}
+			}
 			NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
 			Dictionary<string, string> Postdata = new Dictionary<string, string>(){
 				{"gid", "15"},
@@ -78,19 +88,17 @@ namespace libTravian
 			};
 
 			UpCall.PageQuery(VillageID, "build.php", Postdata);
-
+			UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Buildings, VillageID = VillageID });
+			
 			int lvl = CV.InBuilding[2] != null && CV.InBuilding[2].FinishTime > DateTime.Now ? CV.InBuilding[2].Level : -1;
 			if(lvl < 0)
-				UpCall.DebugLog("Unknown state: Destroy to -1", DebugLevel.W);
+				UpCall.DebugLog("Unknown state", DebugLevel.E);
 			if(lvl <= 0)
 			{
 				MarkDeleted = true;
+				UpCall.FetchVillageBuilding(VillageID);
 				UpCall.Dirty = true;
-				UpCall.CallStatusUpdate(this, new Travian.StatusChanged()
-				{
-					ChangedData = Travian.ChangedType.Queue,
-					VillageID = VillageID
-				});
+				UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 			}
 			UpCall.BuildCount();
 		}

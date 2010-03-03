@@ -84,6 +84,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(492, 468);
 			this.CloseButton = false;
+			this.CloseButtonVisible = false;
 			this.Controls.Add(this.listViewTroop);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
 									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop)

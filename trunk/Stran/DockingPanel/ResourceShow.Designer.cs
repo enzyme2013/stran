@@ -119,6 +119,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(472, 88);
 			this.CloseButton = false;
+			this.CloseButtonVisible = false;
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.Controls.Add(this.label5);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop)

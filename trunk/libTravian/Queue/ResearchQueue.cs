@@ -34,7 +34,7 @@ namespace libTravian
 				int timecost;
 				if(!UpCall.TD.Villages.ContainsKey(VillageID))
 				{
-					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.W);
+					UpCall.DebugLog("Unknown VillageID given in queue, cause to be deleted!", DebugLevel.E);
 					MarkDeleted = true;
 					return "UNKNOWN VID";
 				}

@@ -16,6 +16,8 @@ namespace Stran
         private Label[] lblMaxTroops;
         private RadioButton[] rdbRaidTypes;
         private RadioButton[] rdbSpyOptions;
+        private DateTime actionAt = DateTime.MinValue;
+        private int minimumInterval = 0;
         #endregion
 
         #region Constructor
@@ -61,6 +63,13 @@ namespace Stran
         {
             mui.RefreshLanguage(this);
             SuspendLayout();
+            string[] raidtypelist = this.mui._("raidtypelist").Split(',');
+            rdbTypeReinforce.Text = raidtypelist[0];
+            rdbAttackNormal.Text = raidtypelist[1];
+            rdbAttackRaid.Text = raidtypelist[2];
+            rdbSpyResource.Text = raidtypelist[3];
+            rdbSpyDefense.Text = raidtypelist[4];
+            this.nudMaxSlots.Maximum = Village.Buildings[39].Level * 5;
             if (this.Return != null)
             {
                 this.LoadTroopIcons();
@@ -183,6 +192,9 @@ namespace Stran
             task.MaxSlots = Convert.ToInt32(this.nudMaxSlots.Value);
             task.MultipeRaids = this.ckbMultipleRaids.Checked;
             task.Description = tbDesc.Text;
+            task.resumeTime = actionAt;
+            task.MinimumInterval = minimumInterval;
+            task.RandomRaid = this.ckbRandom.Checked;
 
             this.Return = task;
         }
@@ -317,5 +329,22 @@ namespace Stran
             }
         }
         #endregion
+		
+		private void ButtonTimingClick(object sender, EventArgs e)
+		{
+            ActionTiming tt = new ActionTiming
+            {
+                ActionAt = actionAt,
+                MinimumInterval = minimumInterval,
+                ActionTime = 0,
+                mui = mui
+            };
+
+            if (tt.ShowDialog() == DialogResult.OK)
+            {
+                actionAt = tt.ActionAt;
+                minimumInterval = tt.MinimumInterval;
+            }
+		}
     }
 }

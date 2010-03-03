@@ -36,7 +36,7 @@ namespace libTravian
 			get
 			{
 				string maxCount = this.MaxCount == 0 ? "inf" : this.MaxCount.ToString();
-				return String.Format("{0}/{1}=>{2}", this.Count, maxCount, this.Distribution);
+				return String.Format("{0}/{1}=>{2}", this.doCount, maxCount, this.Distribution);
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace libTravian
 
 			if (!IsValid)
 			{
-				UpCall.DebugLog("Invalid NPC trade task discarded: " + ToString(), DebugLevel.W);
+				UpCall.DebugLog("Invalid NPC trade task discarded: " + ToString(), DebugLevel.E);
 				RemoveQueuedTask();
 				return;
 			}
@@ -92,7 +92,7 @@ namespace libTravian
 			switch (returnCode)
 			{
 				case NpcTradeResult.Failure:
-					UpCall.DebugLog("NPC trade task has failed: " + ToString(), DebugLevel.W);
+					UpCall.DebugLog("NPC trade task has failed: " + ToString(), DebugLevel.E);
 					RemoveQueuedTask();
 					return;
 
@@ -102,8 +102,8 @@ namespace libTravian
 					break;
 
 				case NpcTradeResult.Success:
-					Count++;
-					if (MaxCount != 0 & Count >= MaxCount)
+					doCount++;
+					if (MaxCount != 0 & doCount >= MaxCount)
 					{
 						RemoveQueuedTask();
 						return;
@@ -291,7 +291,7 @@ namespace libTravian
 		/// Current number of repeats
 		/// </summary>
 		[Json]
-		public int Count { get; set; }
+		public int doCount { get; set; }
 
 		/// <summary>
 		/// A percentage p: an NPC trade won't happen unless at least p%

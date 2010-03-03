@@ -50,7 +50,7 @@ namespace Stran
 			CV = TravianData.Villages[FromVillageID];
 			foreach (var v in TravianData.Villages)
 				if (v.Key != FromVillageID)
-					comboBoxTargetVillage.Items.Add(v.Key + " " + v.Value.Coord + " " + v.Value.Name);
+					comboBoxTargetVillage.Items.Add(v.Key + " (" + v.Value.Coord + ") " + v.Value.Name);
 				else
 					comboBoxTargetVillage.SelectedIndex = comboBoxTargetVillage.Items.Count - 1;
 
@@ -59,10 +59,12 @@ namespace Stran
 				var ts = File.ReadAllLines("Transfer");
 				foreach (var t in ts)
 				{
-					string[] opt = t.Split(new char[] { '|' }, 3);
-					if (opt.Length < 3)
+					string[] opt = t.Split(new char[] { '|' }, 4);
+					if (opt.Length < 4)
 						continue;
 					int x = 0, y = 0;
+					if (opt[3] != UpCall.TD.Server)
+						continue;
 					if(int.TryParse(opt[0], out x) && int.TryParse(opt[1], out y))
 						if(Math.Abs(x) <= 400 && Math.Abs(y) <= 400)
 							comboBoxTargetVillage2.Items.Add(opt[0] + "|" + opt[1] + " " + opt[2]);

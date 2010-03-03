@@ -24,10 +24,11 @@ namespace libTravian
         {
             get
             {
-            	if (!Settlers && (wTroops[Wave].Troops == null))
+            	if (!Settlers && (wTroops[0].Troops == null))
                     return "N/A";
-                var s = string.Format("{4} ({0}/{1} - {2}/{3})", TargetID + 1, Targets.Count, Wave + 1, wWaves.Count, RaidTypeL[Raidtype]);
-                if (UpCall != null)
+            	var s = string.Format("{2} ({3})<{0}/{1}>", TargetID + 1, Targets.Count, RaidTypeL[Raidtype], Targets[TargetID].ToString());
+                /*
+            	if (UpCall != null)
                 {
                     for (int i = 0; i < wTroops.Count; i++)
                     {
@@ -38,6 +39,7 @@ namespace libTravian
                         }
                     }
                 }
+                */
                 return s;
             }
         }
@@ -47,6 +49,8 @@ namespace libTravian
             get
             {
                 int timecost = 0;
+                if (StartAt >= DateTime.Now)
+                	return Convert.ToInt32(StartAt.Subtract(DateTime.Now).TotalSeconds);
                 if (NextExec != DateTime.MinValue && NextExec > DateTime.Now)
                     timecost = Math.Max(timecost, Convert.ToInt32(NextExec.Subtract(DateTime.Now).TotalSeconds));
                 return timecost;
@@ -59,8 +63,11 @@ namespace libTravian
                 return;
             if (Targets[TargetID].IsEmpty)
             {
-                UpCall.DebugLog("Target Is Error!!", DebugLevel.F);
-                MarkDeleted = true;
+                UpCall.DebugLog("Error Target!!", DebugLevel.E);
+                if (TargetID == Targets.Count - 1)
+                	MarkDeleted = true;
+                else
+                	TargetID++;
                 return;
             }
             if (Settlers)
@@ -81,7 +88,7 @@ namespace libTravian
                 }
                 else
                 {
-                    UpCall.DebugLog("Unable to Settlers", DebugLevel.F);
+                    UpCall.DebugLog("Unable to sent settlers", DebugLevel.W);
                 }
                 MarkDeleted = true;
                 return;
@@ -123,9 +130,8 @@ namespace libTravian
             		var result = UpCall.PageQuery(VillageID, "a2b.php", PostData);
             		if (result.Contains("<p class=\"error\">"))
             		{
-            			UpCall.DebugLog("Target is Error!!", DebugLevel.W);
-            			MarkDeleted = true;
-            			return;
+            			UpCall.DebugLog("Error Target or No Enough Troops", DebugLevel.E);
+            			break;
             		}
             		Match m20;
             		m20 = Regex.Match(result, "type=\"hidden\" name=\"timestamp\" value=\"([^>]*?)\"");
@@ -152,9 +158,9 @@ namespace libTravian
             				PostDataF["t4"] = wTroops[w].Troops[3].ToString();
             			else
             			{
-            				UpCall.DebugLog("NO SCOUT TROOPS", DebugLevel.W);
+            				UpCall.DebugLog("No Scout!!", DebugLevel.W);
             				MarkDeleted = true;
-            				return;
+            				break;
             			}
             		}
             		else
@@ -186,9 +192,13 @@ namespace libTravian
             	}
             }
             //POST ALL Attack
+            if (PostDataALL == null || PostDataALL.Count == 0)
+            {
+            	TargetID++;
+            	return;
+            }
             for (int i = 0; i < PostDataALL.Count; i++)
             	UpCall.PageQuery(VillageID, "a2b.php", PostDataALL[i]);
-            Wave++;
             if (TargetID == Targets.Count - 1)
             {
             	MarkDeleted = true;
@@ -206,14 +216,10 @@ namespace libTravian
         public List<TPoint> Targets { get; set; }
         [Json]
         public List<TTInfo> wTroops { get; set; }
-//        [Json]
-//        public List<int[]> wTroops { get; set; }
-        [Json]
-        public int Wave { get; set; }
         [Json]
         public int VillageID { get; set; }
-        [Json]
-        public int Count { get; set; }
+//        [Json]
+//        public int doCount { get; set; }
 //        [Json]
 //        public int MaxCount { get; set; }
         [Json]
@@ -239,6 +245,8 @@ namespace libTravian
 
         [Json]
         public int MinimumInterval { get; set; }
+        [Json]
+        public DateTime StartAt {get; set;}
 
         private Random rand = new Random();
         /// <summary>

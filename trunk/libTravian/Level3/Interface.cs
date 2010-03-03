@@ -79,5 +79,11 @@ namespace libTravian
 			t.Name = "Cancel";
 			t.Start(new CancelOption() { VillageID = VillageID, Key = Key });
 		}
+		public void Rename(int VillageID, string VillageName)
+		{
+			Thread t = new Thread(new ParameterizedThreadStart(doRenameWrapper));
+			t.Name = "Rename";
+			t.Start(new RenameOption() { VillageID = VillageID, VillageName = VillageName });
+		}
 	}
 }

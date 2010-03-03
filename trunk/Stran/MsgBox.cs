@@ -40,7 +40,7 @@ namespace Stran
 			// NOT SURE TO WORK. DISABLED FOR SAFE.
 			CopyToClipboard(textBox1.Text);
 			//Clipboard.SetText(textBox1.Text);
-			MessageBox.Show("Message copied to clipboard.", Text);
+			MessageBox.Show("资料已经复制至剪贴簿.", Text);
 		}
 
 		private void FatalError_Load(object sender, EventArgs e)

@@ -148,6 +148,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(392, 368);
 			this.CloseButton = false;
+			this.CloseButtonVisible = false;
 			this.Controls.Add(this.listViewBuilding);
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
