@@ -31,7 +31,11 @@ namespace libTravian
         /// When the troops will return
         /// </summary>
         [Json]
-        public DateTime resumeTime = DateTime.MinValue;
+        public DateTime resumeTime {get; set;}
+        [Json]
+        public int MinimumInterval { get; set; }
+        [Json]
+        public bool RandomRaid {get; set;}
 
         #endregion
 
@@ -86,7 +90,7 @@ namespace libTravian
                 {
                     return string.Format(
                         "{0}:{1}/{2}:{3} {4} {5}",
-                        this.Count + 1,
+                        this.doCount + 1,
                         this.TargetID + 1,
                         this.MaxCount == 0 ? "∞" : this.MaxCount.ToString(),
                         this.Targets.Count,
@@ -161,7 +165,7 @@ namespace libTravian
         public bool MultipeRaids { get; set; }
 
         [Json]
-        public int Count { get; set; }
+        public int doCount { get; set; }
 
         [Json]
         public int TargetID { get; set; }
@@ -242,7 +246,7 @@ namespace libTravian
                     break;
                 case DoRaidResult.DeleteVillage:
                     this.Targets.RemoveAt(this.TargetID);
-                    if (this.Targets.Count == 0)
+                    if (this.Targets == null && this.Targets.Count == 0)
                     {
                         this.Delete();
                     }
@@ -256,7 +260,7 @@ namespace libTravian
                     throw new Exception(String.Format("Unhandled DoRaidResult {0}", result)); 
             }
 
-            this.MinimumDelay = this.RandomDelay(30, 120);
+            this.MinimumDelay = this.MinimumInterval + this.RandomDelay(30, 120);
         }
         #endregion
 
@@ -272,6 +276,9 @@ namespace libTravian
             this.MaxSlots = settings.MaxSlots;
             this.MultipeRaids = settings.MultipeRaids;
             this.Description = settings.Description;
+            this.resumeTime = settings.resumeTime;
+            this.MinimumInterval = settings.MinimumInterval;
+            this.RandomRaid = settings.RandomRaid;
 
             if (this.TargetID >= this.Targets.Count)
             {
@@ -413,13 +420,20 @@ namespace libTravian
         private void NextTarget()
         {
             this.UpCall.TD.Dirty = true;
-            if (++this.TargetID >= this.Targets.Count)
+            if (!RandomRaid)
             {
-                this.TargetID = 0;
-                if (++this.Count >= this.MaxCount && this.MaxCount != 0)
-                {
-                    this.Delete();
-                }
+	            if (++this.TargetID >= this.Targets.Count)
+	            {
+	                this.TargetID = 0;
+	            }
+            }
+            else
+            {
+            	this.TargetID = random.Next(0, this.Targets.Count);
+            }
+            if (++this.doCount >= this.MaxCount && this.MaxCount != 0)
+            {
+            	this.Delete();
             }
         }
 

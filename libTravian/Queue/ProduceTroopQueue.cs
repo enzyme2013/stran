@@ -40,7 +40,7 @@ namespace libTravian
 		{
 			get
 			{
-				string count = this.Count.ToString() + "/";
+				string count = this.doCount.ToString() + "/";
 				count += this.MaxCount == 0 ? "∞" : this.MaxCount.ToString();
 				if(LastExec != DateTime.MinValue)
 					return string.Format("{2}, Last: {0}, Next: After {1}", LastExec.ToShortTimeString(), NextExec.ToShortTimeString(), count);
@@ -87,14 +87,16 @@ namespace libTravian
 
 			if (GRt && (Aid == 7 || Aid == 8) || Gid == 0)
 			{
-				UpCall.DebugLog("Not appropriate kind of troop to produce, deleted.", DebugLevel.W);
+				UpCall.DebugLog("Not appropriate kind of troop to produce, deleted.", DebugLevel.E);
 				MarkDeleted = true;
 				return;
 			}
 			string data = UpCall.PageQuery(VillageID, "build.php?gid=" + Gid);
+			if (data == null)
+				return;
 			if (!data.Contains(string.Format("name=\"t{0}\"", Aid)))
 			{
-				UpCall.DebugLog("Cannot produce this kind of troop before research it.", DebugLevel.W);
+				UpCall.DebugLog("Cannot produce this kind of troop before research it.", DebugLevel.E);
 				MarkDeleted = true;
 				return;
 			}
@@ -119,7 +121,7 @@ namespace libTravian
 				p_id = m.Groups[1].Value;
 			else
 			{
-				UpCall.DebugLog("Parse id error!", DebugLevel.F);
+				UpCall.DebugLog("Parse id error!", DebugLevel.E);
 				MarkDeleted = true;
 				return;
 			}
@@ -128,7 +130,7 @@ namespace libTravian
 				p_z = m.Groups[1].Value;
 			else
 			{
-				UpCall.DebugLog("Parse z error!", DebugLevel.F);
+				UpCall.DebugLog("Parse z error!", DebugLevel.E);
 				MarkDeleted = true;
 				return;
 			}
@@ -137,7 +139,7 @@ namespace libTravian
 				p_a = m.Groups[1].Value;
 			else
 			{
-				UpCall.DebugLog("Parse a error!", DebugLevel.F);
+				UpCall.DebugLog("Parse a error!", DebugLevel.E);
 				MarkDeleted = true;
 				return;
 			}
@@ -152,8 +154,8 @@ namespace libTravian
 			data = UpCall.PageQuery(VillageID, "build.php", PostData);
 			LastExec = DateTime.Now;
 			NextExec = LastExec.AddSeconds(MinimumInterval);
-			Count++;
-			if (MaxCount != 0 && Count >= MaxCount)
+			doCount++;
+			if (MaxCount != 0 && doCount >= MaxCount)
 				MarkDeleted = true;
 		}
 
@@ -190,7 +192,7 @@ namespace libTravian
 		/// How many transfers been done so far
 		/// </summary>
 		[Json]
-		public int Count { get; set; }
+		public int doCount { get; set; }
 
 		/// <summary>
 		/// Minimum interval between two actions in seconds

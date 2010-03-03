@@ -28,7 +28,6 @@ namespace Stran
         private int minimumInterval = 0;
         public List<TPoint> iTargets = new List<TPoint>();
         public List<TTInfo> nTargets = new List<TTInfo>();
-//        public List<int[]> nTargets = new List<int[]>();
         public List<int> nWaves = new List<int>();
         public bool tablelayoutdone = false;
         public AttackQueue Return { get; private set; }
@@ -124,7 +123,9 @@ namespace Stran
                     wave.Maximum = 50;
                     wave.Minimum = 0;
                     wave.Increment = 1;
+                    wave.TextAlign = HorizontalAlignment.Right;
                 }
+                Waves[0].Value = 1;
                 for (int i = 0; i < 11; i++)
                 {
                     Label l1 = new Label();
@@ -149,8 +150,10 @@ namespace Stran
                         nud.TabIndex = i;
                         nud.Maximum = Troops[i];
                         nud.Minimum = 0;
-                        nud.ThousandsSeparator = true;
-                        nud.Increment = Math.Max(1, (decimal)(Troops[i] / 20));
+                        nud.ThousandsSeparator = false;
+                        nud.TextAlign = HorizontalAlignment.Right;
+                        nud.Increment = Math.Max(1, (decimal)(Troops[i] / 10));
+                        nud.Enabled = Troops[i] != 0;
                     }
                 }
                 ResumeLayout();
@@ -158,23 +161,14 @@ namespace Stran
             }
         }
 
-		private void button1_Click(object sender, EventArgs e)
+		private void buttonOK_Click(object sender, EventArgs e)
 		{
             if (this.txtX.Text == "" && this.txtY.Text == "" && this.textCoord.Text == "")
                 return;
-            else if(this.txtX.Text != "" || this.txtY.Text != "")
+            else if(this.textCoord.Text != "")
             {
-                int x = 0, y = 0;
-                Int32.TryParse(this.txtX.Text, out x);
-                Int32.TryParse(this.txtY.Text, out y);
-                var aTargets = new TPoint(x, y);
-                iTargets.Add(aTargets);
-            }
-            else
-            {
-                if (!this.textCoord.Text.Contains(","))
-                    return;
-                string[] multipletargets = this.textCoord.Text.Split(',');
+                string multicoord = this.textCoord.Text.Replace(" ","").Replace("(","").Replace(")","");
+                string[] multipletargets = multicoord.Split(',');
                 for (int i = 0; i < multipletargets.Length; i++)
                 {
                     if (!multipletargets[i].Contains("|"))
@@ -185,10 +179,28 @@ namespace Stran
                     Int32.TryParse(id[1], out y1);
                     TPoint tid = new TPoint(x1, y1);
                     if (!tid.IsEmpty)
-                    iTargets.Add(tid);
+                    	iTargets.Add(tid);
                 }
             }
-
+            else if(this.txtX.Text != "" || this.txtY.Text != "")
+            {
+                int x = 0, y = 0;
+                Int32.TryParse(this.txtX.Text, out x);
+                Int32.TryParse(this.txtY.Text, out y);
+                var aTargets = new TPoint(x, y);
+                if (!aTargets.IsEmpty)
+                	iTargets.Add(aTargets);
+            }
+            else
+            {
+            	UpCall.DebugLog("No Attack Target!", DebugLevel.W);
+            	return;
+            }
+            if (iTargets == null || iTargets.Count == 0)
+            {
+            	UpCall.DebugLog("Attack Coord is Error!", DebugLevel.W);
+            	return;
+            }
             for (int i = 0; i < 11; i++)
             {
             	int totalattack = Convert.ToInt32(this.numericUpDown1.Value) * iTargets.Count;
@@ -204,7 +216,7 @@ namespace Stran
                 totalraidtroops[i] = totaltroops;
                 if ((totalraidtroops[i] * totalattack) > Troops[i])
             		{
-            			var Nt = MessageBox.Show("No Enough Troop");
+            			var Nt = MessageBox.Show("没有足够的军队");
             			return;
             		}
             }
@@ -222,7 +234,6 @@ namespace Stran
             	{
             		TTInfo mTargets = new TTInfo
             		{
-//            			Tribe = wv,
             			Troops = raidtroops
             		};
             		nWaves.Add(wv);
@@ -237,20 +248,17 @@ namespace Stran
 
             Return = new AttackQueue
 			{
-//				Troops = raidtroops,
                 Raidtype = this.checkBox2.Checked ? 1 : this.comboBox3.SelectedIndex + 2,
 				Targets = iTargets,
                 wTroops = nTargets,
                 wWaves = nWaves,
                 VillageID = VillageID,
-//                Tribe = Tribe,
-//                dl = this.dl,
 //                MaxCount = Convert.ToInt32(this.numericUpDown1.Value),
                 kata = this.comboBox1.SelectedIndex,
                 kata2 = this.comboBox2.SelectedIndex,
                 Settlers = this.checkBox2.Checked,
                 MinimumInterval = minimumInterval,
-				NextExec = actionAt,
+				StartAt = actionAt,
 			};
 		}
 

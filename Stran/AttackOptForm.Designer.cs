@@ -63,7 +63,7 @@ namespace Stran
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
 			this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 8);
@@ -87,7 +87,7 @@ namespace Stran
 			// label2
 			// 
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(73, 1);
+			this.label2.Location = new System.Drawing.Point(72, 1);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(49, 37);
 			this.label2.TabIndex = 1;
@@ -100,7 +100,7 @@ namespace Stran
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.Location = new System.Drawing.Point(4, 1);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(62, 37);
+			this.label1.Size = new System.Drawing.Size(61, 37);
 			this.label1.TabIndex = 0;
 			this.label1.Tag = "troopname";
 			this.label1.Text = "troopname troopname";
@@ -116,7 +116,7 @@ namespace Stran
 			this.button1.Tag = "ok";
 			this.button1.Text = "ok";
 			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.button1.Click += new System.EventHandler(this.buttonOK_Click);
 			// 
 			// button2
 			// 
@@ -291,7 +291,11 @@ namespace Stran
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "AttackOptForm";
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Tag = "SendTroops";
 			this.Text = "AttackOptForm";

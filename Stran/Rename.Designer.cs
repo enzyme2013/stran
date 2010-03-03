@@ -36,7 +36,7 @@
         	// 
         	// lboldVillagename
         	// 
-        	this.lboldVillagename.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.lboldVillagename.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         	this.lboldVillagename.Location = new System.Drawing.Point(6, 25);
         	this.lboldVillagename.Name = "lboldVillagename";
         	this.lboldVillagename.Size = new System.Drawing.Size(270, 30);
@@ -89,9 +89,12 @@
         	this.Controls.Add(this.lboldVillagename);
         	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
         	this.MaximizeBox = false;
+        	this.MinimizeBox = false;
         	this.Name = "Rename";
+        	this.ShowIcon = false;
+        	this.ShowInTaskbar = false;
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-        	this.Tag = "Rename";
+        	this.Tag = "Renamec";
         	this.Text = "Rename";
         	this.Load += new System.EventHandler(this.Rename_Load);
         	this.ResumeLayout(false);

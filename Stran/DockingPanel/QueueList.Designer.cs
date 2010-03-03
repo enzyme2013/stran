@@ -86,6 +86,7 @@
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(507, 418);
 			this.CloseButton = false;
+			this.CloseButtonVisible = false;
 			this.Controls.Add(this.listViewQueue);
 			this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight)
 									| WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop)

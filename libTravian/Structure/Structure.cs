@@ -84,9 +84,17 @@ namespace libTravian
 
 	public class TIGM
 	{
-		string Sender { get; set; }
-		string Subject { get; set; }
-		string Text { get; set; }
+		public int ID {get; set;}
+		public bool NEW {get; set;}
+		public string Title {get; set;}
+		public string SentAccount {get; set;}
+		public string Date {get; set;}
+		public string Content {get;set;}
+		public TIGM()
+		{
+			ID = 0;
+			NEW = false;
+		}
 	}
 	/*
 	public class TStatus

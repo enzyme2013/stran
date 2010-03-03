@@ -40,9 +40,9 @@ namespace libTravian
 		{
 			get
 			{
-				if(MaxCount != 0 && Count >= MaxCount)
+				if(MaxCount != 0 && doCount >= MaxCount)
 					RemoveQueuedTask();
-				string count = this.Count.ToString() + "/";
+				string count = this.doCount.ToString() + "/";
 				string mask = (this.NoCrop ? "NC " : "") + (this.ForceGo ? "FG " : "");
 				count += this.MaxCount == 0 ? "∞" : this.MaxCount.ToString();
 				CalculateResourceAmount(UpCall.TD, VillageID);
@@ -109,6 +109,12 @@ namespace libTravian
 				this.RemoveQueuedTask();
 				return;
 			}
+			if(TargetVillageID != 0 && !UpCall.TD.Villages.ContainsKey(TargetVillageID))
+			{
+				UpCall.DebugLog(string.Format("Target Village (\"{0}\") is captured by others or isn't existed", TargetPos.ToString()), DebugLevel.E);
+				this.RemoveQueuedTask();
+				return;
+			}
 
 			if(MinimumDelay > 0)
 			{
@@ -129,7 +135,7 @@ namespace libTravian
 				var temp = NeedCrop(UpCall.TD);
 				if(temp != null)
 				{
-					UpCall.DebugLog("NeedCrop rule on use. Force crop transfer.", DebugLevel.I);
+						UpCall.DebugLog("NeedCrop rule on use. Force crop transfer.", DebugLevel.W);
 					toTransfer = temp;
 				}
 				else if(ExceedTargetCapacity(UpCall.TD))
@@ -148,9 +154,13 @@ namespace libTravian
 			{
 				var CV = UpCall.TD.Villages[VillageID];
 				MinimumDelay = Math.Max(MinimumInterval, timeCost * 2 + 30);
-				Count++;
-				if(MaxCount != 0 && Count >= MaxCount)
+				doCount++;
+				if(MaxCount != 0 && doCount >= MaxCount)
 					RemoveQueuedTask();
+			}
+			else if (timeCost == -5)
+			{
+				RemoveQueuedTask();
 			}
 		}
 
@@ -163,6 +173,7 @@ namespace libTravian
 		}
 
 		int retrycount = 0;
+		int refreshcount = 0;
 
 		/// <summary>
 		/// Dispatch a transportation of a given amount of resource from one village to a given destiantion
@@ -197,7 +208,7 @@ namespace libTravian
 			if(result.Contains("Popup(2,5)") && Amount.TotalAmount > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
 			{
 				resumeTime = DateTime.Now.AddSeconds(rand.Next(200 + retrycount * 20, 300 + retrycount * 30));
-				UpCall.DebugLog("0:00:0?, Will retry...", DebugLevel.I);
+				UpCall.DebugLog("0:00:0?, Will retry...", DebugLevel.W);
 				return -2;
 			}
 			if(Amount.TotalAmount > CV.Market.SingleCarry * CV.Market.ActiveMerchant)
@@ -206,11 +217,11 @@ namespace libTravian
 				if(retrycount > 5)
 				{
 					UpCall.DebugLog(string.Format("Transfer cannot go on: MCarry({0}) * MCount({1}) < Amount({2})", CV.Market.SingleCarry, CV.Market.ActiveMerchant, Amount.TotalAmount), DebugLevel.W);
-					return -2; // Beyond transfer ability
+					return -5; // Beyond transfer ability
 				}
 				else
 				{
-					UpCall.DebugLog("Error on 'ActiveMerchant'! Will retry...", DebugLevel.I);
+					UpCall.DebugLog("Error on 'ActiveMerchant'! Will retry...", DebugLevel.W);
 					resumeTime = DateTime.Now.AddSeconds(rand.Next(500 + retrycount * 20, 800 + retrycount * 30));
 					CV.Market.ActiveMerchant = Math.Min(Amount.TotalAmount / CV.Market.SingleCarry + 1, CV.Market.MaxMerchant);
 					return -2;
@@ -229,6 +240,21 @@ namespace libTravian
 
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);
 
+			if(result.Contains("<p class=\"error\">"))
+			{
+				refreshcount++;
+				if (refreshcount > 2)
+				{
+					UpCall.DebugLog("Target Village (" + TargetPos.ToString() +") isn't existed", DebugLevel.E);
+					return -5;
+				}
+				else
+				{
+					UpCall.DebugLog("Data isn't refreshed?! Will retry...", DebugLevel.W);
+					return -2;
+				}
+			}
+			refreshcount = 0;
 			if(result == null)
 				return -1;
 			m = Regex.Match(result, "name=\"sz\" value=\"(\\d+)\"");
@@ -245,21 +271,8 @@ namespace libTravian
 			{
 				// calc market speed
 				var distance = CV.Coord * TargetPos;
-				UpCall.TD.Dirty = true;
 				UpCall.TD.MarketSpeed = Convert.ToInt32(Math.Round(distance * 3600 / TimeCost));
-				/*
-				if(DB.Instance.GetInt(UpCall.TD.Server, "MarketSpeedX", -1) == -1)
-				{
-					int StdSpeed;
-					if(UpCall.TD.Tribe == 1)
-						StdSpeed = 16;
-					else if(UpCall.TD.Tribe == 2)
-						StdSpeed = 12;
-					else
-						StdSpeed = 24;
-					DB.Instance.SetInt(UpCall.TD.Server, "MarketSpeedX", UpCall.TD.MarketSpeed / StdSpeed);
-				}
-				 */
+				UpCall.TD.Dirty = true;
 			}
 			UpCall.JustTransferredData = Amount;
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);
@@ -327,7 +340,7 @@ namespace libTravian
 		/// How many transfers been done so far
 		/// </summary>
 		[Json]
-		public int Count { get; set; }
+		public int doCount { get; set; }
 
 		/// <summary>
 		/// Resource distribution options
@@ -424,7 +437,6 @@ namespace libTravian
 
 			return false;
 		}
-		[Obsolete("Don't use this before fixing")]
 		private TResAmount NeedCrop(Data travianData)
 		{
 			return null;
@@ -450,7 +462,7 @@ namespace libTravian
 			if(destination.Resource[3].Produce >= 0)
 			{
 				if(UpCall != null)
-					UpCall.DebugLog("Target Produce >= 0, no need crop rule.", DebugLevel.I);
+					UpCall.DebugLog("Target Produce >= 0, no need crop rule.", DebugLevel.W);
 				return null;
 			}
 
@@ -472,7 +484,7 @@ namespace libTravian
 				return new TResAmount(0, 0, 0, ResourceAmount.TotalAmount);
 			}
 			if(UpCall != null)
-				UpCall.DebugLog("Target village don't need crop, no need crop rule.", DebugLevel.I);
+				UpCall.DebugLog("Target village don't need crop, no need crop rule.", DebugLevel.W);
 
 			return null;
 		}
@@ -503,7 +515,6 @@ namespace libTravian
 			}
 		}
 
-		[Obsolete("Not implemented well")]
 		private void BalanceSourceTime(Data travianData, int VillageID)
 		{
 			// TODO: FIXME

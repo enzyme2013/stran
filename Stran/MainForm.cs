@@ -39,6 +39,7 @@ namespace Stran
 
 		//public static readonly string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击力", "防御力" };
 		public static string[] tribelist = new string[] { "自动探测", "罗马", "日尔曼", "高卢" };
+        public bool CloseMainform = false;
 		public MainForm()
 		{
 			InitializeComponent();
@@ -47,7 +48,7 @@ namespace Stran
 			AssemblyName aName = myAsm.GetName();
 			Version v = aName.Version;
 			//int rev = Convert.ToInt32(svnid.Split(' ')[1]);
-			VERSION = Text = string.Format("Stran {0}.{1}.{2} [2009-12-18 Stran 开发版本]", v.Major, v.Minor, v.Build);
+			VERSION = Text = string.Format("Stran {0}.{1}.{2} [{3} Stran 开发版本]", "1", "4", "0.5", File.GetLastWriteTime("Stran.exe").ToString("yyyy-MM-dd"));
 			notifyIcon1.Text = Text;
 			Buildings.Init();
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
@@ -148,6 +149,20 @@ namespace Stran
 						break;
 				}
 			}
+            if (Options.ContainsKey("close")) //取消关闭提醒
+            {
+                char clo = Options["close"].Trim()[0];
+                switch (clo)
+                {
+                    case 'y':
+                    case 'Y':
+                    case 't':
+                    case 'T':
+                    case '1':
+                        CloseMainform = true;
+                        break;
+                }
+            }
 
             if (!Options.ContainsKey("NoRaid2to7"))
             {
@@ -177,9 +192,12 @@ namespace Stran
 		}
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if(MessageBox.Show(mui._("reallyexittext"), mui._("reallyclosecap"),
-				MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.No)
-				e.Cancel = true;
+            if (!CloseMainform)
+            {
+                if (MessageBox.Show(mui._("reallyexittext"), mui._("reallyclosecap"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                    e.Cancel = true;
+            }
 		}
 
 		private void saveAccountInfo()

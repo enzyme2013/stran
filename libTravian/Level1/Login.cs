@@ -40,17 +40,17 @@ namespace libTravian
 				string data = wc.DownloadString("/");
 				if (!data.Contains("Travian"))
 				{
-					DebugLog("Cannot visit travian website!", DebugLevel.F);
+					DebugLog("Cannot visit travian website!", DebugLevel.E);
 					return false;
 				}
-				string userkey, passkey, alkey;
+				string userkey, passkey, alkey, alkey_value;
 				Match m;
 				m = Regex.Match(data, "type=\"text\" name=\"(\\S+?)\"");
 				if (m.Success)
 					userkey = m.Groups[1].Value;
 				else
 				{
-					DebugLog("Parse userkey error!", DebugLevel.F);
+					DebugLog("Parse userkey error!", DebugLevel.E);
 					return false;
 				}
 				m = Regex.Match(data, "type=\"password\" name=\"(\\S+?)\"");
@@ -58,31 +58,36 @@ namespace libTravian
 					passkey = m.Groups[1].Value;
 				else
 				{
-					DebugLog("Parse passkey error!", DebugLevel.F);
+					DebugLog("Parse passkey error!", DebugLevel.E);
 					return false;
 				}
-				MatchCollection ms = Regex.Matches(data, "<input type=\"hidden\" name=\"(\\S+?)\" value");
+				MatchCollection ms = Regex.Matches(data, "<input type=\"hidden\" name=\"(.*?)\" value=\"(.*?)\"");
 				if (ms.Count > 0)
+				{
 					alkey = ms[ms.Count - 1].Groups[1].Value;
+					alkey_value = ms[ms.Count - 1].Groups[2].Value;
+				}
 				else
 				{
-					DebugLog("Parse alkey error!", DebugLevel.F);
+					DebugLog("Parse alkey error!", DebugLevel.E);
 					return false;
 				}
+				Random rand = new Random();
 				Dictionary<string, string> PostData = new Dictionary<string, string>();
 				PostData["w"] = "1024:768";
 				PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
 				PostData[userkey] = Username;
 				PostData[passkey] = Password;
-				PostData[alkey] = "";
-				PostData["s1.x"] = "0";
-				PostData["s1.y"] = "0";
-
-				string result = this.pageQuerier.PageQuery(0, "dorf1.php?ok", PostData, false, true);
+				PostData[alkey] = alkey_value;
+            	PostData["s1.x"] = rand.Next(40, 70).ToString();
+            	PostData["s1.y"] = rand.Next(3, 17).ToString();
+            	PostData["s1"] = "login";
+				
+				string result = this.pageQuerier.PageQuery(0, "dorf1.php", PostData, false, true);
 
 				if (result.Contains("login"))
 				{
-					DebugLog("Username or Password error!", DebugLevel.F);
+					DebugLog("Username or Password error!", DebugLevel.E);
 					//MessageBox.Show("Login failed.");
 					return false;
 				}

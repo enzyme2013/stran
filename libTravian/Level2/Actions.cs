@@ -35,7 +35,7 @@ namespace libTravian
 					}
 					catch (Exception ex)
 					{
-						DebugLog(ex, DebugLevel.W);
+						DebugLog(ex, DebugLevel.F);
 					}
 					try
 					{
@@ -48,14 +48,14 @@ namespace libTravian
 					}
 					catch(Exception ex)
 					{
-						DebugLog(ex, DebugLevel.W);
+						DebugLog(ex, DebugLevel.F);
 					}
 				}
 			}
 			catch (InvalidOperationException e)
 			{
 				// Good bye! Collection was modified; enumeration operation may not execute.
-				DebugLog(e, DebugLevel.I);
+				DebugLog(e, DebugLevel.F);
 			}
 			if (NextExec > DateTime.Now)
 				return;
@@ -121,12 +121,15 @@ namespace libTravian
 								break;
 							case "NpcTradeQueue":
 								break;
+								/*
 							case "RaidQueue":
                                 if (CV.isTroopInitialized == 0)
                                 {
                                     CV.InitializeTroop();
                                     continue;
                                 }
+                                else if (CV.isTroopInitialized == 1)
+                                	continue;
 								break;
 							case "AttackQueue":
                                 if (CV.isTroopInitialized == 0)
@@ -134,7 +137,10 @@ namespace libTravian
                                     CV.InitializeTroop();
                                     continue;
                                 }
+                                else if (CV.isTroopInitialized == 1)
+                                	continue;
 								break;
+								*/
 						}
 						if(task.CountDown <= 0)
 							task.Action();
@@ -147,7 +153,8 @@ namespace libTravian
 			catch(InvalidOperationException e)
 			{
 				// Good bye! Collection was modified; enumeration operation may not execute.
-				DebugLog(e, DebugLevel.I);
+				string data = (object) e as string;
+				DebugLog("Warning!! Queue list was changed", DebugLevel.F);
 			}
 			try 
 			{

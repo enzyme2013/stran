@@ -84,6 +84,20 @@ namespace libTravian
                 return new TResAmount(capacity);
             }
         }
+        
+        public TResAmount ResourceCurrAmount
+        {
+        	get
+        	{
+                int[] capacity = new int[this.Resource.Length];
+                for (int i = 0; i < capacity.Length; i++)
+                {
+                    capacity[i] = this.Resource[i].CurrAmount;
+                }
+
+                return new TResAmount(capacity);
+        	}
+        }
 
         public void InitializeBuilding()
         {
@@ -732,7 +746,8 @@ namespace libTravian
                 {
                     x.MType = TMType.MyBack;
                     var distance = CV.Coord * x.Coord;
-                    var time = distance * 3600 / MarketSpeed;
+                    int speed = MarketSpeed == 0 ? 24 : MarketSpeed;
+                    var time = distance * 3600 / speed;
                     try
                     {
                         x.FinishTime = x.FinishTime.AddSeconds(time);
@@ -777,6 +792,7 @@ namespace libTravian
             }
         }
     }
+    
     public enum TMType
     {
         MyOut,
@@ -904,8 +920,8 @@ namespace libTravian
 	        	foreach (TTInfo troop in this.Troops)
 	        	{
 	        		var vname = troop.VillageName;
-	        		bool isattack = vname.StartsWith("攻擊") || vname.EndsWith("攻击") || vname.StartsWith("Attack against");;
-	        		bool israid = vname.StartsWith("搶奪") || vname.EndsWith("抢夺") || vname.StartsWith("Raid against");
+	        		bool isattack = vname.StartsWith("攻擊") || vname.EndsWith("攻击") || vname.StartsWith("Attack against")|| vname.EndsWith("の攻撃");
+	        		bool israid = vname.StartsWith("搶奪") || vname.EndsWith("抢夺") || vname.StartsWith("Raid against") || vname.EndsWith("の奇襲");
 	        		if (troop.TroopType == TTroopType.Incoming && (isattack || israid))
 	        			return true;
 //	        		if (troop.TroopType == TTroopType.BeAttackedWay)
@@ -989,6 +1005,15 @@ namespace libTravian
                 else
                     return "None";
                 return sb.ToString();
+            }
+        }
+        [Json]
+        public string CancelURL { get; set; }
+        public bool Cancellable
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(CancelURL);
             }
         }
     }

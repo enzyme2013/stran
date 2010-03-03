@@ -73,7 +73,15 @@ namespace Stran
 			{
 				m = Regex.Match(textBox3.Text.ToLower(), "travian.(.*)");
 				if(m.Success)
-					textBox4.Text = m.Groups[1].Value;
+				{
+					string lang = m.Groups[1].Value;
+					if (lang == "tw" || lang == "hk")
+						textBox4.Text = "tw";
+					else if (lang == "cn")
+						textBox4.Text = "cn";
+					else
+						textBox4.Text = "en";
+				}
 			}
 		}
 

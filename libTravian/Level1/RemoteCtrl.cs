@@ -25,10 +25,10 @@ namespace libTravian
 		private DateTime NextExec = DateTime.MinValue;
 		private DateTime NextRead = DateTime.MinValue;
 		private string RemoteStopWord = "stop";
-		private void CheckPause(int VillageID, string data)
+		private Random rand = new Random();
+		private void CheckPause(string data)
 		{
-			var m = Regex.Match(data, "l/m(1|2)\\.gif");
-			if(!m.Success)
+			if (data.Contains("class=\"i3\"") || data.Contains("class=\"i4\""))
 			{
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Stop, Param = 0 });
 				return; // no igm found, go on processing.
@@ -38,11 +38,12 @@ namespace libTravian
 			data = this.pageQuerier.PageQuery(0, "nachrichten.php", null, true, true);
 			if(data == null)
 				return; // cannot read... network problem?
-			NextRead = DateTime.Now.AddMinutes(15);
+			int next = rand.Next(15,30);
+			NextRead = DateTime.Now.AddMinutes(next);
 			if(Regex.Match(data, "<a href=\"nachrichten.php[^\"]+\">" + RemoteStopWord + "</a>", RegexOptions.IgnoreCase).Success)
 			{
-				NextExec = DateTime.Now.AddMinutes(15);
-				DebugLog("Pause: To " + NextExec.ToLongTimeString(), DebugLevel.I);
+				NextExec = DateTime.Now.AddMinutes(next + rand.Next(1,5));
+				DebugLog("Pause: To " + NextExec.ToLongTimeString(), DebugLevel.W);
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Stop, Param = 1 });
 			}
 			else
