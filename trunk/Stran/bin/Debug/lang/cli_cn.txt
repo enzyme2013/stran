@@ -16,11 +16,11 @@ editacc=&E. 编辑帐号
 delacc=&D. 删除帐号
 // main form message
 repeatlogin=重复登录的帐号: 
-
 // main frame
 villagebuilding=村庄建设
 event=事件
 log=日志
+browser=浏览
 // tab village building tab
 villagestatus=村庄建筑
 upgradestatus=研发状态

@@ -21,6 +21,7 @@ repeatlogin=下列帳號已重覆登入:
 villagebuilding=村莊建設
 event=事件
 log=記錄
+browser=瀏覽
 // tab village building tab
 villagestatus=村莊建築
 upgradestatus=研發狀態

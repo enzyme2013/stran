@@ -21,6 +21,7 @@ repeatlogin=Repeat login:
 villagebuilding=Village Develop
 event=Events
 log=Log
+browser=Browser
 // tab village building tab
 villagestatus=Building Status
 upgradestatus=Upgrade Status
