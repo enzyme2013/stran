@@ -8,7 +8,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * 
+ *   
  * The Initial Developer of the Original Code is [MeteorRain <msg7086@gmail.com>].
  * Copyright (C) MeteorRain 2007, 2008. All Rights Reserved.
  * Contributor(s): [MeteorRain].
@@ -92,7 +92,6 @@ namespace Stran
             {
                 TravianData.Proxy = new WebProxy(LoginInfo.Proxy);
             }
-
             //if (MainForm.Options.ContainsKey("proxy"))
             //{
             //    string proxy = MainForm.Options["proxy"];
@@ -1966,7 +1965,7 @@ namespace Stran
             if (CV.isUpgradeInitialized < 2)
             {
                 CV.InitializeUpgrade();
-                MessageBox.Show("程序正在读取研发信息，请重新操作一次");
+                MessageBox.Show("程序正在读取研发信息，请重新操作一次!");
                 return;
             }
             List<TroopInfo> CanProduce = new List<TroopInfo>();
