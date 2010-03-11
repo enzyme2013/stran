@@ -88,11 +88,16 @@ namespace Stran
             TravianData.Password = LoginInfo.Password;
             TravianData.Tribe = LoginInfo.Tribe;
             TravianData.Server = LoginInfo.Server;
-            if (MainForm.Options.ContainsKey("proxy"))
+            if (!string.IsNullOrEmpty(LoginInfo.Proxy))
             {
-                string proxy = MainForm.Options["proxy"];
-                TravianData.Proxy = new WebProxy(proxy);
+                TravianData.Proxy = new WebProxy(LoginInfo.Proxy);
             }
+
+            //if (MainForm.Options.ContainsKey("proxy"))
+            //{
+            //    string proxy = MainForm.Options["proxy"];
+            //    TravianData.Proxy = new WebProxy(proxy);
+            //}
             tr = DB.Instance.RestoreTravian(LoginInfo.Server);
             if (tr == null)
                 tr = new Travian(TravianData, MainForm.Options);
