@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-# SharpDevelop 3.1.1.5322
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libTravian", "libTravian\libTravian.csproj", "{935028A9-A233-4FFE-8FC6-37C34847A0F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stran", "Stran\Stran.csproj", "{A361E172-DB43-4782-A032-878EE055F5A0}"
@@ -17,9 +16,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Stran2.vsmdi = Stran2.vsmdi
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lang", "lang", "{7363C43D-3A32-450E-93BC-838527E81CA5}"
+	ProjectSection(SolutionItems) = preProject
+		Stran\bin\Debug\lang\cli_cn.txt = Stran\bin\Debug\lang\cli_cn.txt
+		Stran\bin\Debug\lang\cli_en.txt = Stran\bin\Debug\lang\cli_en.txt
+		Stran\bin\Debug\lang\cli_tw.txt = Stran\bin\Debug\lang\cli_tw.txt
+		Stran\bin\Debug\lang\svr_cn.txt = Stran\bin\Debug\lang\svr_cn.txt
+		Stran\bin\Debug\lang\svr_en.txt = Stran\bin\Debug\lang\svr_en.txt
+		Stran\bin\Debug\lang\svr_tw.txt = Stran\bin\Debug\lang\svr_tw.txt
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Stran2.vsmdi
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +55,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
