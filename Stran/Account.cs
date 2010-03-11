@@ -24,84 +24,95 @@ using System.Text.RegularExpressions;
 
 namespace Stran
 {
-	public partial class NewAccount : Form
-	{
-		bool _ismodify;
-		public TLoginInfo accountresult;
-		public MUI mui { get; set; }
-		public TLoginInfo logininfo { get; set; }
-		public NewAccount(bool ismodify)
-		{
-			_ismodify = ismodify;
-			InitializeComponent();
-		}
+    public partial class NewAccount : Form
+    {
+        bool _ismodify;
+        public TLoginInfo accountresult;
+        public MUI mui { get; set; }
+        public TLoginInfo logininfo { get; set; }
+        public NewAccount(bool ismodify)
+        {
+            _ismodify = ismodify;
+            InitializeComponent();
+        }
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			if(textBox3.Text != "" && textBox2.Text != "" && (_ismodify || textBox1.Text != ""))
-			{
-				accountresult = new TLoginInfo()
-				{
-					Server = textBox3.Text,
-					Username = textBox2.Text,
-					Password = textBox1.Text,
-					Tribe = comboBox1.SelectedIndex,
-					Language = textBox4.Text
-				};
-			}
-		}
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtProxy.Text))
+            {
+                var m = Regex.Match(txtProxy.Text, @"^((1?\d?\d|(2([0-4]\d|5[0-5])))\.){3}(1?\d?\d|(2([0-4]\d|5[0-5]))):\d{1,5}$");
+                if (!m.Success)
+                {
+                    MessageBox.Show("代理地址格式错误！");
+                    return;
+                }
+            }
+            if (textBox3.Text != "" && textBox2.Text != "" && (_ismodify || textBox1.Text != ""))
+            {
+                accountresult = new TLoginInfo()
+                {
+                    Server = textBox3.Text,
+                    Username = textBox2.Text,
+                    Password = textBox1.Text,
+                    Tribe = comboBox1.SelectedIndex,
+                    Language = textBox4.Text,
+                    Proxy = txtProxy.Text
+                };
+            }
+        }
 
-		private void textBox3_Leave(object sender, EventArgs e)
-		{
-			var m = Regex.Match(textBox3.Text.ToLower(), "^([a-zA-Z]{2,3})(\\d{1,3}|x)$");
-			if(m.Success)
-			{
-				if(m.Groups[1].Value == "de")
-					textBox3.Text = string.Format("welt{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
-				else
-					textBox3.Text = string.Format("s{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
-				if(textBox4.Text == "")
-					textBox4.Text = m.Groups[1].Value;
-				return;
-			}
-			m = Regex.Match(textBox3.Text.ToLower(), "http://(.*)");
-			if(m.Success)
-			{
-				textBox3.Text = m.Groups[1].Value;
-			}
-			if(textBox4.Text == "")
-			{
-				m = Regex.Match(textBox3.Text.ToLower(), "travian.(.*)");
-				if(m.Success)
-				{
-					string lang = m.Groups[1].Value;
-					if (lang == "tw" || lang == "hk")
-						textBox4.Text = "tw";
-					else if (lang == "cn")
-						textBox4.Text = "cn";
-					else
-						textBox4.Text = "en";
-				}
-			}
-		}
+        private void textBox3_Leave(object sender, EventArgs e)
+        {
+            var m = Regex.Match(textBox3.Text.ToLower(), "^([a-zA-Z]{2,3})(\\d{1,3}|x)$");
+            if (m.Success)
+            {
+                if (m.Groups[1].Value == "de")
+                    textBox3.Text = string.Format("welt{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
+                else
+                    textBox3.Text = string.Format("s{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
+                if (textBox4.Text == "")
+                    textBox4.Text = m.Groups[1].Value;
+                return;
+            }
+            m = Regex.Match(textBox3.Text.ToLower(), "http://(.*)");
+            if (m.Success)
+            {
+                textBox3.Text = m.Groups[1].Value;
+            }
+            if (textBox4.Text == "")
+            {
+                m = Regex.Match(textBox3.Text.ToLower(), "travian.(.*)");
+                if (m.Success)
+                {
+                    string lang = m.Groups[1].Value;
+                    if (lang == "tw" || lang == "hk")
+                        textBox4.Text = "tw";
+                    else if (lang == "cn")
+                        textBox4.Text = "cn";
+                    else
+                        textBox4.Text = "en";
+                }
+            }
+        }
 
-		private void NewAccount_Load(object sender, EventArgs e)
-		{
-			mui.RefreshLanguage(this);
-			comboBox1.Items.AddRange(MainForm.tribelist);
-			if(_ismodify)
-				Text = mui._("edit") + Text;
-			else
-				Text = mui._("add") + Text;
-			comboBox1.SelectedIndex = 0;
-			if(logininfo != null)
-			{
-				textBox3.Text = logininfo.Server;
-				textBox2.Text = logininfo.Username;
-				comboBox1.SelectedIndex = logininfo.Tribe;
-				textBox4.Text = logininfo.Language;
-			}
-		}
+        private void NewAccount_Load(object sender, EventArgs e)
+        {
+            mui.RefreshLanguage(this);
+            comboBox1.Items.AddRange(MainForm.tribelist);
+            if (_ismodify)
+                Text = mui._("edit") + Text;
+            else
+                Text = mui._("add") + Text;
+            comboBox1.SelectedIndex = 0;
+            if (logininfo != null)
+            {
+                textBox3.Text = logininfo.Server;
+                textBox2.Text = logininfo.Username;
+                comboBox1.SelectedIndex = logininfo.Tribe;
+                textBox4.Text = logininfo.Language;
+                txtProxy.Text = logininfo.Proxy;
+            }
+        }
 
-	}
+    }
 }

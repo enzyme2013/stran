@@ -5,6 +5,7 @@ typelist=ResField,Building,Destroy,Attack,Defence,Research,Party,Transfer,NpcTra
 username=Username
 server=Server
 tribe=Tribe
+proxy=Proxy
 accmanager=Account Manager
 // main form context menu account
 loginnoacc=&Login
@@ -82,6 +83,7 @@ reallyclosecap=Warning!
 account= account
 password=Password
 displang=Display Lang
+proxy=Proxy
 edit=Edit
 add=Add
 save=Save

@@ -5,6 +5,7 @@ typelist=资源田,建筑,拆除,攻击,防御,研究,活动,运输,平仓
 username=用户名
 server=服务器
 tribe=种族
+proxy=代理地址
 accmanager=帐号管理
 // main form context menu account
 loginnoacc=&L. 登录
@@ -85,6 +86,7 @@ edit=编辑
 add=添加
 save=保存
 cancel=取消
+proxy=代理地址
 
 // new building form
 newbuilding=新建建筑
