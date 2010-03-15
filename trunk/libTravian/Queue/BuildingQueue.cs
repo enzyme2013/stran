@@ -276,6 +276,7 @@ namespace libTravian
 					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 				}
 			}
+			UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Buildings, VillageID = VillageID });
 		}
 
 		#endregion
@@ -332,10 +333,10 @@ namespace libTravian
 		/// </summary>
 		[Json]
 		public int TargetLevel { get; set; }
-
+		
 		[Json]
 		public DateTime NextExec;
-
+		
 		private Random rand = new Random();
 
 		public int QueueGUID { get { return Bid < 19 && Bid > 0 ? 0 : 1; } }

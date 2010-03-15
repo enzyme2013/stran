@@ -66,7 +66,7 @@ namespace Stran
                             listBox1.Items.Add(p);
 	            initialized = true;
         	}
-        	if (listBox1.SelectedIndices.Count == 1)
+        	if (listBox1.SelectedIndices.Count == 1 || checkBox3.Checked)
             {
             	int Aid = checkBox3.Checked ? 10 : (listBox1.SelectedItem as TroopInfo).Aid;
 				int key = (TravianData.Tribe - 1) * 10 + Aid;
@@ -93,7 +93,7 @@ namespace Stran
                 numericUpDownTransferCount.Enabled = false;
                 checkBox1.Enabled = false;
                 listBox1.Enabled = false;
-                TroopRes = Buildings.TroopCost[10];
+                TroopRes = Buildings.TroopCost[(TravianData.Tribe - 1) * 10 + 10];
         	}
         	var ResRes = CV.ResourceCurrAmount - TroopRes;
         	this.labelA.ForeColor = this.labelB.ForeColor = this.labelC.ForeColor = this.labelD.ForeColor = Color.FromArgb(0, 0, 0);
@@ -182,6 +182,10 @@ namespace Stran
         		ProduceTroopSetting_Load(sender, e);
         		this.buttonOK.Enabled = true;
         	}
+		}
+		private void CheckBox2CheckedChanged(object sender, EventArgs e)
+		{
+			ProduceTroopSetting_Load(sender, e);
 		}
 	}
 

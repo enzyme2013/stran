@@ -105,7 +105,7 @@ namespace libTravian
 		{
 			if(!IsValid)
 			{
-				UpCall.DebugLog("Invalid transfer task discarded: " + Title, DebugLevel.W);
+				UpCall.DebugLog("Invalid transfer task discarded: " + Title, DebugLevel.E);
 				this.RemoveQueuedTask();
 				return;
 			}
@@ -239,13 +239,16 @@ namespace libTravian
 			PostData["s1"] = "ok";
 
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);
+			if(result == null)
+				return -1;
 
-			if(result.Contains("<p class=\"error\">"))
+			m = Regex.Match(result, "<p class=\"error\">([^<]*?)</p>");
+			if (m.Success)
 			{
 				refreshcount++;
 				if (refreshcount > 2)
 				{
-					UpCall.DebugLog("Target Village (" + TargetPos.ToString() +") isn't existed", DebugLevel.E);
+					UpCall.DebugLog("Error:" + m.Groups[1].Value, DebugLevel.E);
 					return -5;
 				}
 				else
@@ -255,8 +258,7 @@ namespace libTravian
 				}
 			}
 			refreshcount = 0;
-			if(result == null)
-				return -1;
+			
 			m = Regex.Match(result, "name=\"sz\" value=\"(\\d+)\"");
 			if(!m.Success)
 				return -1; // Parse error!
@@ -273,6 +275,16 @@ namespace libTravian
 				var distance = CV.Coord * TargetPos;
 				UpCall.TD.MarketSpeed = Convert.ToInt32(Math.Round(distance * 3600 / TimeCost));
 				UpCall.TD.Dirty = true;
+				if (UpCall.TD.MarketSpeed == 0)
+				{
+					int StdSpeed = 24;
+					if (UpCall.TD.Tribe != 0)
+					{
+						StdSpeed = Buildings.BaseSpeed[UpCall.TD.Tribe][10];
+					}
+					UpCall.TD.MarketSpeed = StdSpeed;
+					UpCall.TD.Dirty = true;
+				}
 			}
 			UpCall.JustTransferredData = Amount;
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);

@@ -54,6 +54,12 @@ namespace libTravian
 
 		public void Action()
 		{
+			if (!CanParty())
+			{
+				MarkDeleted = true;
+				UpCall.TD.Dirty = true;
+				return;
+			}
 			var CV = UpCall.TD.Villages[VillageID];
 			UpCall.PageQuery(VillageID, "build.php?gid=24&a=" + ((int)PartyType).ToString());
 			LastExec = DateTime.Now;
@@ -71,13 +77,31 @@ namespace libTravian
 					UpCall.DebugLog("Error on party! Will retry...", DebugLevel.I);
 					NextExec = DateTime.Now.AddSeconds(rand.Next(500 + retrycount * 20, 800 + retrycount * 30));
 				}
-				UpCall.Dirty = true;
+				UpCall.TD.Dirty = true;
 			}
 			else
 			{
 				UpCall.BuildCount();
 				retrycount = 0;
 			}
+		}
+		
+		public bool CanParty()
+		{
+			var CV = UpCall.TD.Villages[VillageID];
+			foreach (var x in CV.Buildings)
+			{
+				if (x.Value.Gid== 24)
+				{
+					if (PartyType == TPartyType.P2000 && x.Value.Level >= 10)
+						return true;
+					else if (PartyType == TPartyType.P500 && x.Value.Level >= 1)
+						return true;
+					else
+						return false;
+				}
+			}
+			return false;
 		}
 
 		#endregion

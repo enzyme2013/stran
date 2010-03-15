@@ -194,7 +194,7 @@ namespace libTravian
 
             if (mc.Count == 0)
             {
-                Match m = Regex.Match(data, "karte.php\\?d=(\\d+)&amp;c=.*?\">([^<]*)</a>.*?(</span>)?</td");
+                Match m = Regex.Match(data, "karte.php\\?d=(\\d+)&amp;c=.*?\">([^<]*)</a>.*?(</span>)?</td>");
                 if (TD.Villages.Count < 1)
                 {
                     TVillage tv = new TVillage()
@@ -355,7 +355,7 @@ namespace libTravian
             var CV = TD.Villages[VillageID];
 
             Match m;
-            m = Regex.Match(data, @"demolish.*?<td>\s*([^<]*)\s\(\S+\s(\d+)\).*?timer\d+.*?>(\d+:\d+:\d+)</span>", RegexOptions.Singleline);
+            m = Regex.Match(data, @"demolish.*?<td>[\s\n]*([^<]*)\s\(\S+\s(\d+)\).*?timer\d+.*?>(\d+:\d+:\d+)</span>", RegexOptions.Singleline);
             CV.InBuilding[2] = null;
             if (m.Success)
             {
@@ -470,8 +470,10 @@ namespace libTravian
             foreach (Match m in mc)
                 CV.Buildings[Convert.ToInt32(m.Groups[1].Value) + 18] = new TBuilding() { Gid = Convert.ToInt32(m.Groups[2].Value) };
             CV.Buildings[39] = new TBuilding() { Gid = 16 };
+            if (TD.Tribe == 0)
+            	TD.Tribe = NewParseTribe();
             CV.Buildings[40] = new TBuilding() { Gid = TD.Tribe + 30 };
-            if (data.Contains("img/un/g/g40.gif") || data.Contains("class=\"ww g40\""))
+            if (data.Contains("img/un/g/g40.gif") || data.Contains("class=\"ww g40"))
                 CV.Buildings[26] = new TBuilding { Gid = 40 };
 
             mc = Regex.Matches(data, "<area href=\"build.php\\?id=(\\d+)\" title=\"[^0-9\"]*?(\\d+)[^0-9\"]*?\"");
@@ -481,7 +483,11 @@ namespace libTravian
             {
                 int bid = Convert.ToInt32(m.Groups[1].Value);
                 if (CV.Buildings.ContainsKey(bid))
+                {
                     CV.Buildings[bid].Level = Convert.ToInt32(m.Groups[2].Value);
+                    if (CV.Buildings[bid].Gid == 17)
+                    	CV.Market.MaxMerchant = Convert.ToInt32(m.Groups[2].Value);
+                }
                 else
                     DebugLog("Unknown bid on parsing dorf2: " + bid, DebugLevel.W);
             }
@@ -536,7 +542,7 @@ namespace libTravian
         private DateTime NewParseInDoing(string data, out string text)
         {
             //var m2 = Regex.Match(data, "class=\"s7\">(.*?)</td>.*?\r?\n.*?\r?\n?.*?timer1>([0-9:]+)<");
-            var m2 = Regex.Match(data, "class=\"under_progress\">.*?<tbody><tr>[^<]*?<td[^<]*?>(.*?)</td>.*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
+            var m2 = Regex.Match(data, "class=\"under_progress\">.*?<td class=\"desc\">(.*?)</td>.*?timer\\d+\"?>([0-9:]+)<", RegexOptions.Singleline);
             if (m2.Success)
             {
                 text = m2.Groups[1].Value;
@@ -789,7 +795,7 @@ namespace libTravian
         {
         	Match m = Regex.Match(data, "<div class=\"mov\"><span class=\"a[13]\">[^<]*?</span></div>", RegexOptions.Singleline);
         	if(m.Success)
-        		this.pageQuerier.PageQuery(VillageID, "build.php?gid=16", null, true, false);
+        		this.PageQuery(VillageID, "build.php?gid=16");
         	else
         	{
 	            TVillage village = this.TD.Villages[VillageID];

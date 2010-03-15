@@ -44,6 +44,9 @@
 			this.addAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deleteAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.ACUp = new System.Windows.Forms.ToolStripMenuItem();
+			this.ACDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.timerIcon = new System.Windows.Forms.Timer(this.components);
@@ -67,10 +70,10 @@
 			// 
 			this.tabPage1.Controls.Add(this.textLog);
 			this.tabPage1.Controls.Add(this.listView1);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Location = new System.Drawing.Point(4, 23);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(934, 642);
+			this.tabPage1.Size = new System.Drawing.Size(934, 641);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Tag = "accmanager";
 			this.tabPage1.Text = "帐号管理";
@@ -83,7 +86,7 @@
 			this.textLog.Multiline = true;
 			this.textLog.Name = "textLog";
 			this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textLog.Size = new System.Drawing.Size(528, 636);
+			this.textLog.Size = new System.Drawing.Size(528, 635);
 			this.textLog.TabIndex = 1;
 			// 
 			// listView1
@@ -99,7 +102,7 @@
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listView1.Location = new System.Drawing.Point(3, 3);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(400, 636);
+			this.listView1.Size = new System.Drawing.Size(400, 635);
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -131,23 +134,28 @@
             this.toolStripSeparator1,
             this.addAccountToolStripMenuItem,
             this.editAccountToolStripMenuItem,
-            this.deleteAccountToolStripMenuItem});
+									this.deleteAccountToolStripMenuItem,
+									this.toolStripMenuItem1,
+									this.ACUp,
+									this.ACDown});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			this.contextMenuStrip1.ShowImageMargin = false;
-			this.contextMenuStrip1.Size = new System.Drawing.Size(137, 120);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(186, 198);
 			this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
 			// 
 			// loginToolStripMenuItem
 			// 
 			this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-			this.loginToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.loginToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+			this.loginToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
 			this.loginToolStripMenuItem.Text = "&L. Login";
 			this.loginToolStripMenuItem.Click += new System.EventHandler(this.CMenuLogin_Click);
 			// 
 			// loginAllToolStripMenuItem
 			// 
 			this.loginAllToolStripMenuItem.Name = "loginAllToolStripMenuItem";
-			this.loginAllToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.loginAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.loginAllToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
 			this.loginAllToolStripMenuItem.Tag = "loginall";
 			this.loginAllToolStripMenuItem.Text = "&O. 登录所有帐号";
 			this.loginAllToolStripMenuItem.Click += new System.EventHandler(this.CMenuLoginAll_Click);
@@ -155,12 +163,13 @@
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(182, 6);
 			// 
 			// addAccountToolStripMenuItem
 			// 
 			this.addAccountToolStripMenuItem.Name = "addAccountToolStripMenuItem";
-			this.addAccountToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.addAccountToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+			this.addAccountToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
 			this.addAccountToolStripMenuItem.Tag = "addacc";
 			this.addAccountToolStripMenuItem.Text = "&A. 添加帐号";
 			this.addAccountToolStripMenuItem.Click += new System.EventHandler(this.CMenuAddAccount_Click);
@@ -168,7 +177,8 @@
 			// editAccountToolStripMenuItem
 			// 
 			this.editAccountToolStripMenuItem.Name = "editAccountToolStripMenuItem";
-			this.editAccountToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.editAccountToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+			this.editAccountToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
 			this.editAccountToolStripMenuItem.Tag = "editacc";
 			this.editAccountToolStripMenuItem.Text = "&E. 编辑帐号";
 			this.editAccountToolStripMenuItem.Click += new System.EventHandler(this.CMenuEditAccount_Click);
@@ -176,10 +186,25 @@
 			// deleteAccountToolStripMenuItem
 			// 
 			this.deleteAccountToolStripMenuItem.Name = "deleteAccountToolStripMenuItem";
-			this.deleteAccountToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.deleteAccountToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+			this.deleteAccountToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
 			this.deleteAccountToolStripMenuItem.Tag = "delacc";
 			this.deleteAccountToolStripMenuItem.Text = "&D. 删除帐号";
 			this.deleteAccountToolStripMenuItem.Click += new System.EventHandler(this.CMenuDeleteAccount_Click);
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 6);
+			this.ACUp.Name = "ACUp";
+			this.ACUp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
+			this.ACUp.Size = new System.Drawing.Size(185, 22);
+			this.ACUp.Tag = "cmqup";
+			this.ACUp.Text = "上移";
+			this.ACUp.Click += new System.EventHandler(this.ACUpClick);
+			this.ACDown.Name = "ACDown";
+			this.ACDown.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
+			this.ACDown.Size = new System.Drawing.Size(185, 22);
+			this.ACDown.Tag = "cmqdown";
+			this.ACDown.Text = "下移";
+			this.ACDown.Click += new System.EventHandler(this.ACDownClick);
 			// 
 			// notifyIcon1
 			// 
@@ -217,6 +242,9 @@
 			this.ResumeLayout(false);
 
 		}
+		private System.Windows.Forms.ToolStripMenuItem ACDown;
+		private System.Windows.Forms.ToolStripMenuItem ACUp;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 
 		#endregion
 

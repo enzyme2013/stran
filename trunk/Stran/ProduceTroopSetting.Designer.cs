@@ -165,6 +165,7 @@
 			this.checkBox2.Tag = "Great";
 			this.checkBox2.Text = "Great Barracks&&Stable";
 			this.checkBox2.UseVisualStyleBackColor = true;
+			this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2CheckedChanged);
 			// 
 			// buttonlimit
 			// 
@@ -279,6 +280,7 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Tag = "producetroopsetting";
 			this.Text = "ProduceTroopSetting";
 			this.Load += new System.EventHandler(this.ProduceTroopSetting_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

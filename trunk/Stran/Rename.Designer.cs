@@ -36,10 +36,12 @@
         	// 
         	// lboldVillagename
         	// 
+        	this.lboldVillagename.BackColor = System.Drawing.SystemColors.Window;
+        	this.lboldVillagename.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         	this.lboldVillagename.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        	this.lboldVillagename.Location = new System.Drawing.Point(6, 25);
+        	this.lboldVillagename.Location = new System.Drawing.Point(42, 25);
         	this.lboldVillagename.Name = "lboldVillagename";
-        	this.lboldVillagename.Size = new System.Drawing.Size(270, 30);
+        	this.lboldVillagename.Size = new System.Drawing.Size(200, 30);
         	this.lboldVillagename.TabIndex = 3;
         	this.lboldVillagename.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
         	// 

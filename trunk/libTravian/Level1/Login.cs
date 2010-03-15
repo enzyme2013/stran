@@ -43,6 +43,7 @@ namespace libTravian
 					DebugLog("Cannot visit travian website!", DebugLevel.E);
 					return false;
 				}
+				/*
 				string userkey, passkey, alkey, alkey_value;
 				Match m;
 				m = Regex.Match(data, "type=\"text\" name=\"(\\S+?)\"");
@@ -72,29 +73,42 @@ namespace libTravian
 					DebugLog("Parse alkey error!", DebugLevel.E);
 					return false;
 				}
+				m = Regex.Match(data, "<input type=\"hidden\" name=\"login\" value=\"(.*?)\"");
+				if (!m.Success)
+				{
+					DebugLog("Unknown error!!", DebugLevel.F);
+					return false;
+				}
+				*/
 				Random rand = new Random();
 				Dictionary<string, string> PostData = new Dictionary<string, string>();
-				PostData["w"] = "1024:768";
-				PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
-				PostData[userkey] = Username;
-				PostData[passkey] = Password;
-				PostData[alkey] = alkey_value;
+				PostData["name"] = Username;
+				PostData["password"] = Password;
             	PostData["s1.x"] = rand.Next(40, 70).ToString();
             	PostData["s1.y"] = rand.Next(3, 17).ToString();
             	PostData["s1"] = "login";
+				PostData["w"] = "1024:768";
+				PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
+				//PostData["login"] = m.Groups[1].Value;
+				//PostData[alkey] = alkey_value;
 				
 				string result = this.pageQuerier.PageQuery(0, "dorf1.php", PostData, false, true);
 
-				if (result.Contains("login"))
+				if (result.Contains("login_form"))
 				{
 					DebugLog("Username or Password error!", DebugLevel.E);
 					//MessageBox.Show("Login failed.");
 					return false;
 				}
 
-				m = Regex.Match(result, "spieler.php\\?uid=(\\d*)");
+				Match m = Regex.Match(result, "spieler.php\\?uid=(\\d*)");
 				if (m.Success)
 					TD.UserID = Convert.ToInt32(m.Groups[1].Value);
+				else
+				{
+					DebugLog("Unable to get UID!!", DebugLevel.E);
+					return false;
+				}
 
 				return true;
 			}

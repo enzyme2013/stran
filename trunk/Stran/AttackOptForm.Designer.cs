@@ -54,7 +54,7 @@ namespace Stran
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.BackColor = System.Drawing.Color.Cornsilk;
+			this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Window;
 			this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
 			this.tableLayoutPanel1.ColumnCount = 7;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -63,7 +63,7 @@ namespace Stran
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59F));
 			this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 8);
@@ -87,7 +87,7 @@ namespace Stran
 			// label2
 			// 
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(72, 1);
+			this.label2.Location = new System.Drawing.Point(71, 1);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(49, 37);
 			this.label2.TabIndex = 1;
@@ -100,7 +100,7 @@ namespace Stran
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.Location = new System.Drawing.Point(4, 1);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(61, 37);
+			this.label1.Size = new System.Drawing.Size(60, 37);
 			this.label1.TabIndex = 0;
 			this.label1.Tag = "troopname";
 			this.label1.Text = "troopname troopname";

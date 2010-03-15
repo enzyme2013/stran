@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LitJson;
+using System.Text.RegularExpressions;
 
 namespace libTravian
 {
@@ -79,28 +80,67 @@ namespace libTravian
 					return;
 				}
 			}
-			NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
-			Dictionary<string, string> Postdata = new Dictionary<string, string>(){
-				{"gid", "15"},
-				{"a", VillageID.ToString()},
-				{"abriss", Bid.ToString()},
-				{"ok", "%E6%8B%86%E6%AF%81"}
-			};
-
-			UpCall.PageQuery(VillageID, "build.php", Postdata);
+			if (CurrentLevel < 0)
+			{
+				UpCall.DebugLog("Unknown state", DebugLevel.E);
+				UpCall.FetchVillageBuilding(VillageID);
+				MarkDeleted = true;
+				UpCall.Dirty = true;
+				UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+			}
+			else if (CurrentLevel == 0)
+			{
+				if (CV.InBuilding[2] == null || CV.InBuilding[2].FinishTime < DateTime.Now)
+				{
+					UpCall.FetchVillageBuilding(VillageID);
+					MarkDeleted = true;
+					UpCall.Dirty = true;
+					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+				}
+				else
+					NextExec = CV.InBuilding[2].FinishTime.AddSeconds(rand.Next(30,60));
+			}
+			else
+			{
+				Dictionary<string, string> Postdata = new Dictionary<string, string>(){
+					{"gid", "15"},
+					{"a", VillageID.ToString()},
+					{"abriss", Bid.ToString()},
+					{"ok", "%E6%8B%86%E6%AF%81"}
+				};
+	
+				string result = UpCall.PageQuery(VillageID, "build.php", Postdata);
+				Match m = Regex.Match(result, "<p class=\"error\">(.*?)</p>");
+				if (CV.InBuilding[2] == null)
+				{
+					if (m.Success)
+						UpCall.DebugLog(m.Groups[1].Value, DebugLevel.E);
+					else
+						UpCall.DebugLog("Unknown state", DebugLevel.E);
+					MarkDeleted = true;
+					UpCall.TD.Dirty = true;
+					UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+				}
+				else
+				{
+					NextExec = CV.InBuilding[2].FinishTime.AddSeconds(rand.Next(30, 60));
+					UpCall.BuildCount();
+				}
+			}
 			UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Buildings, VillageID = VillageID });
-			
+			/*
+			NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
 			int lvl = CV.InBuilding[2] != null && CV.InBuilding[2].FinishTime > DateTime.Now ? CV.InBuilding[2].Level : -1;
 			if(lvl < 0)
 				UpCall.DebugLog("Unknown state", DebugLevel.E);
 			if(lvl <= 0)
 			{
 				MarkDeleted = true;
-				UpCall.FetchVillageBuilding(VillageID);
+				//UpCall.FetchVillageBuilding(VillageID);
 				UpCall.Dirty = true;
 				UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
 			}
-			UpCall.BuildCount();
+			*/
 		}
 
 		#endregion
@@ -128,7 +168,7 @@ namespace libTravian
 			{
 				if(UpCall.TD.Villages[VillageID].Buildings.ContainsKey(Bid))
 					return UpCall.TD.Villages[VillageID].Buildings[Bid].Level;
-				return 0;
+				return -1;
 			}
 		}
 

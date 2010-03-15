@@ -36,7 +36,7 @@ namespace Stran
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+		private void Btn_OK_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtProxy.Text))
             {
@@ -51,11 +51,11 @@ namespace Stran
             {
                 accountresult = new TLoginInfo()
                 {
-                    Server = textBox3.Text,
+					Server = textBox3.Text.ToLower(),
                     Username = textBox2.Text,
                     Password = textBox1.Text,
                     Tribe = comboBox1.SelectedIndex,
-                    Language = textBox4.Text,
+					Language = textBox4.Text.ToLower(),
                     Proxy = txtProxy.Text
                 };
             }
