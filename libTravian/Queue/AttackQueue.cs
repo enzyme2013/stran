@@ -101,10 +101,10 @@ namespace libTravian
             		Dictionary<string, string> PostData = new Dictionary<string, string>();
             		var data = UpCall.PageQuery(VillageID, "a2b.php");
             		Match m10;
-            		m10 = Regex.Match(data, "type=\"hidden\" name=\"timestamp\" value=\"([^>]*?)\"");
+            		m10 = Regex.Match(data, "type=\"hidden\"[^>]*?name=\"timestamp\"[^>]*?value=\"([^>]*?)\"", RegexOptions.Singleline);
             		string p_timestamp = m10.Groups[1].Value;
             		Match m11;
-            		m11 = Regex.Match(data, "type=\"hidden\" name=\"timestamp_checksum\" value=\"([^>]*?)\"");
+            		m11 = Regex.Match(data, "type=\"hidden\"[^>]*?name=\"timestamp_checksum\"[^>]*?value=\"([^>]*?)\"", RegexOptions.Singleline);
             		string p_timestamp_checksum = m11.Groups[1].Value;
             		PostData["timestamp"] = p_timestamp;
             		PostData["timestamp_checksum"] = p_timestamp_checksum;
@@ -134,13 +134,13 @@ namespace libTravian
             			break;
             		}
             		Match m20;
-            		m20 = Regex.Match(result, "type=\"hidden\" name=\"timestamp\" value=\"([^>]*?)\"");
+            		m20 = Regex.Match(result, "type=\"hidden\"[^>]*?name=\"timestamp\"[^>]*?value=\"([^>]*?)\"", RegexOptions.Singleline);
             		string p_timestampF = m20.Groups[1].Value;
             		Match m21;
-            		m21 = Regex.Match(result, "type=\"hidden\" name=\"timestamp_checksum\" value=\"([^>]*?)\"");
+            		m21 = Regex.Match(result, "type=\"hidden\"[^>]*?name=\"timestamp_checksum\"[^>]*?value=\"([^>]*?)\"", RegexOptions.Singleline);
             		string p_timestamp_checksumF = m21.Groups[1].Value;
             		Match m22;
-            		m22 = Regex.Match(result, "type=\"hidden\" name=\"a\" value=\"(\\d+?)\"");
+            		m22 = Regex.Match(result, "type=\"hidden\"[^>]*?name=\"a\"[^>]*?value=\"(\\d+?)\"", RegexOptions.Singleline);
             		string p_aF = m22.Groups[1].Value;
             		PostDataF["timestamp"] = p_timestampF;
             		PostDataF["timestamp_checksum"] = p_timestamp_checksumF;
@@ -192,13 +192,11 @@ namespace libTravian
             	}
             }
             //POST ALL Attack
-            if (PostDataALL == null || PostDataALL.Count == 0)
+            if (PostDataALL != null && PostDataALL.Count > 0)
             {
-            	TargetID++;
-            	return;
+	            for (int i = 0; i < PostDataALL.Count; i++)
+	            	UpCall.PageQuery(VillageID, "a2b.php", PostDataALL[i]);
             }
-            for (int i = 0; i < PostDataALL.Count; i++)
-            	UpCall.PageQuery(VillageID, "a2b.php", PostDataALL[i]);
             if (TargetID == Targets.Count - 1)
             {
             	MarkDeleted = true;

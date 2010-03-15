@@ -337,8 +337,10 @@ namespace libTravian
                 return DoRaidResult.SkipVillage;
             }
 
+            MatchCollection maxraidMatch = Regex.Matches(confirmForm,"<span class=\"b\">" + this.MaxSlots.ToString() + "</span>");
+
             Match errorMatch = Regex.Match(confirmForm, "<p class=\"error\">(.+)</p>");
-            if (errorMatch.Success)
+            if (errorMatch.Success && maxraidMatch.Count < 2)
             {
                 string error = String.Format(
                     "Delete village {0}. Error: {1}",
@@ -348,7 +350,7 @@ namespace libTravian
                 return DoRaidResult.DeleteVillage;
             }
 
-            if (!confirmForm.Contains("<form method=\"post\" action=\"a2b.php\">"))
+            if (!confirmForm.ToLower().Contains("<form method=\"post\" action=\"a2b.php\">"))
             {
                 return DoRaidResult.SkipVillage;
             }
@@ -443,7 +445,7 @@ namespace libTravian
             this.UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = this.VillageID });
         }
 
-        private static Regex hiddenInputPattern = new Regex(@"<input type=""hidden"" name=""(\w+)"" value=""(.+)"" />");
+        private static Regex hiddenInputPattern = new Regex("type=\"hidden\"[^>]*?name=\"([^\"]*?)\"[^>]*?value=\"([^\"]*?)\"", RegexOptions.Singleline);
         private static Dictionary<string, string> GetHiddenInputValues(string data)
         {
             Dictionary<string, string> values = new Dictionary<string, string>();

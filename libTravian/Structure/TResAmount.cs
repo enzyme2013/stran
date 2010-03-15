@@ -56,7 +56,12 @@ namespace libTravian
 				double[] proportions = new double[this.Resources.Length];
 				for(int i = 0; i < proportions.Length; i++)
 				{
-					proportions[i] = this.Resources[i] / total;
+					if (total != 0)
+						proportions[i] = this.Resources[i] / total;
+					//else if (proportions.Length != 0)
+					//	proportions[i] = this.Resources[i] / proportions.Length;
+					else
+						proportions[i] = 0;
 				}
 
 				return proportions;

@@ -141,22 +141,31 @@ namespace libTravian
                         if (!CV.Buildings.ContainsKey(i))
                             continue;
                         var tlevel = CV.Buildings[i].Level;
-                        if (tlevel < 10 && croop == false)
+                        if (tlevel < 10)
                         {
                             gid = CV.Buildings[i].Gid;
                             bid = i;
                             croop = true;
+                            break;
                         }
                     }
                     if (croop == false && CV.Queue.Contains(this))
                     {
-                        MarkDeleted = true;
-                        UpCall.Dirty = true;
-                        UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+                    	retrycount++;
+                    	if (retrycount >= 2)
+                    	{
+                    		MarkDeleted = true;
+                    		UpCall.Dirty = true;
+                    		UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+                    		return;
+                    	}
+                    	UpCall.PageQuery(VillageID, "dorf1.php");
+                    	UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Buildings, VillageID = VillageID });
                         return;
                     }
 				}
 			}
+			retrycount = 0;
 			// balance on warehouse and resource field:
 			int[] rate2;
 			if(UpCall.TD.Villages.Count > 20)
@@ -276,6 +285,7 @@ namespace libTravian
 		}
 
 		private int Gid = 0;
+		private int retrycount = 0;
 		public int QueueGUID { get { return 0; } }
 	}
 }

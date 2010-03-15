@@ -132,17 +132,11 @@ namespace libTravian
                     }
                     QueryString = sb.ToString();
                     wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    lock (Level2Lock)
-                    {
-                        result = wc.UploadString(Uri, QueryString);
-                    }
+					result = wc.UploadString(Uri, QueryString);
                 }
                 else
                 {
-                    lock (Level2Lock)
-                    {
-                        result = wc.DownloadString(Uri);
-                    }
+					result = wc.DownloadString(Uri);
                 }
                 string[] t = wc.ResponseHeaders.GetValues("Set-Cookie");
                 if (t != null)
@@ -159,7 +153,7 @@ namespace libTravian
                 if (!CheckLogin)
                     return result;
 
-                if (result.Contains("login"))
+				if(result.Contains("login_form"))
                 {
                     if (!Login())
                         return null;

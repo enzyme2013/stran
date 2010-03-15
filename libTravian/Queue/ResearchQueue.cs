@@ -108,8 +108,6 @@ namespace libTravian
 			var CV = UpCall.TD.Villages[VillageID];
 			int GID;
 			var Q = this;
-			string c;
-			Match m;
 			switch(ResearchType)
 			{
 				case TResearchType.Research:
@@ -121,7 +119,6 @@ namespace libTravian
 						return;
 					}
 					GID = 22;
-					string result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString() + "&a=" + Aid.ToString());
 					break;
 				case TResearchType.UpAttack:
 					if(TargetLevel != 0 && CV.Upgrades[Aid].AttackLevel >= TargetLevel || CV.Upgrades[Aid].AttackLevel >= CV.BlacksmithLevel)
@@ -132,12 +129,6 @@ namespace libTravian
 						return;
 					}
 					GID = 12;
-					result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString());
-					m = Regex.Match(result, "&c=(.*?)\">", RegexOptions.Singleline);
-					if (!m.Success)
-						return;
-					c = m.Groups[1].Value;
-					result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString() + "&a=" + Aid.ToString() + "&c=" + c);
 					break;
 				case TResearchType.UpDefence:
 					if(TargetLevel != 0 && CV.Upgrades[Aid].DefenceLevel >= TargetLevel || CV.Upgrades[Aid].DefenceLevel >= CV.ArmouryLevel)
@@ -148,17 +139,19 @@ namespace libTravian
 						return;
 					}
 					GID = 13;
-					result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString());
-					m = Regex.Match(result, "&c=(.*?)\">", RegexOptions.Singleline);
-					if (!m.Success)
-						return;
-					c = m.Groups[1].Value;
-					result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString() + "&a=" + Aid.ToString() + "&c=" + c);
 					break;
 				default:
 					return;
 			}
-			UpCall.BuildCount();
+			
+			string result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString());
+			Match m = Regex.Match(result, "&(?:amp;)a=" + Aid.ToString() + "&(?:amp;)c=(.*?)\">", RegexOptions.Singleline);
+			if (m.Success)
+			{
+				string c = m.Groups[1].Value;
+				UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString() + "&a=" + Aid.ToString() + "&c=" + c);
+				UpCall.BuildCount();
+			}
 
 			if(TargetLevel == 0 || ResearchType == TResearchType.Research)
 			{

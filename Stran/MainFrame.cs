@@ -62,6 +62,7 @@ namespace Stran
         Travian tr = null;
         int QueueCount = 0;
         int SelectVillage = 0;
+        public static bool AutoPlay {get; set;}
 
         public MainFrame()
         {
@@ -157,7 +158,7 @@ namespace Stran
             {
                 if (e.VillageID == -1)
                 {
-                    MessageBox.Show("Login failed.", "Stran");
+                    MessageBox.Show("Login failed!(登入失败!)\n請檢查伺服器和帳號密碼設定", "Stran");
                     return;
                 }
                 if (LoginInfo.Tribe == 0 && LoginInfo.Tribe != TravianData.Tribe)
@@ -181,10 +182,6 @@ namespace Stran
                             m_villagelist.listViewVillage.Items.Clear();
                 }
 
-                int index = -1;
-                if (m_villagelist.listViewVillage.SelectedIndices.Count == 1 && m_villagelist.listViewVillage.Items.Count != 0)
-                    index = m_villagelist.listViewVillage.SelectedIndices[0];
-                int i = 0;
                 List<int> f = new List<int>();
                 foreach (ListViewItem x in m_villagelist.listViewVillage.Items)
                 {
@@ -200,7 +197,11 @@ namespace Stran
                             xkey.SubItems[2].Text = x.Value.Name;
                         xkey.BackColor = SystemColors.Window;
                         if (TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
+						{
                             xkey.BackColor = Color.Salmon;
+							if (AutoPlay)
+								PlayAlert();
+						}
                     }
                     else
                     {
@@ -212,17 +213,33 @@ namespace Stran
                         lvi.SubItems.Add("");
                         lvi.BackColor = SystemColors.Window;
                         if (TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
+                        {
                             lvi.BackColor = Color.Salmon;
-                        if (e.VillageID == x.Key)
-                            i = m_villagelist.listViewVillage.Items.Count - 1;
-                        else
-                            i = lvi.Index;
+							if (AutoPlay)
+								PlayAlert();
+                        }
                     }
                 }
+				int index = -1;
+				if (m_villagelist.listViewVillage.Items.Count != 0)
+				{
+					if (m_villagelist.listViewVillage.SelectedIndices.Count == 1)
+						index = m_villagelist.listViewVillage.SelectedIndices[0];
+                        else
+					{
+						foreach (ListViewItem x in m_villagelist.listViewVillage.Items)
+						{
+							if (Convert.ToInt32(x.SubItems[0].Text) == SelectVillage)
+							{
+								index = m_villagelist.listViewVillage.Items.IndexOf(x);
+                    }
+                }
+					}
+				}
                 if (index >= 0)
                     m_villagelist.listViewVillage.Items[index].Selected = true;
                 else
-                    m_villagelist.listViewVillage.Items[i].Selected = true;
+                	m_villagelist.listViewVillage.Items[m_villagelist.listViewVillage.Items.Count - 1].Selected = true;
             }
             else if (e.ChangedData == Travian.ChangedType.Stop)
             {
@@ -233,6 +250,10 @@ namespace Stran
                 else if (e.Param == 0)
                 {
                     m_resourceshow.label5.BackColor = Color.Ivory;
+            	}
+            	else if (e.Param == 2)
+            	{
+            		m_resourceshow.label5.BackColor = Color.Gold;
                 }
             }
             else if (e.ChangedData == Travian.ChangedType.Queue && e.Param == -1)
@@ -1113,14 +1134,21 @@ namespace Stran
                         continue;
                     int Bid = Convert.ToInt32(m_buildinglist.listViewBuilding.SelectedItems[i].Text);
                     int Gid = CV.Buildings[Bid].Gid;
-                    if (CV.Buildings[Bid].Level >= Buildings.BuildingCost[Gid].data.Length - 1)
+                    int clevel = CV.Buildings[Bid].Level;
+                    int tlevel = Buildings.BuildingCost[Gid].data.Length - 1;
+                    if (Gid <= 4)
+                    {
+                    	if (!CV.isCapital)
+                    		tlevel = 10;
+                    }
+                    if (clevel >= tlevel)
                         continue;
                     BuildToLevel btl = new BuildToLevel()
                     {
                         BuildingName = tr.GetGidLang(Gid),
                         DisplayName = dl.GetGidLang(Gid),
-                        CurrentLevel = CV.Buildings[Bid].Level,
-                        TargetLevel = Buildings.BuildingCost[Gid].data.Length - 1,
+                        CurrentLevel = clevel,
+                        TargetLevel = tlevel,
                         mui = mui
                     };
                     if (btl.ShowDialog() == DialogResult.OK)
@@ -1288,6 +1316,12 @@ namespace Stran
             {
                 CV.InitializeTroop();
                 MessageBox.Show("读取军队信息，重新操作一次");
+                return;
+            }
+            TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
+            if (Troop == null)
+            {
+            	MessageBox.Show("目前此村庄中无军队!");
                 return;
             }
             RaidQueue task = new RaidQueue()
@@ -1965,7 +1999,7 @@ namespace Stran
             if (CV.isUpgradeInitialized < 2)
             {
                 CV.InitializeUpgrade();
-                MessageBox.Show("程序正在读取研发信息，请重新操作一次!");
+                MessageBox.Show("程序正在读取研发信息，请重新操作一次");
                 return;
             }
             List<TroopInfo> CanProduce = new List<TroopInfo>();
@@ -2041,6 +2075,9 @@ namespace Stran
             if (newname.ShowDialog() == DialogResult.OK)
             {
                 VillageName = newname.VillageName;
+                if (CV.Name == VillageName)
+                	return;
+                else
                 tr.Rename(VillageID, VillageName);
             }
         }
@@ -2060,8 +2097,6 @@ namespace Stran
                 MessageBox.Show("读取军队信息，重新操作一次");
                 return;
             }
-            if (CV.isTroopInitialized == 2)
-            {
                 TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
                 if (Troop == null)
                 {
@@ -2086,9 +2121,6 @@ namespace Stran
                     lvi(rof.Return);
                 }
             }
-            else
-                CV.InitializeTroop();
-        }
 
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
@@ -2171,6 +2203,7 @@ namespace Stran
                     village.RestoreQueueRes(openFileDialog.FileName);
                     TravianData.Dirty = true;
                 }
+				Local_StatusUpdate(sender, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = SelectVillage });
             }
         }
 
@@ -2212,6 +2245,12 @@ namespace Stran
                 }
             }
         }
+		private void PlayAlert()
+		{
+			System.Media.SoundPlayer SP = new System.Media.SoundPlayer();
+			SP.SoundLocation = "Alert.wav";
+			SP.Play();
+		}
 
         void tabPage3_Enter(object sender, EventArgs e)
         {

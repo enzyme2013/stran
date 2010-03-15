@@ -40,6 +40,7 @@ namespace Stran
         //public static readonly string[] typelist = new string[] { "资源田", "建筑", "拆除", "攻击力", "防御力" };
         public static string[] tribelist = new string[] { "自动探测", "罗马", "日尔曼", "高卢" };
         public bool CloseMainform = false;
+        public bool StartSmall = false;
         public MainForm()
         {
             InitializeComponent();
@@ -165,9 +166,44 @@ namespace Stran
                 }
             }
 
+            if (Options.ContainsKey("AutoPlay")) //攻擊警報音樂
+            {
+                char pop = Options["AutoPlay"].Trim()[0];
+                switch (pop)
+                {
+                    case 'y':
+                    case 'Y':
+                    case 't':
+                    case 'T':
+                    case '1':
+                        MainFrame.AutoPlay = true;
+                        break;
+                }
+            }
+            if (Options.ContainsKey("StartSmall")) //啟動時最小化視窗
+            {
+                char pop = Options["StartSmall"].Trim()[0];
+                switch (pop)
+                {
+                    case 'y':
+                    case 'Y':
+                    case 't':
+                    case 'T':
+                    case '1':
+                        StartSmall = true;
+                        break;
+                }
+            }
             if (!Options.ContainsKey("NoRaid2to7"))
             {
                 RaidQueue.NoRaid2To7 = true;
+            }
+			if (StartSmall)
+			{
+				this.WindowState = FormWindowState.Minimized;
+				this.notifyIcon1.Visible = true;
+				this.ShowInTaskbar = false;
+				StartSmall = false;
             }
         }
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -177,6 +213,7 @@ namespace Stran
                 {
                     Visible = true;
                     WindowState = FormWindowState.Normal;
+					ShowInTaskbar = true;
                 }
                 else
                 {
@@ -383,6 +420,35 @@ namespace Stran
         {
             notifyIcon1.Icon = Resources.free;
             timerIcon.Enabled = false;
+		}
+		private void ACUpClick(object sender, EventArgs e)
+		{
+            if (listView1.SelectedIndices.Count == 0 || listView1.SelectedIndices[0] == 0)
+                return;
+            for (int i = 0; i < listView1.SelectedIndices.Count; i++)
+            {
+                int n = listView1.SelectedIndices[i];
+                accounts.Reverse(n - 1, 2);
+                ListViewItem tlvi = listView1.Items[n - 1];
+                listView1.Items.RemoveAt(n - 1);
+                listView1.Items.Insert(n, tlvi);
+            }
+            saveAccountInfo();
+		}
+		
+		private void ACDownClick(object sender, EventArgs e)
+		{
+            if (listView1.SelectedIndices.Count == 0 || listView1.SelectedIndices[listView1.SelectedIndices.Count - 1] == listView1.Items.Count - 1)
+                return;
+            for (int i = listView1.SelectedIndices.Count - 1; i >= 0; i--)
+            {
+                int n = listView1.SelectedIndices[i];
+                accounts.Reverse(n, 2);
+                ListViewItem tlvi = listView1.Items[n + 1];
+                listView1.Items.RemoveAt(n + 1);
+                listView1.Items.Insert(n, tlvi);
+            }
+            saveAccountInfo();			
         }
     }
 

@@ -17,6 +17,7 @@ editacc=&E. 编辑帐号
 delacc=&D. 删除帐号
 // main form message
 repeatlogin=重复登录的帐号: 
+
 // main frame
 villagebuilding=村庄建设
 event=事件
@@ -190,6 +191,7 @@ autonormalizemetime=自动平衡我的爆仓时间
 forcetransfer=无视爆仓检查
 CMBProduceTroop=&R. 造兵
 CMBRaid=&S. 出兵
+CMBAttack=&K. 出兵
 vres=资源
 newcap=&C. 刷新主村
 showallarmy=&A. 显示所有军种
@@ -206,7 +208,7 @@ SendTroops=出兵
 Description=简单描述
 saveRES=&E. 汇出资源限制
 restoreRES=&I. 汇入资源限制
-refreshall=&L. 全部刷新
+refreshall=&F. 全部刷新
 deleteVillage=&D. 删除村庄
 allbuildings=&A. 显示所有建筑
 wonder=&W. 显示奇观建筑
@@ -280,3 +282,5 @@ exit=离开
 percent=百分比
 autobalance=自动平衡资源
 random=随机攻击
+addtarget=新增自设
+deletetarget=删除自设

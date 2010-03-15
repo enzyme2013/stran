@@ -28,13 +28,13 @@ namespace Stran
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+			this.Btn_OK = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+			this.Btn_Cancel = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -46,15 +46,15 @@ namespace Stran
             // 
             // button1
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(77, 244);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 32);
-            this.button1.TabIndex = 6;
-            this.button1.Tag = "save";
-            this.button1.Text = "保存";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.Btn_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.Btn_OK.Location = new System.Drawing.Point(77, 231);
+			this.Btn_OK.Name = "Btn_OK";
+			this.Btn_OK.Size = new System.Drawing.Size(80, 32);
+			this.Btn_OK.TabIndex = 5;
+			this.Btn_OK.Tag = "save";
+			this.Btn_OK.Text = "OK";
+			this.Btn_OK.UseVisualStyleBackColor = true;
+			this.Btn_OK.Click += new System.EventHandler(this.Btn_OK_Click);
             // 
             // label4
             // 
@@ -63,7 +63,7 @@ namespace Stran
             this.label4.Size = new System.Drawing.Size(93, 14);
             this.label4.TabIndex = 9;
             this.label4.Tag = "password";
-            this.label4.Text = "密码";
+			this.label4.Text = "PWD";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label5
@@ -73,7 +73,7 @@ namespace Stran
             this.label5.Size = new System.Drawing.Size(93, 14);
             this.label5.TabIndex = 8;
             this.label5.Tag = "username";
-            this.label5.Text = "用户名";
+			this.label5.Text = "ID";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label6
@@ -83,7 +83,7 @@ namespace Stran
             this.label6.Size = new System.Drawing.Size(93, 14);
             this.label6.TabIndex = 7;
             this.label6.Tag = "server";
-            this.label6.Text = "服务器";
+			this.label6.Text = "Server";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox1
@@ -104,14 +104,14 @@ namespace Stran
             // 
             // button2
             // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(188, 244);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(80, 32);
-            this.button2.TabIndex = 7;
-            this.button2.Tag = "cancel";
-            this.button2.Text = "取消";
-            this.button2.UseVisualStyleBackColor = true;
+			this.Btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.Btn_Cancel.Location = new System.Drawing.Point(187, 231);
+			this.Btn_Cancel.Name = "Btn_Cancel";
+			this.Btn_Cancel.Size = new System.Drawing.Size(80, 32);
+			this.Btn_Cancel.TabIndex = 6;
+			this.Btn_Cancel.Tag = "cancel";
+			this.Btn_Cancel.Text = "Cancel";
+			this.Btn_Cancel.UseVisualStyleBackColor = true;
             // 
             // comboBox1
             // 
@@ -129,7 +129,7 @@ namespace Stran
             this.label1.Size = new System.Drawing.Size(93, 14);
             this.label1.TabIndex = 10;
             this.label1.Tag = "tribe";
-            this.label1.Text = "种族";
+			this.label1.Text = "Race";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox3
@@ -147,7 +147,7 @@ namespace Stran
             this.label2.Size = new System.Drawing.Size(93, 14);
             this.label2.TabIndex = 11;
             this.label2.Tag = "displang";
-            this.label2.Text = "显示语言";
+			this.label2.Text = "Language";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox4
@@ -176,11 +176,11 @@ namespace Stran
             // 
             // NewAccount
             // 
-            this.AcceptButton = this.button1;
+			this.AcceptButton = this.Btn_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(344, 299);
+			this.CancelButton = this.Btn_Cancel;
+			this.ClientSize = new System.Drawing.Size(344, 270);
             this.Controls.Add(this.lblProxy);
             this.Controls.Add(this.txtProxy);
             this.Controls.Add(this.label2);
@@ -188,8 +188,8 @@ namespace Stran
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+			this.Controls.Add(this.Btn_Cancel);
+			this.Controls.Add(this.Btn_OK);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -204,12 +204,14 @@ namespace Stran
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Tag = "account";
-            this.Text = "帐号";
+			this.Text = "Acccount";
             this.Load += new System.EventHandler(this.NewAccount_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
+		private System.Windows.Forms.Button Btn_Cancel;
+		private System.Windows.Forms.Button Btn_OK;
 
         #endregion
 
@@ -217,9 +219,7 @@ namespace Stran
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox3;

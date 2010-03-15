@@ -58,7 +58,10 @@ namespace libTravian
 				int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
 				int timecost;
                 TResAmount TroopRes;
-                TroopRes = Buildings.TroopCost[key] * Amount * (GRt ? 3 : 1);
+                if (Aid == 9 || Aid == 10)
+                	TroopRes = Buildings.TroopCost[key] * Amount;
+                else
+                	TroopRes = Buildings.TroopCost[key] * Amount * (GRt ? 3 : 1);
 
                 int[] adjustedResources = new int[TroopRes.Resources.Length];
                 for (int i = 0; i < adjustedResources.Length; i++)
@@ -116,7 +119,7 @@ namespace libTravian
 			 */
 			string p_a, p_id, p_z;
 			Match m;
-			m = Regex.Match(data, "type=\"hidden\" name=\"id\" value=\"(\\d+?)\"");
+			m = Regex.Match(data, "type=\"hidden\" name=\"id\" value=\"([^>]*?)\"");
 			if (m.Success)
 				p_id = m.Groups[1].Value;
 			else
@@ -125,7 +128,7 @@ namespace libTravian
 				MarkDeleted = true;
 				return;
 			}
-			m = Regex.Match(data, "type=\"hidden\" name=\"z\" value=\"(\\d+?)\"");
+			m = Regex.Match(data, "type=\"hidden\" name=\"z\" value=\"([^>]*?)\"");
 			if (m.Success)
 				p_z = m.Groups[1].Value;
 			else
@@ -134,7 +137,7 @@ namespace libTravian
 				MarkDeleted = true;
 				return;
 			}
-			m = Regex.Match(data, "type=\"hidden\" name=\"a\" value=\"(\\d+?)\"");
+			m = Regex.Match(data, "type=\"hidden\" name=\"a\" value=\"([^>]*?)\"");
 			if (m.Success)
 				p_a = m.Groups[1].Value;
 			else

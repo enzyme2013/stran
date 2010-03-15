@@ -69,7 +69,7 @@ namespace libTravian
 	            string mainuser = PageQuery(VillageID, "spieler.php");
 	            if (mainuser == null)
 	            	return;
-	            Match mu = Regex.Match(mainuser, "<a href=\"spieler.php\\?s=1\">", RegexOptions.Singleline);
+	            Match mu = Regex.Match(mainuser, "<a href=\"spieler.php\\?s=1\">");
 	            if (!mu.Success)
 	            {
 	                DebugLog("Not owner of this accounts.", DebugLevel.W);
@@ -100,22 +100,22 @@ namespace libTravian
                     p_mw = m.Groups[1].Value;
 	                m = Regex.Match(data, "tabindex=\"5\" type=\"text\" name=\"ort\" value=\"(.*?)\" maxlength=\"30\"");
                     p_ort = m.Groups[1].Value;
-	                m = Regex.Match(data, "tabindex=\"7\" name=\"be1\">([^<]*?)</textarea>");
+	                m = Regex.Match(data, "tabindex=\"7\" name=\"be1\">([^<]*?)</textarea>", RegexOptions.Singleline);
                     p_be1 = m.Groups[1].Value;
-	                m = Regex.Match(data, "tabindex=\"8\" name=\"be2\">([^<]*?)</textarea>");
+                    m = Regex.Match(data, "tabindex=\"8\" name=\"be2\">([^<]*?)</textarea>", RegexOptions.Singleline);
                     p_be2 = m.Groups[1].Value;
-	                
-	                Dictionary<string, string> PostData = new Dictionary<string, string>();
+                    
+                    Dictionary<string, string> PostData = new Dictionary<string, string>();
 	                PostData["e"] = p_e;
 	                PostData["uid"] = p_uid;
 	                PostData["jahr"] = p_jahr;
 	                PostData["monat"] = p_monat;
 	                PostData["tag"] = p_tag;
-	                PostData["be1"] = p_be1;
+	                PostData["be1"] = p_be1.Replace("\n", "\r\n");
 	                PostData["mw"] = p_mw;
 	                PostData["ort"] = p_ort;
 	                PostData["dname"] = VillageName;
-	                PostData["be2"] = p_be2;
+	                PostData["be2"] = p_be2.Replace("\n", "\r\n");
 	                PostData["s1.x"] = rand.Next(10, 70).ToString();
 	                PostData["s1.y"] = rand.Next(3, 17).ToString();
 	                string result = PageQuery(VillageID, "spieler.php", PostData);
