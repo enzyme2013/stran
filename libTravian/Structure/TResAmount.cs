@@ -139,12 +139,23 @@ namespace libTravian
 			}
 		}
 
-		/// <summary>
-		/// Comparator for unit tests
-		/// </summary>
-		/// <param name="obj">Another resource amount to compare with</param>
-		/// <returns>True if the two amounts are equal</returns>
-		public override bool Equals(object obj)
+        public void clearMinus()
+        {
+            for (int i = 0; i < Resources.Length; i++)
+            {
+                if (Resources[i] < 0)
+                {
+                    Resources[i] = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Comparator for unit tests
+        /// </summary>
+        /// <param name="obj">Another resource amount to compare with</param>
+        /// <returns>True if the two amounts are equal</returns>
+        public override bool Equals(object obj)
 		{
 			TResAmount amount = obj as TResAmount;
 			if(amount == null)
