@@ -46,6 +46,7 @@ namespace libTravian
         [Json]
         public int isMarketInitialized { get; set; }
         public Travian UpCall { get; set; }
+
         public TPoint Coord
         {
             get
@@ -132,6 +133,21 @@ namespace libTravian
             UpCall.FetchVillageMarket(ID);
         }
 
+        public BalancerQueue getBalancer()
+        {
+            if (Queue == null) return null;
+            if (Queue.Count == 0) return null;
+            foreach (var x in Queue)
+            {
+                if (x is BalancerQueue)
+                {
+                    return x as BalancerQueue;
+                }
+            }
+            return null;
+        } 
+           
+   
         public int TimeCost(TResAmount ResCost)
         {
             int time = 0;
@@ -156,6 +172,7 @@ namespace libTravian
         public bool GetAllTroop = false;
         [Json]
         public TTroop Troop;
+
         public TVillage()
         {
             Resource = new TResource[4];
@@ -165,7 +182,9 @@ namespace libTravian
             Market = new TMarket();
             Troop = new TTroop();
             for (int i = 1; i <= 10; i++)
+            {
                 Upgrades[i] = new TRU();
+            }
         }
 
         public override string ToString()
@@ -378,6 +397,7 @@ namespace libTravian
             }
             catch { }
         }
+
     }
 
     public class TResource
@@ -511,7 +531,8 @@ namespace libTravian
         Party,
         Transfer,
         NpcTrade,
-        Raid
+        Raid,
+        Balancer
     }
 
     /// <summary>
