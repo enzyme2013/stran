@@ -68,14 +68,17 @@ namespace libTravian
             switch (state)
             {
                 case states.notinitlized:
-                    UpdateState();
+                    UpdateType();
                     break;
                 case states.initlized:
                     execute();
                     break;
-                case states.executing:
-                    break;
-                case states.done:
+                //case states.executing:
+                //    break;
+                //case states.done:
+                //    break;
+                default:
+                    UpdateType();
                     break;
             }
         }
@@ -84,7 +87,7 @@ namespace libTravian
         {
             get
             {
-                return 6;
+                return 5;
             }
         }
 
@@ -137,16 +140,20 @@ namespace libTravian
             groupVillages = new List<TSVillage>();
         }
 
-        private void debug(String message)
-        {
-            if (message == null) return;
-            UpCall.DebugLog(message, DebugLevel.E);
-        }
+        //private void debug(String message)
+        //{
+        //    if (message == null) return;
+        //    UpCall.DebugLog(message, DebugLevel.E);
+        //}
 
-        private void UpdateState()
+        private void UpdateType()
         {
 
             village = UpCall.TD.Villages[VillageID];
+            if (village.Name.Contains("047"))
+            {
+                int debug = 3;
+            }
             if (village == null) return;
             if (DateTime.Now.Subtract(lastUpdateTime).TotalSeconds > 10)
             {
@@ -168,10 +175,12 @@ namespace libTravian
             {
                 ///检查建筑队列
                 TResAmount source = CaculateBuildingAmount(ignoreMarket, ignoreTime);
+                source.clearMinus();
                 if (source.isZero())
                 {
                     source = CaculatePartyResource(ignoreMarket, ignoreTime);
                 }
+                source.clearMinus();
                 if (source.isZero())
                 {
                     source = CaculateResearchAmount(ignoreMarket, ignoreTime);
@@ -188,7 +197,7 @@ namespace libTravian
                 else
                 {
 
-                    debug("Auto Balancer : " + village.Name + " need res " + source.ToString());
+                    UpCall.DebugLog("Auto Balancer : " + village.Name + " need res " + source.ToString(), DebugLevel.E);
                     type = villagetype.needer;
                 }
             }
@@ -223,23 +232,98 @@ namespace libTravian
                             break;
                         }
                     }
+                    else if (task.GetType().Name == "AIQueue")
+                    {
+                        AIQueue Q = task as AIQueue;
+                        if (Q.Gid != 0)
+                        {
+                            TResAmount res = Buildings.Cost(village.Buildings[Q.Bid].Gid, village.Buildings[Q.Bid].Level + 1);
+                            //建筑所需资源没有超过仓库上限
+                            if ((larger(res, GetVillageCapacity(village))) == false)
+                            {
+                                resource += res;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             resource -= GetVillageRes(village, ignoreMarket, ignoreTime);
             return resource;
         }
 
-        //检测建筑序列所需的资源
+        //检测研究序列所需的资源
         protected TResAmount CaculateResearchAmount(int ignoreMarket, int ignorTime)
         {
-            //TODO
+            //UPAttack
+            if (village.InBuilding[3] == null)
+            {
+                foreach (var task in village.Queue)
+                {
+                    if (task.GetType().Name == "ResearchQueue")
+                    {
+                        ResearchQueue Q = task as ResearchQueue;
+                        if (Q.ResearchType == ResearchQueue.TResearchType.UpAttack)
+                        {
+                            TResAmount res = Buildings.UpCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid][village.Upgrades[Q.Aid].AttackLevel];
+                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
+                        }
+                    }
+                }
+            }
+            //UPDefense
+            if (village.InBuilding[4] == null)
+            {
+                foreach (var task in village.Queue)
+                {
+                    if (task.GetType().Name == "ResearchQueue")
+                    {
+                        ResearchQueue Q = task as ResearchQueue;
+                        if (Q.ResearchType == ResearchQueue.TResearchType.UpDefence)
+                        {
+                            TResAmount res = Buildings.UpCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid][village.Upgrades[Q.Aid].DefenceLevel];
+                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
+                        }
+                    }
+                }
+            }
+            //Research
+            if (village.InBuilding[5] == null)
+            {
+                foreach (var task in village.Queue)
+                {
+                    if (task.GetType().Name == "ResearchQueue")
+                    {
+                        ResearchQueue Q = task as ResearchQueue;
+                        if (Q.ResearchType == ResearchQueue.TResearchType.Research)
+                        {
+                            TResAmount res = Buildings.ResearchCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid];
+                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
+                        }
+                    }
+                }
+            }
             return new TResAmount();
         }
 
         //检测Party所需的资源
         protected TResAmount CaculatePartyResource(int ignoreMarket, int ignorTime)
         {
-            //TODO
+            if (village.InBuilding[6] == null)
+            {
+                foreach (var task in village.Queue)
+                {
+                    if (task.GetType().Name == "PartyQueue")
+                    {
+                        PartyQueue Q = task as PartyQueue;
+                        TResAmount res = Buildings.PartyCos[(int)Q.PartyType - 1];
+                        if ((larger(res, GetVillageCapacity(village))) == false)
+                        {
+                            return res -= GetVillageRes(village, ignoreMarket, ignoreTime);
+                        }
+                    }
+                }
+            }
             return new TResAmount();
         }
 
@@ -315,12 +399,12 @@ namespace libTravian
                                 if (thisTypeCount > marketCarry)
                                 {
                                     sendRes[i] = (marketCarry > r.Resources[i]) ? r.Resources[i] : marketCarry;
-                                    marketCarry -= sendRes[i];
                                 }
                                 else
                                 {
-                                    sendRes[i] = thisTypeCount;
+                                    sendRes[i] = (r.Resources[i] > thisTypeCount) ? thisTypeCount : r.Resources[i];
                                 }
+                                marketCarry -= sendRes[i];
                             }
                             TResAmount r2 = new TResAmount(sendRes);
                             DoTranfer(fromVillage, this.village, r2);
@@ -334,42 +418,7 @@ namespace libTravian
                     }
                 }
             }
-            UpdateState();
-            /* PUSH模式
-             
-            if (type == villagetype.giver)
-            {
-                foreach (var vid in UpCall.TD.Villages.Keys)
-                {
-                    var CV = UpCall.TD.Villages[vid];
-                    BalancerQueue queue = CV.getBalancer();
-                    if (queue != null)
-                    {
-                        //TODO1 增加Balancer Group设定
-                        //TODO2 增加自动寻找最近的村子
-                        if (queue.type == villagetype.needer)
-                        {
-                            TResAmount targetRes = queue.needRes;
-                            if (targetRes.isZero() == false)
-                            {
-                                debug("Auto Balancer: send res from " + village.Name + " => " + CV+ " " + targetRes );
-                                //计算运送的资源
-                                TResAmount sendRes = targetRes;
-                                TransferQueue transfer = new TransferQueue()
-                                {
-                                    UpCall = this.UpCall,
-                                    VillageID = this.VillageID,
-                                };
-                                transfer.TargetPos = new TPoint(queue.village.X, queue.village.Y);
-                                transfer.ResourceAmount = sendRes;
-                                transfer.Action();
-                            }
-                        }
-                    }
-                }
-            }
-            */
-            state = states.notinitlized;
+            UpdateType();
         }
 
         private int GetMarketMan(int totalSend, int carry)
@@ -388,7 +437,7 @@ namespace libTravian
 
         private void DoTranfer(TVillage from, TVillage to, TResAmount res)
         {
-            debug("Balancer : " + from.Name + " => " + to.Name + " " + res.ToString());
+            UpCall.DebugLog("Balancer : " + from.Name + " => " + to.Name + " " + res.ToString(), DebugLevel.E);
             TransferQueue transfer = new TransferQueue()
             {
                 UpCall = this.UpCall,
@@ -428,6 +477,11 @@ namespace libTravian
                 }
             }
             groupVillages.Sort();
+            foreach (var v in groupVillages)
+            {
+                TVillage TV = UpCall.TD.Villages[v.VillageID];
+                //UpCall.DebugLog(TV.Name + v.distance,DebugLevel.E);
+            }
             //debug("Auto Balancer : " + this.village.Name + " Update Group VillageList, size = " + groupVillages.Count);
         }
 
@@ -471,7 +525,7 @@ namespace libTravian
 
             public int CompareTo(TSVillage other)
             {
-                return (int)(other.distance - distance);
+                return (int)(distance - other.distance);
             }
 
             #endregion
