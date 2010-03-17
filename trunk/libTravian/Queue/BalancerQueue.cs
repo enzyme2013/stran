@@ -168,40 +168,50 @@ namespace libTravian
              */
             if (village.Queue == null)
             {
-                type = checkAvailableMerchant();
+                type = UpdateMarketState();
 
             }
             else
             {
                 ///检查建筑队列
                 TResAmount source = CaculateBuildingAmount(ignoreMarket, ignoreTime);
-                source.clearMinus();
+                //检查party
                 if (source.isZero())
                 {
                     source = CaculatePartyResource(ignoreMarket, ignoreTime);
                 }
-                source.clearMinus();
+                //检查研究
                 if (source.isZero())
                 {
                     source = CaculateResearchAmount(ignoreMarket, ignoreTime);
                 }
-                //把负数的清0
-                source.clearMinus();
-                //TODO 检查是否有资源限制
+                //检查造兵
+                if (source.isZero())
+                {
+                    source = CaculateProduceTroop(ignoreMarket, ignoreTime);
+                }
                 needRes = source;
                 if (source.isZero())
                 {
                     //TODO 检查爆仓
-                    type = checkAvailableMerchant();
+                    type = UpdateMarketState();
                 }
                 else
                 {
 
-                    UpCall.DebugLog("Auto Balancer : " + village.Name + " need res " + source.ToString(), DebugLevel.E);
+                    UpCall.DebugLog("Auto Balancer : " + VillageShort(village) + " need res " + source.ToString(), DebugLevel.E);
                     type = villagetype.needer;
                 }
             }
             state = states.initlized;
+        }
+
+        protected bool notInBuilding(TInBuilding inbuilding)
+        {
+            if (inbuilding == null) return true;
+            //提前60秒开始送资源
+            //TODO 可以设置到配置文件中
+            return inbuilding.end(-60);
         }
 
         //检测建筑序列所需的资源
@@ -217,13 +227,14 @@ namespace libTravian
 
             }
             //单造的处理
-            if (village.InBuilding[0] == null && village.InBuilding[1] == null)
+            if (notInBuilding(village.InBuilding[0]) && notInBuilding(village.InBuilding[1]))
             {
                 foreach (var task in village.Queue)
                 {
                     if (task.GetType().Name == "BuildingQueue")
                     {
                         BuildingQueue Q = task as BuildingQueue;
+                        //UpCall.DebugLog(VillageShort(village) + " BuildingQ " + Q.Gid, DebugLevel.E);
                         TResAmount res = Buildings.Cost(village.Buildings[Q.Bid].Gid, village.Buildings[Q.Bid].Level + 1);
                         //建筑所需资源没有超过仓库上限
                         if ((larger(res, GetVillageCapacity(village))) == false)
@@ -237,6 +248,7 @@ namespace libTravian
                         AIQueue Q = task as AIQueue;
                         if (Q.Gid != 0)
                         {
+                            //UpCall.DebugLog(VillageShort(village) + " AIQueue " + Q.Gid, DebugLevel.E);
                             TResAmount res = Buildings.Cost(village.Buildings[Q.Bid].Gid, village.Buildings[Q.Bid].Level + 1);
                             //建筑所需资源没有超过仓库上限
                             if ((larger(res, GetVillageCapacity(village))) == false)
@@ -249,14 +261,20 @@ namespace libTravian
                 }
             }
             resource -= GetVillageRes(village, ignoreMarket, ignoreTime);
+            resource.clearMinus();
+            if (resource.isZero() == false)
+            {
+                UpCall.DebugLog(VillageShort(village) + " Building Need " + resource, DebugLevel.E);
+            }
             return resource;
         }
 
         //检测研究序列所需的资源
         protected TResAmount CaculateResearchAmount(int ignoreMarket, int ignorTime)
         {
+            TResAmount result = new TResAmount();
             //UPAttack
-            if (village.InBuilding[3] == null)
+            if (notInBuilding(village.InBuilding[3]))
             {
                 foreach (var task in village.Queue)
                 {
@@ -266,65 +284,120 @@ namespace libTravian
                         if (Q.ResearchType == ResearchQueue.TResearchType.UpAttack)
                         {
                             TResAmount res = Buildings.UpCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid][village.Upgrades[Q.Aid].AttackLevel];
-                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
+                            result = res - GetVillageRes(village, ignoreMarket, ignorTime);
+                            break;
                         }
                     }
                 }
             }
+
             //UPDefense
-            if (village.InBuilding[4] == null)
+            if (result.isZero())
             {
-                foreach (var task in village.Queue)
+                if (notInBuilding(village.InBuilding[4]))
                 {
-                    if (task.GetType().Name == "ResearchQueue")
+                    foreach (var task in village.Queue)
                     {
-                        ResearchQueue Q = task as ResearchQueue;
-                        if (Q.ResearchType == ResearchQueue.TResearchType.UpDefence)
+                        if (task.GetType().Name == "ResearchQueue")
                         {
-                            TResAmount res = Buildings.UpCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid][village.Upgrades[Q.Aid].DefenceLevel];
-                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
+                            ResearchQueue Q = task as ResearchQueue;
+                            if (Q.ResearchType == ResearchQueue.TResearchType.UpDefence)
+                            {
+                                TResAmount res = Buildings.UpCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid][village.Upgrades[Q.Aid].DefenceLevel];
+                                result = res - GetVillageRes(village, ignoreMarket, ignorTime);
+                                break;
+                            }
+                        }
+                    }
+                }
+                //Research
+                if (result.isZero())
+                {
+                    if (notInBuilding(village.InBuilding[5]))
+                    {
+                        foreach (var task in village.Queue)
+                        {
+                            if (task.GetType().Name == "ResearchQueue")
+                            {
+                                ResearchQueue Q = task as ResearchQueue;
+                                if (Q.ResearchType == ResearchQueue.TResearchType.Research)
+                                {
+                                    TResAmount res = Buildings.ResearchCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid];
+                                    result = res - GetVillageRes(village, ignoreMarket, ignorTime);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
             }
-            //Research
-            if (village.InBuilding[5] == null)
+            result.clearMinus();
+            if (result.isZero() == false)
             {
-                foreach (var task in village.Queue)
-                {
-                    if (task.GetType().Name == "ResearchQueue")
-                    {
-                        ResearchQueue Q = task as ResearchQueue;
-                        if (Q.ResearchType == ResearchQueue.TResearchType.Research)
-                        {
-                            TResAmount res = Buildings.ResearchCost[(UpCall.TD.Tribe - 1) * 10 + Q.Aid];
-                            return res - GetVillageRes(village, ignoreMarket, ignorTime);
-                        }
-                    }
-                }
+                UpCall.DebugLog(VillageShort(village) + " Research Need " + result, DebugLevel.E);
             }
-            return new TResAmount();
+            return result;
         }
 
         //检测Party所需的资源
-        protected TResAmount CaculatePartyResource(int ignoreMarket, int ignorTime)
+        protected TResAmount CaculatePartyResource(int ignoreMarket, int ignoreTime)
         {
-            if (village.InBuilding[6] == null)
+            TResAmount result = new TResAmount();
+            if (notInBuilding(village.InBuilding[6]))
             {
                 foreach (var task in village.Queue)
                 {
                     if (task.GetType().Name == "PartyQueue")
                     {
                         PartyQueue Q = task as PartyQueue;
+                        //UpCall.DebugLog(VillageShort(village) + " PartyQ " + Q.PartyType, DebugLevel.E);
                         TResAmount res = Buildings.PartyCos[(int)Q.PartyType - 1];
                         if ((larger(res, GetVillageCapacity(village))) == false)
                         {
-                            return res -= GetVillageRes(village, ignoreMarket, ignoreTime);
+                            result = res - GetVillageRes(village, ignoreMarket, ignoreTime);
+                            break;
                         }
                     }
                 }
             }
-            return new TResAmount();
+            result.clearMinus();
+            if (result.isZero() == false)
+            {
+                UpCall.DebugLog(VillageShort(village) + " Party Need " + result, DebugLevel.E);
+            }
+            return result;
+        }
+
+        protected TResAmount CaculateProduceTroop(int ignoreMarket, int ignoreTime)
+        {
+            TResAmount result = new TResAmount();
+            foreach (var task in village.Queue)
+            {
+                if (task.GetType().Name == "ProduceTroopQueue")
+                {
+                    ProduceTroopQueue Q = task as ProduceTroopQueue;
+
+                    var CV = UpCall.TD.Villages[VillageID];
+                    int Aid = Q.Aid;
+                    int Amount = Q.Amount;
+                    int key = (UpCall.TD.Tribe - 1) * 10 + Aid;
+                    int timecost;
+                    TResAmount TroopRes;
+                    if (Aid == 9 || Aid == 10)
+                        TroopRes = Buildings.TroopCost[key] * Amount;
+                    else
+                        TroopRes = Buildings.TroopCost[key] * Amount * (Q.GRt ? 3 : 1);
+
+                    result = TroopRes - GetVillageRes(village, ignoreMarket, ignoreTime);
+                    break;
+                }
+            }
+            result.clearMinus();
+            if (result.isZero() == false)
+            {
+                UpCall.DebugLog(VillageShort(village) + " Produce Troop Need " + result, DebugLevel.E);
+            }
+            return result;
         }
 
         //返回目标村庄的资源上限
@@ -346,30 +419,28 @@ namespace libTravian
         }
 
         //检查市场
-        private villagetype checkAvailableMerchant()
+        private villagetype UpdateMarketState()
         {
             if (village.Market.ActiveMerchant <= 0)
             {
                 return villagetype.marketnotavailable;
             }
-            /*
-             //TODO 爆仓处理
-            else if (village.full())
-            {
-                return villagetype.full;
-            }
-            */
-
             else
             {
+                foreach (var res in village.Resource)
+                {
+                    if (res != null && res.isFull)
+                    {
+                        return villagetype.full;
+                    }
+                }
                 return villagetype.giver;
             }
         }
 
         private void execute()
         {
-            //TODO 从push模式改成pull模式
-
+            //PULL模式，自动寻找最近的资源点pull资源
             if (type == villagetype.needer)
             {
                 TResAmount res = new TResAmount(needRes);
@@ -418,6 +489,59 @@ namespace libTravian
                     }
                 }
             }
+            else if (type == villagetype.full)
+            {
+                //push模式，爆仓的村庄自动寻找资源最少的村子进行push
+                if (village.Market.ActiveMerchant > 0)
+                {
+                    int outResType = -1;
+                    for(int i=0;i<village.Resource.Length;i++){
+                        if (village.Resource[i] != null && village.Resource[i].isFull)
+                        {
+                            outResType = i;
+                        }
+                    }
+
+                    if(outResType != -1){
+                        double minCap = 100.0;
+                        int targetVillageID = -1;
+
+                        foreach (var tsv in groupVillages)
+                        {
+                            TVillage tv = UpCall.TD.Villages[tsv.VillageID];
+                            double rate = tv.Resource[outResType].CurrAmount * 100.0 / tv.Resource[outResType].Capacity;
+                            if (rate < minCap)
+                            {
+                                minCap = rate;
+                                targetVillageID = tsv.VillageID;
+                            }
+                        }
+
+                        if (targetVillageID != -1)
+                        {
+                            //计算运送的资源
+                            //TODO 没有加上ResourceLimit的计算
+                            TVillage targetVillage = UpCall.TD.Villages[targetVillageID];
+                            int maxReceiveRes = targetVillage.Resource[outResType].Capacity - targetVillage.Resource[outResType].CurrAmount;
+                            maxReceiveRes = maxReceiveRes * 8 / 10;
+                            int maxCarry = village.Market.ActiveMerchant * village.Market.SingleCarry;
+                            int maxSend = village.Resource[outResType].CurrAmount;
+                            maxSend = (maxCarry < maxSend) ? maxCarry : maxSend;
+                            maxSend = (maxReceiveRes < maxSend) ? maxReceiveRes : maxSend;
+
+                            TResAmount res = new TResAmount();
+                            res.Resources[outResType] = maxSend;
+                            UpCall.DebugLog("push res from " + VillageShort(village) + " => " + VillageShort(targetVillage) + " " + res, DebugLevel.E);
+                            DoTranfer(village,targetVillage,res);
+                        }
+                    }
+
+                }
+                else
+                {
+                    UpCall.DebugLog(VillageShort(village) + " resource is full " + village.ResourceCurrAmount, DebugLevel.E);
+                }
+            }
             UpdateType();
         }
 
@@ -437,7 +561,7 @@ namespace libTravian
 
         private void DoTranfer(TVillage from, TVillage to, TResAmount res)
         {
-            UpCall.DebugLog("Balancer : " + from.Name + " => " + to.Name + " " + res.ToString(), DebugLevel.E);
+            UpCall.DebugLog("Balancer : " + VillageShort(from) + " => " + VillageShort(to) + " " + res.ToString(), DebugLevel.E);
             TransferQueue transfer = new TransferQueue()
             {
                 UpCall = this.UpCall,
@@ -536,9 +660,14 @@ namespace libTravian
             }
         }
 
-        public String ToString()
+        public override String ToString()
         {
             return village.Name + type;
+        }
+
+        public static string VillageShort(TVillage CV)
+        {
+            return string.Format("{0} ({1}|{2})", CV.Name, CV.Coord.X, CV.Coord.Y);
         }
     }
 }
