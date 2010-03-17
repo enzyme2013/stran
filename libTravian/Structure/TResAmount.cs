@@ -90,7 +90,8 @@ namespace libTravian
 			return new TResAmount(resources);
 		}
 
-		public static TResAmount FromString(string s)
+
+        public static TResAmount FromString(string s)
 		{
 			string[] values = s.Split('|');
 			int[] resources = new int[values.Length];
@@ -188,6 +189,18 @@ namespace libTravian
 		{
 			return new TResAmount(Res.Resources[0] * Time, Res.Resources[1] * Time, Res.Resources[2] * Time, Res.Resources[3] * Time);
 		}
-	}
+
+        public bool isZero()
+        {
+            for (int i = 0; i < Resources.Length; i++)
+            {
+                if (Resources[i] != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
 }
