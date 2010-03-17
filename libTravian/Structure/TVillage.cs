@@ -518,6 +518,11 @@ namespace libTravian
                 return !string.IsNullOrEmpty(CancelURL);
             }
         }
+
+        public bool end(int second)
+        {
+            return DateTime.Now.Subtract(FinishTime).TotalSeconds > second;
+        }
     }
 
     public enum TQueueType
