@@ -231,6 +231,7 @@ namespace libTravian
 				UpCall = UpCall,
 				VillageID = VillageID
 			};
+            Bid = bid;
 			Gid = gid;
 			if(BQ.CountDown <= 0)
 				BQ.Action();
@@ -284,7 +285,8 @@ namespace libTravian
 			return -1;
 		}
 
-		private int Gid = 0;
+		public int Gid = 0;
+        public int Bid = 0;
 		private int retrycount = 0;
 		public int QueueGUID { get { return 0; } }
 	}
