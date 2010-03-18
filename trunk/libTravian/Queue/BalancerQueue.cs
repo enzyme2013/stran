@@ -40,6 +40,8 @@ namespace libTravian
                         return "无空闲商人";
                     case villagetype.needer:
                         return "需求资源";
+                    case villagetype.waiting:
+                        return "Waiting";
                     default:
                         return "等待处理";
                 }
@@ -65,22 +67,9 @@ namespace libTravian
 
         public void Action()
         {
-            switch (state)
-            {
-                case states.notinitlized:
-                    UpdateType();
-                    break;
-                case states.initlized:
-                    execute();
-                    break;
-                //case states.executing:
-                //    break;
-                //case states.done:
-                //    break;
-                default:
-                    UpdateType();
-                    break;
-            }
+            UpdateType();
+            execute();
+            UpdateType();
         }
 
         public int QueueGUID
@@ -110,6 +99,17 @@ namespace libTravian
 
         private List<TSVillage> groupVillages;//本组的村庄
         private DateTime lastUpdateTime;
+
+        private int MinResPull
+        {
+            get
+            {
+                return 200;
+            }
+            set
+            {
+            }
+        }
         #endregion
 
 
@@ -130,6 +130,7 @@ namespace libTravian
             marketnotavailable = 3,
             full = 4,
             unknown = 5,
+            waiting = 6
         }
 
         #endregion
@@ -150,15 +151,11 @@ namespace libTravian
         {
 
             village = UpCall.TD.Villages[VillageID];
-            if (village.Name.Contains("047"))
-            {
-                int debug = 3;
-            }
             if (village == null) return;
-            if (DateTime.Now.Subtract(lastUpdateTime).TotalSeconds > 10)
+            if (DateTime.Now.Subtract(lastUpdateTime).TotalSeconds > 10000)
             {
                 UpdateGroupVillages();
-                lastUpdateTime = DateTime.Now;
+                lastUpdateTime = DateTime.Now.AddSeconds(1);
             }
             /*
             if (village.isMarketInitialized() == false)
@@ -174,33 +171,47 @@ namespace libTravian
             else
             {
                 ///检查建筑队列
-                TResAmount source = CaculateBuildingAmount(ignoreMarket, ignoreTime);
+                TResAmount source = CaculateBuildingAmount(1, ignoreTime);
                 //检查party
                 if (source.isZero())
                 {
-                    source = CaculatePartyResource(ignoreMarket, ignoreTime);
+                    source = CaculatePartyResource(1, ignoreTime);
                 }
                 //检查研究
                 if (source.isZero())
                 {
-                    source = CaculateResearchAmount(ignoreMarket, ignoreTime);
+                    source = CaculateResearchAmount(1, ignoreTime);
                 }
                 //检查造兵
                 if (source.isZero())
                 {
-                    source = CaculateProduceTroop(ignoreMarket, ignoreTime);
+                    source = CaculateProduceTroop(1, ignoreTime);
                 }
-                needRes = source;
                 if (source.isZero())
                 {
-                    //TODO 检查爆仓
                     type = UpdateMarketState();
                 }
                 else
                 {
-
-                    UpCall.DebugLog("Auto Balancer : " + VillageShort(village) + " need res " + source.ToString(), DebugLevel.E);
-                    type = villagetype.needer;
+                    TResAmount totalComRes = new TResAmount();
+                    foreach (TMInfo transfer in village.Market.MarketInfo)
+                    {
+                        if (transfer.MType == TMType.OtherCome)
+                        {
+                            totalComRes += transfer.CarryAmount;
+                        }
+                    }
+                    needRes = source - totalComRes;
+                    needRes.clearMinus();
+                    if (needRes.isZero())
+                    {
+                        type = villagetype.waiting;
+                    }
+                    else
+                    {
+                        UpCall.DebugLog("Auto Balancer : " + VillageShort(village) + " need res " + source.ToString(), DebugLevel.E);
+                        type = villagetype.needer;
+                    }
                 }
             }
             state = states.initlized;
@@ -264,7 +275,7 @@ namespace libTravian
             resource.clearMinus();
             if (resource.isZero() == false)
             {
-                UpCall.DebugLog(VillageShort(village) + " Building Need " + resource, DebugLevel.E);
+                //UpCall.DebugLog(VillageShort(village) + " Building Need " + resource, DebugLevel.E);
             }
             return resource;
         }
@@ -334,7 +345,7 @@ namespace libTravian
             result.clearMinus();
             if (result.isZero() == false)
             {
-                UpCall.DebugLog(VillageShort(village) + " Research Need " + result, DebugLevel.E);
+                //UpCall.DebugLog(VillageShort(village) + " Research Need " + result, DebugLevel.E);
             }
             return result;
         }
@@ -363,7 +374,7 @@ namespace libTravian
             result.clearMinus();
             if (result.isZero() == false)
             {
-                UpCall.DebugLog(VillageShort(village) + " Party Need " + result, DebugLevel.E);
+                //UpCall.DebugLog(VillageShort(village) + " Party Need " + result, DebugLevel.E);
             }
             return result;
         }
@@ -395,7 +406,7 @@ namespace libTravian
             result.clearMinus();
             if (result.isZero() == false)
             {
-                UpCall.DebugLog(VillageShort(village) + " Produce Troop Need " + result, DebugLevel.E);
+                //UpCall.DebugLog(VillageShort(village) + " Produce Troop Need " + result, DebugLevel.E);
             }
             return result;
         }
@@ -411,9 +422,18 @@ namespace libTravian
         {
             TResAmount res = new TResAmount(village.ResourceCurrAmount);
             //TODO ignoreMarket和ignoreTime的处理
-            foreach (TMInfo transfer in village.Market.MarketInfo)
+            if (ignoreMarket != 1)
             {
-                res += transfer.CarryAmount;
+                foreach (TMInfo transfer in village.Market.MarketInfo)
+                {
+                    if (transfer.MType == TMType.OtherCome)
+                    {
+                        //if (DateTime.Now <= transfer.FinishTime)
+                        //{
+                        res += transfer.CarryAmount;
+                        //}
+                    }
+                }
             }
             return res;
         }
@@ -427,9 +447,10 @@ namespace libTravian
             }
             else
             {
-                foreach (var res in village.Resource)
+                TResAmount res = GetVillageRes(village, ignoreMarket, ignoreTime);
+                for (int i = 0; i < village.Resource.Length; i++)
                 {
-                    if (res != null && res.isFull)
+                    if (res.Resources[i] >= village.Resource[i].Capacity)
                     {
                         return villagetype.full;
                     }
@@ -439,110 +460,151 @@ namespace libTravian
         }
 
         private void execute()
-        {
-            //PULL模式，自动寻找最近的资源点pull资源
+        {          
             if (type == villagetype.needer)
             {
-                TResAmount res = new TResAmount(needRes);
-                foreach (var tsv in groupVillages)
-                {
-                    //tsv.queue.UpdateState();
-                    TVillage fromVillage = UpCall.TD.Villages[tsv.VillageID];
-                    if (tsv.queue.type == villagetype.giver
-                        || tsv.queue.type == villagetype.full)
-                    {
-
-                        TResAmount r = GetVillageRes(fromVillage, ignoreMarket, ignoreTime);
-                        int marketCarry = fromVillage.Market.ActiveMerchant * fromVillage.Market.SingleCarry;
-                        //资源和商人都充足
-                        if (res.TotalAmount < marketCarry && smaller(res, r))
-                        {
-                            DoTranfer(fromVillage, this.village, res);
-                            res -= res;
-                        }
-                        else
-                        {
-                            int totalSend = 0;
-                            int[] sendRes = new int[r.Resources.Length];
-                            for (int i = 0; i < sendRes.Length; i++)
-                            {
-                                int thisTypeCount = needRes.Resources[i];
-                                if (thisTypeCount > marketCarry)
-                                {
-                                    sendRes[i] = (marketCarry > r.Resources[i]) ? r.Resources[i] : marketCarry;
-                                }
-                                else
-                                {
-                                    sendRes[i] = (r.Resources[i] > thisTypeCount) ? thisTypeCount : r.Resources[i];
-                                }
-                                marketCarry -= sendRes[i];
-                            }
-                            TResAmount r2 = new TResAmount(sendRes);
-                            DoTranfer(fromVillage, this.village, r2);
-                            res -= r2;
-                        }
-                    }
-
-                    if (res.isZero())
-                    {
-                        break;
-                    }
-                }
+                NeedPull();
             }
             else if (type == villagetype.full)
             {
-                //push模式，爆仓的村庄自动寻找资源最少的村子进行push
-                if (village.Market.ActiveMerchant > 0)
+                FullPush();
+            }
+        }
+
+        //PULL模式，自动寻找最近的资源点pull资源
+        private void NeedPull()
+        {
+            TResAmount res = new TResAmount(needRes);
+            foreach (var tsv in groupVillages)
+            {
+                //tsv.queue.UpdateState();
+                TVillage fromVillage = UpCall.TD.Villages[tsv.VillageID];
+                if (tsv.queue.type == villagetype.giver
+                    || tsv.queue.type == villagetype.full)
                 {
-                    int outResType = -1;
-                    for(int i=0;i<village.Resource.Length;i++){
-                        if (village.Resource[i] != null && village.Resource[i].isFull)
+
+                    TResAmount r = fromVillage.ResourceCurrAmount;
+                    int marketCarry = fromVillage.Market.ActiveMerchant * fromVillage.Market.SingleCarry;
+                    //资源和商人都充足
+                    if (res.TotalAmount < marketCarry && smaller(res, r))
+                    {
+                        if (DoTranfer(fromVillage, this.village, res))
                         {
-                            outResType = i;
+                            res -= res;
+                            needRes -= res;
                         }
                     }
-
-                    if(outResType != -1){
-                        double minCap = 100.0;
-                        int targetVillageID = -1;
-
-                        foreach (var tsv in groupVillages)
+                    else
+                    {
+                        int[] sendRes = new int[r.Resources.Length];
+                        for (int i = 0; i < sendRes.Length; i++)
                         {
-                            TVillage tv = UpCall.TD.Villages[tsv.VillageID];
-                            double rate = tv.Resource[outResType].CurrAmount * 100.0 / tv.Resource[outResType].Capacity;
-                            if (rate < minCap)
+                            int thisTypeCount = needRes.Resources[i];
+                            if (thisTypeCount > marketCarry)
                             {
-                                minCap = rate;
-                                targetVillageID = tsv.VillageID;
+                                sendRes[i] = (marketCarry > r.Resources[i]) ? r.Resources[i] : marketCarry;
+                            }
+                            else
+                            {
+                                sendRes[i] = (r.Resources[i] > thisTypeCount) ? thisTypeCount : r.Resources[i];
+                            }
+                            marketCarry -= sendRes[i];
+                        }
+                        TResAmount r2 = new TResAmount(sendRes);
+                        if (r2.TotalAmount > MinResPull)
+                        {
+                            if (DoTranfer(fromVillage, this.village, r2))
+                            {
+                                res -= r2;
+                                needRes -= r2;
                             }
                         }
+                    }
+                }
 
-                        if (targetVillageID != -1)
+                if (res.isZero())
+                {
+                    break;
+                }
+            }
+        }
+
+        //push模式，爆仓的村庄自动寻找资源最少的村子进行push
+        private void FullPush()
+        {
+            if (village.Market.ActiveMerchant > 0)
+            {
+                if (village.Name.Contains("006"))
+                {
+                    int debug = 3;
+                }
+                int outResType = -1;
+                TResAmount res = GetVillageRes(village, ignoreMarket, ignoreTime);
+                for (int i = 0; i < village.Resource.Length; i++)
+                {
+                    if (res.Resources[i] >= village.Resource[i].Capacity)
+                    {
+                        outResType = i;
+                        break;
+                    }
+                }
+
+                if (outResType != -1)
+                {
+                    int outResCurrAmount = village.Resource[outResType].CurrAmount;
+                    int outResCap = village.Resource[outResType].Capacity;
+                    double minCap = 100.0;
+                    int targetVillageID = -1;
+
+                    foreach (var tsv in groupVillages)
+                    {
+                        TVillage tv = UpCall.TD.Villages[tsv.VillageID];
+                        TResAmount tvres = GetVillageRes(tv, ignoreMarket, ignoreTime);
+                        TResAmount tvcap = GetVillageCapacity(tv);
+                        double rate = tvres.Resources[outResType] * 100.0 / tvcap.Resources[outResType];
+                        //double rate = tv.Resource[outResType].CurrAmount * 100.0 / tv.Resource[outResType].Capacity;
+                        if (rate < minCap)
                         {
-                            //计算运送的资源
-                            //TODO 没有加上ResourceLimit的计算
-                            TVillage targetVillage = UpCall.TD.Villages[targetVillageID];
-                            int maxReceiveRes = targetVillage.Resource[outResType].Capacity - targetVillage.Resource[outResType].CurrAmount;
-                            maxReceiveRes = maxReceiveRes * 8 / 10;
-                            int maxCarry = village.Market.ActiveMerchant * village.Market.SingleCarry;
-                            int maxSend = village.Resource[outResType].CurrAmount;
-                            maxSend = (maxCarry < maxSend) ? maxCarry : maxSend;
-                            maxSend = (maxReceiveRes < maxSend) ? maxReceiveRes : maxSend;
-
-                            TResAmount res = new TResAmount();
-                            res.Resources[outResType] = maxSend;
-                            UpCall.DebugLog("push res from " + VillageShort(village) + " => " + VillageShort(targetVillage) + " " + res, DebugLevel.E);
-                            DoTranfer(village,targetVillage,res);
+                            minCap = rate;
+                            targetVillageID = tsv.VillageID;
                         }
                     }
 
+                    if (targetVillageID != -1)
+                    {
+                        //计算运送的资源
+                        //TODO 没有加上ResourceLimit的计算
+                        TVillage targetVillage = UpCall.TD.Villages[targetVillageID];
+                        TResAmount tvcurrent = GetVillageRes(targetVillage, ignoreMarket, ignoreTime);
+                        TResAmount tvcap = GetVillageCapacity(targetVillage);
+
+                        //计算平均rate
+                        double rate = (tvcurrent.Resources[outResType] + outResCurrAmount) * 100.0 / (tvcap.Resources[outResType] + outResCap);
+                        //double rate = (targetVillage.Resource[outResType].CurrAmount + village.Resource[outResType].CurrAmount) * 100.0 / (targetVillage.Resource[outResType].Capacity + village.Resource[outResType].Capacity);
+                        //int maxReceiveRes = targetVillage.Resource[outResType].Capacity * rate - targetVillage.Resource[outResType].CurrAmount;
+                        //maxReceiveRes = maxReceiveRes * 8 / 10;
+                        int maxReceiveRes = Convert.ToInt32((tvcap.Resources[outResType] * rate - tvcurrent.Resources[outResType])/100.0);
+                        int maxCarry = village.Market.ActiveMerchant * village.Market.SingleCarry;
+                        int maxSend = village.Resource[outResType].CurrAmount;
+                        maxSend = (maxCarry < maxSend) ? maxCarry : maxSend;
+                        maxSend = (maxReceiveRes < maxSend) ? maxReceiveRes : maxSend;
+
+                        TResAmount sendRes = new TResAmount();
+                        sendRes.Resources[outResType] = maxSend;
+                        sendRes.clearMinus();
+                        if (sendRes.isZero() == false)
+                        {
+                            UpCall.DebugLog("push res from " + VillageShort(village) + " => " + VillageShort(targetVillage) + " " + sendRes, DebugLevel.E);
+                            DoTranfer(village, targetVillage, sendRes);
+                        }
+                    }
                 }
-                else
-                {
-                    UpCall.DebugLog(VillageShort(village) + " resource is full " + village.ResourceCurrAmount, DebugLevel.E);
-                }
+
             }
-            UpdateType();
+            else
+            {
+                UpCall.DebugLog(VillageShort(village) + " resource is full " + village.ResourceCurrAmount, DebugLevel.E);
+            }
         }
 
         private int GetMarketMan(int totalSend, int carry)
@@ -559,8 +621,13 @@ namespace libTravian
             }
         }
 
-        private void DoTranfer(TVillage from, TVillage to, TResAmount res)
+        private bool DoTranfer(TVillage from, TVillage to, TResAmount res)
         {
+            res.clearMinus();
+            if (res.isZero())
+            {
+                return false;
+            }
             UpCall.DebugLog("Balancer : " + VillageShort(from) + " => " + VillageShort(to) + " " + res.ToString(), DebugLevel.E);
             TransferQueue transfer = new TransferQueue()
             {
@@ -569,7 +636,9 @@ namespace libTravian
                 TargetPos = to.Coord,
                 ResourceAmount = res
             };
+            if (transfer.ExceedTargetCapacity(UpCall.TD)) return false;
             transfer.Action();
+            return true;
         }
 
         //按照距离更新村庄列表
