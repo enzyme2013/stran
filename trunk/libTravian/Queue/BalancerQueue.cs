@@ -684,7 +684,7 @@ namespace libTravian
                         TResAmount tvcap = GetVillageCapacity(tv);
                         double rate = tvres.Resources[outResType] * 100.0 / tvcap.Resources[outResType];
                         //double rate = tv.Resource[outResType].CurrAmount * 100.0 / tv.Resource[outResType].Capacity;
-                        if (rate < minCap)
+                        if (rate < minCap && rate < 80)
                         {
                             minCap = rate;
                             targetVillageID = tsv.VillageID;
@@ -729,8 +729,11 @@ namespace libTravian
                         sendRes.clearMinus();
                         if (sendRes.isZero() == false)
                         {
-                            UpCall.DebugLog("push res from " + VillageShort(village) + " => " + VillageShort(targetVillage) + " " + sendRes, DebugLevel.E);
-                            DoTranfer(village, targetVillage, sendRes);
+                            if (sendRes.TotalAmount >= this.BalancerGroup.MinSendResource)
+                            {
+                                UpCall.DebugLog("push res from " + VillageShort(village) + " => " + VillageShort(targetVillage) + " " + sendRes, DebugLevel.E);
+                                DoTranfer(village, targetVillage, sendRes);
+                            }
                         }
                     }
                 }
@@ -764,7 +767,7 @@ namespace libTravian
             {
                 return false;
             }
-            UpCall.DebugLog("Balancer : " + VillageShort(from) + " => " + VillageShort(to) + " " + res.ToString(), DebugLevel.E);
+            UpCall.DebugLog(VillageShort(from) + " => " + VillageShort(to) + " " + res.ToString(), DebugLevel.E);
             TransferQueue transfer = new TransferQueue()
             {
                 UpCall = this.UpCall,
