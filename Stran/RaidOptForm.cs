@@ -97,7 +97,7 @@ namespace Stran
                 this.nudMaxSlots.Value = this.Return.MaxSlots;
                 this.ckbMultipleRaids.Checked = this.Return.MultipeRaids;
                 this.tbDesc.Text = this.Return.Description;
-
+                this.ckbRandom.Checked = this.Return.RandomRaid;
                 if (this.Return.Targets != null)
                 {
                     foreach (TPoint village in this.Return.Targets)
