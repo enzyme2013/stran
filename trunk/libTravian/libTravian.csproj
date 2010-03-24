@@ -73,6 +73,7 @@
     <Compile Include="Queue\RaidQueue.cs" />
     <Compile Include="Queue\ResearchQueue.cs" />
     <Compile Include="Queue\TransferQueue.cs" />
+    <Compile Include="RegexLang.cs" />
     <Compile Include="ServerLang.cs" />
     <Compile Include="Structure\Structure.cs" />
     <Compile Include="Structure\TResAmount.cs" />

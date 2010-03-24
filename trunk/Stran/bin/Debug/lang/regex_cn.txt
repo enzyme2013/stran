@@ -1,0 +1,6 @@
+//lib newparser.cs
+newparser_hassupport=Ö§Ô®$
+newparser_hasretrun=·µ»Ø$
+newparser_hasspy=Õì²ì$
+newparser_hasraid=ÇÀ¶á$
+newparser_hasattack=¹¥»÷$

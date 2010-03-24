@@ -39,7 +39,7 @@ namespace libTravian
                 }
                 NewRefreshVillages(VillageID, data);
                 if (!TD.Villages.ContainsKey(VillageID))
-                	return;
+                    return;
                 NewParseResource(VillageID, data);
                 NewParseDorf1Building(VillageID, data);
                 NewParseDorf2Building(VillageID, data);
@@ -65,7 +65,7 @@ namespace libTravian
             if (VillageID == 0)
                 return;
             MatchCollection m;
-            m = Regex.Matches(data, "<td id=\"l\\d\" title=\"(-?\\d+)\">(\\d+)/(\\d+)</td>");
+            m = Regex.Matches(data, RegexLang["newparser_ParseResource"], RegexOptions.Singleline);
             if (m.Count == 4)
                 for (int i = 0; i < 4; i++)
                     TD.Villages[VillageID].Resource[i] = new TResource(
@@ -81,7 +81,7 @@ namespace libTravian
             string data = this.pageQuerier.PageQuery(0, "a2b.php", null, true, true);
             if (data == null)
                 return 0;
-            Match m = Regex.Match(data, "<img class=\"unit u(\\d*)\"");
+            Match m = Regex.Match(data, RegexLang["newparser_ParseTribe"], RegexOptions.Singleline);
             return Convert.ToInt32(m.Groups[1].Value) / 10 + 1;
         }
 
@@ -122,8 +122,8 @@ namespace libTravian
             */
             else
             {
-				Dictionary<int, TVillage> NEWTV = new Dictionary<int, TVillage>();
-				bool newv = false;
+                Dictionary<int, TVillage> NEWTV = new Dictionary<int, TVillage>();
+                bool newv = false;
                 for (i = 0; i < mc.Count; i++)
                 {
                     Match m = mc[i];
@@ -132,9 +132,9 @@ namespace libTravian
                     {
                         if (TD.Villages[vid].Name != m.Groups[2].Value)
                         {
-							TD.Villages[vid].Name = m.Groups[2].Value;
-							TD.Dirty = true;
-							newv = true;
+                            TD.Villages[vid].Name = m.Groups[2].Value;
+                            TD.Dirty = true;
+                            newv = true;
                         }
                     }
                     else
@@ -142,30 +142,30 @@ namespace libTravian
                         TD.Villages[vid] = new TVillage()
                         {
                             ID = vid,
-							Name = m.Groups[2].Value,
+                            Name = m.Groups[2].Value,
                             X = Convert.ToInt32(m.Groups[3].Value),
                             Y = Convert.ToInt32(m.Groups[4].Value),
-							UpCall = this,
-							Sort = i
+                            UpCall = this,
+                            Sort = i
                         };
                         TD.Dirty = true;
-						newv = true;
+                        newv = true;
                     }
-					if (TD.Villages[vid].Sort != i)
-					{
-						TD.Villages[vid].Sort = i;
-						TD.Dirty = true;
-					}
-					NEWTV.Add(vid, TD.Villages[vid]);
-				}
-				if (newv == true || TD.Villages.Count != NEWTV.Count)
-				{
-					TD.Villages.Clear();
-					TD.Villages = NEWTV;
-					TD.Dirty = true;
-	                StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
-				}
-			}
+                    if (TD.Villages[vid].Sort != i)
+                    {
+                        TD.Villages[vid].Sort = i;
+                        TD.Dirty = true;
+                    }
+                    NEWTV.Add(vid, TD.Villages[vid]);
+                }
+                if (newv == true || TD.Villages.Count != NEWTV.Count)
+                {
+                    TD.Villages.Clear();
+                    TD.Villages = NEWTV;
+                    TD.Dirty = true;
+                    StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
+                }
+            }
         }
 
         private void NewParseVillages(string data)
@@ -379,7 +379,7 @@ namespace libTravian
                     CV.RB[2].Gid == CV.Buildings[CV.RB[2].ABid].Gid &&
                     CV.RB[2].Level == CV.Buildings[CV.RB[2].ABid].Level)
                 {
-                	CV.Buildings[CV.RB[2].ABid].Level--;
+                    CV.Buildings[CV.RB[2].ABid].Level--;
                     CV.Buildings[CV.RB[2].ABid].InBuilding = true;
                     TD.Dirty = true;
                 }
@@ -471,7 +471,7 @@ namespace libTravian
                 CV.Buildings[Convert.ToInt32(m.Groups[1].Value) + 18] = new TBuilding() { Gid = Convert.ToInt32(m.Groups[2].Value) };
             CV.Buildings[39] = new TBuilding() { Gid = 16 };
             if (TD.Tribe == 0)
-            	TD.Tribe = NewParseTribe();
+                TD.Tribe = NewParseTribe();
             CV.Buildings[40] = new TBuilding() { Gid = TD.Tribe + 30 };
             if (data.Contains("img/un/g/g40.gif") || data.Contains("class=\"ww g40"))
                 CV.Buildings[26] = new TBuilding { Gid = 40 };
@@ -486,7 +486,7 @@ namespace libTravian
                 {
                     CV.Buildings[bid].Level = Convert.ToInt32(m.Groups[2].Value);
                     if (CV.Buildings[bid].Gid == 17)
-                    	CV.Market.MaxMerchant = Convert.ToInt32(m.Groups[2].Value);
+                        CV.Market.MaxMerchant = Convert.ToInt32(m.Groups[2].Value);
                 }
                 else
                     DebugLog("Unknown bid on parsing dorf2: " + bid, DebugLevel.W);
@@ -731,12 +731,12 @@ namespace libTravian
 
                     if (m1.Groups[5].Value.Length != 0)
                         MType = TMType.MyBack;
-					var vname = m1.Groups[3].Value;
+                    var vname = m1.Groups[3].Value;
                     //Console.WriteLine("Pos:{0}, VName:{1}, Time:{2}, Type:{3}, Amount:{4}", m1.Groups[1], m1.Groups[2], m1.Groups[3], MType, string.Join("|", am));
                     CV.Market.MarketInfo.Add(new TMInfo()
                     {
                         Coord = Convert.ToInt32(m1.Groups[2].Value),
-						VillageName = vname,
+                        VillageName = vname,
                         MType = MType,
                         CarryAmount = new TResAmount(am),
                         FinishTime = DateTime.Now.Add(TimeSpanParse(m1.Groups[4].Value)).AddSeconds(15)
@@ -771,14 +771,14 @@ namespace libTravian
             string buildingTitle = titleMatch.Groups[1].Value;
             if (!buildingTitle.Contains(GidLang[gid]))
             {
-            	if (gid == 16)
-            	{
-            		titleMatch = Regex.Match(pageContent, @"<h2>(.+)</h2>");
-            		buildingTitle = titleMatch.Groups[1].Value;
-            		if (!buildingTitle.Contains(GidLang[gid]))
-            			return -1;
-            		return 0;
-            	}
+                if (gid == 16)
+                {
+                    titleMatch = Regex.Match(pageContent, @"<h2>(.+)</h2>");
+                    buildingTitle = titleMatch.Groups[1].Value;
+                    if (!buildingTitle.Contains(GidLang[gid]))
+                        return -1;
+                    return 0;
+                }
                 return -1;
             }
 
@@ -793,52 +793,52 @@ namespace libTravian
 
         public void NewParseTroops(int VillageID, string data)
         {
-        	Match m = Regex.Match(data, "<div class=\"mov\"><span class=\"a[13]\">[^<]*?</span></div>", RegexOptions.Singleline);
-        	if(m.Success)
-        		this.PageQuery(VillageID, "build.php?gid=16");
-        	else
-        	{
-	            TVillage village = this.TD.Villages[VillageID];
-	 			if (this.GetBuildingLevel(16, data) < 0 && !data.Contains("<h1>Rally point"))
-	            {
-	                return;
-	            }
-	 			if (this.GetBuildingLevel(16, data) == 0 && !data.Contains("<h2>Rally point"))
-	 			{
-	 				village.Troop.Troops.Clear();
-	 				return;
-	 			}
-	 			village.Troop.Troops.Clear();
-	            string[] troopGroups = data.Split(new string[] { "<h4>" }, StringSplitOptions.None);
-	            if (troopGroups.Length < 2)
-	            {
-	                return;
-	            }
-	
-	            bool inVillageTroopsParsed = false;
-	            for (int i = 1; i < troopGroups.Length; i++)
-	            {
-	                string[] troopDetails = HtmlUtility.GetElementsWithClass(
-	                    troopGroups[i],
-	                    "table",
-	                    "troop_details");
-	                bool postInVillageTroops = inVillageTroopsParsed;
-	                foreach (string troopDetail in troopDetails)
-	                {
-	                    TTInfo troop = this.ParseTroopDetail(troopDetail, postInVillageTroops);
-	                    if (troop != null)
-	                    {
-	                        village.Troop.Troops.Add(troop);
-	                        if (troop.TroopType == TTroopType.InVillage)
-	                        {
-	                            inVillageTroopsParsed = true;
-	                        }
-	                    }
-	                }
-	            }
-		        TD.Dirty = true;
-	        	StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
-        	}
+            Match m = Regex.Match(data, "<div class=\"mov\"><span class=\"a[13]\">[^<]*?</span></div>", RegexOptions.Singleline);
+            if (m.Success)
+                this.PageQuery(VillageID, "build.php?gid=16");
+            else
+            {
+                TVillage village = this.TD.Villages[VillageID];
+                if (this.GetBuildingLevel(16, data) < 0 && !data.Contains("<h1>Rally point"))
+                {
+                    return;
+                }
+                if (this.GetBuildingLevel(16, data) == 0 && !data.Contains("<h2>Rally point"))
+                {
+                    village.Troop.Troops.Clear();
+                    return;
+                }
+                village.Troop.Troops.Clear();
+                string[] troopGroups = data.Split(new string[] { "<h4>" }, StringSplitOptions.None);
+                if (troopGroups.Length < 2)
+                {
+                    return;
+                }
+
+                bool inVillageTroopsParsed = false;
+                for (int i = 1; i < troopGroups.Length; i++)
+                {
+                    string[] troopDetails = HtmlUtility.GetElementsWithClass(
+                        troopGroups[i],
+                        "table",
+                        "troop_details");
+                    bool postInVillageTroops = inVillageTroopsParsed;
+                    foreach (string troopDetail in troopDetails)
+                    {
+                        TTInfo troop = this.ParseTroopDetail(troopDetail, postInVillageTroops);
+                        if (troop != null)
+                        {
+                            village.Troop.Troops.Add(troop);
+                            if (troop.TroopType == TTroopType.InVillage)
+                            {
+                                inVillageTroopsParsed = true;
+                            }
+                        }
+                    }
+                }
+                TD.Dirty = true;
+                StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
+            }
         }
 
         private TTInfo ParseTroopDetail(string troopDetail, bool postInVillageTroops)
@@ -951,7 +951,7 @@ namespace libTravian
                 }
                 Match m = Regex.Match(infosBody, "<a href=\"([^>]*?)\">");
                 if (m.Success)
-                	callback = m.Groups[1].Value;
+                    callback = m.Groups[1].Value;
             }
 
             TTroopType type = postInVillageTroops ? TTroopType.InOtherVillages : TTroopType.InVillage;
@@ -999,12 +999,12 @@ namespace libTravian
                     continue;
                 int[] tro = new int[11];
                 for (int i = 0; i < m.Groups[4].Captures.Count; i++)
-				{
+                {
                     if (m.Groups[4].Captures[i].Value == "?")
                         tro[i] = -1;
                     else
                         tro[i] = Convert.ToInt32(m.Groups[4].Captures[i].Value);
-				}
+                }
                 /*
                uid  time  	mark	troopcount  cropcost	returnlink
                 -     O      R		 	O      	-			-		MyReturnWay
@@ -1017,14 +1017,14 @@ namespace libTravian
                 O     -    	 		    O       O       	O		BeSupportMe
                  */
                 bool hasuid = m.Groups[2].Value.Contains("uid");
-				bool hassupport = m.Groups[2].Value.StartsWith("增援到") || m.Groups[2].Value.EndsWith("支援") || m.Groups[2].Value.StartsWith("Reinforcement for");
-				bool hasretrun = m.Groups[2].Value.EndsWith("回歸") || m.Groups[2].Value.EndsWith("返回") || m.Groups[2].Value.StartsWith("Return from");
-				bool hasspy = m.Groups[2].Value.EndsWith("偵察") || m.Groups[2].Value.EndsWith("侦察") || m.Groups[2].Value.StartsWith("Scouting of");
-				bool hasraid = m.Groups[2].Value.StartsWith("搶奪") || m.Groups[2].Value.EndsWith("抢夺") || m.Groups[2].Value.StartsWith("Raid against");
-				bool hasattack = m.Groups[2].Value.StartsWith("攻擊") || m.Groups[2].Value.EndsWith("攻击") || m.Groups[2].Value.StartsWith("Attack against");
+                bool hassupport = Regex.Match(m.Groups[2].Value, RegexLang["newparser_hassupport"]).Success;
+                bool hasretrun = Regex.Match(m.Groups[2].Value, RegexLang["newparser_hasretrun"]).Success;
+                bool hasspy = Regex.Match(m.Groups[2].Value, RegexLang["newparser_hasspy"]).Success;
+                bool hasraid = Regex.Match(m.Groups[2].Value, RegexLang["newparser_hasraid"]).Success;
+                bool hasattack = Regex.Match(m.Groups[2].Value, RegexLang["newparser_hasattack"]).Success;
                 bool hasTime = m.Groups[6].Success;
                 bool hasCount = tro[0] != -1;
-				bool hasCrop = m.Groups[5].Success;
+                bool hasCrop = m.Groups[5].Success;
                 string vvname = CV.Name;
                 string vname;
                 TTroopType trooptype = hasuid ?

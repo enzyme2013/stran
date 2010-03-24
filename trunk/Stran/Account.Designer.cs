@@ -28,33 +28,35 @@ namespace Stran
         /// </summary>
         private void InitializeComponent()
         {
-			this.Btn_OK = new System.Windows.Forms.Button();
+            this.Btn_OK = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-			this.Btn_Cancel = new System.Windows.Forms.Button();
+            this.txtPWD = new System.Windows.Forms.TextBox();
+            this.txtID = new System.Windows.Forms.TextBox();
+            this.Btn_Cancel = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtServer = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtLanguage = new System.Windows.Forms.TextBox();
             this.lblProxy = new System.Windows.Forms.Label();
             this.txtProxy = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtServerLang = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // button1
+            // Btn_OK
             // 
-			this.Btn_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.Btn_OK.Location = new System.Drawing.Point(77, 231);
-			this.Btn_OK.Name = "Btn_OK";
-			this.Btn_OK.Size = new System.Drawing.Size(80, 32);
-			this.Btn_OK.TabIndex = 5;
-			this.Btn_OK.Tag = "save";
-			this.Btn_OK.Text = "OK";
-			this.Btn_OK.UseVisualStyleBackColor = true;
-			this.Btn_OK.Click += new System.EventHandler(this.Btn_OK_Click);
+            this.Btn_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.Btn_OK.Location = new System.Drawing.Point(76, 265);
+            this.Btn_OK.Name = "Btn_OK";
+            this.Btn_OK.Size = new System.Drawing.Size(80, 32);
+            this.Btn_OK.TabIndex = 5;
+            this.Btn_OK.Tag = "save";
+            this.Btn_OK.Text = "OK";
+            this.Btn_OK.UseVisualStyleBackColor = true;
+            this.Btn_OK.Click += new System.EventHandler(this.Btn_OK_Click);
             // 
             // label4
             // 
@@ -63,7 +65,7 @@ namespace Stran
             this.label4.Size = new System.Drawing.Size(93, 14);
             this.label4.TabIndex = 9;
             this.label4.Tag = "password";
-			this.label4.Text = "PWD";
+            this.label4.Text = "PWD";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label5
@@ -73,7 +75,7 @@ namespace Stran
             this.label5.Size = new System.Drawing.Size(93, 14);
             this.label5.TabIndex = 8;
             this.label5.Tag = "username";
-			this.label5.Text = "ID";
+            this.label5.Text = "ID";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label6
@@ -83,35 +85,35 @@ namespace Stran
             this.label6.Size = new System.Drawing.Size(93, 14);
             this.label6.TabIndex = 7;
             this.label6.Tag = "server";
-			this.label6.Text = "Server";
+            this.label6.Text = "Server";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox1
+            // txtPWD
             // 
-            this.textBox1.Location = new System.Drawing.Point(135, 93);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = 'X';
-            this.textBox1.Size = new System.Drawing.Size(180, 22);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.UseSystemPasswordChar = true;
+            this.txtPWD.Location = new System.Drawing.Point(135, 93);
+            this.txtPWD.Name = "txtPWD";
+            this.txtPWD.PasswordChar = 'X';
+            this.txtPWD.Size = new System.Drawing.Size(180, 22);
+            this.txtPWD.TabIndex = 2;
+            this.txtPWD.UseSystemPasswordChar = true;
             // 
-            // textBox2
+            // txtID
             // 
-            this.textBox2.Location = new System.Drawing.Point(135, 58);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(180, 22);
-            this.textBox2.TabIndex = 1;
+            this.txtID.Location = new System.Drawing.Point(135, 58);
+            this.txtID.Name = "txtID";
+            this.txtID.Size = new System.Drawing.Size(180, 22);
+            this.txtID.TabIndex = 1;
             // 
-            // button2
+            // Btn_Cancel
             // 
-			this.Btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.Btn_Cancel.Location = new System.Drawing.Point(187, 231);
-			this.Btn_Cancel.Name = "Btn_Cancel";
-			this.Btn_Cancel.Size = new System.Drawing.Size(80, 32);
-			this.Btn_Cancel.TabIndex = 6;
-			this.Btn_Cancel.Tag = "cancel";
-			this.Btn_Cancel.Text = "Cancel";
-			this.Btn_Cancel.UseVisualStyleBackColor = true;
+            this.Btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.Btn_Cancel.Location = new System.Drawing.Point(188, 265);
+            this.Btn_Cancel.Name = "Btn_Cancel";
+            this.Btn_Cancel.Size = new System.Drawing.Size(80, 32);
+            this.Btn_Cancel.TabIndex = 6;
+            this.Btn_Cancel.Tag = "cancel";
+            this.Btn_Cancel.Text = "Cancel";
+            this.Btn_Cancel.UseVisualStyleBackColor = true;
             // 
             // comboBox1
             // 
@@ -129,16 +131,16 @@ namespace Stran
             this.label1.Size = new System.Drawing.Size(93, 14);
             this.label1.TabIndex = 10;
             this.label1.Tag = "tribe";
-			this.label1.Text = "Race";
+            this.label1.Text = "Race";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox3
+            // txtServer
             // 
-            this.textBox3.Location = new System.Drawing.Point(135, 23);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(180, 22);
-            this.textBox3.TabIndex = 0;
-            this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
+            this.txtServer.Location = new System.Drawing.Point(135, 23);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(180, 22);
+            this.txtServer.TabIndex = 0;
+            this.txtServer.Leave += new System.EventHandler(this.textBox3_Leave);
             // 
             // label2
             // 
@@ -147,15 +149,15 @@ namespace Stran
             this.label2.Size = new System.Drawing.Size(93, 14);
             this.label2.TabIndex = 11;
             this.label2.Tag = "displang";
-			this.label2.Text = "Language";
+            this.label2.Text = "Language";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // textBox4
+            // txtLanguage
             // 
-            this.textBox4.Location = new System.Drawing.Point(135, 164);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(180, 22);
-            this.textBox4.TabIndex = 4;
+            this.txtLanguage.Location = new System.Drawing.Point(135, 164);
+            this.txtLanguage.Name = "txtLanguage";
+            this.txtLanguage.Size = new System.Drawing.Size(180, 22);
+            this.txtLanguage.TabIndex = 4;
             // 
             // lblProxy
             // 
@@ -164,7 +166,7 @@ namespace Stran
             this.lblProxy.Size = new System.Drawing.Size(93, 14);
             this.lblProxy.TabIndex = 13;
             this.lblProxy.Tag = "proxy";
-            this.lblProxy.Text = "¥˙¿Ìµÿ÷∑";
+            this.lblProxy.Text = "Proxy";
             this.lblProxy.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtProxy
@@ -174,27 +176,47 @@ namespace Stran
             this.txtProxy.Size = new System.Drawing.Size(180, 22);
             this.txtProxy.TabIndex = 5;
             // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(24, 230);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 14);
+            this.label3.TabIndex = 15;
+            this.label3.Tag = "serverlang";
+            this.label3.Text = "ServerLang";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtServerLang
+            // 
+            this.txtServerLang.Location = new System.Drawing.Point(135, 227);
+            this.txtServerLang.Name = "txtServerLang";
+            this.txtServerLang.ReadOnly = true;
+            this.txtServerLang.Size = new System.Drawing.Size(180, 22);
+            this.txtServerLang.TabIndex = 14;
+            // 
             // NewAccount
             // 
-			this.AcceptButton = this.Btn_OK;
+            this.AcceptButton = this.Btn_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.Btn_Cancel;
-			this.ClientSize = new System.Drawing.Size(344, 270);
+            this.CancelButton = this.Btn_Cancel;
+            this.ClientSize = new System.Drawing.Size(344, 309);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtServerLang);
             this.Controls.Add(this.lblProxy);
             this.Controls.Add(this.txtProxy);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.txtLanguage);
+            this.Controls.Add(this.txtServer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox1);
-			this.Controls.Add(this.Btn_Cancel);
-			this.Controls.Add(this.Btn_OK);
+            this.Controls.Add(this.Btn_Cancel);
+            this.Controls.Add(this.Btn_OK);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtPWD);
+            this.Controls.Add(this.txtID);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -204,7 +226,7 @@ namespace Stran
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Tag = "account";
-			this.Text = "Acccount";
+            this.Text = "Acccount";
             this.Load += new System.EventHandler(this.NewAccount_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -218,15 +240,17 @@ namespace Stran
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtPWD;
+        private System.Windows.Forms.TextBox txtID;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtLanguage;
         private System.Windows.Forms.Label lblProxy;
         private System.Windows.Forms.TextBox txtProxy;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtServerLang;
 
     }
 }

@@ -1,0 +1,11 @@
+//lib login.cs
+login_uid=spieler.php\?uid=(\d*)
+
+//lib newparser.cs
+newparser_ParseResource=<td id="l\d" title="(-?\d+)">(\d+)/(\d+)</td>
+newparser_ParseTribe=<img class="unit u(\d*)"
+newparser_hassupport=^Reinforcement for
+newparser_hasretrun=^Return from
+newparser_hasspy=^Scouting of
+newparser_hasraid=^Raid against
+newparser_hasattack=^Attack against
