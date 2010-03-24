@@ -34,21 +34,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin11 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
-            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin11 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient31 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient71 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin11 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient11 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient72 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient32 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient73 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient11 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient74 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient75 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient33 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient76 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
-            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient77 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -57,6 +57,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.checkBoxVerbose = new System.Windows.Forms.CheckBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.contextMenuEvent = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuBuilding = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CMBUp = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +91,7 @@
             this.CMBAlarm = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.CMBEnableCoin = new System.Windows.Forms.ToolStripMenuItem();
+            this.自动平衡资源ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuResearch = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CMRResearch = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -150,12 +153,12 @@
             this.CMTAlarm = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.CMTRefresh = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.autoBalancerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.contextMenuBuilding.SuspendLayout();
             this.contextMenuResearch.SuspendLayout();
             this.contextMenuQueue.SuspendLayout();
@@ -164,7 +167,6 @@
             this.contextMenuMarket.SuspendLayout();
             this.contextMenuInbuilding.SuspendLayout();
             this.contextMenuTroop.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl2
@@ -201,50 +203,50 @@
             this.dockPanel1.Location = new System.Drawing.Point(3, 3);
             this.dockPanel1.Name = "dockPanel1";
             this.dockPanel1.Size = new System.Drawing.Size(919, 579);
-            dockPanelGradient31.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient31.StartColor = System.Drawing.SystemColors.ControlLight;
-            autoHideStripSkin11.DockStripGradient = dockPanelGradient31;
-            tabGradient71.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient71.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient71.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            autoHideStripSkin11.TabGradient = tabGradient71;
-            dockPanelSkin11.AutoHideStripSkin = autoHideStripSkin11;
-            tabGradient72.EndColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient72.StartColor = System.Drawing.SystemColors.ControlLightLight;
-            tabGradient72.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient11.ActiveTabGradient = tabGradient72;
-            dockPanelGradient32.EndColor = System.Drawing.SystemColors.Control;
-            dockPanelGradient32.StartColor = System.Drawing.SystemColors.Control;
-            dockPaneStripGradient11.DockStripGradient = dockPanelGradient32;
-            tabGradient73.EndColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient73.StartColor = System.Drawing.SystemColors.ControlLight;
-            tabGradient73.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripGradient11.InactiveTabGradient = tabGradient73;
-            dockPaneStripSkin11.DocumentGradient = dockPaneStripGradient11;
-            tabGradient74.EndColor = System.Drawing.SystemColors.ActiveCaption;
-            tabGradient74.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient74.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
-            tabGradient74.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
-            dockPaneStripToolWindowGradient11.ActiveCaptionGradient = tabGradient74;
-            tabGradient75.EndColor = System.Drawing.SystemColors.Control;
-            tabGradient75.StartColor = System.Drawing.SystemColors.Control;
-            tabGradient75.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient11.ActiveTabGradient = tabGradient75;
-            dockPanelGradient33.EndColor = System.Drawing.SystemColors.ControlLight;
-            dockPanelGradient33.StartColor = System.Drawing.SystemColors.ControlLight;
-            dockPaneStripToolWindowGradient11.DockStripGradient = dockPanelGradient33;
-            tabGradient76.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            tabGradient76.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-            tabGradient76.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            tabGradient76.TextColor = System.Drawing.SystemColors.ControlText;
-            dockPaneStripToolWindowGradient11.InactiveCaptionGradient = tabGradient76;
-            tabGradient77.EndColor = System.Drawing.Color.Transparent;
-            tabGradient77.StartColor = System.Drawing.Color.Transparent;
-            tabGradient77.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-            dockPaneStripToolWindowGradient11.InactiveTabGradient = tabGradient77;
-            dockPaneStripSkin11.ToolWindowGradient = dockPaneStripToolWindowGradient11;
-            dockPanelSkin11.DockPaneStripSkin = dockPaneStripSkin11;
-            this.dockPanel1.Skin = dockPanelSkin11;
+            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
+            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
+            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient1.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin1.TabGradient = tabGradient1;
+            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
+            tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
+            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
+            tabGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
+            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
+            tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
+            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
+            tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
+            tabGradient5.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient5.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
+            dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
+            tabGradient6.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient6.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
+            tabGradient7.EndColor = System.Drawing.Color.Transparent;
+            tabGradient7.StartColor = System.Drawing.Color.Transparent;
+            tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
+            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
+            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
+            this.dockPanel1.Skin = dockPanelSkin1;
             this.dockPanel1.TabIndex = 22;
             this.dockPanel1.Resize += new System.EventHandler(this.dockPanel1_Resize);
             // 
@@ -301,6 +303,27 @@
             this.checkBoxVerbose.Text = "Verbose";
             this.checkBoxVerbose.UseVisualStyleBackColor = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.webBrowser1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 23);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(926, 585);
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Tag = "browser";
+            this.tabPage3.Text = "browser";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.Enter += new System.EventHandler(this.tabPage3_Enter);
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(926, 585);
+            this.webBrowser1.TabIndex = 0;
+            // 
             // contextMenuEvent
             // 
             this.contextMenuEvent.Name = "contextMenuEvent";
@@ -332,10 +355,11 @@
             this.CMBAttack,
             this.CMBAlarm,
             this.toolStripSeparator15,
-            this.CMBEnableCoin});
+            this.CMBEnableCoin,
+            this.自动平衡资源ToolStripMenuItem});
             this.contextMenuBuilding.Name = "contextMenuStrip2";
             this.contextMenuBuilding.ShowImageMargin = false;
-            this.contextMenuBuilding.Size = new System.Drawing.Size(190, 398);
+            this.contextMenuBuilding.Size = new System.Drawing.Size(190, 420);
             this.contextMenuBuilding.Text = "添加到队列";
             // 
             // CMBUp
@@ -533,7 +557,6 @@
             this.CMBRaid.Size = new System.Drawing.Size(189, 22);
             this.CMBRaid.Tag = "CMBRaid";
             this.CMBRaid.Text = "出兵";
-            this.CMBRaid.Visible = false;
             this.CMBRaid.Click += new System.EventHandler(this.CMBRaid_Click);
             // 
             // CMBAttack
@@ -542,7 +565,6 @@
             this.CMBAttack.Size = new System.Drawing.Size(189, 22);
             this.CMBAttack.Tag = "CMBRaid";
             this.CMBAttack.Text = "出兵";
-            this.CMBAttack.Visible = false;
             this.CMBAttack.Click += new System.EventHandler(this.CMBAttackClick);
             // 
             // CMBAlarm
@@ -551,7 +573,6 @@
             this.CMBAlarm.Size = new System.Drawing.Size(189, 22);
             this.CMBAlarm.Tag = "CMBAlarm";
             this.CMBAlarm.Text = "自动报警";
-            this.CMBAlarm.Visible = false;
             this.CMBAlarm.Click += new System.EventHandler(this.CMBAlarm_Click);
             // 
             // toolStripSeparator15
@@ -568,6 +589,13 @@
             this.CMBEnableCoin.Tag = "CMBEnableCoin";
             this.CMBEnableCoin.Text = "启用金币功能";
             this.CMBEnableCoin.CheckedChanged += new System.EventHandler(this.CMBEnableCoin_CheckedChanged);
+            // 
+            // 自动平衡资源ToolStripMenuItem
+            // 
+            this.自动平衡资源ToolStripMenuItem.Name = "自动平衡资源ToolStripMenuItem";
+            this.自动平衡资源ToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.自动平衡资源ToolStripMenuItem.Text = "自动平衡资源";
+            this.自动平衡资源ToolStripMenuItem.Click += new System.EventHandler(this.自动平衡资源ToolStripMenuItem_Click);
             // 
             // contextMenuResearch
             // 
@@ -670,6 +698,7 @@
             this.contextMenuQueue.ShowImageMargin = false;
             this.contextMenuQueue.Size = new System.Drawing.Size(197, 220);
             this.contextMenuQueue.Tag = "";
+            this.contextMenuQueue.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuQueue_Opening);
             // 
             // CMQDel
             // 
@@ -693,7 +722,6 @@
             this.CMQEdit.Size = new System.Drawing.Size(196, 22);
             this.CMQEdit.Tag = "cmqedit";
             this.CMQEdit.Text = "&E.  编辑";
-            this.CMQEdit.Visible = false;
             this.CMQEdit.Click += new System.EventHandler(this.CMQEdit_Click);
             // 
             // toolStripSeparator1
@@ -779,10 +807,11 @@
             this.toolStripSeparator11,
             this.CMVSnapshot,
             this.CMVSnapAll,
-            this.CMVDelV});
+            this.CMVDelV,
+            this.autoBalancerToolStripMenuItem});
             this.contextMenuVillage.Name = "contextMenuStrip1";
             this.contextMenuVillage.ShowImageMargin = false;
-            this.contextMenuVillage.Size = new System.Drawing.Size(166, 280);
+            this.contextMenuVillage.Size = new System.Drawing.Size(166, 324);
             this.contextMenuVillage.Opening += new System.ComponentModel.CancelEventHandler(this.CMV_Opening);
             // 
             // CMVRefresh
@@ -799,7 +828,6 @@
             this.CMVRefreshAll.Size = new System.Drawing.Size(165, 22);
             this.CMVRefreshAll.Tag = "refreshall";
             this.CMVRefreshAll.Text = "全部刷新";
-            this.CMVRefreshAll.Visible = false;
             this.CMVRefreshAll.Click += new System.EventHandler(this.CMVRefreshAll_Click);
             // 
             // CMBNewCap
@@ -867,7 +895,6 @@
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
             this.toolStripSeparator11.Size = new System.Drawing.Size(162, 6);
-            this.toolStripSeparator11.Visible = false;
             // 
             // CMVSnapshot
             // 
@@ -875,7 +902,6 @@
             this.CMVSnapshot.Size = new System.Drawing.Size(165, 22);
             this.CMVSnapshot.Tag = "snapshot";
             this.CMVSnapshot.Text = "snapshot";
-            this.CMVSnapshot.Visible = false;
             this.CMVSnapshot.Click += new System.EventHandler(this.CMVSnapshot_Click);
             // 
             // CMVSnapAll
@@ -884,7 +910,6 @@
             this.CMVSnapAll.Size = new System.Drawing.Size(165, 22);
             this.CMVSnapAll.Tag = "snapall";
             this.CMVSnapAll.Text = "snapall";
-            this.CMVSnapAll.Visible = false;
             this.CMVSnapAll.Click += new System.EventHandler(this.CMVSnapAll_Click);
             // 
             // CMVDelV
@@ -893,7 +918,6 @@
             this.CMVDelV.Size = new System.Drawing.Size(165, 22);
             this.CMVDelV.Tag = "deleteVillage";
             this.CMVDelV.Text = "Delete Village";
-            this.CMVDelV.Visible = false;
             this.CMVDelV.Click += new System.EventHandler(this.CMVDelVClick);
             // 
             // timer1
@@ -1009,6 +1033,7 @@
             this.contextMenuMarket.Name = "contextMenuMarket";
             this.contextMenuMarket.ShowImageMargin = false;
             this.contextMenuMarket.Size = new System.Drawing.Size(118, 76);
+            this.contextMenuMarket.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuMarket_Opening);
             // 
             // CMMRefresh
             // 
@@ -1076,7 +1101,6 @@
             this.CMTRaid.Size = new System.Drawing.Size(129, 22);
             this.CMTRaid.Tag = "CMBRaid";
             this.CMTRaid.Text = "send troops";
-            this.CMTRaid.Visible = false;
             this.CMTRaid.Click += new System.EventHandler(this.CMBRaid_Click);
             // 
             // CMTAttack
@@ -1085,7 +1109,6 @@
             this.CMTAttack.Size = new System.Drawing.Size(129, 22);
             this.CMTAttack.Tag = "CMBRaid";
             this.CMTAttack.Text = "send troops";
-            this.CMTAttack.Visible = false;
             this.CMTAttack.Click += new System.EventHandler(this.CMBAttackClick);
             // 
             // CMTAlarm
@@ -1094,7 +1117,6 @@
             this.CMTAlarm.Size = new System.Drawing.Size(129, 22);
             this.CMTAlarm.Tag = "CMBAlarm";
             this.CMTAlarm.Text = "auto alarm";
-            this.CMTAlarm.Visible = false;
             this.CMTAlarm.Click += new System.EventHandler(this.CMBAlarm_Click);
             // 
             // toolStripSeparator16
@@ -1110,26 +1132,12 @@
             this.CMTRefresh.Text = "refresh troops";
             this.CMTRefresh.Click += new System.EventHandler(this.CMTRefresh_Click);
             // 
-            // tabPage3
+            // autoBalancerToolStripMenuItem
             // 
-            this.tabPage3.Controls.Add(this.webBrowser1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 23);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(926, 585);
-            this.tabPage3.TabIndex = 3;
-            this.tabPage3.Tag = "browser";
-            this.tabPage3.Text = "browser";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Enter += new System.EventHandler(this.tabPage3_Enter);
-            // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(926, 585);
-            this.webBrowser1.TabIndex = 0;
+            this.autoBalancerToolStripMenuItem.Name = "autoBalancerToolStripMenuItem";
+            this.autoBalancerToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.autoBalancerToolStripMenuItem.Text = "AutoBalancer";
+            this.autoBalancerToolStripMenuItem.Click += new System.EventHandler(this.autoBalancerToolStripMenuItem_Click);
             // 
             // MainFrame
             // 
@@ -1148,6 +1156,7 @@
             this.tabPage1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.contextMenuBuilding.ResumeLayout(false);
             this.contextMenuResearch.ResumeLayout(false);
             this.contextMenuQueue.ResumeLayout(false);
@@ -1157,7 +1166,6 @@
             this.contextMenuMarket.ResumeLayout(false);
             this.contextMenuInbuilding.ResumeLayout(false);
             this.contextMenuTroop.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1268,6 +1276,8 @@
         private System.Windows.Forms.ToolStripMenuItem CMBAlarm;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.ToolStripMenuItem 自动平衡资源ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoBalancerToolStripMenuItem;
         //fix commit error
     }
 }

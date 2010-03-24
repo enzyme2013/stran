@@ -64,6 +64,8 @@ namespace Stran
         int SelectVillage = 0;
         public static bool AutoPlay {get; set;}
 
+        private TResAmount totalAmount = new TResAmount();
+
         public MainFrame()
         {
             InitializeComponent();
@@ -1305,8 +1307,8 @@ namespace Stran
         private void CMBRaid_Click(object sender, EventArgs e)
         {
             //TODO toggle
-            MessageBox.Show("尚未完成此功能");
-            return;
+            //MessageBox.Show("尚未完成此功能");
+            //return;
             TVillage CV = this.GetSelectedVillage();
             if (CV == null)
             {
@@ -1368,6 +1370,39 @@ namespace Stran
                         Local_StatusUpdate(sender, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = village.ID });
                 }
             }
+        }
+
+        private bool EditBalancerGroupQueue(TVillage village, BalancerQueue Queue)
+        {
+            //return this.EditRaidQueue(village, null);
+            BalanceForm form = new BalanceForm()
+            {
+                Village = village,
+                BalancerGroup = (Queue == null) ? TBalancerGroup.GetDefaultTBalancerGroup() : Queue.BalancerGroup,
+                mui = this.mui,
+            };
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            if (form.BalancerGroup == null)
+            {
+                return false;
+            }
+            if (Queue != null)
+            {
+                village.Queue.Remove(Queue);
+            }
+            Queue = new BalancerQueue()
+            {
+                UpCall = tr,
+                VillageID = SelectVillage,
+                BalancerGroup = form.BalancerGroup,
+            };
+            village.Queue.Add(Queue);
+            lvi(Queue);
+            form.Close();
+            return true;
         }
 
         private bool EditRaidQueue(TVillage village, RaidQueue task)
@@ -2085,8 +2120,8 @@ namespace Stran
         private void CMBAttackClick(object sender, EventArgs e)
         {
             //TODO toggle
-            MessageBox.Show("尚未完成此功能");
-            return;
+            //MessageBox.Show("尚未完成此功能");
+            //return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
 
@@ -2125,8 +2160,8 @@ namespace Stran
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
             //TODO toggle
-            MessageBox.Show("尚未完成此功能");
-            return;
+            //MessageBox.Show("尚未完成此功能");
+           // return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
             TVillage CV = TravianData.Villages[SelectVillage];
@@ -2230,8 +2265,8 @@ namespace Stran
         private void CMVRefreshAll_Click(object sender, EventArgs e)
         {
             //TODO toggle
-            MessageBox.Show("尚未完成此功能");
-            return;
+            //MessageBox.Show("尚未完成此功能");
+            //return;
             var dr = MessageBox.Show("这将会立即刷新全部村庄，请勿过度使用，以免造成锁帐。\r\n\r\n确定继续执行吗？", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dr == DialogResult.OK)
             {
@@ -2279,5 +2314,69 @@ namespace Stran
             submit.Focus();
             submit.InvokeMember("click");
         }
+
+        private void contextMenuMarket_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void contextMenuQueue_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void 自动平衡资源ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!TravianData.Villages.ContainsKey(SelectVillage))
+                return;
+            var CV = TravianData.Villages[SelectVillage];
+            if (CV != null)
+            {
+                EditBalancerGroupQueue(CV, CV.getBalancer());
+            }
+            //if (CV.isBuildingInitialized == 2)
+            //{
+            //    var Q = new BalancerQueue()
+            //    {
+            //        UpCall = tr,
+            //        VillageID = SelectVillage,
+            //    };
+                
+            //    CV.Queue.Add(Q);
+            //    lvi(Q);
+            //}
+
+            BalancerQueue.CalcAllVillages(tr);
+
+        }
+
+        private void autoBalancerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, TVillage> x in TravianData.Villages)
+            {
+                //var Q = new BalancerQueue()
+                //{
+                //    UpCall = tr,
+                //    VillageID = x.Key,
+                //};
+
+                //x.Value.Queue.Add(Q);
+                //lvi(Q);
+                BalancerQueue Queue = x.Value.getBalancer();
+                if(Queue != null){
+                    x.Value.Queue.Remove(Queue);
+                }
+                Queue = new BalancerQueue()
+                {
+                    UpCall = tr,
+                    VillageID = SelectVillage,
+                    BalancerGroup = TBalancerGroup.GetDefaultTBalancerGroup(),
+                };
+                x.Value.Queue.Add(Queue);
+                lvi(Queue);
+            }
+        }
+
+        
     }
 }
