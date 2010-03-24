@@ -244,12 +244,13 @@ namespace Stran
             StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
             for (int i = 0; i < accounts.Count; i++)
             {
-                sw.WriteLine("{0}:{1}:{2}:{3}:{4}:{5}",
+                sw.WriteLine("{0}:{1}:{2}:{3}:{4}:{5}:{6}",
                     accounts[i].Username,
                     Convert.ToBase64String(Encoding.UTF8.GetBytes(accounts[i].Server)),
                     Convert.ToBase64String(Encoding.UTF8.GetBytes(accounts[i].Password)),
                     accounts[i].Tribe,
                     accounts[i].Language,
+                    accounts[i].ServerLang,
                     accounts[i].Proxy);
                 accounts[i].Changed = false;
             }
@@ -473,6 +474,7 @@ namespace Stran
             }
         }
         public string Language { get; set; }
+        public string ServerLang { get; set; }
         public TLoginInfo()
         {
         }
@@ -486,10 +488,10 @@ namespace Stran
             if (accountdata.Length > 4)
                 Language = accountdata[4];
             if (accountdata.Length > 5)
-                Proxy = accountdata[5];
+                ServerLang = accountdata[5];
             if (accountdata.Length > 6)
-                Proxy += ":" + accountdata[6];
-        }
+                Proxy = accountdata[6];
+            if (accountdata.Length > 7)                Proxy += ":" + accountdata[7];        }
         string invalidchar = "\\/:*?\"<>|";
         public string GetKey()
         {

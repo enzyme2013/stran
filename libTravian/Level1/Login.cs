@@ -22,28 +22,28 @@ using System.Net;
 
 namespace libTravian
 {
-	partial class Travian
-	{
-		private int UnixTime(DateTime time)
-		{
-			return Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds);
-		}
-		private bool Login()
-		{
-			string Username = TD.Username;
-			string Password = TD.Password;
-			if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
-				return false;
-			try
-			{
-				//WriteInfo("Logging in as '" + Username + "', may take a few seconds...");
-				string data = wc.DownloadString("/");
-				if (!data.Contains("Travian"))
-				{
-					DebugLog("Cannot visit travian website!", DebugLevel.E);
-					return false;
-				}
-				/*
+    partial class Travian
+    {
+        private int UnixTime(DateTime time)
+        {
+            return Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds);
+        }
+        private bool Login()
+        {
+            string Username = TD.Username;
+            string Password = TD.Password;
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+                return false;
+            try
+            {
+                //WriteInfo("Logging in as '" + Username + "', may take a few seconds...");
+                string data = wc.DownloadString("/");
+                if (!data.Contains("Travian"))
+                {
+                    DebugLog("Cannot visit travian website!", DebugLevel.E);
+                    return false;
+                }
+                /*
 				string userkey, passkey, alkey, alkey_value;
 				Match m;
 				m = Regex.Match(data, "type=\"text\" name=\"(\\S+?)\"");
@@ -80,43 +80,43 @@ namespace libTravian
 					return false;
 				}
 				*/
-				Random rand = new Random();
-				Dictionary<string, string> PostData = new Dictionary<string, string>();
-				PostData["name"] = Username;
-				PostData["password"] = Password;
-            	PostData["s1.x"] = rand.Next(40, 70).ToString();
-            	PostData["s1.y"] = rand.Next(3, 17).ToString();
-            	PostData["s1"] = "login";
-				PostData["w"] = "1024:768";
-				PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
-				//PostData["login"] = m.Groups[1].Value;
-				//PostData[alkey] = alkey_value;
-				
-				string result = this.pageQuerier.PageQuery(0, "dorf1.php", PostData, false, true);
+                Random rand = new Random();
+                Dictionary<string, string> PostData = new Dictionary<string, string>();
+                PostData["name"] = Username;
+                PostData["password"] = Password;
+                PostData["s1.x"] = rand.Next(40, 70).ToString();
+                PostData["s1.y"] = rand.Next(3, 17).ToString();
+                PostData["s1"] = "login";
+                PostData["w"] = "1024:768";
+                PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
+                //PostData["login"] = m.Groups[1].Value;
+                //PostData[alkey] = alkey_value;
 
-				if (result.Contains("login_form"))
-				{
-					DebugLog("Username or Password error!", DebugLevel.E);
-					//MessageBox.Show("Login failed.");
-					return false;
-				}
+                string result = this.pageQuerier.PageQuery(0, "dorf1.php", PostData, false, true);
 
-				Match m = Regex.Match(result, "spieler.php\\?uid=(\\d*)");
-				if (m.Success)
-					TD.UserID = Convert.ToInt32(m.Groups[1].Value);
-				else
-				{
-					DebugLog("Unable to get UID!!", DebugLevel.E);
-					return false;
-				}
+                if (result.Contains("login_form"))
+                {
+                    DebugLog("Username or Password error!", DebugLevel.E);
+                    //MessageBox.Show("Login failed.");
+                    return false;
+                }
 
-				return true;
-			}
-			catch (Exception e)
-			{
-				DebugLog(e);
-				return false;
-			}
-		}
-	}
+                Match m = Regex.Match(result, RegexLang["login_uid"], RegexOptions.Singleline);
+                if (m.Success)
+                    TD.UserID = Convert.ToInt32(m.Groups[1].Value);
+                else
+                {
+                    DebugLog("Unable to get UID!!", DebugLevel.E);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                DebugLog(e);
+                return false;
+            }
+        }
+    }
 }

@@ -47,50 +47,57 @@ namespace Stran
                     return;
                 }
             }
-            if (textBox3.Text != "" && textBox2.Text != "" && (_ismodify || textBox1.Text != ""))
+            if (txtServer.Text != "" && txtID.Text != "" && (_ismodify || txtPWD.Text != ""))
             {
                 accountresult = new TLoginInfo()
                 {
-					Server = textBox3.Text.ToLower(),
-                    Username = textBox2.Text,
-                    Password = textBox1.Text,
+					Server = txtServer.Text.ToLower(),
+                    Username = txtID.Text,
+                    Password = txtPWD.Text,
                     Tribe = comboBox1.SelectedIndex,
-					Language = textBox4.Text.ToLower(),
-                    Proxy = txtProxy.Text
+					Language = txtLanguage.Text.ToLower(),
+                    Proxy = txtProxy.Text,
+                    ServerLang = txtServerLang.Text
                 };
             }
         }
 
         private void textBox3_Leave(object sender, EventArgs e)
         {
-            var m = Regex.Match(textBox3.Text.ToLower(), "^([a-zA-Z]{2,3})(\\d{1,3}|x)$");
+            var m = Regex.Match(txtServer.Text.ToLower(), "^([a-zA-Z]{2,3})(\\d{1,3}|x)$");
             if (m.Success)
             {
                 if (m.Groups[1].Value == "de")
-                    textBox3.Text = string.Format("welt{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
+                    txtServer.Text = string.Format("welt{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
                 else
-                    textBox3.Text = string.Format("s{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
-                if (textBox4.Text == "")
-                    textBox4.Text = m.Groups[1].Value;
+                    txtServer.Text = string.Format("s{0}.travian.{1}", m.Groups[2].Value[0] == 'x' ? "peed" : m.Groups[2].Value, m.Groups[1].Value);
+                if (txtLanguage.Text == "")
+                    txtLanguage.Text = m.Groups[1].Value;
                 return;
             }
-            m = Regex.Match(textBox3.Text.ToLower(), "http://(.*)");
+            m = Regex.Match(txtServer.Text.ToLower(), "http://(.*)");
             if (m.Success)
             {
-                textBox3.Text = m.Groups[1].Value;
+                txtServer.Text = m.Groups[1].Value;
             }
-            if (textBox4.Text == "")
+            string slang = txtServer.Text.Substring(txtServer.Text.LastIndexOf(".") + 1, txtServer.Text.Length - txtServer.Text.LastIndexOf(".") - 1);
+            if (slang == "com")
+                slang = "en";
+            if (slang == "org")
+                slang = "de";
+            txtServerLang.Text = slang;
+            if (txtLanguage.Text == "")
             {
-                m = Regex.Match(textBox3.Text.ToLower(), "travian.(.*)");
+                m = Regex.Match(txtServer.Text.ToLower(), "travian.(.*)");
                 if (m.Success)
                 {
                     string lang = m.Groups[1].Value;
                     if (lang == "tw" || lang == "hk")
-                        textBox4.Text = "tw";
+                        txtLanguage.Text = "tw";
                     else if (lang == "cn")
-                        textBox4.Text = "cn";
+                        txtLanguage.Text = "cn";
                     else
-                        textBox4.Text = "en";
+                        txtLanguage.Text = "en";
                 }
             }
         }
@@ -106,13 +113,13 @@ namespace Stran
             comboBox1.SelectedIndex = 0;
             if (logininfo != null)
             {
-                textBox3.Text = logininfo.Server;
-                textBox2.Text = logininfo.Username;
+                txtServer.Text = logininfo.Server;
+                txtID.Text = logininfo.Username;
                 comboBox1.SelectedIndex = logininfo.Tribe;
-                textBox4.Text = logininfo.Language;
+                txtLanguage.Text = logininfo.Language;
                 txtProxy.Text = logininfo.Proxy;
+                txtServerLang.Text = logininfo.ServerLang;
             }
         }
-
     }
 }

@@ -64,8 +64,9 @@ namespace libTravian
             //Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
         }
 
-        public Travian(Data TravianData, Dictionary<string, string> Options)
+        public Travian(Data TravianData, Dictionary<string, string> Options, string ServerLang)
         {
+            LoadRegexLang(ServerLang);
             TD = TravianData;
             //DB.Instance.Initialize(TravianData.Server);
             //DB.Instance.Initialize(TravianData.key);

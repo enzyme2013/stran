@@ -102,9 +102,10 @@ namespace Stran
             //}
             tr = DB.Instance.RestoreTravian(LoginInfo.Server);
             if (tr == null)
-                tr = new Travian(TravianData, MainForm.Options);
+                tr = new Travian(TravianData, MainForm.Options, LoginInfo.ServerLang);
             else
             {
+                tr.LoadRegexLang(LoginInfo.ServerLang);
                 tr.TD = TravianData;
                 tr.LoadOptions(MainForm.Options);
             }
