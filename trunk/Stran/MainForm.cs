@@ -196,7 +196,7 @@ namespace Stran
             }
             if (!Options.ContainsKey("NoRaid2to7"))
             {
-                RaidQueue.NoRaid2To7 = true;
+                RaidQueue.NoRaid2To7 = false;
             }
 			if (StartSmall)
 			{
