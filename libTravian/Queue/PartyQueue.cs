@@ -61,7 +61,9 @@ namespace libTravian
 				return;
 			}
 			var CV = UpCall.TD.Villages[VillageID];
-			UpCall.PageQuery(VillageID, "build.php?gid=24&a=" + ((int)PartyType).ToString());
+			var result = UpCall.PageQuery(VillageID, "build.php?gid=24&a=" + ((int)PartyType).ToString());
+			if (result == null)
+				return;
 			LastExec = DateTime.Now;
 			if(CV.InBuilding[6] == null || CV.InBuilding[6].FinishTime < DateTime.Now)
 			{
@@ -123,6 +125,6 @@ namespace libTravian
 		public PartyQueue()
 		{
 		}
-		public int QueueGUID { get { return 6; } }
+		public int QueueGUID { get { return 20; } }
 	}
 }

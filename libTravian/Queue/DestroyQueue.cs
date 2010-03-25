@@ -110,6 +110,8 @@ namespace libTravian
 				};
 	
 				string result = UpCall.PageQuery(VillageID, "build.php", Postdata);
+				if (result == null)
+					return;
 				Match m = Regex.Match(result, "<p class=\"error\">(.*?)</p>");
 				if (CV.InBuilding[2] == null)
 				{

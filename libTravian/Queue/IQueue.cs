@@ -49,7 +49,31 @@ namespace libTravian
 		/// </summary>
 		/// <returns></returns>
 		void Action();
-
+		
+		/// <summary>
+		/// 0 : AIQueue, BuildingQueue
+		/// 1 : BuildingQueue
+		/// 2 : DestroyQueue
+		/// 10 : UpAttack
+		/// 11 : UpDefence
+		/// 12 : Research
+		/// 13 : AutoFSQueue
+		/// 14 : AlarmQueue
+		/// 20 : PartyQueue
+		/// 21 : BalancerQueue
+		/// 22 : AutoBalanceQueue
+		/// 30 : RefreshVillageQueue
+		/// 31 : AutoRefreshVillageQueue
+		/// 
+		/// 50 : TransferQUeue
+		/// 51 : NPCTradeQueue
+		/// 52 : TradeQueue - selfqueue
+		/// 53 : TradeQueue - AutoSell
+		/// 54 : TradeQueue - AutoBuy
+		/// 60 : AttackQueue
+		/// 61 : RaidQueue
+		/// 62 : ProduceQueue
+		/// </summary>
 		int QueueGUID { get; }
 	}
 }

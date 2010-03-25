@@ -132,15 +132,15 @@ namespace libTravian
 				// check if it's a crop transfer, and crop is seriously needed from target village:
 				if (UpCall.TD.Villages[TargetVillageID].Resource[3].Produce < 0)
 				{
-				var temp = NeedCrop(UpCall.TD);
-				if(temp != null)
-				{
+					var temp = NeedCrop(UpCall.TD);
+					if(temp != null)
+					{
 						UpCall.DebugLog("NeedCrop rule on use. Force crop transfer.", DebugLevel.W);
-					toTransfer = temp;
-				}
-				else if(ExceedTargetCapacity(UpCall.TD))
-				{
-					return;
+						toTransfer = temp;
+					}
+					else if(ExceedTargetCapacity(UpCall.TD))
+					{
+						return;
 					}
 				}
 			}
@@ -162,6 +162,11 @@ namespace libTravian
 			{
 				RemoveQueuedTask();
 			}
+			else if (timeCost == -1)
+			{
+				UpCall.DebugLog("Wrong Parse!!", DebugLevel.E);
+				RemoveQueuedTask();
+			}
 		}
 
 		#endregion
@@ -180,9 +185,9 @@ namespace libTravian
 		/// </summary>
 		/// <param name="VillageID">Unique ID of the departure village</param>
 		/// <param name="Amount">Amounts of resources to transport</param>
-		/// <param name="TargetPos">Position of the arrival village</param>
+		/// <param name="Target">Position of the arrival village</param>
 		/// <returns>Error return minus number. Succeed return single way transfer time cost.</returns>
-		public int doTransfer(TResAmount Amount, TPoint TargetPos)
+		public int doTransfer(TResAmount Amount, TPoint Target)
 		{
 			string result = UpCall.PageQuery(VillageID, "build.php?gid=17");
 			if(result == null)
@@ -234,14 +239,14 @@ namespace libTravian
 			}
 
 			PostData["dname"] = "";
-			PostData["x"] = TargetPos.X.ToString();
-			PostData["y"] = TargetPos.Y.ToString();
+			PostData["x"] = Target.X.ToString();
+			PostData["y"] = Target.Y.ToString();
 			PostData["s1"] = "ok";
 
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);
 			if(result == null)
 				return -1;
-
+			
 			m = Regex.Match(result, "<p class=\"error\">([^<]*?)</p>");
 			if (m.Success)
 			{
@@ -263,12 +268,13 @@ namespace libTravian
 			if(!m.Success)
 				return -1; // Parse error!
 			PostData["sz"] = m.Groups[1].Value;
-			PostData["kid"] = TargetPos.Z.ToString();
+			PostData["kid"] = Target.Z.ToString();
 			PostData["a"] = VillageID.ToString();
 			m = Regex.Match(result, "<td>([0-9:]{6,})</td>");
 			if(!m.Success)
 				return -1; // Parse error!
 			int TimeCost = Convert.ToInt32(UpCall.TimeSpanParse(m.Groups[1].Value).TotalSeconds);
+
 			if(UpCall.TD.MarketSpeed != 0)
 			{
 				// calc market speed
@@ -286,8 +292,11 @@ namespace libTravian
 					UpCall.TD.Dirty = true;
 				}
 			}
+
 			UpCall.JustTransferredData = Amount;
 			result = UpCall.PageQuery(VillageID, "build.php", PostData);
+			if (result == null)
+				return -1;
 			UpCall.BuildCount();
 
 			// write data into target village if it's my village.
@@ -295,7 +304,7 @@ namespace libTravian
 			{
 				if(x.Value == CV)
 					continue;
-				if(x.Value.Coord == TargetPos)
+				if(x.Value.Coord == Target)
 				{
 					if(x.Value.isBuildingInitialized == 2)
 						x.Value.Market.MarketInfo.Add(new TMInfo()
@@ -309,7 +318,7 @@ namespace libTravian
 					break;
 				}
 			}
-			UpCall.DebugLog(string.Format("Transfer {0}({1}) => {2} {3}", CV.Coord.ToString(), VillageID, TargetPos.ToString(),
+			UpCall.DebugLog(string.Format("Transfer {0}({1}) => {2} {3}", CV.Coord.ToString(), VillageID, Target.ToString(),
 				Amount.ToString()), DebugLevel.I);
 			return TimeCost;
 		}
@@ -738,7 +747,7 @@ namespace libTravian
 
 		private Random rand = new Random();
 
-		public int QueueGUID { get { return 7; } }
+		public int QueueGUID { get { return 50; } }
 
 		[Json]
 		public bool ForceGo { get; set; }

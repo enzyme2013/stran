@@ -207,14 +207,20 @@ namespace libTravian
 				}
 				else
 				{
+					if (RetryCount >= 2)
+					{
+						UpCall.DebugLog("Unknown status! And cause a queue been deleted! " + Q.Title, DebugLevel.E);
+						Q.MarkDeleted = true;
+						UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+					}
+					UpCall.DebugLog("Unknown status!" + Q.Title, DebugLevel.E);
 					UpCall.PageQuery(VillageID, "dorf1.php");
 					UpCall.PageQuery(VillageID, "dorf2.php");
-					UpCall.DebugLog("Unknown status! And cause a queue been deleted! " + Q.Title, DebugLevel.E);
-					//Q.MarkDeleted = true;
-					//UpCall.CallStatusUpdate(this, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = VillageID });
+					RetryCount++;
 					Q.NextExec = DateTime.Now.AddSeconds(rand.Next(150, 300));
 					return;
 				}
+				RetryCount = 0;
 				// test if resource enough
 				int timecost;
 				if(CV.Buildings.ContainsKey(bid))
@@ -338,6 +344,7 @@ namespace libTravian
 		public DateTime NextExec;
 		
 		private Random rand = new Random();
+		private int RetryCount = 0;
 
 		public int QueueGUID { get { return Bid < 19 && Bid > 0 ? 0 : 1; } }
 	}

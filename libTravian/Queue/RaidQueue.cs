@@ -51,10 +51,7 @@ namespace libTravian
         [Json]
         public int VillageID { get; set; }
 
-        public int QueueGUID
-        {
-            get { return 9; }
-        }
+        public int QueueGUID { get { return 61; } }
 
         public string Title
         {
