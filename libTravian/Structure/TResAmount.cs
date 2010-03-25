@@ -140,16 +140,6 @@ namespace libTravian
 			}
 		}
 
-        public void clearMinus()
-        {
-            for (int i = 0; i < Resources.Length; i++)
-            {
-                if (Resources[i] < 0)
-                {
-                    Resources[i] = 0;
-                }
-            }
-        }
 
         /// <summary>
         /// Comparator for unit tests

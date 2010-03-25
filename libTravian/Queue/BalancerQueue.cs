@@ -25,7 +25,7 @@ namespace libTravian
         {
             get
             {
-                if (BalancerGroup.ID == -1)
+                if (BalancerGroup.ID == 0)
                 {
                     return "Default Group";
                 }
@@ -236,7 +236,7 @@ namespace libTravian
                         }
                     }
                     needRes = source - totalComRes;
-                    needRes.clearMinus();
+                    needRes.NoNegative();
                     if (needRes.isZero())
                     {
                         if (totalComRes.isZero())
@@ -274,7 +274,7 @@ namespace libTravian
                 amount.Resources[3] = maxcrop / 2;
             }
             amount -= GetVillageRes(village,BalancerGroup.IgnoreMarket,BalancerGroup.IgnoreMarketTime);
-            amount.clearMinus();
+            amount.NoNegative();
             return amount;
         }
 
@@ -307,7 +307,7 @@ namespace libTravian
                 }
             }
             resource -= GetVillageRes(village, ignoreMarket, BalancerGroup.IgnoreMarketTime);
-            resource.clearMinus();
+            resource.NoNegative();
             //if (resource.isZero() == false)
             //{
             //    UpCall.DebugLog(VillageShort(village) + " Building Need " + resource, DebugLevel.E);
@@ -415,7 +415,7 @@ namespace libTravian
                     }
                 }
             }
-            result.clearMinus();
+            result.NoNegative();
             if (result.isZero() == false)
             {
                 //UpCall.DebugLog(VillageShort(village) + " Research Need " + result, DebugLevel.E);
@@ -444,7 +444,7 @@ namespace libTravian
                     }
                 }
             }
-            result.clearMinus();
+            result.NoNegative();
             if (result.isZero() == false)
             {
                 //UpCall.DebugLog(VillageShort(village) + " Party Need " + result, DebugLevel.E);
@@ -476,7 +476,7 @@ namespace libTravian
                     break;
                 }
             }
-            result.clearMinus();
+            result.NoNegative();
             if (result.isZero() == false)
             {
                 //UpCall.DebugLog(VillageShort(village) + " Produce Troop Need " + result, DebugLevel.E);
@@ -499,7 +499,7 @@ namespace libTravian
             {
                 res -= village.Market.LowerLimit;
             }
-            res.clearMinus();
+            res.NoNegative();
             return res;
         }
 
@@ -726,7 +726,7 @@ namespace libTravian
 
                         TResAmount sendRes = new TResAmount();
                         sendRes.Resources[outResType] = maxSend;
-                        sendRes.clearMinus();
+                        sendRes.NoNegative();
                         if (sendRes.isZero() == false)
                         {
                             if (sendRes.TotalAmount >= this.BalancerGroup.MinSendResource)
@@ -762,7 +762,7 @@ namespace libTravian
 
         private bool DoTranfer(TVillage from, TVillage to, TResAmount res)
         {
-            res.clearMinus();
+            res.NoNegative();
             if (res.isZero())
             {
                 return false;
@@ -853,7 +853,7 @@ namespace libTravian
                 //TotalCapacity[i] = new TResource();
                 //TotalProduce[i] = new TResource();
             //}
-            foreach (KeyValuePair<int, TVillage> x in UpCall.TD.Villages)
+            foreach (var x in UpCall.TD.Villages)
             {
                 TVillage TV = x.Value;
                 for (int i = 3; i >= 0; i--)
@@ -918,7 +918,7 @@ namespace libTravian
             {
                 DefaultTBalancerGroup = new TBalancerGroup()
                 {
-                    ID = -1,
+                    ID = 0,
                 };
             }
             return DefaultTBalancerGroup;
@@ -927,10 +927,10 @@ namespace libTravian
         {
             ID = generated++;
             IgnoreMarket = BalancerQueue.IgnorMarketType.notignore;
-            IgnoreMarketTime = 3600;
+            IgnoreMarketTime = 60 * 60 * 2;
             ReadyTime = 60;
-            MinSendResource = 200;
-            MaxSendResource = 100000;
+            MinSendResource = 0;
+            MaxSendResource = 0;
         }
 
         [Json]
