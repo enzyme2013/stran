@@ -13,7 +13,7 @@ namespace Stran
     public partial class BalanceForm : Form
     {
         #region Fields
-        private TextBox[] txt;
+        //private TextBox[] txt;
         #endregion
 
         #region Properties
@@ -30,25 +30,34 @@ namespace Stran
 
         private void BalanceForm_Load(object sender, EventArgs e)
         {
+        	mui.RefreshLanguage(this);
             if (BalancerGroup == null)
             {
                 BalancerGroup = TBalancerGroup.GetDefaultTBalancerGroup();
             }
-            this.textID.Text = BalancerGroup.ID.ToString();
-            this.textMarket.Text = ((int)BalancerGroup.IgnoreMarket).ToString();
-            this.textMarketTime.Text = BalancerGroup.IgnoreMarketTime.ToString();
+            this.numID.Value = BalancerGroup.ID;
+            this.cbxMarket.SelectedIndex = (int)BalancerGroup.IgnoreMarket == 1 ? 1 : 0;
+            this.numMarketTime.Value = BalancerGroup.IgnoreMarketTime / 60;
             this.textDescription.Text = BalancerGroup.desciption;
-            this.textReadyTime.Text = BalancerGroup.ReadyTime.ToString();
-            this.textMinSendResource.Text = BalancerGroup.MinSendResource.ToString();
-            this.textMaxSendResource.Text = BalancerGroup.MaxSendResource.ToString();
+            this.numReadyTime.Value = BalancerGroup.ReadyTime;
+            if (Village.Market.MaxMerchant > 0)
+            {
+	            this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = true;
+	            this.numMinSendResource.Maximum = this.numMaxSendResource.Maximum = Village.Market.SingleCarry * Village.Market.MaxMerchant;
+	            this.numMinSendResource.Increment = this.numMaxSendResource.Increment = Village.Market.SingleCarry / 2;
+	            this.numMinSendResource.Value = BalancerGroup.MinSendResource != 0 ? BalancerGroup.MinSendResource : Village.Market.SingleCarry / 2;
+	            this.numMaxSendResource.Value = BalancerGroup.MaxSendResource != 0 ? BalancerGroup.MaxSendResource : Village.Market.SingleCarry * Village.Market.MaxMerchant;
+            }
+            else
+            	this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Btn_OK_Click(object sender, EventArgs e)
         {
             TBalancerGroup group = new TBalancerGroup();
-            group.ID = Convert.ToInt32(this.textID.Text);
+            group.ID = Convert.ToInt32(this.numID.Value);
              
-            if (Convert.ToInt32(this.textMarket.Text) == 1)
+            if (this.cbxMarket.SelectedIndex == 1)
             {
                 group.IgnoreMarket = BalancerQueue.IgnorMarketType.ignore;
             }
@@ -57,16 +66,14 @@ namespace Stran
                 group.IgnoreMarket = BalancerQueue.IgnorMarketType.notignore;
             }
                 
-            group.IgnoreMarketTime = Convert.ToInt32(this.textMarketTime.Text);
+            group.IgnoreMarketTime = Convert.ToInt32(this.numMarketTime.Value) * 60;
             group.desciption = this.textDescription.Text;
-            group.ReadyTime = Convert.ToInt32(this.textReadyTime.Text);
+            group.ReadyTime = Convert.ToInt32(this.numReadyTime.Value);
 
-            group.MinSendResource = Convert.ToInt32(textMinSendResource.Text);
-            group.MinSendResource = Convert.ToInt32(textMinSendResource.Text);
+            group.MinSendResource = Convert.ToInt32(this.numMinSendResource.Value);
+            group.MinSendResource = Convert.ToInt32(this.numMaxSendResource.Value);
 
             BalancerGroup = group;
-
-            
         }
     }
 }

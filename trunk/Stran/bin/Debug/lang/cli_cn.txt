@@ -278,9 +278,82 @@ sent=发信
 delete=删除
 date=日期
 exit=离开
+allies=同盟
 //AutoBalance
 percent=百分比
 autobalance=自动平衡资源
 random=随机攻击
 addtarget=新增自设
 deletetarget=删除自设
+//HeroInfo
+hero=英雄资讯
+heroinfo=英雄资讯(&I)
+heroname=英雄名称
+herolife=生命
+exp=经验
+herorename=更名
+oasisinfo=绿洲资讯
+herorefresh=更新资讯
+att=攻击
+def=防御
+atts=攻击(%)
+defs=防御(%)
+heal=回复
+//About
+about=&F. 关於
+aboutstran=关於 STRAN
+author=作者
+authors=MeteorRain, ChiHsun, etc
+version=版本
+date=发布
+copyright=版权
+copyrights=Copyright © 2007-2010
+//CulturePoint
+culturepoint=&P. 文明点资讯
+culturepointinfo=文明点资讯
+refreshCP=刷新文明点
+currentCP=所有村庄的文明点产量
+totalCP=目前你的村庄总共有
+villageCP=村庄数
+allneedCP=所需的文明点
+needCP=不足的文明点
+newdateCP=预计达成时间
+waitdateCP=预计剩余时间
+//FindMap
+findmap=搜田
+centerpoint=中心座标
+findcycle=搜寻圈数
+startsearch=开始搜寻
+starthero=新增
+revivehero=复活
+refreshvillage=定时刷新村庄
+setrefreshvillage=&H. 定时刷新村庄
+//InTrainingInfo
+producetroopsetting=建造军队
+produceinfo=详细资讯
+option=选项
+description=描述
+finishtime=完成时间
+//Option
+preference=&P. 选项
+lang=界面语言
+NoMB=自动升级大楼
+autorun=启动时自动登入
+close=取消关闭提示
+IgnorePopWIN=取消弹出视窗
+NoRaid2to7=停止攻击(2~7时)
+proxy=代理伺服器
+remotestop=远端控制码
+resrate=资源比例
+AutoRefresh=自动更新村庄
+StartSmall=启动时最小化
+autoplay=开启警告音效
+//Balancer
+balancer=&B. 平衡资源
+balanceform=平衡资源设定
+groupid=平衡组别
+ignoremarket=略过此村庄
+ignoretime=略过过久的运输(分)
+readytime=提前运算时间(秒)
+minsendresource=最小输出量
+maxsendresource=最大输出量

@@ -277,9 +277,82 @@ sent=Sent
 delete=Delete
 date=Date
 exit=Exit
+allies=Allies
 //AutoBalance
 percent=%
 autobalance=AutoBalance
 random=Random Attack
 addtarget=Add Target
 deletetarget=Delete Target
+//HeroInfo
+hero=HeroInfo
+heroinfo=Hero &Info
+heroname=Hero Name
+herolife=Hero Life
+exp=Hero Exp.
+herorename=Rename
+oasisinfo=Oasis Info
+herorefresh=Refresh
+att=Att
+def=Def
+atts=Att(%)
+defs=Def(%)
+heal=Heal
+//About
+about=About
+aboutstran=About STRAN
+author=Author
+authors=MeteorRain, ChiHsun, etc
+version=Version
+date=Date
+copyright=Copyright
+copyrights=Copyright © 2007-2010
+//CulturePoint
+culturepoint=Culture &Point
+culturepointinfo=CP Info
+refreshCP=Refresh
+currentCP=All Villages Produced CP / hour
+totalCP=Current Total CP Amount
+villageCP=Villages
+allneedCP=Need CP
+needCP=Not Enough CP
+newdateCP=Enough Time
+waitdateCP=Residual Time
+//FindMap
+findmap=FindMap
+centerpoint=Center
+findcycle=Cycle
+startsearch=Start
+starthero=Add
+revivehero=Revive
+refreshvillage=Set Refresh Village
+setrefreshvillage=Set Refres&h Village
+//InTrainingInfo
+producetroopsetting=Producing Troops
+produceinfo=ProduceInfo
+option=Option
+description=Description
+finishtime=Finishi Time
+//Option
+preference=&Preference
+lang=Language
+NoMB=Auto Upgrade MB
+autorun=AutoRun
+close=Close without warning
+IgnorePopWIN=Ignore Pop WIN
+NoRaid2to7=No Raid 2~7
+proxy=Proxy
+remotestop=Remote Stop
+resrate=Resources Rate
+AutoRefresh=Auto Refresh Village
+StartSmall=Start Minimized
+autoplay=Auto Play Alert
+//Balancer
+balancer=&Balancer
+balanceform=Balance Option
+groupid=Group
+ignoremarket=Ignore Market
+ignoretime=Ignore Longer(min)
+readytime=Prepare Time(sec)
+minsendresource=Min. Resources
+maxsendresource=Max. Resources
