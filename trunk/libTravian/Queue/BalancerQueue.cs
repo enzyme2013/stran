@@ -82,13 +82,7 @@ namespace libTravian
             UpdateType();
         }
 
-        public int QueueGUID
-        {
-            get
-            {
-                return 5;
-            }
-        }
+        public int QueueGUID { get { return 21; } }
 
         #endregion
 

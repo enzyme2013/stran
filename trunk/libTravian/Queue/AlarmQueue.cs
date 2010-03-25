@@ -11,33 +11,13 @@ namespace libTravian
     public class AlarmQueue : IQueue
     {
         #region IQueue 成员
-
-        public Travian UpCall
-        {
-            set;
-            get;
-        }
-
+        
+        public Travian UpCall {get; set;}
         [Json]
-        public int VillageID
-        {
-            set;
-            get;
-        }
-
-        public bool MarkDeleted
-        {
-            get;
-            private set;
-        }
-
+        public int VillageID {get; set;}
+        public bool MarkDeleted {get; private set;}
         [Json]
-        public bool Paused
-        {
-            set;
-            get;
-        }
-
+        public bool Paused {get; set;}
         public string Title
         {
             get
@@ -104,7 +84,7 @@ namespace libTravian
             if (BeAttacked)
             {
                 AnalizeAttacker();
-
+                
                 if (SendMail())
                 {
                     TotalCount++;
@@ -121,10 +101,7 @@ namespace libTravian
             HasGetAll = !(this.MinimumDelay > this.MinimumInterval);
         }
 
-        public int QueueGUID
-        {
-            get { return 11; }
-        }
+        public int QueueGUID { get { return 14; } }
 
         public bool BeAttacked
         {
@@ -185,11 +162,11 @@ namespace libTravian
         /// <summary>
         /// sms body. at most 350 for sms
         /// </summary>
-        string SmsBody
+        public string SmsBody
         {
             get
             {
-                string format = "{0},{1},{2}({3}) is under attack. totally {4} waves, the latest wave is at {5} from: {6}(7)";
+                string format = "{0},{1},{2}({3}) is under attack. Totally {4} waves, and the latest wave is at {5} from: {6}({7})";
                 var cv = UpCall.TD.Villages[VillageID];
                 return string.Format(format,
                     UpCall.TD.Server,
@@ -262,18 +239,18 @@ namespace libTravian
             }
         }
 
-        int TotalCount = 0;
-        DateTime resumeTime = DateTime.Now;
-        TTInfo LatestIncoming = null;
+        private int TotalCount = 0;
+        private DateTime resumeTime = DateTime.Now;
+        private TTInfo LatestIncoming = null;
         #endregion
 
         #region methods
-        void AnalizeAttacker()
+        private void AnalizeAttacker()
         {
             //not ready
         }
 
-        bool IsAttackType(TTInfo troop, string attType)
+        private bool IsAttackType(TTInfo troop, string attType)
         {
             if (troop.TroopType != TTroopType.Incoming)
                 return false;
@@ -288,17 +265,17 @@ namespace libTravian
             return false;
         }
 
-        bool IsRaid(TTInfo troop)
+        private bool IsRaid(TTInfo troop)
         {
             return IsAttackType(troop, "raid");
         }
 
-        bool IsAttack(TTInfo troop)
+        private bool IsAttack(TTInfo troop)
         {
             return IsAttackType(troop, "attack");
         }
 
-        void AddAtacker(TTInfo troop)
+        private void AddAtacker(TTInfo troop)
         {
             if (!IsAttack(troop) && !IsRaid(troop))
                 return;
@@ -322,7 +299,7 @@ namespace libTravian
                 LatestIncoming = troop;
         }
 
-        TAttacker ParseAttacker(TTInfo troop)
+        private TAttacker ParseAttacker(TTInfo troop)
         {
             string data = UpCall.PageQuery(VillageID, troop.OwnerVillageUrl, null, true, true);
             if (string.IsNullOrEmpty(data))
@@ -360,7 +337,7 @@ namespace libTravian
             return attacker;
         }
 
-        void InitAttackers()
+        private void InitAttackers()
         {
             foreach (TAttacker ta in attackers.Values)
             {
@@ -373,7 +350,7 @@ namespace libTravian
             }
         }
 
-        bool IsTrustful(string user)
+        private bool IsTrustful(string user)
         {
             if (string.IsNullOrEmpty(TrustfulUsers))
                 return false;
@@ -381,7 +358,7 @@ namespace libTravian
             return TrustfulUsers.Contains(user);
         }
 
-        bool SendMail()
+        private bool SendMail()
         {
             MailMessage msg = new MailMessage();
             msg.To.Add(To.Join(","));

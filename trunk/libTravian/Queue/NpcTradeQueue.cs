@@ -401,6 +401,6 @@ namespace libTravian
 			get { return this.Threshold.TotalAmount > 0 && this.Distribution.TotalAmount > 0; }
 		}
 
-		public int QueueGUID { get { return 8; } }
+		public int QueueGUID { get { return 51; } }
 	}
 }

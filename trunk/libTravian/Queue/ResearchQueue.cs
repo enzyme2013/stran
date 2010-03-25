@@ -107,7 +107,6 @@ namespace libTravian
 		{
 			var CV = UpCall.TD.Villages[VillageID];
 			int GID;
-			var Q = this;
 			switch(ResearchType)
 			{
 				case TResearchType.Research:
@@ -145,6 +144,8 @@ namespace libTravian
 			}
 			
 			string result = UpCall.PageQuery(VillageID, "build.php?gid=" + GID.ToString());
+			if (result == null)
+				return;
 			Match m = Regex.Match(result, "&(?:amp;)a=" + Aid.ToString() + "&(?:amp;)c=(.*?)\">", RegexOptions.Singleline);
 			if (m.Success)
 			{
@@ -206,11 +207,11 @@ namespace libTravian
 				switch(ResearchType)
 				{
 					case TResearchType.UpAttack:
-						return 3;
+						return 10;
 					case TResearchType.UpDefence:
-						return 4;
+						return 11;
 					case TResearchType.Research:
-						return 5;
+						return 12;
 					default: // will not happened
 						return -1;
 				}

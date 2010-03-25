@@ -82,7 +82,7 @@ namespace libTravian
 						}
 						if(status.Contains(task.QueueGUID))
 							continue;
-						else if(task.QueueGUID < 7)
+						else if(task.QueueGUID < 50)
 							status.Add(task.QueueGUID);
 						if (task.QueueGUID <= 1 && !TD.isRomans)
 							status.Add(1 - task.QueueGUID);

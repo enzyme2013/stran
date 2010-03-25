@@ -155,6 +155,8 @@ namespace libTravian
 			PostData["s1"] = "ok";
 			PostData["t" + Aid] = Amount.ToString();
 			data = UpCall.PageQuery(VillageID, "build.php", PostData);
+			if (data == null)
+				return;
 			LastExec = DateTime.Now;
 			NextExec = LastExec.AddSeconds(MinimumInterval);
 			doCount++;
@@ -162,7 +164,7 @@ namespace libTravian
 				MarkDeleted = true;
 		}
 
-		public int QueueGUID { get { return 10; } }
+		public int QueueGUID { get { return 62; } }
 
 		#endregion
 

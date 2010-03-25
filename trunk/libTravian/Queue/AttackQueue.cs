@@ -73,6 +73,8 @@ namespace libTravian
             if (Settlers)
             {
                 var result = UpCall.PageQuery(VillageID, "a2b.php?id=" + Targets[TargetID].Z.ToString() + "&s=1");
+                if (result == null)
+                	return;
                 Match m;
                 m = Regex.Match(result, "type=\"image\" value=\"ok\" name=\"s1\"");
                 if (m.Success)
@@ -100,6 +102,8 @@ namespace libTravian
             	{
             		Dictionary<string, string> PostData = new Dictionary<string, string>();
             		var data = UpCall.PageQuery(VillageID, "a2b.php");
+            		if (data == null)
+            			return;
             		Match m10;
             		m10 = Regex.Match(data, "type=\"hidden\"[^>]*?name=\"timestamp\"[^>]*?value=\"([^>]*?)\"", RegexOptions.Singleline);
             		string p_timestamp = m10.Groups[1].Value;
@@ -128,7 +132,9 @@ namespace libTravian
 						
             		Dictionary<string, string> PostDataF = new Dictionary<string, string>();
             		var result = UpCall.PageQuery(VillageID, "a2b.php", PostData);
-            		if (result.Contains("<p class=\"error\">"))
+            		if (result == null)
+            			break;
+            		else if (result.Contains("<p class=\"error\">"))
             		{
             			UpCall.DebugLog("Error Target or No Enough Troops", DebugLevel.E);
             			break;
@@ -257,6 +263,6 @@ namespace libTravian
 		37, 38, 39, 40, 41, 99};
         private static readonly string[] RaidTypeL = new string[] {"0", "S", "R", "A:N", "A:R", "S:R", "S:D"};
 
-        public int QueueGUID { get { return 9; } }
+        public int QueueGUID { get { return 60; } }
     }
 }
