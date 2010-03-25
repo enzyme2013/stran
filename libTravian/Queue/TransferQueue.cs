@@ -288,6 +288,9 @@ namespace libTravian
 					{
 						StdSpeed = Buildings.BaseSpeed[UpCall.TD.Tribe][10];
 					}
+                    //判断如果是speed服则商人速度×2
+                    if (UpCall.TD.Server.Substring(0, 5) == "speed")
+                        StdSpeed *= 2;
 					UpCall.TD.MarketSpeed = StdSpeed;
 					UpCall.TD.Dirty = true;
 				}
