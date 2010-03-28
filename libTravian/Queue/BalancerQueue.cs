@@ -8,7 +8,7 @@ namespace libTravian
 {
     public class BalancerQueue : IQueue
     {
-
+//
         #region IQueue 成员
 
         public Travian UpCall { get; set; }
@@ -161,12 +161,12 @@ namespace libTravian
 
             village = UpCall.TD.Villages[VillageID];
             if (village == null) return;
-            if (village.Name.Contains("090"))
+            if (village.Name.Contains("084"))
             {
                 int debug = 0;
                 debug++;
             }
-            if (DateTime.Now.Subtract(lastUpdateTime).TotalSeconds > 10000)
+            if (DateTime.Now.Subtract(lastUpdateTime).TotalSeconds > 600)
             {
                 UpdateGroupVillages();
                 lastUpdateTime = DateTime.Now.AddSeconds(1);
@@ -572,10 +572,12 @@ namespace libTravian
             TResAmount res = new TResAmount(needRes);
             foreach (var tsv in groupVillages)
             {
+                res.NoNegative();
                 //tsv.queue.UpdateState();
                 TVillage fromVillage = UpCall.TD.Villages[tsv.VillageID];
-                if (tsv.queue.type == villagetype.giver
-                    || tsv.queue.type == villagetype.full)
+                var queue = fromVillage.getBalancer();
+                if (queue.type == villagetype.giver
+                    || queue.type == villagetype.full)
                 {
 
                     //TResAmount r = fromVillage.ResourceCurrAmount;
@@ -799,7 +801,7 @@ namespace libTravian
                             VillageID = vid,
                             coord = village.Coord,
                             distance = village.Coord * this.village.Coord,
-                            queue = Q
+                            //queue = Q
                         };
                         groupVillages.Add(one);
                     }
@@ -871,7 +873,7 @@ namespace libTravian
             public int VillageID;
             public TPoint coord;
             public double distance;
-            public BalancerQueue queue;
+            //public BalancerQueue queue;
 
             #region IComparable<TBVillage> 成员
 
@@ -882,10 +884,10 @@ namespace libTravian
 
             #endregion
 
-            public String toString()
-            {
-                return queue.ToString() + VillageID;
-            }
+            //public String toString()
+            //{
+            //    return queue.ToString() + VillageID;
+            //}
         }
 
         public override String ToString()
@@ -923,8 +925,8 @@ namespace libTravian
             IgnoreMarket = BalancerQueue.IgnorMarketType.notignore;
             IgnoreMarketTime = 60 * 60 * 2;
             ReadyTime = 60;
-            MinSendResource = 0;
-            MaxSendResource = 0;
+            MinSendResource = 200;
+            MaxSendResource = 100000;
         }
 
         [Json]
