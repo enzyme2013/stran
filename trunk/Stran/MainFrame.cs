@@ -2370,7 +2370,7 @@ namespace Stran
                 Queue = new BalancerQueue()
                 {
                     UpCall = tr,
-                    VillageID = SelectVillage,
+                    VillageID = x.Key,
                     BalancerGroup = TBalancerGroup.GetDefaultTBalancerGroup(),
                 };
                 x.Value.Queue.Add(Queue);
