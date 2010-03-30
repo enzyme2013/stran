@@ -26,6 +26,7 @@ using System.Net;
 using Stran.DockingPanel;
 using System.IO;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Text.RegularExpressions;
 
 namespace Stran
 {
@@ -62,7 +63,7 @@ namespace Stran
         Travian tr = null;
         int QueueCount = 0;
         int SelectVillage = 0;
-        public static bool AutoPlay {get; set;}
+        public static bool AutoPlay { get; set; }
 
         private TResAmount totalAmount = new TResAmount();
 
@@ -200,11 +201,11 @@ namespace Stran
                             xkey.SubItems[2].Text = x.Value.Name;
                         xkey.BackColor = SystemColors.Window;
                         if (TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
-						{
+                        {
                             xkey.BackColor = Color.Salmon;
-							if (AutoPlay)
-								PlayAlert();
-						}
+                            if (AutoPlay)
+                                PlayAlert();
+                        }
                     }
                     else
                     {
@@ -218,31 +219,31 @@ namespace Stran
                         if (TravianData.Villages[x.Key].Troop.GetTroopsIsAttackMe == true)
                         {
                             lvi.BackColor = Color.Salmon;
-							if (AutoPlay)
-								PlayAlert();
+                            if (AutoPlay)
+                                PlayAlert();
                         }
                     }
                 }
-				int index = -1;
-				if (m_villagelist.listViewVillage.Items.Count != 0)
-				{
-					if (m_villagelist.listViewVillage.SelectedIndices.Count == 1)
-						index = m_villagelist.listViewVillage.SelectedIndices[0];
-                        else
-					{
-						foreach (ListViewItem x in m_villagelist.listViewVillage.Items)
-						{
-							if (Convert.ToInt32(x.SubItems[0].Text) == SelectVillage)
-							{
-								index = m_villagelist.listViewVillage.Items.IndexOf(x);
+                int index = -1;
+                if (m_villagelist.listViewVillage.Items.Count != 0)
+                {
+                    if (m_villagelist.listViewVillage.SelectedIndices.Count == 1)
+                        index = m_villagelist.listViewVillage.SelectedIndices[0];
+                    else
+                    {
+                        foreach (ListViewItem x in m_villagelist.listViewVillage.Items)
+                        {
+                            if (Convert.ToInt32(x.SubItems[0].Text) == SelectVillage)
+                            {
+                                index = m_villagelist.listViewVillage.Items.IndexOf(x);
+                            }
+                        }
                     }
                 }
-					}
-				}
                 if (index >= 0)
                     m_villagelist.listViewVillage.Items[index].Selected = true;
                 else
-                	m_villagelist.listViewVillage.Items[m_villagelist.listViewVillage.Items.Count - 1].Selected = true;
+                    m_villagelist.listViewVillage.Items[m_villagelist.listViewVillage.Items.Count - 1].Selected = true;
             }
             else if (e.ChangedData == Travian.ChangedType.Stop)
             {
@@ -253,10 +254,10 @@ namespace Stran
                 else if (e.Param == 0)
                 {
                     m_resourceshow.label5.BackColor = Color.Ivory;
-            	}
-            	else if (e.Param == 2)
-            	{
-            		m_resourceshow.label5.BackColor = Color.Gold;
+                }
+                else if (e.Param == 2)
+                {
+                    m_resourceshow.label5.BackColor = Color.Gold;
                 }
             }
             else if (e.ChangedData == Travian.ChangedType.Queue && e.Param == -1)
@@ -461,66 +462,70 @@ namespace Stran
         /// </summary>
         private void DisplayQueue()
         {
-            if (!TravianData.Villages.ContainsKey(SelectVillage))
-                return;
-
-            var CV = TravianData.Villages[SelectVillage];
-            lock (QueueLock)
+            try
             {
-                if (CV.Queue.Count != m_queuelist.listViewQueue.Items.Count)
-                {
-                    m_queuelist.listViewQueue.Items.Clear();
-                    foreach (var x in CV.Queue)
-                    {
-                        ListViewItem lvi;
-                        lvi = m_queuelist.listViewQueue.Items.Add(x.GetType().Name);
+                if (!TravianData.Villages.ContainsKey(SelectVillage))
+                    return;
 
-                        lvi.SubItems.Add(x.Title);
-                        lvi.SubItems.Add(x.Status);
-                        lvi.SubItems.Add("");//tr.GetDelay(SelectVillage, x).ToString());
+                var CV = TravianData.Villages[SelectVillage];
+                lock (QueueLock)
+                {
+                    if (CV.Queue.Count != m_queuelist.listViewQueue.Items.Count)
+                    {
+                        m_queuelist.listViewQueue.Items.Clear();
+                        foreach (var x in CV.Queue)
+                        {
+                            ListViewItem lvi;
+                            lvi = m_queuelist.listViewQueue.Items.Add(x.GetType().Name);
+
+                            lvi.SubItems.Add(x.Title);
+                            lvi.SubItems.Add(x.Status);
+                            lvi.SubItems.Add("");//tr.GetDelay(SelectVillage, x).ToString());
+                        }
                     }
-                }
-                else
-                {
-                    List<int> status = new List<int>();
-                    for (int i = 0; i < CV.Queue.Count; i++)
+                    else
                     {
-                        var x = CV.Queue[i];
-                        var lvi = m_queuelist.listViewQueue.Items[i];
-                        if (lvi.SubItems[2].Text != x.Status)
-                            lvi.SubItems[2].Text = x.Status;
+                        List<int> status = new List<int>();
+                        for (int i = 0; i < CV.Queue.Count; i++)
+                        {
+                            var x = CV.Queue[i];
+                            var lvi = m_queuelist.listViewQueue.Items[i];
+                            if (lvi.SubItems[2].Text != x.Status)
+                                lvi.SubItems[2].Text = x.Status;
 
-                        int ntype = 0;
-                        if (x is BuildingQueue)
-                        {
-                            ntype = (x as BuildingQueue).Bid > 19 && TravianData.isRomans ? 1 : 0;
-                        }
-                        else
-                            ntype = x.QueueGUID;
-
-                        string delayStr = String.Empty;
-                        if (x.Paused)
-                        {
-                            delayStr = "||";
-                        }
-                        else if (!status.Contains(ntype))
-                        {
-                            int n = x.CountDown;
-                            if (n > 0)
+                            int ntype = 0;
+                            if (x is BuildingQueue)
                             {
-                                delayStr = this.TimeToString(n);
+                                ntype = (x as BuildingQueue).Bid > 19 && TravianData.isRomans ? 1 : 0;
                             }
-                            if (ntype < 7)
-                                status.Add(ntype);
-                        }
+                            else
+                                ntype = x.QueueGUID;
 
-                        if (lvi.SubItems[3].Text != delayStr)
-                        {
-                            lvi.SubItems[3].Text = delayStr;
+                            string delayStr = String.Empty;
+                            if (x.Paused)
+                            {
+                                delayStr = "||";
+                            }
+                            else if (!status.Contains(ntype))
+                            {
+                                int n = x.CountDown;
+                                if (n > 0)
+                                {
+                                    delayStr = this.TimeToString(n);
+                                }
+                                if (ntype < 7)
+                                    status.Add(ntype);
+                            }
+
+                            if (lvi.SubItems[3].Text != delayStr)
+                            {
+                                lvi.SubItems[3].Text = delayStr;
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex) { tr.DebugLog(ex); }
         }
 
         private void DisplayInBuilding()
@@ -730,15 +735,19 @@ namespace Stran
                 return;
             m_troopinfolist.listViewTroop.Items.Clear();
             m_troopinfolist.listViewTroop.SuspendLayout();
-            foreach (var x in CV.Troop.Troops)
+            try
             {
-                var lvi = m_troopinfolist.listViewTroop.Items.Add("-");
-                if (x.FinishTime != DateTime.MinValue)
-                    lvi.Text = TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5);
-                lvi.SubItems.Add(x.FriendlyName);
-                lvi.SubItems.Add(x.VillageName);
-                lvi.SubItems.Add(x.TroopType.ToString());
+                foreach (var x in CV.Troop.Troops)
+                {
+                    var lvi = m_troopinfolist.listViewTroop.Items.Add("-");
+                    if (x.FinishTime != DateTime.MinValue)
+                        lvi.Text = TimeToString(Convert.ToInt32(x.FinishTime.Subtract(DateTime.Now).TotalSeconds) + 5);
+                    lvi.SubItems.Add(x.FriendlyName);
+                    lvi.SubItems.Add(x.VillageName);
+                    lvi.SubItems.Add(x.TroopType.ToString());
+                }
             }
+            catch (Exception ex) { tr.DebugLog(ex); }
             m_troopinfolist.listViewTroop.ResumeLayout();
         }
 
@@ -1141,8 +1150,8 @@ namespace Stran
                     int tlevel = Buildings.BuildingCost[Gid].data.Length - 1;
                     if (Gid <= 4)
                     {
-                    	if (!CV.isCapital)
-                    		tlevel = 10;
+                        if (!CV.isCapital)
+                            tlevel = 10;
                     }
                     if (clevel >= tlevel)
                         continue;
@@ -1324,7 +1333,7 @@ namespace Stran
             TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
             if (Troop == null)
             {
-            	MessageBox.Show("目前此村庄中无军队!");
+                MessageBox.Show("目前此村庄中无军队!");
                 return;
             }
             RaidQueue task = new RaidQueue()
@@ -2064,6 +2073,7 @@ namespace Stran
         {
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
+            TravianData.Villages[SelectVillage].isTroopInitialized = 2;
             TravianData.Villages[SelectVillage].InitializeTroop();
         }
         private void CMVTlimit_Click(object sender, EventArgs e)
@@ -2112,9 +2122,9 @@ namespace Stran
             {
                 VillageName = newname.VillageName;
                 if (CV.Name == VillageName)
-                	return;
+                    return;
                 else
-                tr.Rename(VillageID, VillageName);
+                    tr.Rename(VillageID, VillageName);
             }
         }
 
@@ -2133,36 +2143,36 @@ namespace Stran
                 MessageBox.Show("读取军队信息，重新操作一次");
                 return;
             }
-                TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
-                if (Troop == null)
-                {
-                    MessageBox.Show("目前此村庄中无军队!");
-                    return;
-                }
-                AttackOptForm rof = new AttackOptForm()
-                {
-                    mui = this.mui,
-                    Troops = Troop.Troops,
-                    dl = this.dl,
-                    Tribe = Troop.Tribe,
-                    VillageID = CV.ID,
-                    UpCall = tr
-                };
-
-                if (rof.ShowDialog() == DialogResult.OK && rof.Return != null)
-                {
-                    rof.Return.VillageID = CV.ID;
-                    rof.Return.UpCall = tr;
-                    CV.Queue.Add(rof.Return);
-                    lvi(rof.Return);
-                }
+            TTInfo Troop = CV.Troop.GetTroopsAtHome(CV);
+            if (Troop == null)
+            {
+                MessageBox.Show("目前此村庄中无军队!");
+                return;
             }
+            AttackOptForm rof = new AttackOptForm()
+            {
+                mui = this.mui,
+                Troops = Troop.Troops,
+                dl = this.dl,
+                Tribe = Troop.Tribe,
+                VillageID = CV.ID,
+                UpCall = tr
+            };
+
+            if (rof.ShowDialog() == DialogResult.OK && rof.Return != null)
+            {
+                rof.Return.VillageID = CV.ID;
+                rof.Return.UpCall = tr;
+                CV.Queue.Add(rof.Return);
+                lvi(rof.Return);
+            }
+        }
 
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
             //TODO toggle
             //MessageBox.Show("尚未完成此功能");
-           // return;
+            // return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
             TVillage CV = TravianData.Villages[SelectVillage];
@@ -2239,7 +2249,7 @@ namespace Stran
                     village.RestoreQueueRes(openFileDialog.FileName);
                     TravianData.Dirty = true;
                 }
-				Local_StatusUpdate(sender, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = SelectVillage });
+                Local_StatusUpdate(sender, new Travian.StatusChanged() { ChangedData = Travian.ChangedType.Queue, VillageID = SelectVillage });
             }
         }
 
@@ -2281,15 +2291,29 @@ namespace Stran
                 }
             }
         }
-		private void PlayAlert()
-		{
-			System.Media.SoundPlayer SP = new System.Media.SoundPlayer();
-			SP.SoundLocation = "Alert.wav";
-			SP.Play();
-		}
+        private void PlayAlert()
+        {
+            System.Media.SoundPlayer SP = new System.Media.SoundPlayer();
+            SP.SoundLocation = "Alert.wav";
+            SP.Play();
+        }
 
+        #region wb
         void tabPage3_Enter(object sender, EventArgs e)
         {
+            if (tr.TD.Proxy != null)
+            {
+                MessageBox.Show("使用代理禁止浏览！");
+                return;
+            }
+            string[] cookiesFiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Cookies));
+            foreach (string strFileName in cookiesFiles)
+            {
+                if (strFileName.ToLower().IndexOf("index.dat") == -1)
+                {
+                    File.Delete(strFileName);
+                }
+            }
             var url = string.Format("http://{0}/", LoginInfo.Server) + "login.php";
             webBrowser1.Url = new Uri(url);
             webBrowser1.Navigate(url);
@@ -2300,22 +2324,45 @@ namespace Stran
         {
             var table = webBrowser1.Document.GetElementById("login_form");
             if (table == null)
-                return;
-
-            foreach (HtmlElement ele in table.GetElementsByTagName("input"))
             {
-                if (ele.Name == "name") ele.SetAttribute("value", LoginInfo.Username);
-                if (ele.Name == "password") ele.SetAttribute("value", LoginInfo.Password);
+                Match m = Regex.Match(webBrowser1.DocumentText, "<td class=\"dot hl\">.*?<a href=\"\\?newdid=(.*?)(&.*?){0,1}\">", RegexOptions.Singleline);
+                if (m.Success && !string.IsNullOrEmpty(m.Groups[1].Value))
+                {
+                    int VillageID = 0;
+                    if (int.TryParse(m.Groups[1].Value, out VillageID))
+                    {
+                        tr.NewParseEntry(VillageID, webBrowser1.DocumentText);
+                    }
+                }
             }
+            else
+            {
+                foreach (HtmlElement ele in table.GetElementsByTagName("input"))
+                {
+                    if (ele.Name == "name") ele.SetAttribute("value", LoginInfo.Username);
+                    if (ele.Name == "password") ele.SetAttribute("value", LoginInfo.Password);
+                }
 
-            var submit = webBrowser1.Document.GetElementById("btn_login");
-            if (submit == null)
-                return;
+                var submit = webBrowser1.Document.GetElementById("btn_login");
+                if (submit == null)
+                    return;
 
-            submit.Focus();
-            submit.InvokeMember("click");
+                submit.Focus();
+                submit.InvokeMember("click");
+            }
         }
 
+        private void WBNavigate(string gid)
+        {
+            var url = string.Format("http://{0}/build.php?gid={1}", LoginInfo.Server, gid);
+            webBrowser1.Navigate(url);
+        }
+
+        private void wbNavigate_Click(object sender, EventArgs e)
+        {
+            WBNavigate(((Button)sender).Tag.ToString());
+        }
+        #endregion
         private void contextMenuMarket_Opening(object sender, CancelEventArgs e)
         {
 
@@ -2342,7 +2389,7 @@ namespace Stran
             //        UpCall = tr,
             //        VillageID = SelectVillage,
             //    };
-                
+
             //    CV.Queue.Add(Q);
             //    lvi(Q);
             //}
@@ -2364,7 +2411,8 @@ namespace Stran
                 //x.Value.Queue.Add(Q);
                 //lvi(Q);
                 BalancerQueue Queue = x.Value.getBalancer();
-                if(Queue != null){
+                if (Queue != null)
+                {
                     x.Value.Queue.Remove(Queue);
                 }
                 Queue = new BalancerQueue()
@@ -2377,7 +2425,5 @@ namespace Stran
                 lvi(Queue);
             }
         }
-
-        
     }
 }
