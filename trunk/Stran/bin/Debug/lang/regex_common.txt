@@ -9,3 +9,4 @@ newparser_hasretrun=^Return from
 newparser_hasspy=^Scouting of
 newparser_hasraid=^Raid against
 newparser_hasattack=^Attack against
+newparser_InComingCount=<h4>.*?\((.*?)\)</h4><table class="troop_details"
