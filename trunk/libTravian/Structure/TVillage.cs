@@ -857,6 +857,8 @@ namespace libTravian
     public class TTroop
     {
         [Json]
+        public int inComingCount; //读取返回部队数
+        [Json]
         public int TournamentLevel { get; set; }
         [Json]
         public TResAmount ResLimit { get; set; }
@@ -906,6 +908,7 @@ namespace libTravian
         public int GetUsedSlots(TVillage village)
         {
             int slotsUsed = 0;
+            slotsUsed += this.inComingCount;
             foreach (TTInfo troop in this.Troops)
             {
                 if (troop.TroopType == TTroopType.Incoming ||

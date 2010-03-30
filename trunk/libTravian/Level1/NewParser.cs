@@ -24,7 +24,7 @@ namespace libTravian
     {
         //int LastVillageCount = 0;
 
-        private void NewParseEntry(int VillageID, string data)
+        public void NewParseEntry(int VillageID, string data)
         {
             try
             {
@@ -834,6 +834,16 @@ namespace libTravian
                                 inVillageTroopsParsed = true;
                             }
                         }
+                    }
+                }
+                //读取返回部队数
+                Match tm = Regex.Match(data, "<h4>.*?\\((.*?)\\)</h4><table class=\"troop_details\"", RegexOptions.Singleline);
+                if (tm.Success)
+                {
+                    int comingCount = 0;
+                    if (int.TryParse(tm.Groups[1].Value, out comingCount))
+                    {
+                        village.Troop.inComingCount = comingCount;
                     }
                 }
                 TD.Dirty = true;
