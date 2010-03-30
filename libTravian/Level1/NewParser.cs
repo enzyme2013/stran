@@ -837,7 +837,8 @@ namespace libTravian
                     }
                 }
                 //读取返回部队数
-                Match tm = Regex.Match(data, "<h4>.*?\\((.*?)\\)</h4><table class=\"troop_details\"", RegexOptions.Singleline);
+
+                Match tm = Regex.Match(data, RegexLang["newparser_InComingCount"], RegexOptions.Singleline);
                 if (tm.Success)
                 {
                     int comingCount = 0;
