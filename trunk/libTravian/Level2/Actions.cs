@@ -44,6 +44,7 @@ namespace libTravian
 						{
 							CV.Troop.ShouldRefresh = false;
 							FetchVillageTroop(vid);
+                            CV.Troop.nextExec = DateTime.Now.AddSeconds(120);
 						}
 					}
 					catch(Exception ex)

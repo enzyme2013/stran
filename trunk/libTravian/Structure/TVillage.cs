@@ -125,7 +125,9 @@ namespace libTravian
                 UpCall.FetchVillageTroopAll(ID);
             }
             else
+            {
                 UpCall.FetchVillageTroop(ID);
+            }
         }
         public void InitializeMarket()
         {
@@ -895,9 +897,18 @@ namespace libTravian
                     }
                 }
 
-                return refreshTime;
+                if(refreshTime < nextExec)
+                {
+                    return nextExec;
+                } 
+                else 
+                {
+                    return refreshTime;
+                }
             }
         }
+
+        public DateTime nextExec { get; set; }
 
         public TTroop()
         {
