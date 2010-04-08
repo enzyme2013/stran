@@ -270,6 +270,10 @@ namespace libTravian
 			PostData["sz"] = m.Groups[1].Value;
 			PostData["kid"] = Target.Z.ToString();
 			PostData["a"] = VillageID.ToString();
+			m = Regex.Match(result, "name=\"c\" value=\"(.*?)\"");
+			if (m.Success)
+				PostData["c"] = m.Groups[1].Value;
+			
 			m = Regex.Match(result, "<td>([0-9:]{6,})</td>");
 			if(!m.Success)
 				return -1; // Parse error!
