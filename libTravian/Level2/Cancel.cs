@@ -66,8 +66,8 @@ namespace libTravian
 				var CV = TD.Villages[VillageID];
 	            string OldVillageName = CV.Name;
 	            // Get if possible Rename
-	            string mainuser = PageQuery(VillageID, "spieler.php");
-	            if (mainuser == null)
+	            string mainuser = PageQuery(VillageID, "spieler.php?uid=" + TD.UserID);
+	            if (string.IsNullOrEmpty(mainuser))
 	            	return;
 	            Match mu = Regex.Match(mainuser, "<a href=\"spieler.php\\?s=1\">");
 	            if (!mu.Success)
@@ -78,36 +78,57 @@ namespace libTravian
 	            {
 	                // Prepare data
 	                Random rand = new Random();
-	                string p_e, p_uid, p_jahr, p_monat, p_tag, p_be1, p_mw, p_ort, p_be2;
+	                string p_e = string.Empty;
+					string p_uid = string.Empty;
+					string p_did = string.Empty;
+					string p_jahr = string.Empty;
+					string p_monat = string.Empty;
+					string p_tag = string.Empty;
+					string p_be1 = string.Empty;
+					string p_mw = string.Empty;
+					string p_ort = string.Empty;
+					string p_be2 = string.Empty;
 	                string data = PageQuery(VillageID, "spieler.php?s=1");
+	                if (string.IsNullOrEmpty(data))
+	                	return;
 	                Match m;
 	                m = Regex.Match(data, "type=\"hidden\" name=\"e\" value=\"(\\d+?)\"");
-                    p_e = m.Groups[1].Value;
+	                if (m.Success)
+	                	p_e = m.Groups[1].Value;
 	                m = Regex.Match(data, "type=\"hidden\" name=\"uid\" value=\"(\\d+?)\"");
-                    p_uid = m.Groups[1].Value;
-	                m = Regex.Match(data, "tabindex=\"3\" type=\"text\" name=\"jahr\" value=\"(.*?)\" maxlength=\"4\"");
-                    p_jahr = m.Groups[1].Value;
+	                if (m.Success)
+	                    p_uid = m.Groups[1].Value;
+	                m = Regex.Match(data, "type=\"hidden\" name=\"did\" value=\"(\\d+?)\"");
+	                if (m.Success)
+	                    p_did = m.Groups[1].Value;
+                    m = Regex.Match(data, "tabindex=\"3\" type=\"text\" name=\"jahr\" value=\"(.*?)\" maxlength=\"4\"");
+	                if (m.Success)
+	                    p_jahr = m.Groups[1].Value;
 	                m = Regex.Match(data, "<option value=\"(\\d+?)\" selected=\"selected\">");
 	                if (m.Success)
 	                    p_monat = m.Groups[1].Value;
 	                else
-	                {
 	                    p_monat = "0";
-	                }
 	                m = Regex.Match(data, "tabindex=\"1\" class=\"text day\" type=\"text\" name=\"tag\" value=\"(.*?)\" maxlength=\"2\"");
-                    p_tag = m.Groups[1].Value;
+	                if (m.Success)
+	                    p_tag = m.Groups[1].Value;
 	                m = Regex.Match(data, "type=\"radio\" name=\"mw\" value=\"(\\d+?)\" checked tabindex=\"4\"");
-                    p_mw = m.Groups[1].Value;
+ 	                if (m.Success)
+	                   p_mw = m.Groups[1].Value;
 	                m = Regex.Match(data, "tabindex=\"5\" type=\"text\" name=\"ort\" value=\"(.*?)\" maxlength=\"30\"");
-                    p_ort = m.Groups[1].Value;
+	                if (m.Success)
+	                    p_ort = m.Groups[1].Value;
 	                m = Regex.Match(data, "tabindex=\"7\" name=\"be1\">([^<]*?)</textarea>", RegexOptions.Singleline);
-                    p_be1 = m.Groups[1].Value;
+	                if (m.Success)
+	                    p_be1 = m.Groups[1].Value;
                     m = Regex.Match(data, "tabindex=\"8\" name=\"be2\">([^<]*?)</textarea>", RegexOptions.Singleline);
-                    p_be2 = m.Groups[1].Value;
+	                if (m.Success)
+	                    p_be2 = m.Groups[1].Value;
                     
                     Dictionary<string, string> PostData = new Dictionary<string, string>();
 	                PostData["e"] = p_e;
 	                PostData["uid"] = p_uid;
+	                PostData["did"] = p_did;
 	                PostData["jahr"] = p_jahr;
 	                PostData["monat"] = p_monat;
 	                PostData["tag"] = p_tag;
@@ -119,6 +140,17 @@ namespace libTravian
 	                PostData["s1.x"] = rand.Next(10, 70).ToString();
 	                PostData["s1.y"] = rand.Next(3, 17).ToString();
 	                string result = PageQuery(VillageID, "spieler.php", PostData);
+	                if (string.IsNullOrEmpty(result))
+	                	return;
+	                if (TD.Villages.Count == 1)
+	                {
+	                	m = Regex.Match(result, "<td class=\"nam\"><a href=\"karte.php\\?d=(\\d+)&amp;c=[^>]*?\">([^<]*?)</a>");
+	                	if (m.Success && CV.Z == Convert.ToInt32(m.Groups[1].Value) && CV.Name != m.Groups[2].Value)
+	                	{
+	                		CV.Name = m.Groups[2].Value;
+	                		StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Villages });
+	                	}
+	                }
 	            }
 			}
 		}
