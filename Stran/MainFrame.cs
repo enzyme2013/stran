@@ -1316,9 +1316,8 @@ namespace Stran
         }
         private void CMBRaid_Click(object sender, EventArgs e)
         {
-            //TODO toggle
-            //MessageBox.Show("尚未完成此功能");
-            //return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             TVillage CV = this.GetSelectedVillage();
             if (CV == null)
             {
@@ -2130,9 +2129,8 @@ namespace Stran
 
         private void CMBAttackClick(object sender, EventArgs e)
         {
-            //TODO toggle
-            //MessageBox.Show("尚未完成此功能");
-            //return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
 
@@ -2170,9 +2168,8 @@ namespace Stran
 
         private void CMBAlarm_Click(object sender, EventArgs e)
         {
-            //TODO toggle
-            //MessageBox.Show("尚未完成此功能");
-            // return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             if (!TravianData.Villages.ContainsKey(SelectVillage))
                 return;
             TVillage CV = TravianData.Villages[SelectVillage];
@@ -2275,9 +2272,8 @@ namespace Stran
         }
         private void CMVRefreshAll_Click(object sender, EventArgs e)
         {
-            //TODO toggle
-            //MessageBox.Show("尚未完成此功能");
-            //return;
+            MessageBox.Show("尚未完成此功能");
+            return;
             var dr = MessageBox.Show("这将会立即刷新全部村庄，请勿过度使用，以免造成锁帐。\r\n\r\n确定继续执行吗？", "注意！", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dr == DialogResult.OK)
             {
