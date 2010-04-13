@@ -42,14 +42,23 @@ namespace Stran
             this.numReadyTime.Value = BalancerGroup.ReadyTime;
             if (Village.Market.MaxMerchant > 0)
             {
-	            this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = true;
-	            this.numMinSendResource.Maximum = this.numMaxSendResource.Maximum = Village.Market.SingleCarry * Village.Market.MaxMerchant;
-	            this.numMinSendResource.Increment = this.numMaxSendResource.Increment = Village.Market.SingleCarry / 2;
-	            this.numMinSendResource.Value = BalancerGroup.MinSendResource != 0 ? BalancerGroup.MinSendResource : Village.Market.SingleCarry / 2;
-	            this.numMaxSendResource.Value = BalancerGroup.MaxSendResource != 0 ? BalancerGroup.MaxSendResource : Village.Market.SingleCarry * Village.Market.MaxMerchant;
+                int max = Village.Market.SingleCarry * Village.Market.MaxMerchant;
+                max = max > TBalancerGroup.GetDefaultTBalancerGroup().MaxSendResource ? max : TBalancerGroup.GetDefaultTBalancerGroup().MaxSendResource;
+                this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = true;
+                this.numMinSendResource.Maximum = max;
+                this.numMaxSendResource.Maximum = max;
+                this.numMinSendResource.Increment = this.numMaxSendResource.Increment = Village.Market.SingleCarry / 2;
+                this.numMinSendResource.Value = BalancerGroup.MinSendResource;
+                this.numMaxSendResource.Value = BalancerGroup.MaxSendResource;
+
+                //this.numMaxSendResource.Maximum = BalancerGroup.MaxSendResource != 0 ? BalancerGroup.MaxSendResource : (this.numMaxSendResource.Maximum = tmp > 100000 ? tmp : 100000);
             }
             else
-            	this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = false;
+            {
+                this.numMinSendResource.Enabled = this.numMaxSendResource.Enabled = false;
+                this.numMinSendResource.Value = TBalancerGroup.GetDefaultTBalancerGroup().MinSendResource;
+                this.numMaxSendResource.Value = TBalancerGroup.GetDefaultTBalancerGroup().MaxSendResource;
+            }
         }
 
         private void Btn_OK_Click(object sender, EventArgs e)
@@ -71,7 +80,7 @@ namespace Stran
             group.ReadyTime = Convert.ToInt32(this.numReadyTime.Value);
 
             group.MinSendResource = Convert.ToInt32(this.numMinSendResource.Value);
-            group.MinSendResource = Convert.ToInt32(this.numMaxSendResource.Value);
+            group.MaxSendResource = Convert.ToInt32(this.numMaxSendResource.Value);
 
             BalancerGroup = group;
         }
