@@ -261,13 +261,25 @@ namespace libTravian
         protected TResAmount CaculateCropAmount()
         {
             TResAmount amount = new TResAmount();
-
             if (village.Resource[3].Produce < 0 || village.Resource[3].CurrAmount <= 0)
             {
                 int maxcrop = village.Resource[3].Capacity;
-                amount.Resources[3] = maxcrop / 2;
+                amount.Resources[3] = maxcrop / 3;
             }
-            amount -= GetVillageRes(village,BalancerGroup.IgnoreMarket,BalancerGroup.IgnoreMarketTime);
+            else
+            {
+                return amount;
+            }
+            
+            TResAmount currentAmount = GetVillageRes(village);
+            if (currentAmount.Resources[3] < amount.Resources[3])
+            {
+                amount = amount * 2 - currentAmount;
+            }
+            else
+            {
+                amount.Clear();
+            }
             amount.NoNegative();
             return amount;
         }
@@ -497,6 +509,11 @@ namespace libTravian
             return res;
         }
 
+        protected TResAmount GetVillageRes(TVillage village)
+        {
+            return GetVillageRes(village, IgnorMarketType.notignore, 60 * 60 * 2);
+        }
+
         //返回村庄当前资源(包含市场)
         //用于计算是否接受资源
         protected TResAmount GetVillageRes(TVillage village, IgnorMarketType ignoreMarket, int ignorTime)
@@ -673,17 +690,21 @@ namespace libTravian
                     double minCap = 100.0;
                     int targetVillageID = -1;
 
+                    TResAmount tvcurrent = new TResAmount();
+                    TResAmount tvcap = new TResAmount();
                     foreach (var tsv in groupVillages)
                     {
                         TVillage tv = UpCall.TD.Villages[tsv.VillageID];
-                        TResAmount tvres = GetVillageRes(tv, BalancerGroup.IgnoreMarket, BalancerGroup.IgnoreMarketTime);
-                        TResAmount tvcap = GetVillageCapacity(tv);
-                        double rate = tvres.Resources[outResType] * 100.0 / tvcap.Resources[outResType];
+                        TResAmount tres = GetVillageRes(tv);
+                        TResAmount tcap = GetVillageCapacity(tv);
+                        double rate = tres.Resources[outResType] * 100.0 / tcap.Resources[outResType];
                         //double rate = tv.Resource[outResType].CurrAmount * 100.0 / tv.Resource[outResType].Capacity;
                         if (rate < minCap && rate < 80)
                         {
                             minCap = rate;
                             targetVillageID = tsv.VillageID;
+                            tvcurrent = tres;
+                            tvcap = tcap;
                         }
                     }
 
@@ -691,15 +712,15 @@ namespace libTravian
                     {
                         //计算运送的资源
                         TVillage targetVillage = UpCall.TD.Villages[targetVillageID];
-                        TResAmount tvcurrent = GetVillageRes(targetVillage, BalancerGroup.IgnoreMarket, BalancerGroup.IgnoreMarketTime);
-                        TResAmount tvcap = GetVillageCapacity(targetVillage);
+                        //TResAmount tvcurrent = GetVillageRes(targetVillage);
+                        //TResAmount tvcap = GetVillageCapacity(targetVillage);
 
                         //计算平均rate
-                        double rate = (tvcurrent.Resources[outResType] + outResCurrAmount) * 100.0 / (tvcap.Resources[outResType] + outResCap);
+                        double rate = (tvcurrent.Resources[outResType] + outResCurrAmount) *1.0 / (tvcap.Resources[outResType] + outResCap);
                         //double rate = (targetVillage.Resource[outResType].CurrAmount + village.Resource[outResType].CurrAmount) * 100.0 / (targetVillage.Resource[outResType].Capacity + village.Resource[outResType].Capacity);
                         //int maxReceiveRes = targetVillage.Resource[outResType].Capacity * rate - targetVillage.Resource[outResType].CurrAmount;
                         //maxReceiveRes = maxReceiveRes * 8 / 10;
-                        int maxReceiveRes = Convert.ToInt32((tvcap.Resources[outResType] * rate - tvcurrent.Resources[outResType]) / 100.0);
+                        int maxReceiveRes = Convert.ToInt32(tvcap.Resources[outResType] * rate - tvcurrent.Resources[outResType]);
                         int maxCarry = village.Market.ActiveMerchant * village.Market.SingleCarry;
                         int maxSend = village.Resource[outResType].CurrAmount;
                         if (village.Market.LowerLimit != null)
