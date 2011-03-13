@@ -51,22 +51,16 @@ namespace Stran
 			DateTime CompileTime = GetPe32Time(this.GetType().Assembly.Location);
 			if(CompileTime == DateTime.MinValue)
 				CompileTime = File.GetLastWriteTime(this.GetType().Assembly.Location);
-			VERSION = Text = string.Format("{0} {1} [{2} 开发版本]", aName.Name, v, CompileTime.ToString("yyyy-MM-dd"));
+			VERSION = Text = string.Format("{0} {1} [{2} 测试版本]", aName.Name, v, CompileTime.ToString("yyyy-MM-dd"));
 			notifyIcon1.Text = Text;
 			Buildings.Init();
+			DummyBrowser.ScreenHeight = Screen.PrimaryScreen.Bounds.Height;
+			DummyBrowser.ScreenWidth = Screen.PrimaryScreen.Bounds.Width;
 			//AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 
 			//Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
 		}
 
-		private delegate void void_d();
-		/*
-		public void RefreshListView1()
-		{
-				Invoke(new void_d(listView1_Refresh));
-				Invoke(new void_d(saveAccountInfo));
-		}
-		*/
 		public void listView1_Refresh()
 		{
 			listView1.Items.Clear();

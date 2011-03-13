@@ -45,7 +45,6 @@ namespace Stran
 
 		private delegate void StatusEvent_d(object sender, Travian.StatusChanged e);
 		private delegate void LogEvent_d(TDebugInfo e);
-		private delegate void Void_d();
 
 		private static Color[] ResColor = new Color[] { Color.ForestGreen, Color.Chocolate, Color.SlateGray, Color.Gold };
 		private static readonly Color RedBGColor = Color.FromArgb(255, 192, 192);

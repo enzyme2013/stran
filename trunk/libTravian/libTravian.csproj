@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>libTravian</RootNamespace>
     <AssemblyName>libTravian</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,10 +36,12 @@
     <DefineConstants>DEBUG;COMBAT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.JScript" />
+    <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -50,6 +52,7 @@
     <Compile Include="HtmlUtility.cs" />
     <Compile Include="Level1\Data.cs" />
     <Compile Include="Level1\Debug.cs" />
+    <Compile Include="Level1\DummyBrowser.cs" />
     <Compile Include="Level1\ExtendMethod.cs" />
     <Compile Include="Level1\Login.cs" />
     <Compile Include="Level1\NewParser.cs" />

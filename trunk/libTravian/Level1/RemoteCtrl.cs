@@ -28,6 +28,11 @@ namespace libTravian
 		private Random rand = new Random();
 		private void CheckPause(string data)
 		{
+			if (data.Contains("recaptcha_response_field"))
+			{
+				StatusUpdate(this, new StatusChanged { ChangedData = ChangedType.Stop, Param = 1 });
+				return;
+			}
 			if (data.Contains("class=\"i3\"") || data.Contains("class=\"i4\""))
 			{
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Stop, Param = 0 });
@@ -49,5 +54,6 @@ namespace libTravian
 			else
 				StatusUpdate(this, new StatusChanged() { ChangedData = ChangedType.Stop, Param = 0 });
 		}
+
 	}
 }

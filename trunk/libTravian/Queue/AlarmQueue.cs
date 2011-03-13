@@ -205,7 +205,7 @@ namespace libTravian
                 if (string.IsNullOrEmpty(From) && new Regex(reg).IsMatch(From))
                     return false;
 
-                if (string.IsNullOrEmpty(To.Join(",")))
+                if (string.IsNullOrEmpty(string.Join(",", To)))
                     return false;
 
                 if (string.IsNullOrEmpty(Password))
@@ -361,7 +361,7 @@ namespace libTravian
         private bool SendMail()
         {
             MailMessage msg = new MailMessage();
-            msg.To.Add(To.Join(","));
+            msg.To.Add(string.Join(",", To));
             msg.From = new MailAddress(From, UpCall.TD.Server, Encoding.UTF8);
             msg.Subject = string.Format("{0}@{1}", UpCall.TD.Server, UpCall.TD.Username);
             msg.SubjectEncoding = System.Text.Encoding.UTF8;
