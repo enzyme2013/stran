@@ -84,11 +84,11 @@ namespace libTravian
                 Dictionary<string, string> PostData = new Dictionary<string, string>();
                 PostData["name"] = Username;
                 PostData["password"] = Password;
-                PostData["s1.x"] = rand.Next(40, 70).ToString();
-                PostData["s1.y"] = rand.Next(3, 17).ToString();
+                PostData["s1.x"] = rand.Next(10, 70).ToString();
+                PostData["s1.y"] = rand.Next(2, 17).ToString();
                 PostData["s1"] = "login";
-                PostData["w"] = "1024:768";
-                PostData["login"] = (UnixTime(DateTime.Now) - 10).ToString();
+                PostData["w"] = "1366:768";
+                PostData["login"] = (UnixTime(DateTime.Now) - 5).ToString();
                 //PostData["login"] = m.Groups[1].Value;
                 //PostData[alkey] = alkey_value;
 
