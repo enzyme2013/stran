@@ -30,21 +30,28 @@ namespace libTravian
 	/// </summary>
 	public interface IPageQuerier
 	{
+		string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser, bool NoChangeRef);
 		string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser);
+		string Referer { get; }
 	}
 
 	public partial class Travian
 	{
+		public const string UA = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; .NET CLR 2.0.50727)";
 		int CurrentVillageID = 0;
 		public string PageQuery(int VillageID, string Uri)
 		{
-			return this.pageQuerier.PageQuery(VillageID, Uri, null, true, false);
+			return this.pageQuerier.PageQuery(VillageID, Uri, null, true, false, false);
 		}
 		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data)
 		{
-			return this.pageQuerier.PageQuery(VillageID, Uri, Data, true, false);
+			return this.pageQuerier.PageQuery(VillageID, Uri, Data, true, false, false);
 		}
 
+		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
+		{
+			return this.pageQuerier.PageQuery(VillageID, Uri, Data, CheckLogin, NoParser, false);
+		}
 		private string AddNewdid(int VillageID, string Uri)
 		{
 			if (VillageID == 0)
@@ -69,14 +76,17 @@ namespace libTravian
 			int.TryParse(m.Groups[1].Value, out CurrentVillageID);
 
 			// Check stats.php
+			/*
 			var mc = Regex.Matches(PageData, @"""(stats\.php\?p=[^""]+)""");
 			if (mc.Count > 0)
 				File.WriteAllText("PAGEDUMP_" + DateTime.Now.Ticks + ".htm", PageData);
 			foreach (Match mm in mc)
 			{
 				var uri = mm.Groups[1].Value;
-				PageQuery(0, uri, null, false, true);
+				PageQuery(0, uri, null, false, true, true);
 			}
+			 */
+			DummyBrowser.DummyCheck(PageData, this);
 		}
 
 		private void PageQueryDebugLog(int VillageID, string Uri)
@@ -123,7 +133,16 @@ namespace libTravian
 		}
 
 		string _LastQueryPageURI = null;
-		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser)
+		public string Referer
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_LastQueryPageURI))
+					return string.Empty;
+				return string.Format("http://{0}/{1}", TD.Server, _LastQueryPageURI);
+			}
+		}
+		public string PageQuery(int VillageID, string Uri, Dictionary<string, string> Data, bool CheckLogin, bool NoParser, bool NoChangeRef)
 		{
 			try
 			{
@@ -142,9 +161,10 @@ namespace libTravian
 					_LastQueryPageURI = wc.BaseAddress;
 				}
 				wc.Headers[HttpRequestHeader.Referer] = _LastQueryPageURI;
-				_LastQueryPageURI = wc.BaseAddress + Uri;
-				wc.Headers[HttpRequestHeader.UserAgent] = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; .NET CLR 2.0.50727)";
-				wc.Headers[HttpRequestHeader.Accept] = "image/jpeg, image/gif, */*";
+				if (!NoChangeRef)
+					_LastQueryPageURI = wc.BaseAddress + Uri;
+				wc.Headers[HttpRequestHeader.UserAgent] = UA;
+				wc.Headers[HttpRequestHeader.Accept] = "*/*";
 				wc.Headers[HttpRequestHeader.AcceptLanguage] = "zh-CN";
 
 				if (TD.Cookie == null)

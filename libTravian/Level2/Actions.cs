@@ -151,10 +151,9 @@ namespace libTravian
 							CV.Queue.RemoveAt(i);
 				}
 			}
-			catch(InvalidOperationException e)
+			catch(InvalidOperationException)
 			{
 				// Good bye! Collection was modified; enumeration operation may not execute.
-				string data = (object) e as string;
 				DebugLog("Warning!! Queue list was changed", DebugLevel.F);
 			}
 			try 

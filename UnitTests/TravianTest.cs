@@ -44,7 +44,7 @@ namespace UnitTests
         /// <summary>
         /// A test for NewParseTroops
         ///</summary>
-        [TestMethod()]
+        //[TestMethod()]
         public void NewParseTroopsTiny()
         {
             Travian target = new Travian();
@@ -93,7 +93,7 @@ namespace UnitTests
         /// <summary>
         /// Another test for NewParseTroops
         ///</summary>
-        [TestMethod()]
+        //[TestMethod()]
         public void NewParseTroopsCrazy()
         {
             Travian target = new Travian();

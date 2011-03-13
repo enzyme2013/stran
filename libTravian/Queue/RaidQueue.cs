@@ -81,7 +81,7 @@ namespace libTravian
                         this.TargetID + 1,
                         this.Targets.Count,
                         this.Targets[this.TargetID],
-                        this.Description.IsEmpty() ? "-" : this.Description);
+                        string.IsNullOrEmpty(Description) ? "-" : this.Description);
                 }
                 else
                 {
@@ -92,7 +92,7 @@ namespace libTravian
                         this.MaxCount == 0 ? "∞" : this.MaxCount.ToString(),
                         this.Targets.Count,
                         this.Targets[this.TargetID],
-                        this.Description.IsEmpty() ? "-" : this.Description);
+												string.IsNullOrEmpty(Description) ? "-" : this.Description);
                 }
             }
         }

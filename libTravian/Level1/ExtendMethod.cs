@@ -6,6 +6,7 @@ namespace libTravian
 {
     public static class ExtendMethod
     {
+			/*
         public static string Join(this Array array, string seperator)
         {
             if (array == null || array.Length == 0)
@@ -19,10 +20,10 @@ namespace libTravian
             sb.Remove(sb.Length - seperator.Length, seperator.Length);
             return sb.ToString();
         }
-
         public static bool IsEmpty(this string str)
         {
             return string.IsNullOrEmpty(str);
         }
+			*/
     }
 }
