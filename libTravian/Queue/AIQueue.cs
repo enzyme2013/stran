@@ -216,7 +216,7 @@ namespace libTravian
 				{
 					tgid = 15;
 					tbid = findDorf2Building(CV.Buildings, tgid);
-					if(tbid != -1 && CV.Buildings[tbid].Level < 20 && CV.Buildings[tbid].Level * rate2[2] < CV.Resource[0].Capacity)
+					if(tbid != -1 && CV.Buildings[tbid].Level < 20 && CV.Buildings[tbid].Level * CV.Buildings[tbid].Level * rate2[2] * 4 < CV.Resource[0].Capacity)
 					{
 						gid = tgid;
 						bid = tbid;
